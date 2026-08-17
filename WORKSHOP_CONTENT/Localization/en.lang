@@ -1,0 +1,473 @@
+﻿@language=English;english;en;Английский
+catalog.compact.all	ALL
+catalog.compact.ammo	AMMO
+catalog.compact.armor	ARMOR
+catalog.compact.chips	CHIPS
+catalog.compact.consumables	USE
+catalog.compact.containers	CASES
+catalog.compact.implants	IMPL
+catalog.compact.other	OTHER
+catalog.compact.weapons	WEAP
+catalog.scope.all.compact	ALL
+catalog.scope.favorites.compact	FAV
+catalog.scope.recent.compact	RECENT
+catalog.scope.all	ALL ITEMS
+catalog.scope.favorites	FAVORITES
+catalog.scope.recent	HISTORY
+catalog.favorite.short	FAV
+catalog.label.data	DATA
+catalog.data.any	ANY
+catalog.data.recipes	RECIPES
+catalog.data.sources	SOURCES
+catalog.data.consumers	CONSUMERS
+catalog.data.magnum	MAGNUM
+catalog.data.factions	FACTIONS
+catalog.data.ammo	AMMO
+catalog.data.disassembly	DISASSEMBLY
+catalog.label.sort	SORT
+catalog.sort.name	NAME
+catalog.sort.tech	TECH
+catalog.sort.id	ID
+catalog.sort.recent	RECENT
+catalog.sort.asc	ASCENDING
+catalog.sort.desc	DESCENDING
+catalog.sort.fixed	FIXED ORDER
+catalog.reset	RESET
+catalog.clear.history	CLEAR HISTORY
+catalog.full.all	ALL ITEMS
+catalog.full.ammo	AMMUNITION
+catalog.full.armor	ARMOR & EQUIPMENT
+catalog.full.chips	CHIPS
+catalog.full.consumables	CONSUMABLES
+catalog.full.containers	CONTAINERS
+catalog.full.implants	IMPLANTS
+catalog.full.other	OTHER
+catalog.full.weapons	WEAPONS
+chrome.close	[{KEY}] CLOSE
+label.magnum	MAGNUM
+note.improved_variant	Improved variant
+stats.ammo	AMMO
+stats.magnum	MAGNUM
+stats.recipes	RECIPES
+stats.trade	TRADE / ECON
+tab.ammo	5 AMMO
+tab.factions	6 FACTIONS
+tab.loot	7 LOOT
+tab.magnum	2 MAGNUM
+tab.overview	1 OVERVIEW
+tab.recipes	3 RECIPES
+tab.trade	4 TRADE
+ui.1_7_section_q_e_tab_wheel_page_esc_close	[1-7] SECTION   [Q/E] TAB   [WHEEL] PAGE   [ESC] CLOSE
+ui.lmb_open_item	[LMB] OPEN ITEM
+ui.after_all_magnum	After all Magnum
+ui.after_all_research	After all research
+ui.after_open_research	After open research
+ui.all_related_research_is_already_completed	All related research is already completed.
+ui.alternative_recipes	Alternative recipes
+ui.ammo	ammo
+ui.ammo_links	Ammo links
+ui.ammunition	AMMUNITION
+ui.amputate	amputate
+ui.amputation	amputation
+ui.amputation_drops	AMPUTATION DROPS
+ui.any	any
+ui.armor	armor
+ui.available	available
+ui.available_2	AVAILABLE
+ui.available_3	available
+ui.available_now	Available now
+ui.available_now_2	AVAILABLE NOW
+ui.back	BACK
+ui.barter_give	GIVE
+ui.barter_option	OPTION
+ui.barter_receive	RECEIVE
+ui.barter_receive_this_item	BARTER — RECEIVE THIS ITEM
+ui.barter_recipes	Barter recipes
+ui.barter_give_this_item	BARTER — GIVE THIS ITEM
+ui.bonus	bonus
+ui.boots	boots
+ui.buy_at_stations	BUY AT STATIONS
+ui.item_id	ITEM ID
+ui.catalog	CATALOG
+ui.chance	CHANCE
+ui.base_share	BASE SHARE
+ui.tech	TECH
+ui.civil_resistance	Civil Resistance
+ui.click_a_station_to_open_its_location_on_the_star	Click a station to open its location on the starmap.
+ui.cloning	Cloning
+ui.compact_intelligence_on_normal_hover	Show compact item info on hover.
+ui.compatibility	COMPATIBILITY
+ui.compatible_weapons	COMPATIBLE WEAPONS
+ui.completed	completed
+ui.completed_research	Completed research
+ui.connecting_to_market_data	Connecting to market data...
+ui.consumers	CONSUMERS
+ui.container	CONTAINER
+ui.container_2	Container
+ui.container_3	Container 
+ui.containers	CONTAINERS
+ui.context	LOCATION TYPE
+ui.conveyor	Conveyor
+ui.corporate_stations	Corporate stations
+ui.corpse	corpse
+ui.corpse_bonus	corpse bonus
+ui.craftable	craftable
+ui.crafted_by_recipes	Crafted by recipes
+ui.crafted_from	Crafted from
+ui.crafted_from_2	CRAFTED FROM
+ui.current_tech	CURRENT TECH
+ui.disassembly_index	Loading disassembly data: 
+ui.disassembly_outputs	DISASSEMBLY OUTPUTS
+ui.obtained_by_disassembling	OBTAINED BY DISASSEMBLING
+ui.done	DONE
+ui.enable_item_intelligence	Enable Item Intelligence
+ui.enemy	ENEMY
+ui.enemy_corpse_loot	LOOT FROM ENEMIES
+ui.english	English
+ui.extra_item	extra item
+ui.extra_weapon_ammo	extra-weapon ammo
+ui.f2_close	[{KEY}] CLOSE
+ui.f2_item_analysis	[{KEY}]  ITEM ANALYSIS
+ui.faction	faction
+ui.faction_2	FACTION
+ui.faction_index	Loading faction data: 
+ui.faction_rewards	FACTION REWARDS
+ui.faction_technology	Faction technology
+ui.floor	floor
+ui.future	  future
+ui.future_2	Future
+ui.future_3	FUTURE
+ui.granted_augmentation	granted augmentation
+ui.granted_implant	granted implant
+ui.granted_item	granted item
+ui.granted_weapon_ammo	granted-weapon ammo
+ui.head_gear	head gear
+ui.here	HERE
+ui.in_locked_branches	In locked branches
+ui.include_locked_future_magnum_upgrades	Include locked future Magnum upgrades.
+ui.ingredient	ingredient
+ui.item_intelligence	ITEM INTELLIGENCE
+ui.key_intel	SUMMARY
+ui.leggings	leggings
+ui.location	location
+ui.locked	locked
+ui.locked_2	locked
+ui.loot_index	LOOT DATA  
+ui.low_rep	LOW REP
+ui.magnum	Magnum
+ui.magnum_required	Magnum: required 
+ui.magnum_research	Magnum research
+ui.magnum_research_2	MAGNUM RESEARCH
+ui.market_processed	Market: processed 
+ui.master_switch_for_the_mod	Enable or disable Item Intelligence.
+ui.mission_pools	MISSION POOLS
+ui.mission_workbench	Mission workbench
+ui.more_relationships	More relationships
+ui.more_rows_format	+ {0} more ({1})
+ui.no_disassembly_relationships	No disassembly relationships.
+ui.no_explicit_loot_sources_found_check_trade_recip	No explicit loot sources found. Check Trade, Recipes, Factions, or special scripted events.
+ui.no_recipe_or_disassembly_relationships	No recipe or disassembly relationships.
+ui.no_recipe_relationships	No recipe relationships.
+ui.no_related_magnum_research_was_found	No related Magnum research was found.
+ui.no_trade_relationships_found_yet	No trade relationships found yet.
+ui.no_weapon_ammo_relationships	No weapon/ammo relationships.
+ui.none	none
+ui.not_found	not found
+ui.not_required	not required
+ui.note	Note
+ui.now	  now
+ui.other_compatible_item_intelligence_features_rema	Other sections are unaffected.
+ui.other_uses_also_exist	Other uses also exist
+ui.owned	Owned
+ui.page	PAGE 
+ui.pirates	Pirates
+ui.possible_outcomes	Possible outcomes
+ui.price	PRICE
+ui.primary_ammo	primary ammo
+ui.primary_weapon	primary weapon
+ui.production	PRODUCTION
+ui.profile	PROFILE
+ui.qty	QTY
+ui.qty_rolls	QTY/ROLLS
+ui.quasimorph_sources	Quasimorph sources
+ui.quick_intelligence	Quick Intelligence
+ui.random_augmentation	random augmentation
+ui.random_implant	random implant
+ui.recipe	Recipe 
+ui.recognized_as_a_trade_item_but_current_game_tabl	Trade item; no trade entries found.
+ui.recyclable	recyclable
+ui.remaining	 remaining
+ui.required_for_open_research	Required for open research
+ui.result	RESULT
+ui.reward	REWARD %
+ui.role	Role
+ui.roll	/roll
+ui.rolls	ROLLS
+ui.rolls_2	 rolls
+ui.rows	 ROWS
+ui.search_item	SEARCH ITEM...
+ui.secondary_ammo	secondary ammo
+ui.secondary_weapon	secondary weapon
+ui.sell_to_stations	SELL TO STATIONS
+ui.show_ammo_relations	Show Ammo Relations
+ui.show_barter_and_consumer_relationships	Show station buyers and station-economy recipe inputs.
+ui.show_future_magnum_uses	Show Future Magnum Uses
+ui.show_magnum_surplus	Show Magnum Surplus
+ui.show_magnum_uses	Show Magnum Uses
+ui.show_production_and_barter_source_relationships	Show loot sources, station sellers, and station-economy recipe outputs.
+ui.show_recipes	Show Recipes
+ui.show_remaining_amount_relative_to_all_unfinished	Show remaining amount relative to all unfinished Magnum upgrades.
+ui.show_sources	Show acquisition sources
+ui.show_trade_information	Show selling and barter uses
+ui.show_unfinished_magnum_upgrade_uses	Show unfinished Magnum upgrade uses.
+ui.show_used_in_and_crafted_from_relationships	Show Used In and Crafted From relationships.
+ui.show_weapon_ammo_relationships	Show weapon-ammo relationships.
+ui.source	SOURCE
+ui.sources	SOURCES
+ui.sources_producers	SOURCES / PRODUCERS
+ui.sources_trade	SOURCES & TRADE
+ui.state_unknown	unknown
+ui.station	STATION
+ui.station_2	station
+ui.station_list_is_unavailable_from_the_current_gam	Station data is unavailable.
+ui.stations	Stations
+ui.status	STATUS
+ui.status_2	STATUS
+ui.stock	STOCK
+ui.current_stock_may_change_during_travel	Current stock — may change during travel
+ui.tech_lock	TECH LOCK
+ui.this_item	THIS ITEM
+ui.this_is_not_a_safe_to_sell_value_the_item_has_ot	Used elsewhere too.
+ui.this_item_was_not_found_in_faction_reward_pools	This item was not found in faction reward pools.
+ui.total_remaining	Total remaining
+ui.trade	trade
+ui.trade_consumers	TRADE / CONSUMERS
+ui.trade_links	Trade links
+ui.travel	TRAVEL
+ui.type	TYPE
+ui.unlock	UNLOCK
+ui.used_by_recipes	Used by recipes
+ui.used_in	Used in
+ui.used_in_2	USED IN
+ui.used_in_barter	Used in barter
+ui.vanilla_exposes_the_remaining_total_but_the_rela	Research details unavailable.
+ui.var	 var.
+ui.variants	 variants
+ui.weapon	weapon
+ui.wheel_pgup_pgdn	   •   WHEEL / PGUP / PGDN
+ui.workbench	Workbench: 
+ui.wound_slot	WOUND SLOT
+ui.wound_slot_2	wound slot
+ammo.index_prefix	Loading weapon data: 
+loot.note.amputation	Conditional chance after a successful amputation. Magnum upgrades may affect the result.
+loot.note.augmentation_woundslot	Can appear as an enemy body-part module.
+loot.note.augmentations	Chance = probability the enemy has this module. Rolls = generation attempts.
+loot.note.container_chance	CHANCE — get ≥1 item across all shown rolls. Marauder is already included. TECH — minimum source Tech.
+loot.note.corpse_transfer	Enemy inventory and equipment move to the corpse on death, except bare hands.
+loot.note.enemy_chance	Conditional on meeting this enemy. Ranges reflect Tech and faction conditions.
+loot.note.implants	Chance = installation attempt. “Amputate X%” = chance to recover an already installed implant.
+loot.note.mission_pools	The item is in the normal mission-loot pool for the listed sources. It may appear in a container or on the floor.
+loot.note.placement_generic	Room loot may go to containers; corridor loot goes to the floor.
+loot.note.placement_percent_prefix	Placement: rooms use a 
+loot.note.placement_percent_suffix	% container attempt; otherwise floor. Corridors always use the floor.
+loot.note.random_equipment	Shows generation chance. Full enemy inventory can discard generated items.
+loot.note.tech	TECH = minimum source Tech, including item Tech and enemy equipment-Tech bonus.
+overview.trade.consumers_separator	 / consumers 
+overview.trade.sources_prefix	sources 
+tab.overview.short	OVERVIEW
+tab.magnum.short	MAGNUM
+tab.recipes.short	RECIPES
+tab.trade.short	TRADE
+tab.ammo.short	AMMO
+tab.factions.short	FACTIONS
+tab.loot.short	LOOT
+magnum.module.navigation	Navigation
+magnum.module.research	Research
+magnum.module.hangar	Hangar
+magnum.module.supply	Supply
+magnum.module.cloning	Cloning
+magnum.module.science	Science
+magnum.module.medical	Medical
+magnum.module.engineering	Engineering
+magnum.module.industry	Industry
+magnum.module.security	Security
+magnum.module.logistics	Logistics
+magnum.module.communications	Communications
+magnum.module.storage	Storage
+magnum.module.command	Command
+magnum.module.crew	Crew
+magnum.module.armory	Armory
+magnum.module.workshop	Workshop
+magnum.module.training	Training
+magnum.module.habitation	Habitation
+magnum.node.scanner	Scanner
+magnum.node.travel	Travel
+magnum.node.shuttle	Shuttle
+magnum.node.capsule	Capsule
+magnum.node.trade	Trade
+source.station	station
+source.stations	stations
+source.barter	barter
+mcm.header.general	General
+mcm.header.tooltip	Tooltip
+mcm.header.inspector	Browser
+mcm.header.information	Information
+mcm.show_f2_hint	Show Browser Hotkey Hint
+mcm.show_f2_hint_tip	Show the browser hotkey hint while hovering items. Current key: {KEY}.
+mcm.enable_browser	Enable Item Browser
+mcm.enable_browser_tip	Press {KEY} while hovering an item. Alt item details remain unchanged.
+mcm.inspector_hotkey	Open Browser Hotkey
+mcm.inspector_hotkey_tip	Choose the browser key. Letters, numbers and punctuation still type normally in Search; use Esc to close while typing.
+mcm.show_interface_icons	Minimal Interface Icons
+mcm.show_interface_icons_tip	Show the minimalist icon set in Item Intelligence controls. Item pictures and functional status markers are not affected.
+mcm.mod_name	Item Intelligence - Item Database & Loot Sources
+compat.disabled_feature	This feature is temporarily unavailable.
+mcm.save_failed	Could not save Item Intelligence settings.
+station_group.corporate	Corporate stations
+station_group.resistance	Civil Resistance
+station_group.quasimorph	Quasimorph sources
+station_group.pirates	Pirates
+station_group.stations	Stations
+loot.container.common_box	Common box
+loot.container.common_container	Common container
+loot.container.common_rack	Common rack
+loot.container.common_locker	Common locker
+loot.container.cloth_locker	Clothing locker
+loot.container.wooden_box	Wooden box
+loot.container.industry	Industrial container
+loot.container.science	Science container
+loot.container.medical	Medical container
+loot.container.medical_case	Medical case
+loot.container.medical_holder	Medical shelf
+loot.container.weapon_case_big	Large weapons case
+loot.container.weapon_case_small	Small weapons case
+loot.container.elite_weapon_case	Elite weapons case
+loot.container.weapon_stand	Weapon rack
+loot.container.ammo_case	Ammo case
+loot.container.data	Data container
+loot.container.server	Server container
+loot.container.tool_case	Tool case
+loot.column.container_profile	TYPE / PROFILE
+loot.container.trash_can	Trash can
+loot.container.armor_locker	Armor locker
+loot.container.food	Food container
+loot.container.plants	Plant container
+loot.container.aztec_chest	Aztec chest
+loot.container.matrix_box	Matrix box
+loot.container.gas_barrel	Fuel barrel
+loot.container.toxic_barrel	Toxic barrel
+loot.container.water_sink	Sink
+loot.container.blood_sink	Blood sink
+loot.container.toilet	Toilet
+loot.container.water_tank	Water tank
+loot.container.corpse_pile	Corpse pile
+loot.container.station_stash	Station stash
+loot.container.airdrop_capsule	Airdrop capsule
+loot.container.autonomous_capsule	Autonomous capsule
+loot.container.aztec_altar	Aztec altar
+loot.container.snowman	Snowman
+loot.container.aed_case	Defibrillator case
+loot.container.extinguisher_holder	Fire extinguisher holder
+loot.container.watermelon_growbox	Watermelon grow box
+loot.container.cabbage_growbox	Cabbage grow box
+loot.container.silence_casket	Silence casket
+loot.station_type.industrial	Industrial
+loot.station_type.lab	Laboratory
+loot.station_type.mine	Mine
+loot.station_type.military	Military
+loot.station_type.prison	Prison
+loot.station_type.colony_farm	Colony Farm
+loot.station_type.civilian	Civilian
+loot.station_type.quasimorphic_temple	Quasimorphic Temple
+loot.station_type.space_station	Space Station
+loot.station_type.bramfatura	Bramfatura
+ui.close_current_ship_screen_before_starmap	Close the current ship screen before opening the starmap.
+ui.starmap_unavailable_in_bramfatura	The starmap is unavailable from Bramfatura space. Finish or leave the current descent first.
+ui.starmap_unavailable_during_raid_prep	The starmap is unavailable during raid preparation. Close the preparation screen first.
+ui.starmap_unavailable_during_travel	The starmap is unavailable while the ship is travelling. Wait until arrival before choosing another destination.
+ui.secret_data_rewards	SECRET DATA — FACTION REWARDS
+ui.secret_data_rewards_note	Fixed starter package and reputation reward.
+ui.secret_data_items	items
+ui.secret_data_rep	rep.
+ui.secret_data_view	VIEW
+ui.secret_data_back	← BACK TO FACTIONS
+ui.secret_data_reputation	REPUTATION
+ui.secret_data_package	STARTER PACKAGE
+ui.secret_data_story_effect	This hand-in has dedicated story handling and may also advance faction story content.
+ui.secret_data_no_rewards	Secret Data rewards are unavailable.
+ui.chip_unlocks	UNLOCKS
+ui.back_to	← BACK TO
+compat.module	Module
+compat.reason	Reason:
+
+ui.chip_unlock_chance_note	Chance is per generated chip. Already unlocked entries remain in the roll pool.
+
+ui.weapon_modes	MODES
+ui.mode_when_empty	No ammo
+ui.mode_single	Single
+ui.mode_burst	Burst
+ui.mode_auto	Auto
+ui.mode_launcher	Launcher
+ui.mode_throw	Throw
+ui.mode_melee	Melee
+ui.mode_buttstroke	Butt stroke
+ui.mode_single_shot	Single shot
+ui.mode_shots	Shots
+ui.mode_accuracy	Accuracy
+ui.mode_damage	Damage
+ui.mode_scatter	Scatter
+ui.mode_shot_delay	Delay
+ui.mode_ammo	Ammo
+ui.mode_full_ammo_required	Full ammo required
+ui.unit_seconds_short	s
+ui.mode_stab	Stab
+ui.mode_slash	Slash
+ui.mode_chop	Chop
+ui.mode_smash	Smash
+ui.mode_punch	Punch
+ui.mode_tooltip_fire	Fire mode
+ui.mode_tooltip_attack	Attack mode
+ui.mode_rate_of_fire	Rate of fire
+ui.mode_damage_modifier	Damage mod.
+ui.mode_ammo_consumption	Ammo consumption
+
+# Modder Mode and advanced search
+mcm.modder_mode	Modder mode
+mcm.modder_mode_tip	Show compact technical record information in Overview. Technical rows can be clicked to copy their value.
+ui.modder_section	MODDING
+ui.modder_record_type	Record type
+ui.modder_item_class	Item class
+ui.modder_tech_level	Tech level
+ui.modder_relation_id	Relation ID
+ui.modder_firemode_ids	Fire mode IDs
+ui.modder_search_syntax	Advanced search: id:  name:  type:  rel:  tech:  cat:   Example: cat:weapon tech:>=5
+ui.search_item_modder	SEARCH...  id: / tech: / cat:
+ui.other_containers	OTHER CONTAINERS
+ui.mission	MISSION
+ui.yes	YES
+ui.mission_generation	MISSION
+loot.note.general_spawn	Compatible container for normal mission loot. Final chance depends on location, faction, Tech and item budget.
+ui.loot_modifiers_current	MODIFIERS: CURRENT
+ui.loot_modifiers_manual	MODIFIERS: MANUAL
+ui.loot_marauder	Marauder
+ui.loot_marika_organization	Marika — Organization
+ui.loot_laksha_field_medic	Laksha — Field Medic
+ui.loot_on	ON
+ui.loot_off	OFF
+ui.loot_pp	pp
+
+ui.bonus_corpse_loot	BONUS LOOT FROM CORPSES
+ui.bonus_rolls	BONUS ROLLS
+loot.note.corpse_bonus_rolls	Marauder and Organization add separate bonus corpse-loot rolls. The range above shows the possible number of bonus rolls; the percentage in parentheses is the chance of the upper value. FINAL is the chance to get the item at least once from those bonus rolls only.
+
+ui.per_roll	PER ROLL
+ui.final_chance	FINAL
+ui.mode_damage_per_ap_default	Damage/AP (default)
+loot.note.unknown_container_rolls	? = roll count could not be determined exactly; total chance is not calculated.
+ui.station_economy_recipe_output	STATION ECONOMY — RECIPE OUTPUT
+ui.station_economy_recipe_input	STATION ECONOMY — RECIPE INPUT
+ui.economy_output	OUTPUT
+ui.economy_input	INPUT
+ui.economy_recipe	ECONOMY RECIPE
+loot.note.current_container_modifier_unknown	Current Marauder bonus could not be resolved; CHANCE shows the exact base probability without that bonus. TECH — minimum source Tech.
+ui.no_active_faction_reward_in_current_save	This item is only in reward pools of factions unavailable in the current save.

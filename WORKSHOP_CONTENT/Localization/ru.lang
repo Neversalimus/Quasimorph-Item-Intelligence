@@ -1,0 +1,473 @@
+﻿@language=Russian;russian;ru;Русский;рус
+catalog.compact.all	ВСЕ
+catalog.compact.ammo	ПАТР
+catalog.compact.armor	БРОН
+catalog.compact.chips	ЧИПЫ
+catalog.compact.consumables	РАСХ
+catalog.compact.containers	ЯЩИК
+catalog.compact.implants	ИМПЛ
+catalog.compact.other	ПРОЧ
+catalog.compact.weapons	ОРУЖ
+catalog.scope.all.compact	ВСЕ
+catalog.scope.favorites.compact	ИЗБ
+catalog.scope.recent.compact	ИСТ
+catalog.scope.all	ВСЕ ПРЕДМЕТЫ
+catalog.scope.favorites	ИЗБРАННОЕ
+catalog.scope.recent	ИСТОРИЯ
+catalog.favorite.short	ИЗБ
+catalog.label.data	ДАННЫЕ
+catalog.data.any	ЛЮБЫЕ
+catalog.data.recipes	РЕЦЕПТЫ
+catalog.data.sources	ИСТОЧНИКИ
+catalog.data.consumers	ПОТРЕБИТЕЛИ
+catalog.data.magnum	MAGNUM
+catalog.data.factions	ФРАКЦИИ
+catalog.data.ammo	ПАТРОНЫ
+catalog.data.disassembly	РАЗБОРКА
+catalog.label.sort	СОРТ.
+catalog.sort.name	ИМЯ
+catalog.sort.tech	TECH
+catalog.sort.id	ID
+catalog.sort.recent	ПОСЛЕДНИЕ
+catalog.sort.asc	ВОЗРАСТАНИЕ
+catalog.sort.desc	УБЫВАНИЕ
+catalog.sort.fixed	ФИКСИРОВАНО
+catalog.reset	СБРОСИТЬ
+catalog.clear.history	ОЧИСТИТЬ ИСТОРИЮ
+catalog.full.all	ВСЕ ПРЕДМЕТЫ
+catalog.full.ammo	БОЕПРИПАСЫ
+catalog.full.armor	БРОНЯ И ЭКИПИРОВКА
+catalog.full.chips	ЧИПЫ
+catalog.full.consumables	РАСХОДНИКИ
+catalog.full.containers	КОНТЕЙНЕРЫ
+catalog.full.implants	ИМПЛАНТЫ
+catalog.full.other	ПРОЧЕЕ
+catalog.full.weapons	ОРУЖИЕ
+chrome.close	[{KEY}] ЗАКРЫТЬ
+label.magnum	MAGNUM
+note.improved_variant	Улучшенный вариант
+stats.ammo	ПАТРОНЫ
+stats.magnum	MAGNUM
+stats.recipes	РЕЦЕПТЫ
+stats.trade	ТОРГ. / ЭКОН.
+tab.ammo	5 ПАТРОНЫ
+tab.factions	6 ФРАКЦИИ
+tab.loot	7 ДОБЫЧА
+tab.magnum	2 MAGNUM
+tab.overview	1 ОБЗОР
+tab.recipes	3 РЕЦЕПТЫ
+tab.trade	4 ТОРГОВЛЯ
+ui.1_7_section_q_e_tab_wheel_page_esc_close	[1-7] РАЗДЕЛ   [Q/E] ВКЛАДКА   [КОЛЕСО] СТР.   [ESC] ЗАКРЫТЬ
+ui.lmb_open_item	[ЛКМ] ОТКРЫТЬ ПРЕДМЕТ
+ui.after_all_magnum	После всех Magnum
+ui.after_all_research	После всех исследований
+ui.after_open_research	После незакрытых исследований
+ui.all_related_research_is_already_completed	Все связанные исследования уже изучены.
+ui.alternative_recipes	Альтернативные рецепты
+ui.ammo	боеприпас
+ui.ammo_links	Патронные связи
+ui.ammunition	БОЕПРИПАСЫ
+ui.amputate	ампут.
+ui.amputation	ампутация
+ui.amputation_drops	АМПУТАЦИЯ
+ui.any	любой
+ui.armor	броня
+ui.available	доступно
+ui.available_2	ДОСТУПНО
+ui.available_3	доступен
+ui.available_now	Доступно сейчас
+ui.available_now_2	ДОСТУПНО СЕЙЧАС
+ui.back	НАЗАД
+ui.barter_give	ОТДАТЬ
+ui.barter_option	ВАРИАНТ
+ui.barter_receive	ПОЛУЧИТЬ
+ui.barter_receive_this_item	БАРТЕР — ПОЛУЧИТЬ ЭТОТ ПРЕДМЕТ
+ui.barter_recipes	Бартерные рецепты
+ui.barter_give_this_item	БАРТЕР — ОТДАТЬ ЭТОТ ПРЕДМЕТ
+ui.bonus	бонус
+ui.boots	обувь
+ui.buy_at_stations	КУПИТЬ НА СТАНЦИЯХ
+ui.item_id	ID ПРЕДМЕТА
+ui.catalog	КАТАЛОГ
+ui.chance	ШАНС
+ui.base_share	БАЗОВАЯ ДОЛЯ
+ui.tech	TECH
+ui.civil_resistance	Сопротивление
+ui.click_a_station_to_open_its_location_on_the_star	Нажмите на станцию, чтобы открыть ее объект на звездной карте.
+ui.cloning	Клонирование
+ui.compact_intelligence_on_normal_hover	Показывать краткую информацию о предмете при наведении.
+ui.compatibility	СОВМЕСТИМОСТЬ
+ui.compatible_weapons	СОВМЕСТИМОЕ ОРУЖИЕ
+ui.completed	изучено
+ui.completed_research	Изучено исследований
+ui.connecting_to_market_data	Подключение к данным рынка...
+ui.consumers	ПОТРЕБИТЕЛИ
+ui.container	КОНТЕЙНЕР
+ui.container_2	Контейнер
+ui.container_3	Контейнер 
+ui.containers	КОНТЕЙНЕРЫ
+ui.context	ТИП ЛОКАЦИИ
+ui.conveyor	конвейер
+ui.corporate_stations	Корпоративные станции
+ui.corpse	труп
+ui.corpse_bonus	бонус трупа
+ui.craftable	создается
+ui.crafted_by_recipes	Создается по рецептам
+ui.crafted_from	Создаётся из
+ui.crafted_from_2	СОЗДАЁТСЯ ИЗ
+ui.current_tech	ТЕК. TECH
+ui.disassembly_index	Загрузка данных разборки: 
+ui.disassembly_outputs	РАЗБОРКА ДАЕТ
+ui.obtained_by_disassembling	МОЖНО ПОЛУЧИТЬ ПРИ РАЗБОРКЕ
+ui.done	ГОТОВО
+ui.enable_item_intelligence	Включить Item Intelligence
+ui.enemy	ВРАГ
+ui.enemy_corpse_loot	ЛУТ С ВРАГОВ
+ui.english	Russian
+ui.extra_item	доп. предмет
+ui.extra_weapon_ammo	патроны доп.предм.
+ui.f2_close	[{KEY}] ЗАКРЫТЬ
+ui.f2_item_analysis	[{KEY}]  АНАЛИЗ ПРЕДМЕТА
+ui.faction	фракция
+ui.faction_2	ФРАКЦИЯ
+ui.faction_index	Загрузка данных фракций: 
+ui.faction_rewards	НАГРАДЫ ФРАКЦИЙ
+ui.faction_technology	Фракционные технологии
+ui.floor	пол
+ui.future	  позже
+ui.future_2	Будущие
+ui.future_3	БУДУЩИЕ
+ui.granted_augmentation	аугм. гарант.
+ui.granted_implant	имплант гарант.
+ui.granted_item	выдано
+ui.granted_weapon_ammo	патроны гарант.оруж.
+ui.head_gear	шлем
+ui.here	ЗДЕСЬ
+ui.in_locked_branches	В заблокированных ветках
+ui.include_locked_future_magnum_upgrades	Включать заблокированные будущие улучшения.
+ui.ingredient	ингредиент
+ui.item_intelligence	ПРИМЕНЕНИЕ
+ui.key_intel	СВОДКА
+ui.leggings	поножи
+ui.location	локация
+ui.locked	заблокировано
+ui.locked_2	заблокирован
+ui.loot_index	ДАННЫЕ ДОБЫЧИ  
+ui.low_rep	НИЗК. РЕП.
+ui.magnum	Magnum
+ui.magnum_required	Magnum: потребуется 
+ui.magnum_research	Magnum исследования
+ui.magnum_research_2	ИССЛЕДОВАНИЯ MAGNUM
+ui.market_processed	Рынок: обработано 
+ui.master_switch_for_the_mod	Включить или отключить Item Intelligence.
+ui.mission_pools	МИССИОННЫЕ ПУЛЫ
+ui.mission_workbench	верстак на миссии
+ui.more_relationships	Ещё связей
+ui.more_rows_format	+ ещё {0} ({1})
+ui.no_disassembly_relationships	Данные разборки не найдены.
+ui.no_explicit_loot_sources_found_check_trade_recip	Явные источники добычи не найдены. Проверьте Торговлю, Рецепты, Фракции или специальные события.
+ui.no_recipe_or_disassembly_relationships	Рецепты и данные разборки не найдены.
+ui.no_recipe_relationships	Рецепты не найдены.
+ui.no_related_magnum_research_was_found	Связанные исследования Magnum не найдены.
+ui.no_trade_relationships_found_yet	Торговые связи пока не найдены.
+ui.no_weapon_ammo_relationships	Связи оружия и боеприпасов не найдены.
+ui.none	нет
+ui.not_found	не найдены
+ui.not_required	не требуется
+ui.note	Важно
+ui.now	  сейчас
+ui.other_compatible_item_intelligence_features_rema	Остальные разделы не затронуты.
+ui.other_uses_also_exist	Есть и другие применения
+ui.owned	У вас
+ui.page	СТР. 
+ui.pirates	Пираты
+ui.possible_outcomes	Возможные результаты
+ui.price	ЦЕНА
+ui.primary_ammo	патроны осн.
+ui.primary_weapon	осн. оружие
+ui.production	ПРОИЗВОДСТВО
+ui.profile	ПРОФИЛЬ
+ui.qty	КОЛ-ВО
+ui.qty_rolls	КОЛ./БРОСКИ
+ui.quasimorph_sources	Квазиморфные источники
+ui.quick_intelligence	Краткая информация
+ui.random_augmentation	аугментация
+ui.random_implant	имплант
+ui.recipe	Рецепт 
+ui.recognized_as_a_trade_item_but_current_game_tabl	Торговый предмет; торговые записи не найдены.
+ui.recyclable	разбирается
+ui.remaining	 осталось
+ui.required_for_open_research	Нужно для незакрытых исследований
+ui.result	ГДЕ
+ui.reward	НАГРАДА %
+ui.role	Роль
+ui.roll	/бросок
+ui.rolls	БРОСКИ
+ui.rolls_2	 броск.
+ui.rows	 СТРОК
+ui.search_item	ПОИСК ПРЕДМЕТА...
+ui.secondary_ammo	патроны доп.
+ui.secondary_weapon	доп. оружие
+ui.sell_to_stations	ПРОДАТЬ СТАНЦИЯМ
+ui.show_ammo_relations	Связи оружия и патронов
+ui.show_barter_and_consumer_relationships	Показывать покупателей на станциях и входы рецептов экономики станций.
+ui.show_future_magnum_uses	Будущие улучшения Magnum
+ui.show_magnum_surplus	Остаток после Magnum
+ui.show_magnum_uses	Использование в Magnum
+ui.show_production_and_barter_source_relationships	Показывать добычу, продавцов на станциях и выходы рецептов экономики станций.
+ui.show_recipes	Рецепты
+ui.show_remaining_amount_relative_to_all_unfinished	Показывать остаток относительно всех незавершённых улучшений Magnum.
+ui.show_sources	Способы получения
+ui.show_trade_information	Продажа и применение в бартере
+ui.show_unfinished_magnum_upgrade_uses	Показывать незавершённые улучшения Magnum.
+ui.show_used_in_and_crafted_from_relationships	Показывать связи «используется в» и «создаётся из».
+ui.show_weapon_ammo_relationships	Показывать используемые боеприпасы и совместимое оружие.
+ui.source	ИСТОЧНИК
+ui.sources	ИСТОЧНИКИ
+ui.sources_producers	ИСТОЧНИКИ / ПРОИЗВОДИТЕЛИ
+ui.sources_trade	ИСТОЧНИКИ И ТОРГОВЛЯ
+ui.state_unknown	неизвестно
+ui.station	СТАНЦИЯ
+ui.station_2	станция
+ui.station_list_is_unavailable_from_the_current_gam	Данные станций недоступны.
+ui.stations	Станции
+ui.status	СОСТОЯНИЕ
+ui.status_2	СТАТУС
+ui.stock	ОСТАТОК
+ui.current_stock_may_change_during_travel	Текущий запас — может измениться за время перелёта
+ui.tech_lock	НИЗК. TECH
+ui.this_item	ЭТОТ ПРЕДМЕТ
+ui.this_is_not_a_safe_to_sell_value_the_item_has_ot	Есть и другие применения.
+ui.this_item_was_not_found_in_faction_reward_pools	Предмет не найден в пулах наград фракций.
+ui.total_remaining	Всего осталось
+ui.trade	торговый
+ui.trade_consumers	БАРТЕР / ПОТРЕБИТЕЛИ
+ui.trade_links	Торговые связи
+ui.travel	ПЕРЕЛЕТ
+ui.type	ТИП
+ui.unlock	ОТКР.
+ui.used_by_recipes	Используется в рецептах
+ui.used_in	Используется в
+ui.used_in_2	ИСПОЛЬЗУЕТСЯ В
+ui.used_in_barter	Используется в бартере
+ui.vanilla_exposes_the_remaining_total_but_the_rela	Детали исследования недоступны.
+ui.var	 вар.
+ui.variants	 варианта
+ui.weapon	оружие
+ui.wheel_pgup_pgdn	   •   КОЛЕСО / PGUP / PGDN
+ui.workbench	Верстак: 
+ui.wound_slot	ЧАСТЬ ТЕЛА
+ui.wound_slot_2	часть тела
+ammo.index_prefix	Загрузка данных оружия: 
+loot.note.amputation	Условный шанс после успешной ампутации. Улучшения Magnum могут изменить результат.
+loot.note.augmentation_woundslot	Может встречаться как модуль части тела врага.
+loot.note.augmentations	Шанс = вероятность наличия модуля у врага. Броски = попытки генерации.
+loot.note.container_chance	ШАНС — получить ≥1 предмет за все указанные броски. Бонус Мародёра уже учтён. TECH — минимальный Tech источника.
+loot.note.corpse_transfer	После смерти инвентарь и экипировка врага переходят в труп, кроме голых рук.
+loot.note.enemy_chance	Условный шанс при встрече с этим врагом. Диапазон зависит от Tech и фракции.
+loot.note.implants	Шанс = попытка установки. «Ампут. X%» = шанс извлечь уже установленный имплант.
+loot.note.mission_pools	Предмет входит в обычный пул добычи миссий для указанных источников. Может появиться в контейнере или на полу.
+loot.note.placement_generic	Лут из комнат может попасть в контейнер; в коридорах — на пол.
+loot.note.placement_percent_prefix	Размещение: комнаты — 
+loot.note.placement_percent_suffix	% попытка положить в контейнер; иначе на пол. В коридорах — всегда на пол.
+loot.note.random_equipment	Показан шанс генерации. При полном инвентаре врага предмет может потеряться.
+loot.note.tech	TECH = минимальный Tech источника с учетом Tech предмета и бонуса экипировки врага.
+overview.trade.consumers_separator	 / потребители 
+overview.trade.sources_prefix	источники 
+tab.overview.short	ОБЗОР
+tab.magnum.short	MAGNUM
+tab.recipes.short	РЕЦЕПТЫ
+tab.trade.short	ТОРГОВЛЯ
+tab.ammo.short	ПАТРОНЫ
+tab.factions.short	ФРАКЦИИ
+tab.loot.short	ДОБЫЧА
+magnum.module.navigation	Навигация
+magnum.module.research	Исследования
+magnum.module.hangar	Ангар
+magnum.module.supply	Снабжение
+magnum.module.cloning	Клонирование
+magnum.module.science	Наука
+magnum.module.medical	Медицина
+magnum.module.engineering	Инженерия
+magnum.module.industry	Промышленность
+magnum.module.security	Безопасность
+magnum.module.logistics	Логистика
+magnum.module.communications	Связь
+magnum.module.storage	Хранилище
+magnum.module.command	Командование
+magnum.module.crew	Экипаж
+magnum.module.armory	Арсенал
+magnum.module.workshop	Мастерская
+magnum.module.training	Тренировочный отсек
+magnum.module.habitation	Жилой отсек
+magnum.node.scanner	Сканер
+magnum.node.travel	Путешествия
+magnum.node.shuttle	Шаттл
+magnum.node.capsule	Капсула
+magnum.node.trade	Торговля
+source.station	станция
+source.stations	станции
+source.barter	бартер
+mcm.header.general	Общее
+mcm.header.tooltip	Тултип
+mcm.header.inspector	Браузер
+mcm.header.information	Информация
+mcm.show_f2_hint	Показывать подсказку горячей клавиши
+mcm.show_f2_hint_tip	Показывать подсказку клавиши браузера при наведении на предметы. Текущая клавиша: {KEY}.
+mcm.enable_browser	Включить браузер предметов
+mcm.enable_browser_tip	Нажмите {KEY} при наведении на предмет. Подробности по Alt остаются без изменений.
+mcm.inspector_hotkey	Клавиша открытия браузера
+mcm.inspector_hotkey_tip	Выберите клавишу браузера. Буквы, цифры и знаки по-прежнему вводятся в поле поиска; во время ввода закрывайте окно через Esc.
+mcm.show_interface_icons	Минималистичные иконки интерфейса
+mcm.show_interface_icons_tip	Показывать набор минималистичных пиктограмм в элементах Item Intelligence. Изображения предметов и функциональные маркеры статуса не отключаются.
+mcm.mod_name	Item Intelligence - База предметов и добычи
+compat.disabled_feature	Эта функция временно недоступна.
+mcm.save_failed	Не удалось сохранить настройки Item Intelligence.
+station_group.corporate	Корпоративные станции
+station_group.resistance	Сопротивление
+station_group.quasimorph	Квазиморфные источники
+station_group.pirates	Пираты
+station_group.stations	Станции
+loot.container.common_box	Обычный ящик
+loot.container.common_container	Обычный контейнер
+loot.container.common_rack	Обычный стеллаж
+loot.container.common_locker	Обычный шкаф
+loot.container.cloth_locker	Шкаф с одеждой
+loot.container.wooden_box	Деревянный ящик
+loot.container.industry	Промышленный контейнер
+loot.container.science	Научный контейнер
+loot.container.medical	Медицинский контейнер
+loot.container.medical_case	Медицинский ящик
+loot.container.medical_holder	Медицинская полка
+loot.container.weapon_case_big	Большой оружейный ящик
+loot.container.weapon_case_small	Малый оружейный ящик
+loot.container.elite_weapon_case	Элитный оружейный ящик
+loot.container.weapon_stand	Оружейная стойка
+loot.container.ammo_case	Ящик с боеприпасами
+loot.container.data	Контейнер данных
+loot.container.server	Серверный контейнер
+loot.container.tool_case	Кейс с инструментами
+loot.column.container_profile	ТИП / ПРОФИЛЬ
+loot.container.trash_can	Мусорный бак
+loot.container.armor_locker	Шкаф с броней
+loot.container.food	Контейнер с едой
+loot.container.plants	Контейнер с растениями
+loot.container.aztec_chest	Ацтекский сундук
+loot.container.matrix_box	Матричный ящик
+loot.container.gas_barrel	Бочка с топливом
+loot.container.toxic_barrel	Токсичная бочка
+loot.container.water_sink	Раковина
+loot.container.blood_sink	Кровавая раковина
+loot.container.toilet	Туалет
+loot.container.water_tank	Бак с водой
+loot.container.corpse_pile	Куча трупов
+loot.container.station_stash	Тайник станции
+loot.container.airdrop_capsule	Десантная капсула
+loot.container.autonomous_capsule	Автономная капсула
+loot.container.aztec_altar	Ацтекский алтарь
+loot.container.snowman	Снеговик
+loot.container.aed_case	Ящик с дефибриллятором
+loot.container.extinguisher_holder	Крепление огнетушителя
+loot.container.watermelon_growbox	Грядка с арбузами
+loot.container.cabbage_growbox	Грядка с капустой
+loot.container.silence_casket	Капсула тишины
+loot.station_type.industrial	Промышленная
+loot.station_type.lab	Лаборатория
+loot.station_type.mine	Шахта
+loot.station_type.military	Военная
+loot.station_type.prison	Тюрьма
+loot.station_type.colony_farm	Колония-ферма
+loot.station_type.civilian	Гражданская
+loot.station_type.quasimorphic_temple	Квазиморфический храм
+loot.station_type.space_station	Космическая станция
+loot.station_type.bramfatura	Брамфатура
+ui.close_current_ship_screen_before_starmap	Закройте текущее окно корабля перед открытием звездной карты.
+ui.starmap_unavailable_in_bramfatura	Звездная карта недоступна из пространства брамфатуры. Сначала завершите или покиньте текущий спуск.
+ui.starmap_unavailable_during_raid_prep	Звездная карта недоступна во время подготовки к рейду. Сначала закройте экран подготовки.
+ui.starmap_unavailable_during_travel	Звездная карта недоступна, пока корабль уже летит. Дождитесь прибытия, прежде чем выбирать другую точку назначения.
+ui.secret_data_rewards	СЕКРЕТНЫЕ ДАННЫЕ — НАГРАДЫ ФРАКЦИЙ
+ui.secret_data_rewards_note	Фиксированный стартовый набор и награда репутацией.
+ui.secret_data_items	предм.
+ui.secret_data_rep	реп.
+ui.secret_data_view	ОТКРЫТЬ
+ui.secret_data_back	← К СПИСКУ ФРАКЦИЙ
+ui.secret_data_reputation	РЕПУТАЦИЯ
+ui.secret_data_package	СТАРТОВЫЙ НАБОР
+ui.secret_data_story_effect	У этой передачи есть отдельная сюжетная обработка; она также может продвинуть сюжет фракции.
+ui.secret_data_no_rewards	Награды за Секретные данные недоступны.
+ui.chip_unlocks	ОТКРЫВАЕТ
+ui.back_to	← НАЗАД К
+compat.module	Модуль
+compat.reason	Причина:
+
+ui.chip_unlock_chance_note	Шанс указан для одного созданного чипа. Уже открытые предметы остаются в пуле выбора.
+
+ui.weapon_modes	РЕЖИМЫ
+ui.mode_when_empty	Без патронов
+ui.mode_single	Одиночный
+ui.mode_burst	Очередь
+ui.mode_auto	Авто
+ui.mode_launcher	Пуск
+ui.mode_throw	Бросок
+ui.mode_melee	Удар
+ui.mode_buttstroke	Удар прикладом
+ui.mode_single_shot	Одиночный выстрел
+ui.mode_shots	Выстрелов
+ui.mode_accuracy	Точность
+ui.mode_damage	Урон
+ui.mode_scatter	Разброс
+ui.mode_shot_delay	Интервал
+ui.mode_ammo	Патроны
+ui.mode_full_ammo_required	Нужен полный боезапас
+ui.unit_seconds_short	с
+ui.mode_stab	Колющий удар
+ui.mode_slash	Режущий удар
+ui.mode_chop	Рубящий удар
+ui.mode_smash	Сокрушающий удар
+ui.mode_punch	Удар
+ui.mode_tooltip_fire	Режим огня
+ui.mode_tooltip_attack	Режим атаки
+ui.mode_rate_of_fire	Скорострельность
+ui.mode_damage_modifier	Мод. урона
+ui.mode_ammo_consumption	Расход патронов
+
+# Modder Mode and advanced search
+mcm.modder_mode	Режим моддера
+mcm.modder_mode_tip	Показывать в Обзоре компактные технические данные записи. Нажмите техническую строку, чтобы скопировать её значение.
+ui.modder_section	МОДДИНГ
+ui.modder_record_type	Тип записи
+ui.modder_item_class	Класс предмета
+ui.modder_tech_level	Тех. уровень
+ui.modder_relation_id	ID связи
+ui.modder_firemode_ids	ID режимов
+ui.modder_search_syntax	Расширенный поиск: id:  name:  type:  rel:  tech:  cat:   Пример: cat:оружие tech:>=5
+ui.search_item_modder	ПОИСК...  id: / tech: / cat:
+ui.other_containers	ДРУГИЕ КОНТЕЙНЕРЫ
+ui.mission	МИССИЯ
+ui.yes	ДА
+ui.mission_generation	МИССИЯ
+loot.note.general_spawn	Совместимый контейнер для обычного лута миссии. Итоговый шанс зависит от локации, фракции, Tech и бюджета.
+ui.loot_modifiers_current	МОДИФИКАТОРЫ: ТЕКУЩИЕ
+ui.loot_modifiers_manual	МОДИФИКАТОРЫ: РУЧНЫЕ
+ui.loot_marauder	Мародёр
+ui.loot_marika_organization	Марика — Организация
+ui.loot_laksha_field_medic	Лакша — Полевой врач
+ui.loot_on	ВКЛ
+ui.loot_off	ВЫКЛ
+ui.loot_pp	п.п.
+
+ui.bonus_corpse_loot	БОНУСНЫЙ ЛУТ С ТРУПОВ
+ui.bonus_rolls	ДОП. БРОСКИ
+loot.note.corpse_bonus_rolls	Мародёр и Организация добавляют отдельные дополнительные броски добычи с трупа. Диапазон выше показывает возможное число таких бросков; процент в скобках — шанс верхнего значения. ИТОГО — шанс получить предмет хотя бы один раз только из дополнительных бросков.
+
+ui.per_roll	ЗА БРОСОК
+ui.final_chance	ИТОГО
+ui.mode_damage_per_ap_default	Урон/ОД (станд.)
+loot.note.unknown_container_rolls	? = число бросков не удалось точно определить; общий шанс не рассчитывается.
+ui.station_economy_recipe_output	ЭКОНОМИКА СТАНЦИЙ — ВЫХОД РЕЦЕПТА
+ui.station_economy_recipe_input	ЭКОНОМИКА СТАНЦИЙ — ВХОД РЕЦЕПТА
+ui.economy_output	ВЫХОД
+ui.economy_input	ВХОД
+ui.economy_recipe	ЭКОН. РЕЦЕПТ
+loot.note.current_container_modifier_unknown	Текущий бонус Мародёра не удалось определить; ШАНС показывает точную базовую вероятность без этого бонуса. TECH — минимальный Tech источника.
+ui.no_active_faction_reward_in_current_save	Предмет есть только в пулах наград фракций, недоступных в текущем сохранении.
