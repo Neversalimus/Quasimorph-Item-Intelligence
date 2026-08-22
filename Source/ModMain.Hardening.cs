@@ -14,7 +14,7 @@ namespace ItemIntelligence
     /// </summary>
     public static partial class ModMain
     {
-        private const string LastVerifiedGameVersion = "1.0.2.573s.9f33900";
+        private const string LastVerifiedGameVersion = "1.0.2.575s.d02a8d8";
         private static string _buildFingerprint = string.Empty;
         private static string _compatibilityVerdict = "UNKNOWN";
         private static int _diagnosticsHotkeyLastFrame = -1000;
@@ -126,12 +126,12 @@ namespace ItemIntelligence
                     WriteDiagnosticsReportSafe("ManualCtrlShiftF10");
                     Debug.Log("[ItemIntelligence] Diagnostics exported: " + DiagnosticsReportPath);
                 }
-                else if (Input.GetKeyDown(KeyCode.F11))
+                else if (ModderMode && Input.GetKeyDown(KeyCode.F11))
                 {
                     _diagnosticsHotkeyLastFrame = frame;
                     _diagnosticsHotkeyConsumedFrame = frame;
                     RunReadOnlySelfTestSafe("ManualCtrlShiftF11");
-                    Debug.Log("[ItemIntelligence] Read-only self-test exported: " + RegressionSelfTestPath);
+                    Debug.Log("[ItemIntelligence] Modder read-only self-test exported: " + RegressionSelfTestPath);
                 }
             }
             catch { }
@@ -180,6 +180,7 @@ namespace ItemIntelligence
                 lines.Add("OutputFile=" + Path.GetFileName(reportPath));
                 lines.Add("ModVersion=" + Version);
                 lines.Add("ReadOnlyKnowledgePolicy=" + ReadOnlyKnowledgePolicy);
+                lines.Add("ModderModeExplicitSpawnException=" + ModderModeExplicitSpawnException);
                 lines.Add("GameVersion=" + (Application.version ?? string.Empty));
                 lines.Add("LastVerifiedGameVersion=" + LastVerifiedGameVersion);
                 lines.Add("AssemblyCSharpSHA256=" + (_compatAssemblySha256 ?? string.Empty));
@@ -225,8 +226,8 @@ namespace ItemIntelligence
                 lines.Add("LootWarmupComplete=" + _lootWarmupComplete);
                 lines.Add("LootContainerProfiles=" + _lootContainerProfileCount.ToString(CultureInfo.InvariantCulture));
                 lines.Add("LootContainerMappedProfiles=" + _lootContainerMappedProfileCount.ToString(CultureInfo.InvariantCulture));
-                lines.Add("LootContainerFallbackProfiles=" + _lootContainerFallbackProfileCount.ToString(CultureInfo.InvariantCulture));
-                lines.Add("LootContainerFallbackProfileIds=" + (LootFallbackContainerProfileIds.Count == 0 ? "<none>" : string.Join(",", LootFallbackContainerProfileIds.ToArray())));
+                lines.Add("LootContainerUnmappedProfiles=" + _lootContainerUnmappedProfileCount.ToString(CultureInfo.InvariantCulture));
+                lines.Add("LootContainerUnmappedProfileIds=" + (LootUnmappedContainerProfileIds.Count == 0 ? "<none>" : string.Join(",", LootUnmappedContainerProfileIds.ToArray())));
                 lines.Add("LootContainerIndexedProfiles=" + _lootContainerIndexedProfileCount.ToString(CultureInfo.InvariantCulture));
                 lines.Add("LootContainerEmptyProfiles=" + _lootContainerEmptyProfileCount.ToString(CultureInfo.InvariantCulture));
                 lines.Add("LootContainerDescriptorLinks=" + _lootContainerDescriptorLinkCount.ToString(CultureInfo.InvariantCulture));
@@ -249,8 +250,8 @@ namespace ItemIntelligence
                 lines.Add("InterfaceIconBindings=" + BrowserInterfaceIconBindings.Count.ToString(CultureInfo.InvariantCulture));
                 lines.Add("InterfaceIconSprites=" + BrowserInterfaceIconSprites.Count.ToString(CultureInfo.InvariantCulture));
                 lines.Add("InspectorItemId=" + (_inspectorItemId ?? string.Empty));
-                lines.Add("BrowserTab=" + _browserTab.ToString(CultureInfo.InvariantCulture));
-                lines.Add("BrowserPage=" + _browserPage.ToString(CultureInfo.InvariantCulture));
+                lines.Add("BrowserTab=" + BrowserNavigation.Tab.ToString(CultureInfo.InvariantCulture));
+                lines.Add("BrowserScrollOffset=" + BrowserNavigation.ScrollOffset.ToString(CultureInfo.InvariantCulture));
                 lines.Add("CatalogOpen=" + _browserCatalogOpen);
                 lines.Add("CatalogScope=" + _browserCatalogScope);
                 lines.Add("CatalogDataFilter=" + _browserCatalogDataFilter);
@@ -258,7 +259,7 @@ namespace ItemIntelligence
                     (_browserCatalogSortDescending ? ":Descending" : ":Ascending"));
                 lines.Add("CatalogFavorites=" + BrowserFavoriteItemIds.Count.ToString(CultureInfo.InvariantCulture));
                 lines.Add("CatalogRecent=" + BrowserRecentItemIds.Count.ToString(CultureInfo.InvariantCulture));
-                lines.Add("BrowserBackDepth=" + BrowserItemNavigationHistory.Count.ToString(CultureInfo.InvariantCulture));
+                lines.Add("BrowserBackDepth=" + BrowserNavigation.History.Count.ToString(CultureInfo.InvariantCulture));
                 lines.Add("GameLanguage=" + (_externalUiTranslationLanguage ?? string.Empty));
                 lines.Add("LocalizationFile=" + (_externalUiTranslationFile ?? string.Empty));
                 lines.Add("LocalizationEnglishKeys=" + EnglishUiFallback.Count.ToString(CultureInfo.InvariantCulture));
@@ -272,11 +273,10 @@ namespace ItemIntelligence
                 lines.Add("ManagedBytesApprox=" + GC.GetTotalMemory(false).ToString(CultureInfo.InvariantCulture));
                 lines.Add("LocalizationCache=" + LocalizationCache.Count.ToString(CultureInfo.InvariantCulture));
                 lines.Add("ResolvedUiTextCache=" + ResolvedUiTextCache.Count.ToString(CultureInfo.InvariantCulture));
-                lines.Add("QuickTooltipPools=" + QuickTooltipPools.Count.ToString(CultureInfo.InvariantCulture));
                 lines.Add("SuppressedRaycasters=" + SuppressedRaycasters.Count.ToString(CultureInfo.InvariantCulture));
                 lines.Add("");
                 lines.Add("ManualExportHotkey=Ctrl+Shift+F10");
-                lines.Add("ReadOnlySelfTestHotkey=Ctrl+Shift+F11");
+                lines.Add("ReadOnlySelfTestHotkey=" + (ModderMode ? "Ctrl+Shift+F11 (Modder Mode)" : "disabled"));
 
                 File.WriteAllLines(reportPath, lines.ToArray(), Encoding.UTF8);
                 WriteLocalizationHealthReportSafe(true);
@@ -304,7 +304,7 @@ namespace ItemIntelligence
 
                 List<string> lines = new List<string>();
                 int failures = 0;
-                lines.Add("Item Intelligence Read-Only Regression Self-Test");
+                lines.Add("Item Intelligence Safety Regression Self-Test");
                 lines.Add("TimestampLocal=" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
                 lines.Add("Trigger=" + (trigger ?? string.Empty));
                 lines.Add("ModVersion=" + Version);
@@ -312,8 +312,10 @@ namespace ItemIntelligence
                 lines.Add("CompatibilityVerdict=" + (_compatibilityVerdict ?? string.Empty));
                 lines.Add("");
 
-                AddSelfTest(lines, "ReadOnlyPolicy", ReadOnlyKnowledgePolicy, ref failures,
-                    "No inventory/economy/story/faction mutation paths are part of Item Intelligence.");
+                AddSelfTest(lines, "OrdinaryReadOnlyPolicy", ReadOnlyKnowledgePolicy, ref failures,
+                    "Normal mode has no mutation path; only an explicit MCM Modder Mode spawn action is exempt.");
+                AddSelfTest(lines, "ModderSpawnExceptionNarrow", ModderModeExplicitSpawnException, ref failures,
+                    "The exception adds one selected item to cargo or clone inventory and does not touch economy/story/factions.");
                 AddSelfTest(lines, "CoreCompatibility", _compatCore, ref failures,
                     _compatCore ? "OK" : GetCompatibilityReason("Core"));
                 AddSelfTest(lines, "InputGuardCompatibility", _compatInputGuard, ref failures,
@@ -360,20 +362,24 @@ namespace ItemIntelligence
             try
             {
                 int localizationBefore = LocalizationCache.Count;
+                int itemDisplayBefore = LocalizedItemDisplayCache.Count;
+                int perkDisplayBefore = LocalizedMagnumPerkDisplayCache.Count;
                 int resolvedBefore = ResolvedUiTextCache.Count;
 
                 // Only transient string/result caches are cleared. Reflection metadata is
                 // intentionally retained because it is immutable and expensive to rediscover.
                 LocalizationCache.Clear();
+                LocalizedItemDisplayCache.Clear();
+                LocalizedMagnumPerkDisplayCache.Clear();
                 ResolvedUiTextCache.Clear();
                 MissingUiTranslationKeys.Clear();
                 BrowserLines.Clear();
-                PruneDeadQuickTooltipPools();
 
                 Debug.Log("[ItemIntelligence] Memory hygiene " + (reason ?? string.Empty) +
                     ": LocalizationCache " + localizationBefore.ToString(CultureInfo.InvariantCulture) + "->0" +
-                    ", ResolvedUiTextCache " + resolvedBefore.ToString(CultureInfo.InvariantCulture) + "->0" +
-                    ", QuickTooltipPools=" + QuickTooltipPools.Count.ToString(CultureInfo.InvariantCulture) + ".");
+                    ", ItemDisplayCache " + itemDisplayBefore.ToString(CultureInfo.InvariantCulture) + "->0" +
+                    ", MagnumDisplayCache " + perkDisplayBefore.ToString(CultureInfo.InvariantCulture) + "->0" +
+                    ", ResolvedUiTextCache " + resolvedBefore.ToString(CultureInfo.InvariantCulture) + "->0.");
             }
             catch (Exception ex)
             {

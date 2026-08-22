@@ -29,8 +29,6 @@ namespace ItemIntelligence
         private static object _itemsPrices;
         private static int _marketEmptyRetryCooldown;
         private static bool _stationSchemaLogged;
-        private static MethodInfo _tradeIsValidItemMethod;
-        private static bool _tradeIsValidItemMethodResolved;
         private static bool _tradeSellContractStatusLogged;
         private static bool _tradeSellContractFailureLogged;
 
@@ -154,112 +152,6 @@ namespace ItemIntelligence
             catch { return null; }
         }
 
-        private static void BuildBrowserTrade(string itemId)
-        {
-            bool ru = IsRussian();
-
-            if (!ShowSources && !ShowTradeInformation) return;
-
-            if (!_compatTrade)
-            {
-                AddCompatibilityUnavailableLine("Trade");
-                return;
-            }
-            EnsureTradeStateDependencies();
-            if (SpaceObjectRecordsById.Count == 0) BuildSpaceObjectIndex();
-            if (!string.Equals(_marketItemId, itemId, StringComparison.OrdinalIgnoreCase))
-                StartMarketScan(itemId);
-
-            PrepareTradePresentationEntries();
-            MarkTradeMissionCountdownUiRendered();
-            int sellToPlayerCount = TradeSellEntries.Count;
-            int buyFromPlayerCount = TradeBuyEntries.Count;
-
-            if (ShowSources && sellToPlayerCount > 0)
-            {
-                BrowserLines.Add(BrowserLine.FullSection((Ui("ui.buy_at_stations")) + "  •  " + sellToPlayerCount.ToString(CultureInfo.InvariantCulture) +
-                    "  (" + Ui("ui.current_stock_may_change_during_travel") + ")"));
-                BrowserLines.Add(BrowserLine.TradeHeader(
-                    Ui("ui.station"), Ui("ui.price"), Ui("ui.stock"), Ui("ui.mission"), Ui("ui.travel")));
-                for (int i = 0; i < TradeSellEntries.Count; i++)
-                {
-                    LiveMarketEntry entry = TradeSellEntries[i];
-                    string price = entry.StationSellPrice.HasValue
-                        ? entry.StationSellPrice.Value.ToString(CultureInfo.InvariantCulture)
-                        : "?";
-                    string stock = entry.Stock.HasValue
-                        ? entry.Stock.Value.ToString(CultureInfo.InvariantCulture)
-                        : "—";
-                    BrowserLines.Add(BrowserLine.TradeStation(
-                        entry.Label, price, stock, GetTradeMissionDisplay(entry), entry.TravelTime, entry.SpaceObjectId,
-                        entry.OwnerFactionId, entry.OwnerRelation, entry.MissionArrivalState));
-                }
-            }
-
-            if (ShowTradeInformation && buyFromPlayerCount > 0)
-            {
-                BrowserLines.Add(BrowserLine.Section((Ui("ui.sell_to_stations")) + "  •  " + buyFromPlayerCount.ToString(CultureInfo.InvariantCulture)));
-                BrowserLines.Add(BrowserLine.TradeHeader(
-                    Ui("ui.station"), Ui("ui.price"), string.Empty, Ui("ui.mission"), Ui("ui.travel")));
-                for (int i = 0; i < TradeBuyEntries.Count; i++)
-                {
-                    LiveMarketEntry entry = TradeBuyEntries[i];
-                    string price = entry.StationBuyPrice.HasValue
-                        ? entry.StationBuyPrice.Value.ToString(CultureInfo.InvariantCulture)
-                        : "?";
-                    BrowserLines.Add(BrowserLine.TradeStation(
-                        entry.Label, price, string.Empty, GetTradeMissionDisplay(entry), entry.TravelTime, entry.SpaceObjectId,
-                        entry.OwnerFactionId, entry.OwnerRelation, entry.MissionArrivalState));
-                }
-            }
-
-            if ((ShowSources && sellToPlayerCount > 0) ||
-                (ShowTradeInformation && buyFromPlayerCount > 0))
-                BrowserLines.Add(BrowserLine.Note(Ui("ui.click_a_station_to_open_its_location_on_the_star")));
-
-            if (_runtimeFallbackResolveActive)
-            {
-                BrowserLines.Add(BrowserLine.Note(Ui("ui.connecting_to_market_data")));
-            }
-            if (_marketScanActive)
-            {
-                BrowserLines.Add(BrowserLine.Note((Ui("ui.market_processed")) +
-                    _marketStationIndex.ToString(CultureInfo.InvariantCulture) + "/" + MarketStations.Count.ToString(CultureInfo.InvariantCulture)));
-            }
-            else if (_marketScanComplete && MarketStations.Count == 0)
-            {
-                BrowserLines.Add(BrowserLine.Note(Ui("ui.station_list_is_unavailable_from_the_current_gam")));
-            }
-
-            // Live station rows are actionable. BarterReceipt rows below are separate
-            // station-economy recipe relations, not a promise of direct player barter.
-            List<TradeRelation> sources = new List<TradeRelation>();
-            List<TradeRelation> consumers = new List<TradeRelation>();
-            List<TradeRelation> list;
-            if (ShowSources)
-            {
-                if (BarterSources.TryGetValue(itemId, out list) && list != null) sources.AddRange(list);
-            }
-            if (ShowTradeInformation)
-            {
-                if (BarterConsumers.TryGetValue(itemId, out list) && list != null) consumers.AddRange(list);
-            }
-
-            if (sources.Count > 0)
-            {
-                BrowserLines.Add(BrowserLine.Section(Ui("ui.station_economy_recipe_output")));
-                AddBrowserBarterRelations(sources, true);
-            }
-            if (consumers.Count > 0)
-            {
-                BrowserLines.Add(BrowserLine.Section(Ui("ui.station_economy_recipe_input")));
-                AddBrowserBarterRelations(consumers, false);
-            }
-
-            if (BrowserLines.Count == 0 && (ShowSources || ShowTradeInformation))
-                BrowserLines.Add(BrowserLine.Note(Ui("ui.no_trade_relationships_found_yet")));
-        }
-
         private static void AddBrowserBarterRelations(List<TradeRelation> relations, bool selectedItemIsOutput)
         {
             if (relations == null || relations.Count == 0) return;
@@ -365,7 +257,7 @@ namespace ItemIntelligence
 
         private static void TickMarketScan()
         {
-            if (!_inspectorOpen || _browserTab != (int)BrowserTabId.Trade) return;
+            if (!_inspectorOpen || BrowserNavigation.Tab != (int)BrowserTabId.Trade) return;
 
             // Travel refresh owns its own failure boundary. It must never trip the
             // existing Trade compatibility breaker.
@@ -732,38 +624,38 @@ namespace ItemIntelligence
             for (int i = 0; i < stations.Count; i++) MarketStations.Add(stations[i]);
         }
 
-        private static bool TryEvaluateVanillaSellToStationGate(object station, string itemId, out bool accepts)
+        private static bool TryEvaluateVanillaConsumerMembership(object station, string itemId, out bool accepts)
         {
             accepts = false;
             if (station == null || string.IsNullOrEmpty(itemId)) return false;
             try
             {
-                EnsureTradeStateDependencies();
+                // Exact current vanilla TradeWindow.Configure contract: the consumer list
+                // is Station.ConsumableItems.ContainsKey(itemId). TradeSystem.IsValidItem
+                // is deliberately NOT used here because it also accepts tutorial/strategy
+                // items that vanilla does not place in the TradeWindow consumer list.
                 Station typedStation = station as Station;
-                Faction typedFaction = ResolveStationFaction(station) as Faction;
-                if (typedStation == null || typedFaction == null) return false;
-
-                if (!_tradeIsValidItemMethodResolved)
+                if (typedStation == null) return false;
+                IDictionary consumableItems = GetMember(typedStation, "ConsumableItems") as IDictionary;
+                if (consumableItems == null)
                 {
-                    _tradeIsValidItemMethodResolved = true;
-                    Type tradeType = AccessTools.TypeByName("MGSC.TradeSystem");
-                    if (tradeType != null)
-                        _tradeIsValidItemMethod = AccessTools.Method(
-                            tradeType, "IsValidItem", new Type[] { typeof(Faction), typeof(Station), typeof(string) });
                     if (!_tradeSellContractStatusLogged)
                     {
                         _tradeSellContractStatusLogged = true;
-                        if (_tradeIsValidItemMethod != null)
-                            Debug.Log("[ItemIntelligence][TradeSellContract] exactGate=TradeSystem.IsValidItem(Faction,Station,string).");
-                        else
-                            Debug.LogWarning("[ItemIntelligence][TradeSellContract] exact vanilla gate unavailable; SELL TO STATIONS relations are omitted rather than guessed.");
+                        Debug.LogWarning("[ItemIntelligence][TradeSellContract] exact Station.ConsumableItems contract unavailable; SELL TO STATIONS relations are omitted rather than guessed.");
                     }
+                    return false;
                 }
-                if (_tradeIsValidItemMethod == null) return false;
 
-                object raw = _tradeIsValidItemMethod.Invoke(null, new object[] { typedFaction, typedStation, itemId });
-                if (!(raw is bool)) return false;
-                accepts = (bool)raw;
+                if (!_tradeSellContractStatusLogged)
+                {
+                    _tradeSellContractStatusLogged = true;
+                    Debug.Log("[ItemIntelligence][TradeSellContract] exactMembership=Station.ConsumableItems.ContainsKey(itemId).");
+                }
+
+                // IDictionary.Contains is the non-generic equivalent of the exact
+                // Dictionary<string,float>.ContainsKey call used by vanilla.
+                accepts = consumableItems.Contains(itemId);
                 return true;
             }
             catch (Exception ex)
@@ -771,7 +663,7 @@ namespace ItemIntelligence
                 if (!_tradeSellContractFailureLogged)
                 {
                     _tradeSellContractFailureLogged = true;
-                    Debug.LogWarning("[ItemIntelligence][TradeSellContract] exact vanilla gate failed; SELL TO STATIONS relations are omitted. " + ex.GetType().Name + ": " + ex.Message);
+                    Debug.LogWarning("[ItemIntelligence][TradeSellContract] exact consumer membership failed; SELL TO STATIONS relations are omitted. " + ex.GetType().Name + ": " + ex.Message);
                 }
                 return false;
             }
@@ -790,8 +682,8 @@ namespace ItemIntelligence
 
                 bool sells = stock > 0;
                 bool buys;
-                bool sellGateResolved = TryEvaluateVanillaSellToStationGate(station, itemId, out buys);
-                if (!sellGateResolved) buys = false;
+                bool consumerMembershipResolved = TryEvaluateVanillaConsumerMembership(station, itemId, out buys);
+                if (!consumerMembershipResolved) buys = false;
                 if (!buys && !sells) return null;
 
                 string stationId = FirstNonEmpty(
@@ -809,9 +701,32 @@ namespace ItemIntelligence
                 int price;
                 int? stationBuyPrice = null;
                 int? stationSellPrice = null;
+                int? stationBuyBatchPrice = null;
+                int? stationSellBatchPrice = null;
+                int? stationBuyLastBatchPrice = null;
+                int? stationSellLastBatchPrice = null;
+                int stationBuyBatchQuantity = 0;
+                int stationSellBatchQuantity = 0;
                 if (buys && TryGetExactStationPrice(station, itemId, true, out price)) stationBuyPrice = price;
                 if (sells && TryGetExactStationPrice(station, itemId, false, out price)) stationSellPrice = price;
-
+                if (IsCurrent103FeatureAssembly())
+                {
+                    stationBuyBatchQuantity = GetTradeBatchSampleQuantity(true, null);
+                    stationSellBatchQuantity = GetTradeBatchSampleQuantity(false, sells ? (int?)stock : null);
+                    int lastUnitPrice;
+                    if (buys && stationBuyBatchQuantity > 0 &&
+                        TryGetExactStationBatchPrice103(station, itemId, true, stationBuyBatchQuantity, out price, out lastUnitPrice))
+                    {
+                        stationBuyBatchPrice = price;
+                        stationBuyLastBatchPrice = lastUnitPrice;
+                    }
+                    if (sells && stationSellBatchQuantity > 0 &&
+                        TryGetExactStationBatchPrice103(station, itemId, false, stationSellBatchQuantity, out price, out lastUnitPrice))
+                    {
+                        stationSellBatchPrice = price;
+                        stationSellLastBatchPrice = lastUnitPrice;
+                    }
+                }
 
                 // OwnerFactionId is the CURRENT runtime/save owner. Quasimorph stations
                 // can be captured, so the initial owner must never drive this display.
@@ -824,7 +739,11 @@ namespace ItemIntelligence
 
                 LiveMarketEntry result = new LiveMarketEntry(
                     stationId, spaceObjectId, label, buys, sells,
-                    stationBuyPrice, stationSellPrice, sells ? (int?)stock : null,
+                    stationBuyPrice, stationSellPrice,
+                    stationBuyBatchPrice, stationSellBatchPrice,
+                    stationBuyLastBatchPrice, stationSellLastBatchPrice,
+                    stationBuyBatchQuantity, stationSellBatchQuantity,
+                    sells ? (int?)stock : null,
                     ownerFactionId, ownerRelation);
                 double? travelHours;
                 result.TravelTime = GetTradeTravelTimeSafe(spaceObjectId, out travelHours);

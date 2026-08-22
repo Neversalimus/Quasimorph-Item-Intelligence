@@ -20,6 +20,12 @@ namespace ItemIntelligence
     {
         private static readonly Dictionary<string, string> LocalizationCache =
             new Dictionary<string, string>(StringComparer.Ordinal);
+        // Final entity-display caches avoid rebuilding candidate-key arrays and re-running
+        // normalization on every pooled-row redraw. Keys include the active language.
+        private static readonly Dictionary<string, string> LocalizedItemDisplayCache =
+            new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        private static readonly Dictionary<string, string> LocalizedMagnumPerkDisplayCache =
+            new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         private static MethodInfo _localizationGetMethod;
         private static ParameterInfo[] _localizationGetParameters;
         private static string _localizationCacheLanguage = string.Empty;
@@ -46,13 +52,25 @@ namespace ItemIntelligence
         private static string LocalizeItem(string itemId)
         {
             if (string.IsNullOrEmpty(itemId)) return string.Empty;
+            EnsureLocalizationCacheLanguage();
+            string displayKey = (_localizationCacheLanguage ?? string.Empty) + "|item|" + itemId;
+            string cachedDisplay;
+            if (LocalizedItemDisplayCache.TryGetValue(displayKey, out cachedDisplay)) return cachedDisplay;
+
             string[] keys = new string[] { "item." + itemId + ".name", "items." + itemId + ".name", itemId };
-            return NormalizeGameText(LocalizeCandidates(keys, itemId));
+            string resolved = NormalizeGameText(LocalizeCandidates(keys, itemId));
+            LocalizedItemDisplayCache[displayKey] = resolved;
+            return resolved;
         }
 
         private static string LocalizeMagnumPerk(string perkId)
         {
             if (string.IsNullOrEmpty(perkId)) return string.Empty;
+            EnsureLocalizationCacheLanguage();
+            string displayKey = (_localizationCacheLanguage ?? string.Empty) + "|magnum|" + perkId;
+            string cachedDisplay;
+            if (LocalizedMagnumPerkDisplayCache.TryGetValue(displayKey, out cachedDisplay)) return cachedDisplay;
+
             string[] keys = new string[]
             {
                 "mgperk." + perkId + ".name",
@@ -62,7 +80,9 @@ namespace ItemIntelligence
                 "project." + perkId + ".name",
                 perkId
             };
-            return NormalizeGameText(LocalizeCandidates(keys, perkId));
+            string resolved = NormalizeGameText(LocalizeCandidates(keys, perkId));
+            LocalizedMagnumPerkDisplayCache[displayKey] = resolved;
+            return resolved;
         }
 
         private static string LocalizeCandidates(string[] keys, string fallback)
@@ -361,6 +381,8 @@ namespace ItemIntelligence
 
             _localizationCacheLanguage = current;
             LocalizationCache.Clear();
+            LocalizedItemDisplayCache.Clear();
+            LocalizedMagnumPerkDisplayCache.Clear();
 
             Debug.Log("[ItemIntelligence] Game language resolved from vanilla localization: " +
                 (string.IsNullOrEmpty(current) ? "<unknown>" : current) +

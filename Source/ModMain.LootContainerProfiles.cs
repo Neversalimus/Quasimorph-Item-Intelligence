@@ -17,7 +17,7 @@ namespace ItemIntelligence
     {
         private static int _lootContainerProfileCount;
         private static int _lootContainerMappedProfileCount;
-        private static int _lootContainerFallbackProfileCount;
+        private static int _lootContainerUnmappedProfileCount;
         private static int _lootContainerPhysicalRecordCount;
         private static int _lootContainerDescriptorLinkCount;
         private static int _lootContainerAdditionalDropMemberLinks;
@@ -26,14 +26,14 @@ namespace ItemIntelligence
         private static int _lootContainerItemLinkCount;
         private static readonly HashSet<string> LootMultiProfilePhysicalContainerIds =
             new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        private static readonly List<string> LootFallbackContainerProfileIds =
+        private static readonly List<string> LootUnmappedContainerProfileIds =
             new List<string>();
 
         private static void ResetLootContainerProfileAuditState()
         {
             _lootContainerProfileCount = 0;
             _lootContainerMappedProfileCount = 0;
-            _lootContainerFallbackProfileCount = 0;
+            _lootContainerUnmappedProfileCount = 0;
             _lootContainerPhysicalRecordCount = 0;
             _lootContainerDescriptorLinkCount = 0;
             _lootContainerAdditionalDropMemberLinks = 0;
@@ -41,7 +41,7 @@ namespace ItemIntelligence
             _lootContainerEmptyProfileCount = 0;
             _lootContainerItemLinkCount = 0;
             LootMultiProfilePhysicalContainerIds.Clear();
-            LootFallbackContainerProfileIds.Clear();
+            LootUnmappedContainerProfileIds.Clear();
         }
 
         private static void BuildLootContainerDescriptors()
@@ -96,28 +96,24 @@ namespace ItemIntelligence
             _lootContainerMappedProfileCount = mapped.Count;
             BuildLootMultiProfilePhysicalContainerSet();
 
-            // A profile with no physical ObstacleContainers alias is still a real
-            // ContainerItemDrop source. Preserve it under its exact profile id so no
-            // weighted relation can disappear merely because presentation metadata is
-            // absent or moved in a future game build.
+            // A ContainerItemDrop profile without a proven ObstacleContainer ->
+            // ManualDropId link is not enough to claim a physical loot source. Current
+            // IL proves AztecAltar is also used by scripted quest insertion, so unmapped
+            // profiles remain diagnostic-only until an exact runtime owner is proven.
             for (int i = 0; i < LootWarmupContainerDropIds.Count; i++)
             {
                 string dropId = LootWarmupContainerDropIds[i];
                 if (string.IsNullOrEmpty(dropId) || mapped.Contains(dropId)) continue;
-                if (AddLootContainerDescriptor(dropId, dropId, 0, 0, false))
-                {
-                    _lootContainerFallbackProfileCount++;
-                    _lootContainerDescriptorLinkCount++;
-                    LootFallbackContainerProfileIds.Add(dropId);
-                }
+                _lootContainerUnmappedProfileCount++;
+                LootUnmappedContainerProfileIds.Add(dropId);
             }
-            LootFallbackContainerProfileIds.Sort(StringComparer.OrdinalIgnoreCase);
+            LootUnmappedContainerProfileIds.Sort(StringComparer.OrdinalIgnoreCase);
 
             Debug.Log(
-                "[ItemIntelligence] Loot container profile audit: profiles=" +
+                "[ItemIntelligence] Loot container profiles: profiles=" +
                 _lootContainerProfileCount.ToString(CultureInfo.InvariantCulture) +
                 ", mapped=" + _lootContainerMappedProfileCount.ToString(CultureInfo.InvariantCulture) +
-                ", fallback=" + _lootContainerFallbackProfileCount.ToString(CultureInfo.InvariantCulture) +
+                ", unmapped=" + _lootContainerUnmappedProfileCount.ToString(CultureInfo.InvariantCulture) +
                 ", physicalRecords=" + _lootContainerPhysicalRecordCount.ToString(CultureInfo.InvariantCulture) +
                 ", descriptorLinks=" + _lootContainerDescriptorLinkCount.ToString(CultureInfo.InvariantCulture) +
                 ", additionalDropMembers=" +
@@ -125,12 +121,11 @@ namespace ItemIntelligence
                 ", multiProfilePhysical=" +
                 LootMultiProfilePhysicalContainerIds.Count.ToString(CultureInfo.InvariantCulture) +
                 "; relationCoverage=" +
-                (_lootContainerMappedProfileCount + _lootContainerFallbackProfileCount)
-                    .ToString(CultureInfo.InvariantCulture) + "/" +
+                _lootContainerMappedProfileCount.ToString(CultureInfo.InvariantCulture) + "/" +
                 _lootContainerProfileCount.ToString(CultureInfo.InvariantCulture) +
-                "; fallbackIds=" + (LootFallbackContainerProfileIds.Count == 0
+                "; unmappedIds=" + (LootUnmappedContainerProfileIds.Count == 0
                     ? "<none>"
-                    : string.Join(",", LootFallbackContainerProfileIds.ToArray())) + ".");
+                    : string.Join(",", LootUnmappedContainerProfileIds.ToArray())) + ".");
         }
 
         private static Dictionary<string, string> CollectLootContainerDropReferences(

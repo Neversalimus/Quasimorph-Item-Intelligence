@@ -15,7 +15,7 @@ namespace ItemIntelligence
 {
     /// <summary>
     /// Shared read-only reflection, record enumeration and quantity extraction owner.
-    /// Extracted in v1.7.36-test10 without changing runtime behavior.
+    /// Extracted in v1.7.36-test11 without changing runtime behavior.
     /// </summary>
     public static partial class ModMain
     {
@@ -23,12 +23,6 @@ namespace ItemIntelligence
         private static readonly BindingFlags StaticFlags = BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
         private static readonly Dictionary<string, MethodInfo> BoolMethodCache =
             new Dictionary<string, MethodInfo>(StringComparer.Ordinal);
-        private static readonly Dictionary<Type, MethodInfo[]> ContainerCountMethodsByType =
-            new Dictionary<Type, MethodInfo[]>();
-        private static readonly object[] ContainerCountInvokeArgs = new object[1];
-        private static readonly HashSet<object> ContainerDeepSearchVisited =
-            new HashSet<object>(ReferenceComparer.Instance);
-
         // Reflection metadata is immutable for the lifetime of the AppDomain.
         private static readonly Dictionary<Type, List<MemberInfo>> ReadableMemberCache =
             new Dictionary<Type, List<MemberInfo>>();
@@ -400,14 +394,6 @@ namespace ItemIntelligence
             }
         }
 
-        private static void MergeItemQuantities(Dictionary<string, int> target, Dictionary<string, int> source)
-        {
-            if (target == null || source == null) return;
-            foreach (KeyValuePair<string, int> pair in source) AddQuantity(target, pair.Key, pair.Value);
-        }
-
-
-
         private static object FirstNonNull(object a, object b)
         {
             return a ?? b;
@@ -428,239 +414,6 @@ namespace ItemIntelligence
             if (values == null) return null;
             for (int i = 0; i < values.Length; i++) if (values[i] != null) return values[i];
             return null;
-        }
-
-        private static bool ContainerHasItem(object container, string itemId)
-        {
-            if (container == null || string.IsNullOrEmpty(itemId)) return false;
-            int count;
-            if (TryGetContainerItemCountFast(container, itemId, out count)) return true;
-            return TryGetContainerItemCountDeep(container, itemId, 3, out count);
-        }
-
-        private static bool TryGetContainerItemCountDeep(object container, string itemId, int depth, out int count)
-        {
-            count = 0;
-            if (container == null || string.IsNullOrEmpty(itemId) || depth < 0) return false;
-            try
-            {
-                ContainerDeepSearchVisited.Clear();
-                return TryFindContainerItemDeep(container, itemId, depth, out count, ContainerDeepSearchVisited);
-            }
-            finally
-            {
-                // Never retain arbitrary runtime/save objects beyond this bounded lookup.
-                ContainerDeepSearchVisited.Clear();
-            }
-        }
-
-        private static bool TryFindContainerItemDeep(object value, string itemId, int depth, out int count, HashSet<object> visited)
-        {
-            count = 0;
-            if (value == null || depth < 0) return false;
-
-            string directString = value as string;
-            if (directString != null)
-            {
-                if (!string.Equals(directString, itemId, StringComparison.OrdinalIgnoreCase)) return false;
-                count = 1;
-                return true;
-            }
-
-            Type valueType = value.GetType();
-            if (IsSimple(valueType)) return false;
-            if (visited != null)
-            {
-                if (visited.Contains(value)) return false;
-                visited.Add(value);
-            }
-
-            string directId = GetItemIdDeep(value, 0);
-            if (string.Equals(directId, itemId, StringComparison.OrdinalIgnoreCase))
-            {
-                count = ExtractMatchedContainerCount(value);
-                return true;
-            }
-
-            IDictionary dict = value as IDictionary;
-            if (dict != null)
-            {
-                int visitedEntries = 0;
-                foreach (DictionaryEntry entry in dict)
-                {
-                    if (++visitedEntries > 4096) break;
-                    string keyId = FirstNonEmpty(
-                        GetItemIdDeep(entry.Key, 0), entry.Key as string, ConvertToStableString(entry.Key));
-                    if (string.Equals(keyId, itemId, StringComparison.OrdinalIgnoreCase))
-                    {
-                        count = ExtractMatchedContainerCount(entry.Value);
-                        return true;
-                    }
-                    if (TryFindContainerItemDeep(entry.Key, itemId, depth - 1, out count, visited) ||
-                        TryFindContainerItemDeep(entry.Value, itemId, depth - 1, out count, visited))
-                        return true;
-                }
-                return false;
-            }
-
-            IEnumerable enumerable = value as IEnumerable;
-            if (enumerable != null)
-            {
-                int visitedEntries = 0;
-                foreach (object entry in enumerable)
-                {
-                    if (++visitedEntries > 4096) break;
-                    if (TryFindContainerItemDeep(entry, itemId, depth - 1, out count, visited)) return true;
-                }
-                return false;
-            }
-
-            List<MemberInfo> members = GetReadableMembers(valueType);
-            for (int i = 0; i < members.Count; i++)
-            {
-                string name = members[i].Name ?? string.Empty;
-                if (name.IndexOf("Price", StringComparison.OrdinalIgnoreCase) < 0 &&
-                    name.IndexOf("Item", StringComparison.OrdinalIgnoreCase) < 0 &&
-                    name.IndexOf("Cost", StringComparison.OrdinalIgnoreCase) < 0 &&
-                    name.IndexOf("Ingredient", StringComparison.OrdinalIgnoreCase) < 0 &&
-                    name.IndexOf("Material", StringComparison.OrdinalIgnoreCase) < 0 &&
-                    name.IndexOf("Requirement", StringComparison.OrdinalIgnoreCase) < 0 &&
-                    name.IndexOf("Input", StringComparison.OrdinalIgnoreCase) < 0 &&
-                    name.IndexOf("Output", StringComparison.OrdinalIgnoreCase) < 0 &&
-                    name.IndexOf("Produce", StringComparison.OrdinalIgnoreCase) < 0 &&
-                    name.IndexOf("Consume", StringComparison.OrdinalIgnoreCase) < 0 &&
-                    name.IndexOf("Value", StringComparison.OrdinalIgnoreCase) < 0)
-                    continue;
-                object child = GetMemberValue(value, members[i]);
-                if (child == null || object.ReferenceEquals(child, value)) continue;
-                if (TryFindContainerItemDeep(child, itemId, depth - 1, out count, visited)) return true;
-            }
-            return false;
-        }
-
-        private static bool TryGetContainerItemCountFast(object container, string itemId, out int count)
-        {
-            count = 0;
-            if (container == null || string.IsNullOrEmpty(itemId)) return false;
-
-            string directString = container as string;
-            if (directString != null)
-            {
-                if (string.Equals(directString, itemId, StringComparison.OrdinalIgnoreCase))
-                {
-                    count = 1;
-                    return true;
-                }
-                return false;
-            }
-
-            IDictionary dict = container as IDictionary;
-            if (dict != null)
-            {
-                try
-                {
-                    if (dict.Contains(itemId))
-                    {
-                        count = ExtractMatchedContainerCount(dict[itemId]);
-                        return true;
-                    }
-                }
-                catch { }
-
-                int visited = 0;
-                foreach (DictionaryEntry entry in dict)
-                {
-                    if (++visited > 4096) break;
-                    string keyId = FirstNonEmpty(
-                        GetItemIdDeep(entry.Key, 0), entry.Key as string, ConvertToStableString(entry.Key));
-                    if (string.Equals(keyId, itemId, StringComparison.OrdinalIgnoreCase))
-                    {
-                        count = ExtractMatchedContainerCount(entry.Value);
-                        return true;
-                    }
-                    string valueId = GetItemIdDeep(entry.Value, 0);
-                    if (string.Equals(valueId, itemId, StringComparison.OrdinalIgnoreCase))
-                    {
-                        count = ExtractMatchedContainerCount(entry.Value);
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            IEnumerable enumerable = container as IEnumerable;
-            if (enumerable != null)
-            {
-                int visited = 0;
-                foreach (object entry in enumerable)
-                {
-                    if (++visited > 4096) break;
-                    if (entry == null) continue;
-                    object key = GetMember(entry, "Key");
-                    object value = GetMember(entry, "Value");
-                    string keyId = FirstNonEmpty(
-                        GetItemIdDeep(key, 0), key as string, ConvertToStableString(key));
-                    if (string.Equals(keyId, itemId, StringComparison.OrdinalIgnoreCase))
-                    {
-                        count = ExtractMatchedContainerCount(value ?? entry);
-                        return true;
-                    }
-                    string entryId = GetItemIdDeep(entry, 0);
-                    if (string.Equals(entryId, itemId, StringComparison.OrdinalIgnoreCase))
-                    {
-                        count = ExtractMatchedContainerCount(entry);
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            string directId = GetItemIdDeep(container, 0);
-            if (string.Equals(directId, itemId, StringComparison.OrdinalIgnoreCase))
-            {
-                count = ExtractMatchedContainerCount(container);
-                return true;
-            }
-            return false;
-        }
-
-        private static int ExtractMatchedContainerCount(object value)
-        {
-            int parsed;
-            if (TryToInt(value, out parsed)) return Math.Max(0, parsed);
-            object rawCount = FirstNonNull(
-                GetMember(value, "Count"), GetMember(value, "Quantity"),
-                GetMember(value, "Amount"), GetMember(value, "ItemsCount"));
-            if (TryToInt(rawCount, out parsed)) return Math.Max(0, parsed);
-            return 1;
-        }
-
-        private static MethodInfo[] GetCachedContainerCountMethods(Type type)
-        {
-            if (type == null) return new MethodInfo[0];
-            MethodInfo[] cached;
-            if (ContainerCountMethodsByType.TryGetValue(type, out cached)) return cached;
-
-            List<MethodInfo> matches = new List<MethodInfo>();
-            try
-            {
-                MethodInfo[] methods = type.GetMethods(InstanceFlags);
-                for (int i = 0; i < methods.Length; i++)
-                {
-                    MethodInfo method = methods[i];
-                    if (method == null) continue;
-                    string name = method.Name ?? string.Empty;
-                    if (name.IndexOf("Count", StringComparison.OrdinalIgnoreCase) < 0 &&
-                        name.IndexOf("Amount", StringComparison.OrdinalIgnoreCase) < 0)
-                        continue;
-                    ParameterInfo[] parameters = method.GetParameters();
-                    if (parameters != null && parameters.Length == 1) matches.Add(method);
-                }
-            }
-            catch { }
-            cached = matches.ToArray();
-            ContainerCountMethodsByType[type] = cached;
-            return cached;
         }
 
         private static Dictionary<string, int> ExtractItemQuantities(object value)

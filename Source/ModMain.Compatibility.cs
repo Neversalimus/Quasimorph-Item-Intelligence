@@ -22,7 +22,7 @@ namespace ItemIntelligence
         // A hash mismatch is diagnostic only. API-contract failures or observed runtime
         // exceptions are the only events that trip feature circuit breakers.
         private const string ValidatedAssemblyCSharpSha256 =
-            "EE9214048DE649AA5C7E913F0CAFBCA44B8A1E164520D74DE72AEA11006C2729";
+            "EFF608C5118735359CD07FEAD8A8219E1CFB557E3A5A57517DB4428F04834B8B";
 
         private static bool _compatStaticChecked;
         private static bool _compatRuntimeChecked;
@@ -775,16 +775,30 @@ namespace ItemIntelligence
 
         private static string ComputeAssemblySha256(Assembly assembly)
         {
+            // Mod loaders may shadow-copy the loaded Assembly-CSharp. Exact-math gates
+            // must fingerprint the physical game binary BUILD_AND_STAGE compiled against,
+            // not a loader-owned copy whose bytes/path can differ at runtime.
+            string managedPath = string.Empty;
+            try
+            {
+                if (!string.IsNullOrEmpty(Application.dataPath))
+                    managedPath = Path.Combine(Application.dataPath, "Managed", "Assembly-CSharp.dll");
+            }
+            catch { managedPath = string.Empty; }
+
+            string managedHash = ComputeFileSha256Safe(managedPath);
+            if (!string.IsNullOrEmpty(managedHash)) return managedHash;
+
             if (assembly == null) return string.Empty;
+            string loadedPath = string.Empty;
+            try { loadedPath = assembly.Location; }
+            catch { loadedPath = string.Empty; }
+            return ComputeFileSha256Safe(loadedPath);
+        }
 
-            string path = string.Empty;
-            try { path = assembly.Location; }
-            catch { path = string.Empty; }
-
-            if (string.IsNullOrEmpty(path) ||
-                !File.Exists(path))
-                return string.Empty;
-
+        private static string ComputeFileSha256Safe(string path)
+        {
+            if (string.IsNullOrEmpty(path) || !File.Exists(path)) return string.Empty;
             try
             {
                 using (SHA256 sha = SHA256.Create())

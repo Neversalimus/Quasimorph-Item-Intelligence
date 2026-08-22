@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -359,7 +359,16 @@ namespace ItemIntelligence
                 try { id = value.ToString(); }
                 catch { id = string.Empty; }
             }
-            if (!string.IsNullOrEmpty(id)) result.Add(id);
+            if (string.IsNullOrEmpty(id)) return;
+
+            // Flags enums stringify as "ClassA, ClassB". Treating that as one class
+            // silently removed every container whose AllowedItemClasses combined flags.
+            string[] parts = id.Split(new char[] { ',', '|' }, StringSplitOptions.RemoveEmptyEntries);
+            for (int i = 0; i < parts.Length; i++)
+            {
+                string part = parts[i].Trim();
+                if (!string.IsNullOrEmpty(part)) result.Add(part);
+            }
         }
         private static void AppendLootGeneralSpawnContainerLines(
             string itemId,
@@ -402,17 +411,15 @@ namespace ItemIntelligence
             if (LootGeneralSpawnAdditionalContainerBuffer.Count == 0) return;
 
             any = true;
-            BrowserLines.Add(
-                BrowserLine.Section(
-                    Ui("ui.other_containers") +
-                    "  •  " + LootGeneralSpawnAdditionalContainerBuffer.Count.ToString(CultureInfo.InvariantCulture)));
+            if (!AddLootSectionHeaderAndShouldBuild(
+                    Ui("ui.other_containers"), LootGeneralSpawnAdditionalContainerBuffer.Count)) return;
             BrowserLines.Add(
                 BrowserLine.LootHeader(
-                    Ui("loot.column.container_profile"),
-                    Ui("ui.source"),
-                    Ui("ui.chance"),
+                    Ui("loot.column.container"),
+                    Ui("ui.mission_generation"),
                     Ui("ui.tech"),
-                    Ui("ui.rolls")));
+                    Ui("ui.status_2"),
+                    string.Empty));
 
             for (int i = 0; i < LootGeneralSpawnAdditionalContainerBuffer.Count; i++)
             {
@@ -421,12 +428,12 @@ namespace ItemIntelligence
                     BrowserLine.LootContainerRow(
                         containerId,
                         ResolveLootContainerName(containerId),
-                        Ui("ui.mission_generation"),
-                        "—",
+                        Ui("loot.general_spawn.placement"),
                         itemTech > 0
                             ? "T" + itemTech.ToString(CultureInfo.InvariantCulture) + "+"
                             : Ui("ui.any"),
-                        "—"));
+                        "eligible",
+                        string.Empty));
             }
 
             AddWrappedLootNote("loot.note.general_spawn");

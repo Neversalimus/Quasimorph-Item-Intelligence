@@ -146,7 +146,7 @@ namespace ItemIntelligence
             // Do not spend gameplay frames on the expensive enemy reverse index. Once
             // requested, it advances only while the Loot tab is actually visible and
             // pauses immediately when F2 is closed or another tab is selected.
-            if (!_inspectorOpen || _browserTab != (int)BrowserTabId.Loot) return;
+            if (!_inspectorOpen || BrowserNavigation.Tab != (int)BrowserTabId.Loot) return;
             if (Time.frameCount < _lootWarmupNextFrame) return;
 
             // Container sources are shown first so the tab becomes useful almost
@@ -318,7 +318,7 @@ namespace ItemIntelligence
                 ", generalSpawnPairs=" +
                 _lootGeneralSpawnPairCount.ToString(CultureInfo.InvariantCulture) + ".");
 
-            if (_inspectorOpen && _browserTab == (int)BrowserTabId.Loot)
+            if (_inspectorOpen && BrowserNavigation.Tab == (int)BrowserTabId.Loot)
                 RenderBrowser(_inspectorItemId);
         }
 
@@ -357,54 +357,79 @@ namespace ItemIntelligence
                 if (entries == null || rawDrop is string) continue;
 
                 List<LootWeightedItem> parsed = new List<LootWeightedItem>();
-                double totalWeight = 0.0;
+                bool schemaResolved = true;
                 int scanned = 0;
 
                 foreach (object entry in entries)
                 {
-                    if (++scanned > 4096) break;
-                    if (entry == null) continue;
-
-                    double weight;
-                    if (!TryToDoubleSafe(GetMember(entry, "Item1"), out weight) ||
-                        weight <= 0.0)
+                    if (++scanned > 4096)
+                    {
+                        schemaResolved = false;
+                        break;
+                    }
+                    if (entry == null)
+                    {
+                        schemaResolved = false;
                         continue;
+                    }
 
                     string itemId = FirstNonEmpty(
                         GetStringMember(entry, "Item2"),
                         GetStringMember(entry, "Value"));
-                    if (string.IsNullOrEmpty(itemId) ||
-                        !KnownItemIds.Contains(itemId))
+                    if (string.IsNullOrEmpty(itemId))
+                    {
+                        schemaResolved = false;
+                        continue;
+                    }
+
+                    double weight;
+                    bool weightResolved = TryToDoubleSafe(GetMember(entry, "Item1"), out weight) &&
+                        !double.IsNaN(weight) && !double.IsInfinity(weight);
+                    if (!weightResolved)
+                    {
+                        schemaResolved = false;
+                        weight = double.NaN;
+                    }
+
+                    object exactRaw;
+                    CompositeItemRecord exactComposite = ItemRecordsById.TryGetValue(itemId, out exactRaw)
+                        ? exactRaw as CompositeItemRecord
+                        : null;
+                    if (exactComposite != null && (exactComposite.PrimaryRecord as ItemRecord) == null)
                         continue;
 
-                    parsed.Add(new LootWeightedItem(itemId, weight));
-                    totalWeight += weight;
+                    int techLevel;
+                    bool techResolved =
+                        TryGetExactContainerItemTechLevel(itemId, out techLevel);
+                    bool bonusEligible;
+                    bool bonusEligibilityResolved =
+                        TryGetExactContainerBonusEligibility(itemId, out bonusEligible);
+
+                    // Vanilla DropManager does not reject zero/negative tuple weights.
+                    // Preserve the raw member and fail the estimate closed if that member
+                    // can affect an eligible weighted pool.
+                    parsed.Add(new LootWeightedItem(
+                        itemId, weight, Math.Max(0, techLevel), techResolved,
+                        bonusEligible, bonusEligibilityResolved));
                 }
 
-                if (totalWeight <= 0.0) continue;
+                if (parsed.Count == 0) continue;
                 hasWeightedData = true;
+                RecordLootContainerWeightedPool(dropId, biomeId, parsed, schemaResolved);
 
                 List<LootContainerDescriptor> descriptors;
                 if (!LootContainerDescriptorsByDropId.TryGetValue(
-                        dropId,
-                        out descriptors) ||
-                    descriptors == null ||
-                    descriptors.Count == 0)
+                        dropId, out descriptors) || descriptors == null || descriptors.Count == 0)
                 {
-                    descriptors = new List<LootContainerDescriptor>();
-                    descriptors.Add(new LootContainerDescriptor(
-                        dropId,
-                        dropId,
-                        0,
-                        0,
-                        false));
+                    // Unmapped ContainerItemDrop (currently AztecAltar) is not proof of a
+                    // physical container. Keep it diagnostic-only and fail closed.
+                    continue;
                 }
 
                 for (int p = 0; p < parsed.Count; p++)
                 {
                     LootWeightedItem item = parsed[p];
-                    float percent = (float)(item.Weight / totalWeight * 100.0);
-
+                    if (!KnownItemIds.Contains(item.ItemId)) continue;
                     for (int d = 0; d < descriptors.Count; d++)
                     {
                         LootContainerDescriptor descriptor = descriptors[d];
@@ -414,7 +439,7 @@ namespace ItemIntelligence
                                 descriptor.ContainerId,
                                 dropId,
                                 biomeId,
-                                percent,
+                                float.NaN,
                                 descriptor.MinRolls,
                                 descriptor.MaxRolls,
                                 descriptor.RollRangeResolved));
@@ -786,9 +811,9 @@ namespace ItemIntelligence
             Dictionary<string, double> drops = ExtractWeightedStringMap(
                 GetMember(entry.Value, "AmputatedDrop"));
             if (drops.Count == 0) return;
-            double total = 0.0;
-            foreach (KeyValuePair<string, double> pair in drops) total += pair.Value;
-            if (total <= 0.0) return;
+            double total;
+            if (!TryResolveStrictlyPositiveItemDropTotal(
+                drops, "amputation." + slotId, out total)) return;
             foreach (KeyValuePair<string, double> pair in drops)
             {
                 float conditional = (float)(pair.Value / total * 100.0);

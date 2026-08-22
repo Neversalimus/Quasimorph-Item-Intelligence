@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -39,6 +39,9 @@ namespace ItemIntelligence
             Implant,
             Consumable,
             Chip,
+            Cargo,
+            Clone,
+            OpenItem,
             Other
         }
 
@@ -767,6 +770,25 @@ namespace ItemIntelligence
                         DrawBrowserInterfaceLine(texture, 2, p, 4, p, color);
                         DrawBrowserInterfaceLine(texture, 11, p, 13, p, color);
                     }
+                    break;
+                case BrowserInterfaceIconKind.Cargo:
+                    DrawBrowserInterfaceRect(texture, 2, 3, 13, 10, color);
+                    DrawBrowserInterfaceLine(texture, 2, 10, 5, 13, color);
+                    DrawBrowserInterfaceLine(texture, 5, 13, 13, 10, color);
+                    DrawBrowserInterfaceLine(texture, 8, 3, 8, 10, color);
+                    break;
+                case BrowserInterfaceIconKind.Clone:
+                    DrawBrowserInterfaceOctagon(texture, 8, 11, 3, color);
+                    DrawBrowserInterfaceLine(texture, 3, 2, 5, 7, color);
+                    DrawBrowserInterfaceLine(texture, 5, 7, 11, 7, color);
+                    DrawBrowserInterfaceLine(texture, 11, 7, 13, 2, color);
+                    DrawBrowserInterfaceLine(texture, 3, 2, 13, 2, color);
+                    break;
+                case BrowserInterfaceIconKind.OpenItem:
+                    DrawBrowserInterfaceRect(texture, 2, 2, 10, 10, color);
+                    DrawBrowserInterfaceLine(texture, 7, 13, 13, 13, color);
+                    DrawBrowserInterfaceLine(texture, 13, 13, 13, 7, color);
+                    DrawBrowserInterfaceLine(texture, 6, 6, 13, 13, color);
                     break;
                 case BrowserInterfaceIconKind.Other:
                     FillBrowserInterfaceRect(texture, 2, 7, 4, 9, color);

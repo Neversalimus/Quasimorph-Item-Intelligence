@@ -79,7 +79,7 @@ namespace ItemIntelligence
             _browserSearchLastResultRevision = -1;
             _browserSearchLastResultLanguage = string.Empty;
             _browserSearchLastResultCount = 0;
-            _browserSearchResultPage = 0;
+            _browserSearchScrollOffset = 0;
             _browserSearchLastNormalizedQuery = string.Empty;
 
             foreach (string itemId in KnownItemIds)
@@ -424,7 +424,7 @@ namespace ItemIntelligence
             {
                 _browserSearchLastResultCount = 0;
                 BrowserSearchCurrentMatches.Clear();
-                _browserSearchResultPage = 0;
+                _browserSearchScrollOffset = 0;
                 _browserSearchLastNormalizedQuery = string.Empty;
                 _browserSearchLastResultRevision = _browserSearchIndexRevision;
                 _browserSearchLastResultLanguage = _browserSearchIndexLanguage;
@@ -440,7 +440,7 @@ namespace ItemIntelligence
             bool queryChanged = !string.Equals(parsed.Signature, _browserSearchLastNormalizedQuery, StringComparison.Ordinal);
             if (queryChanged)
             {
-                _browserSearchResultPage = 0;
+                _browserSearchScrollOffset = 0;
                 _browserSearchLastNormalizedQuery = parsed.Signature;
             }
 
@@ -521,13 +521,13 @@ namespace ItemIntelligence
             RenderBrowserSearchCurrentPage();
         }
 
-        private static void ChangeBrowserSearchPage(int delta)
+        private static void ScrollBrowserSearchRows(int delta)
         {
             if (delta == 0 || BrowserSearchCurrentMatches.Count == 0) return;
-            int pages = Math.Max(1, (BrowserSearchCurrentMatches.Count + BrowserSearchVisibleRows - 1) / BrowserSearchVisibleRows);
-            int next = Mathf.Clamp(_browserSearchResultPage + delta, 0, pages - 1);
-            if (next == _browserSearchResultPage) return;
-            _browserSearchResultPage = next;
+            int maxOffset = Math.Max(0, BrowserSearchCurrentMatches.Count - BrowserSearchVisibleRows);
+            int next = Mathf.Clamp(_browserSearchScrollOffset + delta, 0, maxOffset);
+            if (next == _browserSearchScrollOffset) return;
+            _browserSearchScrollOffset = next;
             RenderBrowserSearchCurrentPage();
         }
 
@@ -571,7 +571,7 @@ namespace ItemIntelligence
             }
             _browserSearchLastResultCount = 0;
             BrowserSearchCurrentMatches.Clear();
-            _browserSearchResultPage = 0;
+            _browserSearchScrollOffset = 0;
             _browserSearchLastNormalizedQuery = string.Empty;
             HideBrowserSearchDropdown();
             UpdateBrowserSearchStatus();

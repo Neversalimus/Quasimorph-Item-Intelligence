@@ -40,21 +40,12 @@ namespace ItemIntelligence
         // Forward view of the same datadisk graph used by recipe chip indicators.
         // It is populated during the existing ammo/datadisk warmup, so Overview adds no second item scan.
         private static readonly Dictionary<string, List<string>> ItemsUnlockedByDatadisk = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
-        // Exact raw UnlockIds pool used by ItemFactory.CreateComponent -> Random.Range(0, Count).
-        // Duplicates are preserved because repeated ids are real probability weight.
-        private static readonly Dictionary<string, List<string>> RawUnlockPoolByDatadisk = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
-        // Per-chip probability cache built alongside the existing datadisk warmup.
-        // This makes every visible unlock row O(1) instead of rescanning the raw pool.
-        private static readonly Dictionary<string, Dictionary<string, int>> UnlockHitCountsByDatadisk = new Dictionary<string, Dictionary<string, int>>(StringComparer.OrdinalIgnoreCase);
-        private static readonly Dictionary<string, int> UnlockPoolSizeByDatadisk = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-        // v1.7.36-test4: chance provenance is explicit. Exact MGSC.DatadiskRecord.UnlockIds
-        // always wins; graph-only fallback pools are accepted only when every observation agrees.
-        private static readonly HashSet<string> CanonicalUnlockPoolDatadisks = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        private static readonly HashSet<string> AmbiguousUnlockPoolDatadisks = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        private static readonly Dictionary<string, string> CanonicalUnlockPoolFingerprintByDatadisk =
-            new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-        private static readonly Dictionary<string, string> FallbackUnlockPoolFingerprintByDatadisk =
-            new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        // Canonical MGSC.DatadiskRecord.UnlockIds probability cache. Duplicates are
+        // preserved as hit counts because ItemFactory chooses a uniform raw list index.
+        private static readonly Dictionary<string, Dictionary<string, int>> UnlockHitCountsByDatadisk =
+            new Dictionary<string, Dictionary<string, int>>(StringComparer.OrdinalIgnoreCase);
+        private static readonly Dictionary<string, int> UnlockPoolSizeByDatadisk =
+            new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
         // The percentage UI is enabled only after a tiny read-only IL check proves the current
         // vanilla selection path still uses UnlockIds -> Count -> Random.Range -> get_Item -> SetUnlockId.
         private static bool _chipUnlockChanceContractChecked;
@@ -77,6 +68,7 @@ namespace ItemIntelligence
         private static int _ammoFinalizeWeaponIndex;
         private static bool _ammoWarmupActive;
         private static bool _ammoWarmupComplete;
+        private static int _ammoMeleeDescriptorSuppressedWeapons;
         private static void ResetAmmoRuntimeSessionState()
         {
             _unlockedProductionItems = null;
@@ -89,13 +81,8 @@ namespace ItemIntelligence
         {
             DatadisksByUnlockedItem.Clear();
             ItemsUnlockedByDatadisk.Clear();
-            RawUnlockPoolByDatadisk.Clear();
             UnlockHitCountsByDatadisk.Clear();
             UnlockPoolSizeByDatadisk.Clear();
-            CanonicalUnlockPoolDatadisks.Clear();
-            AmbiguousUnlockPoolDatadisks.Clear();
-            CanonicalUnlockPoolFingerprintByDatadisk.Clear();
-            FallbackUnlockPoolFingerprintByDatadisk.Clear();
             ProductionDatadiskItemIds.Clear();
         }
 
@@ -123,6 +110,7 @@ namespace ItemIntelligence
             _ammoWarmupIndex = 0;
             _ammoWarmupPhase = 0;
             _ammoFinalizeWeaponIndex = 0;
+            _ammoMeleeDescriptorSuppressedWeapons = 0;
             _ammoWarmupActive = false;
             _ammoWarmupComplete = false;
         }
@@ -166,11 +154,6 @@ namespace ItemIntelligence
             return !_compatAmmo
                 ? "disabled"
                 : (_ammoWarmupActive ? "pending" : "complete");
-        }
-
-        private static void BuildAmmoIndex()
-        {
-            StartAmmoIndexWarmup();
         }
 
         private static void StartAmmoIndexWarmup()
@@ -262,7 +245,11 @@ namespace ItemIntelligence
                 ", weaponModes=" + CountIndexedWeaponModes().ToString(CultureInfo.InvariantCulture) +
                 ", modeIcons=" + WeaponModeIconsByRawId.Count +
                 ", datadiskUnlockedItems=" + DatadisksByUnlockedItem.Count +
-                ", datadiskUnlockSources=" + ItemsUnlockedByDatadisk.Count + ".");
+                ", datadiskUnlockSources=" + ItemsUnlockedByDatadisk.Count +
+                ", chipPoolsCanonical=" + UnlockPoolSizeByDatadisk.Count.ToString(CultureInfo.InvariantCulture) +
+                ", chipPoolSource=MGSC.DatadiskRecord.UnlockIds" +
+                ", meleeDescriptorSuppressedWeapons=" + _ammoMeleeDescriptorSuppressedWeapons.ToString(CultureInfo.InvariantCulture) + ".");
+            AuditAmmoRelationsAfterWarmup();
 
             if (WeaponsByItem.Count == 0)
             {
@@ -277,7 +264,7 @@ namespace ItemIntelligence
             _ammoWarmupPhase = 0;
             _ammoFinalizeWeaponIndex = 0;
 
-            if (_inspectorOpen && (_browserTab == (int)BrowserTabId.Ammo || _browserTab == (int)BrowserTabId.Overview))
+            if (_inspectorOpen && (BrowserNavigation.Tab == (int)BrowserTabId.Ammo || BrowserNavigation.Tab == (int)BrowserTabId.Overview))
                 RenderBrowser(_inspectorItemId);
         }
 
@@ -438,19 +425,51 @@ namespace ItemIntelligence
             return count;
         }
 
+        private static bool ShouldSuppressDescriptorAmmoForMelee(WeaponInfo weapon)
+        {
+            if (weapon == null || weapon.Modes == null || weapon.Modes.Count == 0) return false;
+            bool sawStaticMelee = false;
+            for (int i = 0; i < weapon.Modes.Count; i++)
+            {
+                WeaponModeDescriptor mode = weapon.Modes[i];
+                if (mode == null) continue;
+                if (mode.Stats != null && mode.Stats.AmmoPerShot > 0) return false;
+                WeaponRecord record = ResolveWeaponModeWeaponRecord(mode.Key);
+                if (record == null) continue;
+                if (!record.IsMelee) return false;
+                sawStaticMelee = true;
+            }
+            return sawStaticMelee;
+        }
+
         private static void FinalizeAmmoWarmupWeapon(WeaponInfo weapon)
         {
             if (weapon == null) return;
             AmmoFinalizeCompatibleBuffer.Clear();
             HashSet<string> compatible = AmmoFinalizeCompatibleBuffer;
+            bool suppressMeleeInference = ShouldSuppressDescriptorAmmoForMelee(weapon);
+            if (suppressMeleeInference && (weapon.RequiredAmmoKeys.Count > 0 || weapon.DirectAmmoIds.Count > 0))
+                _ammoMeleeDescriptorSuppressedWeapons++;
 
-            foreach (string direct in weapon.DirectAmmoIds)
-                if (KnownItemIds.Contains(direct)) compatible.Add(direct);
+            if (!suppressMeleeInference)
+            {
+                foreach (string direct in weapon.DirectAmmoIds)
+                    if (KnownItemIds.Contains(direct)) compatible.Add(direct);
 
-            foreach (string overrideId in weapon.OverrideAmmo.Keys)
-                compatible.Add(overrideId);
+                foreach (string overrideId in weapon.OverrideAmmo.Keys)
+                    if (KnownItemIds.Contains(overrideId)) compatible.Add(overrideId);
+            }
+            else
+            {
+                // Static non-energy melee does not consume ammunition. Vanilla records may
+                // still carry DefaultAmmo/OverrideAmmo/RequiredAmmo relation ids for attack
+                // profiles or internal variants; none of those are player ammunition.
+                // Energy/resource-consuming melee is preserved because AmmoPerShot > 0
+                // makes ShouldSuppressDescriptorAmmoForMelee return false.
+                weapon.CompatibleAmmo.Clear();
+            }
 
-            if (weapon.RequiredAmmoKeys.Count > 0)
+            if (weapon.RequiredAmmoKeys.Count > 0 && !suppressMeleeInference)
             {
                 foreach (KeyValuePair<string, HashSet<string>> ammo in AmmoWarmupKeysByItem)
                 {
@@ -1452,16 +1471,6 @@ namespace ItemIntelligence
             }
 
             BrowserLines.Add(BrowserLine.Note(Ui("ui.no_weapon_ammo_relationships")));
-        }
-
-        private static int GetAmmoRelationCount(string itemId)
-        {
-            string relationId = ResolveStaticRelationItemId(itemId);
-            WeaponInfo weapon;
-            List<string> weapons;
-            if (WeaponsByItem.TryGetValue(relationId, out weapon) && weapon != null) return weapon.CompatibleAmmo.Count;
-            if (CompatibleWeaponsByAmmo.TryGetValue(relationId, out weapons) && weapons != null) return weapons.Count;
-            return 0;
         }
 
 

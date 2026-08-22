@@ -68,7 +68,12 @@ namespace ItemIntelligence
                 }
 
                 float weaponBonus = record.BonusScatterAngle;
+                if (float.IsNaN(stats.ScatterAngle.Value) || float.IsInfinity(stats.ScatterAngle.Value) ||
+                    float.IsNaN(weaponBonus) || float.IsInfinity(weaponBonus) ||
+                    float.IsNaN(multiplier) || float.IsInfinity(multiplier))
+                    return false;
                 scatter = (stats.ScatterAngle.Value + weaponBonus) * multiplier;
+                if (float.IsNaN(scatter) || float.IsInfinity(scatter)) return false;
                 if (ModderMode)
                 {
                     if (!_weaponModeScatterFormulaLogged)

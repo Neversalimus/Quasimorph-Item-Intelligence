@@ -1268,14 +1268,17 @@ namespace ItemIntelligence
             if (LootContainerIconsById.TryGetValue(containerId, out cached))
                 return cached;
             if (LootContainerIconMisses.Contains(containerId))
-                return null;
+                return GetBrowserInterfaceIconSprite(BrowserInterfaceIconKind.Loot);
 
             EnsureLootContainerRecordCache();
             object record = null;
             LootContainerRecordsById.TryGetValue(containerId, out record);
 
             if (record == null)
-                return TryResolveMissingRecordLootContainerIcon(containerId);
+            {
+                Sprite exactMissingRecord = TryResolveMissingRecordLootContainerIcon(containerId);
+                return exactMissingRecord ?? GetBrowserInterfaceIconSprite(BrowserInterfaceIconKind.Loot);
+            }
 
             if (IsKnownAmbiguousLootContainerVisual(containerId))
             {
@@ -1283,7 +1286,7 @@ namespace ItemIntelligence
                 if (ModderMode)
                     Debug.Log("[ItemIntelligence][ContainerIconPerf] lazy id=" + containerId +
                         "; selected=<none>; reason=runtime-audited-ambiguous; heuristicScan=SKIPPED.");
-                return null;
+                return GetBrowserInterfaceIconSprite(BrowserInterfaceIconKind.Loot);
             }
 
             int resolveStarted = ModderMode ? Environment.TickCount : 0;
@@ -1386,7 +1389,7 @@ namespace ItemIntelligence
                     "; resolveMs=" + missElapsed.ToString(CultureInfo.InvariantCulture) +
                     "; " + audit + "; " + familyAudit + "; " + neighborhoodAudit + targetedAudit);
             }
-            return null;
+            return GetBrowserInterfaceIconSprite(BrowserInterfaceIconKind.Loot);
         }
     }
 }

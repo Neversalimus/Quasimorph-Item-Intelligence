@@ -1,6 +1,5 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 
 namespace ItemIntelligence
 {
@@ -117,75 +116,5 @@ namespace ItemIntelligence
             return result;
         }
 
-        private static void UpdateBrowserStats(string itemId)
-        {
-            if (_browserStatsText == null) return;
-            _browserStatsText.color = new UnityEngine.Color(0.43f, 0.69f, 0.59f, 1f);
-
-            List<string> parts = new List<string>();
-            if (ShowMagnumUses)
-            {
-                int magnum = GetVisibleMagnumRequired(itemId);
-                string magnumText = magnum > 0
-                    ? magnum.ToString(CultureInfo.InvariantCulture)
-                    : (HasVisibleMagnumUses(itemId) ? Ui("ui.done") : "0");
-                parts.Add(Ui("stats.magnum") + " " + magnumText);
-            }
-
-            if (ShowRecipes)
-            {
-                int used = GetUniqueRecipeOutputCount(itemId);
-                int crafted = GetStaticRelationListCount(CraftedFromRecipes, itemId);
-                parts.Add(Ui("stats.recipes") + " " + used + "/" + crafted);
-            }
-
-            if (ShowSources || ShowTradeInformation)
-            {
-                int sources = ShowSources ? GetUniqueRelationCount(itemId, true) : 0;
-                int consumers = ShowTradeInformation ? GetUniqueRelationCount(itemId, false) : 0;
-                if (string.Equals(_marketItemId, itemId, StringComparison.OrdinalIgnoreCase))
-                {
-                    for (int i = 0; i < MarketEntries.Count; i++)
-                    {
-                        LiveMarketEntry entry = MarketEntries[i];
-                        if (entry == null) continue;
-                        if (ShowSources && entry.StationSells) sources++;
-                        if (ShowTradeInformation && entry.StationBuys) consumers++;
-                    }
-                }
-                parts.Add(Ui("stats.trade") + " " + FormatVisibleTradeCounts(sources, consumers));
-            }
-
-            if (ShowAmmoRelations)
-                parts.Add(Ui("stats.ammo") + " " + GetAmmoRelationCount(itemId));
-
-            _browserStatsText.text = NormalizeModUiText(string.Join("   |   ", parts.ToArray()));
-        }
-
-        private static string FormatVisibleTradeCounts(int sources, int consumers)
-        {
-            if (ShowSources && ShowTradeInformation)
-                return sources.ToString(CultureInfo.InvariantCulture) + "/" +
-                    consumers.ToString(CultureInfo.InvariantCulture);
-            if (ShowSources)
-                return sources.ToString(CultureInfo.InvariantCulture);
-
-            return consumers.ToString(CultureInfo.InvariantCulture);
-        }
-
-        private static int GetUniqueRelationCount(string itemId, bool sources)
-        {
-            HashSet<string> seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            List<TradeRelation> relations;
-            Dictionary<string, List<TradeRelation>> index = sources ? BarterSources : BarterConsumers;
-            if (!index.TryGetValue(itemId, out relations) || relations == null) return 0;
-
-            for (int i = 0; i < relations.Count; i++)
-            {
-                TradeRelation relation = relations[i];
-                if (relation != null && !string.IsNullOrEmpty(relation.Id)) seen.Add(relation.Id);
-            }
-            return seen.Count;
-        }
     }
 }

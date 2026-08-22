@@ -160,7 +160,7 @@ namespace ItemIntelligence
                 ", reverseLinks=" + reverseLinks.ToString(CultureInfo.InvariantCulture) +
                 ", symmetry=OK, rollChance=" + FormatPercentValue(_disassemblyRollChancePercent) + ".");
 
-            if (_inspectorOpen && _browserTab == (int)BrowserTabId.Recipes)
+            if (_inspectorOpen && (BrowserNavigation.Tab == (int)BrowserTabId.Recipes || BrowserNavigation.Tab == (int)BrowserTabId.Overview))
                 RenderBrowser(_inspectorItemId);
         }
 

@@ -103,6 +103,7 @@ namespace ItemIntelligence
             }
 
             ResetBrowserInterfaceIconPresentation();
+            InvalidateBrowserRowRenderCache();
             _inspectorRoot = new GameObject("QII_ItemBrowser");
             _inspectorRoot.transform.SetParent(_inspectorCanvas.transform, false);
             _inspectorRoot.transform.localScale = Vector3.one;
@@ -320,9 +321,23 @@ namespace ItemIntelligence
                 AttachBrowserItemTextNavigation(BrowserRowLeft[i], capturedRow);
                 BrowserRowRight[i] = rightGo.GetComponent<TMP_Text>();
                 BrowserRowIcons[i] = rowIcon;
+
+                GameObject actionIconGo = new GameObject("ActionGlyph");
+                actionIconGo.transform.SetParent(row.transform, false);
+                RectTransform actionIconRt = actionIconGo.AddComponent<RectTransform>();
+                actionIconRt.anchorMin = new Vector2(0f, 0.5f);
+                actionIconRt.anchorMax = new Vector2(0f, 0.5f);
+                actionIconRt.pivot = new Vector2(0f, 0.5f);
+                actionIconRt.anchoredPosition = new Vector2(674f, 0f);
+                actionIconRt.sizeDelta = new Vector2(18f, 18f);
+                Image actionIcon = actionIconGo.AddComponent<Image>();
+                actionIcon.preserveAspect = true;
+                actionIcon.raycastTarget = false;
+                actionIcon.enabled = false;
+                BrowserRowActionIcons[i] = actionIcon;
             }
 
-            _browserPageScrollbar = CreateBrowserPageScrollbar(
+            _browserScrollScrollbar = CreateBrowserPageScrollbar(
                 "BrowserPageScrollbar",
                 _inspectorRoot.transform,
                 new Vector2(724f, -221f),
@@ -331,11 +346,11 @@ namespace ItemIntelligence
 
             CreateBrowserRule(_inspectorRoot.transform, 775f);
 
-            GameObject pageGo = CreateBrowserText("Page", _inspectorRoot.transform,
+            GameObject scrollGo = CreateBrowserText("ScrollStatus", _inspectorRoot.transform,
                 new Vector2(18f, -788f), new Vector2(210f, 42f),
                 15f, new Color(0.70f, 0.82f, 0.60f, 1f), FontStyles.Bold,
                 TextAlignmentOptions.MidlineLeft);
-            _browserPageText = pageGo.GetComponent<TMP_Text>();
+            _browserScrollText = scrollGo.GetComponent<TMP_Text>();
 
             GameObject helpGo = CreateBrowserText("Help", _inspectorRoot.transform,
                 new Vector2(223f, -788f), new Vector2(495f, 42f),
@@ -344,6 +359,7 @@ namespace ItemIntelligence
             _browserHelpText = helpGo.GetComponent<TMP_Text>();
 
             FinalizeBrowserInterfaceIconPresentation();
+            RefreshModderSpawnPanel();
             UpdateBrowserChromeLocalization();
             UpdateBrowserSearchStatus();
 
@@ -635,12 +651,10 @@ namespace ItemIntelligence
         private static void RenderBrowserSearchCurrentPage()
         {
             int total = BrowserSearchCurrentMatches.Count;
-            int pages = Math.Max(1,
-                (total + BrowserSearchVisibleRows - 1) / BrowserSearchVisibleRows);
-            if (_browserSearchResultPage >= pages) _browserSearchResultPage = pages - 1;
-            if (_browserSearchResultPage < 0) _browserSearchResultPage = 0;
+            int maxOffset = Math.Max(0, total - BrowserSearchVisibleRows);
+            _browserSearchScrollOffset = Mathf.Clamp(_browserSearchScrollOffset, 0, maxOffset);
 
-            int start = _browserSearchResultPage * BrowserSearchVisibleRows;
+            int start = _browserSearchScrollOffset;
             for (int i = 0; i < BrowserSearchVisibleRows; i++)
             {
                 GameObject row = BrowserSearchRowRoots[i];
@@ -654,8 +668,8 @@ namespace ItemIntelligence
                         SetBrowserItemTooltipTarget(
                             BrowserSearchRowIcons[i], string.Empty, false);
                     if (BrowserSearchRowButtons[i] != null)
-                        BrowserSearchRowButtons[i].interactable = false;
-                    row.SetActive(false);
+                        SetBrowserInteractableIfChanged(BrowserSearchRowButtons[i], false);
+                    SetBrowserActiveIfChanged(row, false);
                     continue;
                 }
 
@@ -666,32 +680,33 @@ namespace ItemIntelligence
 
                 BrowserSearchRowItemIds[i] = match.ItemId;
                 if (BrowserSearchRowNames[i] != null)
-                    BrowserSearchRowNames[i].text = NormalizeGameText(display);
+                    SetBrowserTextIfChanged(BrowserSearchRowNames[i], NormalizeGameText(display));
                 if (BrowserSearchRowIds[i] != null)
-                    BrowserSearchRowIds[i].text = match.ItemId;
+                    SetBrowserTextIfChanged(BrowserSearchRowIds[i], match.ItemId);
 
                 Image icon = BrowserSearchRowIcons[i];
                 if (icon != null)
                 {
-                    icon.sprite = TryResolveItemSmallIcon(match.ItemId);
-                    icon.enabled = icon.sprite != null;
+                    Sprite nextIcon = TryResolveItemSmallIcon(match.ItemId);
+                    SetBrowserImageSpriteIfChanged(icon, nextIcon);
+                    SetBrowserImageEnabledIfChanged(icon, nextIcon != null);
                     SetBrowserItemTooltipTarget(icon, match.ItemId, icon.enabled);
                 }
 
                 if (BrowserSearchRowButtons[i] != null)
-                    BrowserSearchRowButtons[i].interactable = true;
-                row.SetActive(true);
+                    SetBrowserInteractableIfChanged(BrowserSearchRowButtons[i], true);
+                SetBrowserActiveIfChanged(row, true);
             }
 
             UpdateBrowserSearchStatus();
-            SyncBrowserPageScrollbar(_browserSearchScrollbar, pages, _browserSearchResultPage);
+            SyncBrowserContinuousScrollbar(_browserSearchScrollbar, total, BrowserSearchVisibleRows, _browserSearchScrollOffset);
             if (total == 0)
             {
                 HideBrowserSearchDropdown();
                 return;
             }
 
-            _browserSearchDropdown.SetActive(true);
+            SetBrowserActiveIfChanged(_browserSearchDropdown, true);
             _browserSearchDropdown.transform.SetAsLastSibling();
         }
 
@@ -701,7 +716,7 @@ namespace ItemIntelligence
             {
                 TMP_Text placeholder = _browserSearchInput.placeholder as TMP_Text;
                 if (placeholder != null)
-                    placeholder.text = NormalizeModUiText(Ui(ModderMode ? "ui.search_item_modder" : "ui.search_item"));
+                    SetBrowserTextIfChanged(placeholder, NormalizeModUiText(Ui(ModderMode ? "ui.search_item_modder" : "ui.search_item")));
             }
 
             if (_browserSearchStatusText == null) return;
@@ -712,28 +727,27 @@ namespace ItemIntelligence
 
             if (hasQuery)
             {
-                int pages = Math.Max(1,
-                    (_browserSearchLastResultCount + BrowserSearchVisibleRows - 1) /
-                    BrowserSearchVisibleRows);
-                string pageSuffix = pages > 1
-                    ? "  •  " + (_browserSearchResultPage + 1).ToString(CultureInfo.InvariantCulture) +
-                      "/" + pages.ToString(CultureInfo.InvariantCulture)
+                int first = _browserSearchLastResultCount <= 0 ? 0 : _browserSearchScrollOffset + 1;
+                int last = Math.Min(_browserSearchLastResultCount, _browserSearchScrollOffset + BrowserSearchVisibleRows);
+                string range = _browserSearchLastResultCount > BrowserSearchVisibleRows
+                    ? "  •  " + first.ToString(CultureInfo.InvariantCulture) + "-" +
+                      last.ToString(CultureInfo.InvariantCulture)
                     : string.Empty;
-                _browserSearchStatusText.text = NormalizeGameText(
-                    _browserSearchLastResultCount.ToString(CultureInfo.InvariantCulture) + pageSuffix);
+                SetBrowserTextIfChanged(_browserSearchStatusText, NormalizeGameText(
+                    _browserSearchLastResultCount.ToString(CultureInfo.InvariantCulture) + range));
                 return;
             }
 
             if (_browserSearchWarmupActive && BrowserSearchIndexItemIds.Count > 0)
             {
                 int percent = (int)((long)_browserSearchWarmupIndex * 100L / BrowserSearchIndexItemIds.Count);
-                _browserSearchStatusText.text = NormalizeGameText(
-                    percent.ToString(CultureInfo.InvariantCulture) + "%");
+                SetBrowserTextIfChanged(_browserSearchStatusText, NormalizeGameText(
+                    percent.ToString(CultureInfo.InvariantCulture) + "%"));
             }
             else
             {
-                _browserSearchStatusText.text = NormalizeGameText(
-                    BrowserSearchIndexItemIds.Count.ToString(CultureInfo.InvariantCulture));
+                SetBrowserTextIfChanged(_browserSearchStatusText, NormalizeGameText(
+                    BrowserSearchIndexItemIds.Count.ToString(CultureInfo.InvariantCulture)));
             }
         }
 
@@ -862,24 +876,24 @@ namespace ItemIntelligence
             return scrollbar;
         }
 
-        private static void SyncBrowserPageScrollbar(Scrollbar scrollbar, int pages, int page)
+        private static void SyncBrowserContinuousScrollbar(
+            Scrollbar scrollbar, int totalRows, int visibleRows, int offset)
         {
             if (scrollbar == null) return;
-
-            bool visible = pages > 1;
+            int maxOffset = Math.Max(0, totalRows - visibleRows);
+            bool visible = maxOffset > 0;
             if (scrollbar.gameObject.activeSelf != visible)
                 scrollbar.gameObject.SetActive(visible);
             if (!visible) return;
 
-            int clampedPage = Mathf.Clamp(page, 0, pages - 1);
             _browserScrollbarSync = true;
             try
             {
-                scrollbar.numberOfSteps = pages;
-                scrollbar.size = Mathf.Clamp(1f / pages, 0.065f, 0.50f);
-                scrollbar.value = pages <= 1
-                    ? 1f
-                    : 1f - ((float)clampedPage / (float)(pages - 1));
+                if (scrollbar.numberOfSteps != 0) scrollbar.numberOfSteps = 0;
+                float nextSize = Mathf.Clamp((float)visibleRows / Math.Max(1, totalRows), 0.08f, 0.92f);
+                if (Mathf.Abs(scrollbar.size - nextSize) > 0.0001f) scrollbar.size = nextSize;
+                float nextValue = 1f - ((float)Mathf.Clamp(offset, 0, maxOffset) / maxOffset);
+                if (Mathf.Abs(scrollbar.value - nextValue) > 0.0001f) scrollbar.value = nextValue;
             }
             finally
             {
@@ -887,51 +901,44 @@ namespace ItemIntelligence
             }
         }
 
-        private static int BrowserPageFromScrollbarValue(float value, int pages)
+        private static int BrowserOffsetFromScrollbarValue(float value, int totalRows, int visibleRows)
         {
-            if (pages <= 1) return 0;
+            int maxOffset = Math.Max(0, totalRows - visibleRows);
+            if (maxOffset <= 0) return 0;
             return Mathf.Clamp(
-                Mathf.RoundToInt((1f - Mathf.Clamp01(value)) * (pages - 1)),
-                0,
-                pages - 1);
+                Mathf.RoundToInt((1f - Mathf.Clamp01(value)) * maxOffset),
+                0, maxOffset);
         }
 
         private static void HandleBrowserPageScrollbar(float value)
         {
             if (!_inspectorOpen || _browserCatalogOpen) return;
-
-            int pages = Math.Max(1, (BrowserLines.Count + BrowserVisibleRows - 1) / BrowserVisibleRows);
-            int next = BrowserPageFromScrollbarValue(value, pages);
-            if (next == _browserPage) return;
-            _browserPage = next;
+            int next = BrowserOffsetFromScrollbarValue(value, BrowserLines.Count, BrowserVisibleRows);
+            if (next == BrowserNavigation.ScrollOffset) return;
+            BrowserNavigation.ScrollOffset = next;
+            if (BrowserNavigation.Tab >= 0 && BrowserNavigation.Tab < BrowserNavigation.ScrollOffsets.Length)
+                BrowserNavigation.ScrollOffsets[BrowserNavigation.Tab] = next;
             RenderBrowserRowsOnly();
         }
 
         private static void HandleBrowserCatalogScrollbar(float value)
         {
             if (!_inspectorOpen || !_browserCatalogOpen) return;
-            int pages = Math.Max(1,
-                (BrowserCatalogFilteredItemIds.Count + BrowserCatalogVisibleRows - 1) /
-                BrowserCatalogVisibleRows);
-            int next = BrowserPageFromScrollbarValue(value, pages);
-            if (next == _browserCatalogPage) return;
-            _browserCatalogPage = next;
+            int next = BrowserOffsetFromScrollbarValue(
+                value, BrowserCatalogFilteredItemIds.Count, BrowserCatalogVisibleRows);
+            if (next == _browserCatalogScrollOffset) return;
+            _browserCatalogScrollOffset = next;
             RenderBrowserCatalogRows();
         }
 
         private static void HandleBrowserSearchScrollbar(float value)
         {
-            if (!_inspectorOpen ||
-                _browserSearchDropdown == null ||
-                !_browserSearchDropdown.activeSelf)
+            if (!_inspectorOpen || _browserSearchDropdown == null || !_browserSearchDropdown.activeSelf)
                 return;
-
-            int pages = Math.Max(1,
-                (BrowserSearchCurrentMatches.Count + BrowserSearchVisibleRows - 1) /
-                BrowserSearchVisibleRows);
-            int next = BrowserPageFromScrollbarValue(value, pages);
-            if (next == _browserSearchResultPage) return;
-            _browserSearchResultPage = next;
+            int next = BrowserOffsetFromScrollbarValue(
+                value, BrowserSearchCurrentMatches.Count, BrowserSearchVisibleRows);
+            if (next == _browserSearchScrollOffset) return;
+            _browserSearchScrollOffset = next;
             RenderBrowserSearchCurrentPage();
         }
 
@@ -983,6 +990,7 @@ namespace ItemIntelligence
             }
 
             _inspectorRect.localScale = Vector3.one;
+            UpdateModderSpawnPanelPosition();
             _inspectorRoot.transform.SetAsLastSibling();
         }
 
@@ -992,17 +1000,18 @@ namespace ItemIntelligence
 
             EnsureLocalizationCacheLanguage();
             if (_inspectorTitle != null)
-                _inspectorTitle.text = NormalizeGameText(LocalizeItem(itemId));
+                SetBrowserTextIfChanged(_inspectorTitle, NormalizeGameText(LocalizeItem(itemId)));
             if (_inspectorItemIdText != null)
-                _inspectorItemIdText.text = NormalizeModUiText(Ui("ui.item_id")) + ": " + itemId;
+                SetBrowserTextIfChanged(_inspectorItemIdText, NormalizeModUiText(Ui("ui.item_id")) + ": " + itemId);
 
             UpdateBrowserPreview(itemId);
+            RefreshModderSpawnPanel();
             UpdateBrowserChromeLocalization();
             UpdateBrowserTabs();
             UpdateBrowserStats(itemId);
 
             BrowserLines.Clear();
-            switch ((BrowserTabId)_browserTab)
+            switch ((BrowserTabId)BrowserNavigation.Tab)
             {
                 case BrowserTabId.Overview:
                     BuildBrowserOverview(itemId);
@@ -1035,749 +1044,33 @@ namespace ItemIntelligence
                     if (ShowSources) BuildBrowserLootSources(itemId);
                     break;
                 default:
-                    _browserTab = (int)BrowserTabId.Overview;
+                    BrowserNavigation.Tab = (int)BrowserTabId.Overview;
                     BuildBrowserOverview(itemId);
                     break;
             }
 
             if (BrowserLinesNeedRecipeContextUi()) EnsureBrowserRecipeContextUi();
 
-            int pages = Math.Max(1, (BrowserLines.Count + BrowserVisibleRows - 1) / BrowserVisibleRows);
-            if (_browserPage >= pages) _browserPage = pages - 1;
-            if (_browserPage < 0) _browserPage = 0;
-            if (_browserTab >= 0 && _browserTab < BrowserPageByTab.Length)
-                BrowserPageByTab[_browserTab] = _browserPage;
+            int maxOffset = Math.Max(0, BrowserLines.Count - BrowserVisibleRows);
+            BrowserNavigation.ScrollOffset = Mathf.Clamp(BrowserNavigation.ScrollOffset, 0, maxOffset);
+            if (BrowserNavigation.Tab >= 0 && BrowserNavigation.Tab < BrowserNavigation.ScrollOffsets.Length)
+                BrowserNavigation.ScrollOffsets[BrowserNavigation.Tab] = BrowserNavigation.ScrollOffset;
             RenderBrowserRowsOnly();
             UpdateLootProgressUi();
             PositionInspectorPanel();
         }
 
-        private static void RenderBrowserRowsOnly()
-        {
-            HideBrowserWeaponModeTooltip();
-            int total = BrowserLines.Count;
-            int pages = Math.Max(1, (total + BrowserVisibleRows - 1) / BrowserVisibleRows);
-            if (_browserPage >= pages) _browserPage = pages - 1;
-            if (_browserPage < 0) _browserPage = 0;
-            if (_browserTab >= 0 && _browserTab < BrowserPageByTab.Length)
-                BrowserPageByTab[_browserTab] = _browserPage;
 
-            int startIndex = _browserPage * BrowserVisibleRows;
-            for (int i = 0; i < BrowserVisibleRows; i++)
-            {
-                GameObject root = BrowserRowRoots[i];
-                TMP_Text left = BrowserRowLeft[i];
-                TMP_Text right = BrowserRowRight[i];
-                TMP_Text factionReward = BrowserRowFactionReward[i];
-                TMP_Text factionUnlock = BrowserRowFactionUnlock[i];
-                TMP_Text factionCurrent = BrowserRowFactionCurrent[i];
-                TMP_Text factionState = BrowserRowFactionState[i];
-                Image bg = BrowserRowBackground[i];
-                if (root == null || left == null || right == null) continue;
-                SetBrowserWeaponModeTooltipTarget(root, string.Empty, string.Empty, false);
-
-                int lineIndex = startIndex + i;
-                if (lineIndex >= total)
-                {
-                    if (BrowserRowButtons[i] != null) BrowserRowButtons[i].interactable = false;
-                    left.raycastTarget = false;
-                    root.SetActive(false);
-                    continue;
-                }
-
-                BrowserLine line = BrowserLines[lineIndex];
-                left.raycastTarget = line != null && line.LeftMode == 1 && IsKnownItemId(line.Left);
-                root.SetActive(true);
-
-                if (factionReward != null) factionReward.gameObject.SetActive(false);
-                if (factionUnlock != null) factionUnlock.gameObject.SetActive(false);
-                if (factionCurrent != null) factionCurrent.gameObject.SetActive(false);
-                if (factionState != null) factionState.gameObject.SetActive(false);
-                if (right != null) right.gameObject.SetActive(true);
-
-                Button rowButton = BrowserRowButtons[i];
-                bool actionable = !string.IsNullOrEmpty(line.ActionSpaceObjectId);
-                if (rowButton != null) rowButton.interactable = actionable;
-
-                Outline rowOutline = BrowserRowOutlines[i];
-                if (rowOutline != null)
-                {
-                    rowOutline.enabled = actionable;
-                    rowOutline.effectColor = new Color(0.42f, 0.80f, 0.59f, 0.90f);
-                }
-
-                string leftText = line.Left ?? string.Empty;
-                if (line.LeftMode == 1) leftText = LocalizeItem(leftText);
-                else if (line.LeftMode == 2) leftText = LocalizeMagnumPerk(leftText);
-
-                bool showIcon = false;
-                Image itemIconImage = BrowserRowIcons[i];
-                Image chipIconImage = BrowserRowChipIcons[i];
-                Image chipStatusImage = BrowserRowChipStatusIcons[i];
-
-                if (itemIconImage != null)
-                {
-                    SetBrowserItemTooltipTarget(itemIconImage, string.Empty, false);
-                    itemIconImage.sprite = null;
-                    itemIconImage.enabled = false;
-                    itemIconImage.color = Color.white;
-                }
-                if (chipIconImage != null)
-                {
-                    SetBrowserItemTooltipTarget(chipIconImage, string.Empty, false);
-                    chipIconImage.sprite = null;
-                    chipIconImage.enabled = false;
-                    chipIconImage.color = Color.white;
-                }
-                if (chipStatusImage != null)
-                {
-                    chipStatusImage.sprite = null;
-                    chipStatusImage.enabled = false;
-                    chipStatusImage.color = Color.white;
-                }
-
-                if (line.LeftMode == 1 && itemIconImage != null)
-                {
-                    Sprite icon = TryResolveItemSmallIcon(line.Left);
-                    if (icon != null)
-                    {
-                        itemIconImage.sprite = icon;
-                        itemIconImage.enabled = true;
-                        SetBrowserItemTooltipTarget(itemIconImage, line.Left, true, true);
-                        showIcon = true;
-                    }
-                }
-                else if (line.LeftMode == 3 && itemIconImage != null)
-                {
-                    Sprite modeIcon = TryResolveWeaponModeSmallIcon(line.ContainerIconId);
-                    if (modeIcon != null)
-                    {
-                        itemIconImage.sprite = modeIcon;
-                        itemIconImage.enabled = true;
-                        itemIconImage.color = Color.white;
-                        showIcon = true;
-                    }
-                }
-                else if (!string.IsNullOrEmpty(line.FactionId) && itemIconImage != null)
-                {
-                    Sprite factionIcon = TryResolveFactionSmallIcon(
-                        line.FactionId, ResolveFactionById(line.FactionId));
-                    if (factionIcon != null)
-                    {
-                        itemIconImage.sprite = factionIcon;
-                        itemIconImage.enabled = true;
-                        itemIconImage.color = Color.white;
-                        showIcon = true;
-                    }
-                }
-
-                else if (!string.IsNullOrEmpty(line.ContainerIconId) && itemIconImage != null)
-                {
-                    Sprite containerIcon = TryResolveLootContainerSmallIcon(line.ContainerIconId);
-                    if (containerIcon != null)
-                    {
-                        itemIconImage.sprite = containerIcon;
-                        itemIconImage.enabled = true;
-                        itemIconImage.color = Color.white;
-                        showIcon = true;
-                    }
-                }
-
-                if (line.LeftMode == 3)
-                    SetBrowserWeaponModeTooltipTarget(root, line.ContainerIconId, leftText, true);
-
-                bool showRecipeContext = line.ShowRecipeChipContext;
-                bool showChipUnlockStatus = line.RowKind == BrowserRowKind.ChipUnlock;
-                if (showRecipeContext && chipIconImage != null)
-                {
-                    if (!string.IsNullOrEmpty(line.ChipItemId))
-                    {
-                        Sprite chipSprite = TryResolveItemSmallIcon(line.ChipItemId);
-                        if (chipSprite != null)
-                        {
-                            chipIconImage.sprite = chipSprite;
-                            chipIconImage.color = Color.white;
-                        }
-                        else
-                        {
-                            chipIconImage.sprite = _qiiNoDatadiskSprite;
-                            chipIconImage.color = new Color(0.48f, 0.62f, 0.56f, 1f);
-                        }
-                    }
-                    else
-                    {
-                        chipIconImage.sprite = _qiiNoDatadiskSprite;
-                        chipIconImage.color = new Color(0.48f, 0.62f, 0.56f, 1f);
-                    }
-                    chipIconImage.enabled = chipIconImage.sprite != null;
-                    SetBrowserItemTooltipTarget(
-                        chipIconImage,
-                        line.ChipItemId,
-                        chipIconImage.enabled && !string.IsNullOrEmpty(line.ChipItemId),
-                        true);
-                }
-
-                if (((showRecipeContext && !string.IsNullOrEmpty(line.ChipItemId)) || showChipUnlockStatus) && chipStatusImage != null)
-                {
-                    if (line.ChipStatus > 0)
-                    {
-                        chipStatusImage.sprite = _qiiUnlockedMarkerSprite;
-                        chipStatusImage.color = line.ChipStatus == 1
-                            ? new Color(0.46f, 0.92f, 0.54f, 1f)
-                            : new Color(0.92f, 0.82f, 0.38f, 1f);
-                        chipStatusImage.enabled = chipStatusImage.sprite != null;
-                    }
-                    else if (line.ChipStatus < 0)
-                    {
-                        chipStatusImage.sprite = _qiiLockedMarkerSprite;
-                        chipStatusImage.color = new Color(0.94f, 0.34f, 0.30f, 1f);
-                        chipStatusImage.enabled = chipStatusImage.sprite != null;
-                    }
-                }
-
-                RectTransform itemRt = itemIconImage == null ? null : itemIconImage.rectTransform;
-                RectTransform chipRt = chipIconImage == null ? null : chipIconImage.rectTransform;
-                RectTransform statusRt = chipStatusImage == null ? null : chipStatusImage.rectTransform;
-                RectTransform leftRt = left.rectTransform;
-                RectTransform rightRt = right.rectTransform;
-
-                // The same fixed row objects are reused on every page and tab. Reset
-                // typography before applying a specialized table layout so Loot/Faction
-                // rows cannot leak their font sizes or styles into normal browser rows.
-                left.enableAutoSizing = false;
-                left.fontSize = 18f;
-                right.fontSize = 16f;
-                left.fontStyle = FontStyles.Normal;
-                right.fontStyle = FontStyles.Normal;
-                right.alignment = TextAlignmentOptions.MidlineRight;
-                if (factionReward != null)
-                {
-                    factionReward.fontSize = 15f;
-                    factionReward.fontStyle = FontStyles.Normal;
-                }
-                if (factionUnlock != null)
-                {
-                    factionUnlock.fontSize = 15f;
-                    factionUnlock.fontStyle = FontStyles.Normal;
-                }
-                if (factionCurrent != null)
-                {
-                    factionCurrent.fontSize = 15f;
-                    factionCurrent.fontStyle = FontStyles.Normal;
-                }
-                if (factionState != null)
-                {
-                    factionState.fontSize = 13f;
-                    factionState.fontStyle = FontStyles.Normal;
-                }
-
-                if (rightRt != null)
-                {
-                    rightRt.anchoredPosition = new Vector2(494f, 0f);
-                    rightRt.sizeDelta = new Vector2(194f, rightRt.sizeDelta.y);
-                }
-
-                if (showRecipeContext)
-                {
-                    if (statusRt != null) statusRt.anchoredPosition = new Vector2(5f, 0f);
-                    if (chipRt != null) chipRt.anchoredPosition = new Vector2(23f, 0f);
-                    if (itemRt != null) itemRt.anchoredPosition = new Vector2(51f, 0f);
-                    if (leftRt != null)
-                    {
-                        leftRt.anchoredPosition = new Vector2(79f, 0f);
-                        leftRt.sizeDelta = new Vector2(348f, leftRt.sizeDelta.y);
-                    }
-                }
-                else if (showChipUnlockStatus)
-                {
-                    if (statusRt != null) statusRt.anchoredPosition = new Vector2(6f, 0f);
-                    if (itemRt != null) itemRt.anchoredPosition = new Vector2(28f, 0f);
-                    if (leftRt != null)
-                    {
-                        leftRt.anchoredPosition = new Vector2(56f, 0f);
-                        leftRt.sizeDelta = new Vector2(368f, leftRt.sizeDelta.y);
-                    }
-                }
-                else
-                {
-                    if (itemRt != null) itemRt.anchoredPosition = new Vector2(8f, 0f);
-                    if (leftRt != null)
-                    {
-                        leftRt.anchoredPosition = showIcon ? new Vector2(36f, 0f) : new Vector2(10f, 0f);
-                        leftRt.sizeDelta = showIcon ? new Vector2(388f, leftRt.sizeDelta.y) : new Vector2(414f, leftRt.sizeDelta.y);
-                    }
-                }
-
-                if (line.RowKind == BrowserRowKind.FactionRewardHeader || line.RowKind == BrowserRowKind.FactionReward)
-                {
-                    // Stable faction table geometry: faction/name at left, then four
-                    // fixed columns whose headers sit directly above their values.
-                    if (right != null) right.gameObject.SetActive(false);
-
-                    if (leftRt != null)
-                    {
-                        leftRt.anchoredPosition = line.RowKind == BrowserRowKind.FactionReward && showIcon
-                            ? new Vector2(36f, 0f)
-                            : new Vector2(10f, 0f);
-                        leftRt.sizeDelta = line.RowKind == BrowserRowKind.FactionReward && showIcon
-                            ? new Vector2(268f, leftRt.sizeDelta.y)
-                            : new Vector2(294f, leftRt.sizeDelta.y);
-                    }
-
-                    if (factionReward != null)
-                    {
-                        RectTransform rt = factionReward.rectTransform;
-                        rt.anchoredPosition = new Vector2(304f, 0f);
-                        rt.sizeDelta = new Vector2(82f, rt.sizeDelta.y);
-                        factionReward.gameObject.SetActive(true);
-                        factionReward.text = NormalizeModUiText(line.ColumnReward);
-                    }
-                    if (factionUnlock != null)
-                    {
-                        RectTransform rt = factionUnlock.rectTransform;
-                        rt.anchoredPosition = new Vector2(386f, 0f);
-                        rt.sizeDelta = new Vector2(78f, rt.sizeDelta.y);
-                        factionUnlock.gameObject.SetActive(true);
-                        factionUnlock.text = NormalizeModUiText(line.ColumnUnlock);
-                    }
-                    if (factionCurrent != null)
-                    {
-                        RectTransform rt = factionCurrent.rectTransform;
-                        rt.anchoredPosition = new Vector2(464f, 0f);
-                        rt.sizeDelta = new Vector2(104f, rt.sizeDelta.y);
-                        factionCurrent.gameObject.SetActive(true);
-                        factionCurrent.text = NormalizeModUiText(line.ColumnCurrent);
-                    }
-                    if (factionState != null)
-                    {
-                        RectTransform rt = factionState.rectTransform;
-                        rt.anchoredPosition = new Vector2(568f, 0f);
-                        rt.sizeDelta = new Vector2(94f, rt.sizeDelta.y);
-                        factionState.gameObject.SetActive(true);
-                        factionState.text = NormalizeModUiText(line.ColumnState);
-                    }
-
-                    left.text = NormalizeModUiText(leftText);
-
-                    if (line.RowKind == BrowserRowKind.FactionRewardHeader)
-                    {
-                        left.fontStyle = FontStyles.Italic;
-                        left.color = new Color(0.35f, 0.58f, 0.52f, 1f);
-                        Color headerColor = new Color(0.35f, 0.58f, 0.52f, 1f);
-                        factionReward.color = headerColor;
-                        factionUnlock.color = headerColor;
-                        factionCurrent.color = headerColor;
-                        factionState.color = headerColor;
-                        factionReward.fontStyle = FontStyles.Italic;
-                        factionUnlock.fontStyle = FontStyles.Italic;
-                        factionCurrent.fontStyle = FontStyles.Italic;
-                        factionState.fontStyle = FontStyles.Italic;
-                        if (bg != null) bg.color = new Color(0.010f, 0.030f, 0.027f, 0.30f);
-                    }
-                    else
-                    {
-                        Color valueColor = new Color(0.92f, 0.86f, 0.52f, 1f);
-                        factionReward.color = valueColor;
-                        factionUnlock.color = valueColor;
-                        factionCurrent.color = valueColor;
-                        factionState.color = line.Style == 3
-                            ? new Color(0.64f, 0.85f, 0.67f, 1f)
-                            : valueColor;
-                    }
-                }
-                else if (line.RowKind == BrowserRowKind.LootHeader || line.RowKind == BrowserRowKind.LootRow)
-                {
-                    // Loot uses the already pooled faction-table text objects instead of
-                    // creating new UI objects. The dedicated geometry makes source,
-                    // context, chance, rolls/Tech and status readable at a glance.
-                    if (right != null) right.gameObject.SetActive(false);
-
-                    bool hasFourthColumn = !string.IsNullOrEmpty(line.ColumnState);
-                    bool showContainerIcon =
-                        line.RowKind == BrowserRowKind.LootRow &&
-                        !string.IsNullOrEmpty(line.ContainerIconId) &&
-                        showIcon && itemRt != null;
-                    if (leftRt != null)
-                    {
-                        // Container rows now follow the same icon-before-name grammar as
-                        // item/faction rows throughout QII.
-                        leftRt.anchoredPosition = showContainerIcon
-                            ? new Vector2(36f, 0f)
-                            : new Vector2(10f, 0f);
-                        leftRt.sizeDelta = new Vector2(
-                            showContainerIcon ? 260f : (hasFourthColumn ? 286f : 304f),
-                            leftRt.sizeDelta.y);
-                    }
-                    if (showContainerIcon && itemRt != null)
-                    {
-                        itemRt.anchoredPosition = new Vector2(8f, 0f);
-                        itemRt.sizeDelta = new Vector2(22f, 22f);
-                    }
-
-                    if (hasFourthColumn)
-                    {
-                        ConfigureLootColumn(factionReward, 296f, 150f, line.ColumnReward, 13.5f);
-                        ConfigureLootColumn(factionUnlock, 446f, 86f, line.ColumnUnlock, 13.5f);
-                        ConfigureLootColumn(factionCurrent, 532f, 88f, line.ColumnCurrent, 13.5f);
-
-                        bool eligibilityStatus =
-                            string.Equals(line.ColumnState, "eligible", StringComparison.OrdinalIgnoreCase) ||
-                            string.Equals(line.ColumnState, "ineligible", StringComparison.OrdinalIgnoreCase);
-                        if (eligibilityStatus && line.RowKind == BrowserRowKind.LootRow && chipStatusImage != null)
-                        {
-                            ConfigureLootColumn(factionState, 620f, 70f, string.Empty, 12f);
-                            if (statusRt != null)
-                            {
-                                statusRt.anchoredPosition = new Vector2(646f, 0f);
-                                statusRt.sizeDelta = new Vector2(16f, 16f);
-                            }
-                            bool eligible = string.Equals(line.ColumnState, "eligible", StringComparison.OrdinalIgnoreCase);
-                            chipStatusImage.sprite = eligible ? _qiiUnlockedMarkerSprite : _qiiLockedMarkerSprite;
-                            chipStatusImage.color = eligible
-                                ? new Color(0.46f, 0.92f, 0.54f, 1f)
-                                : new Color(0.94f, 0.34f, 0.30f, 1f);
-                            chipStatusImage.enabled = chipStatusImage.sprite != null;
-                        }
-                        else
-                        {
-                            ConfigureLootColumn(factionState, 620f, 70f, line.ColumnState, 12f);
-                        }
-                    }
-                    else
-                    {
-                        ConfigureLootColumn(factionReward, 314f, 184f, line.ColumnReward, 13.5f);
-                        ConfigureLootColumn(factionUnlock, 498f, 92f, line.ColumnUnlock, 13.5f);
-
-                        bool eligibilityStatus =
-                            string.Equals(line.ColumnCurrent, "eligible", StringComparison.OrdinalIgnoreCase) ||
-                            string.Equals(line.ColumnCurrent, "ineligible", StringComparison.OrdinalIgnoreCase);
-                        if (eligibilityStatus && line.RowKind == BrowserRowKind.LootRow && chipStatusImage != null)
-                        {
-                            ConfigureLootColumn(factionCurrent, 590f, 96f, string.Empty, 13.5f);
-                            if (statusRt != null)
-                            {
-                                statusRt.anchoredPosition = new Vector2(630f, 0f);
-                                statusRt.sizeDelta = new Vector2(16f, 16f);
-                            }
-                            bool eligible = string.Equals(line.ColumnCurrent, "eligible", StringComparison.OrdinalIgnoreCase);
-                            chipStatusImage.sprite = eligible ? _qiiUnlockedMarkerSprite : _qiiLockedMarkerSprite;
-                            chipStatusImage.color = eligible
-                                ? new Color(0.46f, 0.92f, 0.54f, 1f)
-                                : new Color(0.94f, 0.34f, 0.30f, 1f);
-                            chipStatusImage.enabled = chipStatusImage.sprite != null;
-                        }
-                        else
-                        {
-                            ConfigureLootColumn(factionCurrent, 590f, 96f, line.ColumnCurrent, 13.5f);
-                        }
-                        ConfigureLootColumn(factionState, 662f, 0f, string.Empty, 12f);
-                    }
-
-                    left.text = NormalizeModUiText(leftText);
-                    left.fontSize = line.RowKind == BrowserRowKind.LootHeader ? 13f : 16f;
-
-                    if (line.RowKind == BrowserRowKind.LootHeader)
-                    {
-                        Color headerColor = new Color(0.35f, 0.58f, 0.52f, 1f);
-                        left.color = headerColor;
-                        left.fontStyle = FontStyles.Italic;
-                        SetLootColumnHeaderStyle(factionReward, headerColor);
-                        SetLootColumnHeaderStyle(factionUnlock, headerColor);
-                        SetLootColumnHeaderStyle(factionCurrent, headerColor);
-                        SetLootColumnHeaderStyle(factionState, headerColor);
-                        if (bg != null) bg.color = new Color(0.010f, 0.030f, 0.027f, 0.30f);
-                    }
-                    else
-                    {
-                        if (factionReward != null)
-                            factionReward.color = new Color(0.52f, 0.74f, 0.63f, 1f);
-                        if (factionUnlock != null)
-                            factionUnlock.color = new Color(0.92f, 0.86f, 0.52f, 1f);
-                        if (factionCurrent != null)
-                            factionCurrent.color = new Color(0.92f, 0.86f, 0.52f, 1f);
-                        if (factionState != null)
-                            factionState.color = new Color(0.62f, 0.82f, 0.66f, 1f);
-                    }
-                }
-                else if (line.RowKind == BrowserRowKind.LootHeaderSixColumns || line.RowKind == BrowserRowKind.LootRowSixColumns)
-                {
-                    // Six-column enemy Loot table. Reuse the pooled Right text as the
-                    // sixth column so no extra runtime UI objects are allocated.
-                    if (right != null)
-                    {
-                        right.gameObject.SetActive(true);
-                        right.alignment = TextAlignmentOptions.Center;
-                    }
-                    if (itemRt != null)
-                    {
-                        itemRt.anchoredPosition = new Vector2(8f, 0f);
-                        itemRt.sizeDelta = new Vector2(20f, 20f);
-                    }
-                    if (leftRt != null)
-                    {
-                        // Dedicated faction-icon cell: 8..30 px. Enemy text always starts
-                        // after that cell, so faction emblems can never overlap the name.
-                        leftRt.anchoredPosition = new Vector2(38f, 0f);
-                        leftRt.sizeDelta = new Vector2(172f, leftRt.sizeDelta.y);
-                    }
-
-                    // Give probability ranges substantially more room. Values such as
-                    // 0.548%-0.912% must remain readable in both EN and RU layouts.
-                    ConfigureLootColumn(factionReward, 210f, 112f, line.ColumnReward, 12f);
-                    ConfigureLootColumn(factionUnlock, 322f, 112f, line.ColumnUnlock, 11.5f);
-                    ConfigureLootColumn(factionCurrent, 434f, 54f, line.ColumnCurrent, 12f);
-                    ConfigureLootColumn(factionState, 488f, 96f, line.ColumnState, 11.5f);
-                    ConfigureLootColumn(right, 584f, 104f, line.Right, 11.5f);
-
-                    left.text = NormalizeModUiText(leftText);
-                    left.fontSize = line.RowKind == BrowserRowKind.LootHeaderSixColumns ? 12f : 14f;
-
-                    if (line.RowKind == BrowserRowKind.LootHeaderSixColumns)
-                    {
-                        Color headerColor = new Color(0.35f, 0.58f, 0.52f, 1f);
-                        left.color = headerColor;
-                        left.fontStyle = FontStyles.Italic;
-                        SetLootColumnHeaderStyle(factionReward, headerColor);
-                        SetLootColumnHeaderStyle(factionUnlock, headerColor);
-                        SetLootColumnHeaderStyle(factionCurrent, headerColor);
-                        SetLootColumnHeaderStyle(factionState, headerColor);
-                        SetLootColumnHeaderStyle(right, headerColor);
-                        if (bg != null) bg.color = new Color(0.010f, 0.030f, 0.027f, 0.30f);
-                    }
-                    else
-                    {
-                        if (factionReward != null)
-                            factionReward.color = new Color(0.52f, 0.74f, 0.63f, 1f);
-                        if (factionUnlock != null)
-                            factionUnlock.color = new Color(0.92f, 0.86f, 0.52f, 1f);
-                        if (factionCurrent != null)
-                            factionCurrent.color = new Color(0.76f, 0.88f, 0.68f, 1f);
-                        if (factionState != null)
-                            factionState.color = new Color(0.92f, 0.86f, 0.52f, 1f);
-                        if (right != null)
-                            right.color = new Color(0.62f, 0.82f, 0.66f, 1f);
-                    }
-                }
-                else if (line.RowKind == BrowserRowKind.MagnumResearch)
-                {
-                    // Magnum research route | quantity | full state. This avoids the old
-                    // right-edge truncation ("compl") while keeping long routes readable.
-                    if (right != null) right.gameObject.SetActive(false);
-                    if (leftRt != null)
-                    {
-                        leftRt.anchoredPosition = new Vector2(10f, 0f);
-                        leftRt.sizeDelta = new Vector2(478f, leftRt.sizeDelta.y);
-                    }
-                    ConfigureLootColumn(factionReward, 488f, 54f, line.ColumnReward, 14f);
-                    ConfigureLootColumn(factionUnlock, 542f, 146f, line.ColumnUnlock, 13.5f);
-                    ConfigureLootColumn(factionCurrent, 688f, 0f, string.Empty, 12f);
-                    ConfigureLootColumn(factionState, 688f, 0f, string.Empty, 12f);
-                    left.text = NormalizeModUiText(leftText);
-                    left.fontSize = 16f;
-                    if (factionReward != null) factionReward.color = new Color(0.92f, 0.86f, 0.52f, 1f);
-                    if (factionUnlock != null) factionUnlock.color = new Color(0.76f, 0.88f, 0.68f, 1f);
-                }
-                else if (line.RowKind == BrowserRowKind.TradeHeader || line.RowKind == BrowserRowKind.TradeStation)
-                {
-                    // v1.7.39-test11 Trade geometry: station | price | stock | mission remaining | vanilla travel.
-                    // Reuse the existing pooled faction-table texts; no per-row objects.
-                    // Price 0 remains a valid numeric price.
-                    if (right != null) right.gameObject.SetActive(false);
-                    if (leftRt != null)
-                    {
-                        leftRt.anchoredPosition = new Vector2(10f, 0f);
-                        leftRt.sizeDelta = new Vector2(350f, leftRt.sizeDelta.y);
-                    }
-                    ConfigureLootColumn(factionReward, 360f, 65f, line.ColumnReward, 13.5f);
-                    ConfigureLootColumn(factionUnlock, 425f, 58f, line.ColumnUnlock, 13.5f);
-                    ConfigureLootColumn(factionCurrent, 483f, 80f, line.ColumnCurrent, 12.5f);
-                    ConfigureLootColumn(factionState, 563f, 125f, line.ColumnState, 13f);
-
-                    left.text = NormalizeModUiText((actionable && line.RowKind == BrowserRowKind.TradeStation ? ">  " : string.Empty) + leftText);
-                    left.fontSize = line.RowKind == BrowserRowKind.TradeHeader ? 13f : 16f;
-
-                    if (line.RowKind == BrowserRowKind.TradeHeader)
-                    {
-                        Color headerColor = new Color(0.35f, 0.58f, 0.52f, 1f);
-                        left.color = headerColor;
-                        left.fontStyle = FontStyles.Italic;
-                        SetLootColumnHeaderStyle(factionReward, headerColor);
-                        SetLootColumnHeaderStyle(factionUnlock, headerColor);
-                        SetLootColumnHeaderStyle(factionCurrent, headerColor);
-                        SetLootColumnHeaderStyle(factionState, headerColor);
-                        if (bg != null) bg.color = new Color(0.010f, 0.030f, 0.027f, 0.30f);
-                    }
-                    else
-                    {
-                        if (factionReward != null) factionReward.color = new Color(0.92f, 0.86f, 0.52f, 1f);
-                        if (factionUnlock != null) factionUnlock.color = new Color(0.76f, 0.88f, 0.68f, 1f);
-                        if (factionCurrent != null)
-                        {
-                            // Mission column keeps the existing width. Orange means the mission
-                            // is still present when travel would finish; muted green means it expires first.
-                            factionCurrent.color = line.MetaState == 3
-                                ? new Color(0.95f, 0.62f, 0.34f, 1f)
-                                : line.MetaState == 2
-                                    ? new Color(0.56f, 0.72f, 0.58f, 1f)
-                                    : line.MetaState == 1
-                                        ? new Color(0.92f, 0.76f, 0.42f, 1f)
-                                        : new Color(0.50f, 0.58f, 0.54f, 1f);
-                        }
-                        if (factionState != null) factionState.color = new Color(0.70f, 0.78f, 0.73f, 1f);
-                    }
-                }
-                else if (line.RowKind == BrowserRowKind.FullNote ||
-                         line.RowKind == BrowserRowKind.FullSection)
-                {
-                    // Full-width informational rows avoid wasting the unused right
-                    // column. FullSection is used by long localized section titles;
-                    // FullNote lines are pre-wrapped to preserve the fixed row pool.
-                    if (right != null) right.gameObject.SetActive(false);
-                    if (leftRt != null)
-                    {
-                        leftRt.anchoredPosition = new Vector2(10f, 0f);
-                        leftRt.sizeDelta = new Vector2(688f, leftRt.sizeDelta.y);
-                    }
-                    if (line.RowKind == BrowserRowKind.FullSection)
-                    {
-                        // Full-width section titles may include a localized parenthetical.
-                        // TMP auto-sizing keeps the entire single line inside the fixed 688px pool.
-                        left.enableAutoSizing = true;
-                        left.fontSizeMin = 12.5f;
-                        left.fontSizeMax = 17f;
-                        left.fontSize = 17f;
-                    }
-                    else
-                    {
-                        left.fontSize = 12.5f;
-                    }
-                    left.text = NormalizeModUiText(leftText);
-                }
-                else if (line.RowKind == BrowserRowKind.ChipNote)
-                {
-                    // Chip unlock chance explanation uses the full content width.
-                    if (right != null) right.gameObject.SetActive(false);
-                    if (leftRt != null)
-                    {
-                        leftRt.anchoredPosition = new Vector2(10f, 0f);
-                        leftRt.sizeDelta = new Vector2(688f, leftRt.sizeDelta.y);
-                    }
-                    left.fontSize = 13.0f;
-                    left.text = NormalizeModUiText(leftText);
-                }
-                else
-                {
-                    if (actionable)
-                    {
-                        leftText = ">  " + leftText;
-                        string actionRight = line.Right ?? string.Empty;
-                        right.text = NormalizeModUiText(actionRight + "   >>");
-                    }
-                    else
-                    {
-                        right.text = NormalizeModUiText(line.Right ?? string.Empty);
-                    }
-                    left.text = NormalizeModUiText(leftText);
-                }
-
-                if (line.Style == 1)
-                {
-                    left.fontStyle = FontStyles.Bold;
-                    left.color = new Color(0.74f, 0.86f, 0.62f, 1f);
-                    right.color = new Color(0.48f, 0.72f, 0.62f, 1f);
-                    if (bg != null) bg.color = new Color(0.032f, 0.092f, 0.073f, 0.95f);
-                }
-                else if (line.Style == 2)
-                {
-                    left.fontStyle = FontStyles.Italic;
-                    left.color = new Color(0.35f, 0.58f, 0.52f, 1f);
-                    right.color = new Color(0.35f, 0.58f, 0.52f, 1f);
-                    if (bg != null) bg.color = new Color(0.010f, 0.030f, 0.027f, 0.30f);
-                }
-                else if (line.Style == 3)
-                {
-                    left.fontStyle = FontStyles.Bold;
-                    left.color = new Color(0.64f, 0.85f, 0.67f, 1f);
-                    right.color = new Color(0.92f, 0.86f, 0.52f, 1f);
-                    if (bg != null) bg.color = new Color(0.046f, 0.106f, 0.073f, 0.80f);
-                }
-                else
-                {
-                    left.fontStyle = FontStyles.Normal;
-                    left.color = new Color(0.46f, 0.72f, 0.61f, 1f);
-                    right.color = new Color(0.86f, 0.85f, 0.61f, 1f);
-                    if (bg != null) bg.color = i % 2 == 0
-                        ? new Color(0.018f, 0.050f, 0.043f, 0.45f)
-                        : new Color(0.010f, 0.034f, 0.030f, 0.18f);
-                }
-
-                if (actionable)
-                {
-                    left.fontStyle = FontStyles.Bold;
-                    left.color = new Color(0.68f, 0.90f, 0.68f, 1f);
-                    right.color = new Color(0.95f, 0.88f, 0.52f, 1f);
-                    if (bg != null) bg.color = new Color(0.030f, 0.090f, 0.064f, 0.88f);
-                }
-
-                if (actionable && !string.IsNullOrEmpty(line.FactionId))
-                {
-                    if (line.FactionRelation == 1)
-                    {
-                        left.color = new Color(0.43f, 0.92f, 0.55f, 1f);
-                        if (bg != null) bg.color = new Color(0.025f, 0.095f, 0.048f, 0.90f);
-                        if (rowOutline != null)
-                            rowOutline.effectColor = new Color(0.30f, 0.82f, 0.46f, 0.92f);
-                    }
-                    else if (line.FactionRelation == -1)
-                    {
-                        left.color = new Color(0.96f, 0.42f, 0.38f, 1f);
-                        if (bg != null) bg.color = new Color(0.105f, 0.028f, 0.030f, 0.90f);
-                        if (rowOutline != null)
-                            rowOutline.effectColor = new Color(0.90f, 0.30f, 0.28f, 0.94f);
-                    }
-                    else if (line.FactionRelation == 0)
-                    {
-                        left.color = new Color(0.72f, 0.78f, 0.69f, 1f);
-                        if (bg != null) bg.color = new Color(0.046f, 0.060f, 0.052f, 0.88f);
-                        if (rowOutline != null)
-                            rowOutline.effectColor = new Color(0.47f, 0.58f, 0.52f, 0.84f);
-                    }
-                    else
-                    {
-                        // Unknown relation is not neutral. Use a subdued amber treatment
-                        // instead of claiming a relationship state that was not resolved.
-                        left.color = new Color(0.82f, 0.74f, 0.50f, 1f);
-                        if (bg != null) bg.color = new Color(0.075f, 0.061f, 0.036f, 0.88f);
-                        if (rowOutline != null)
-                            rowOutline.effectColor = new Color(0.67f, 0.56f, 0.34f, 0.86f);
-                    }
-                }
-            }
-
-            if (_browserPageText != null)
-            {
-                bool ru = IsRussian();
-                _browserPageText.text = NormalizeModUiText(
-                    (Ui("ui.page")) +
-                    (_browserPage + 1).ToString(CultureInfo.InvariantCulture) + "/" +
-                    pages.ToString(CultureInfo.InvariantCulture) +
-                    "   •   " +
-                    total.ToString(CultureInfo.InvariantCulture) +
-                    (Ui("ui.rows")));
-            }
-
-            SyncBrowserPageScrollbar(_browserPageScrollbar, pages, _browserPage);
-        }
 
         private static void UpdateBrowserChromeLocalization()
         {
             bool ru = IsRussian();
 
             if (_browserCloseText != null)
-                _browserCloseText.text = GetBrowserCloseButtonLabel();
+                SetBrowserTextIfChanged(_browserCloseText, GetBrowserCloseButtonLabel());
 
             if (_browserHelpText != null)
-                _browserHelpText.text = NormalizeModUiText(Ui("ui.1_7_section_q_e_tab_wheel_page_esc_close"));
+                SetBrowserTextIfChanged(_browserHelpText, NormalizeModUiText(Ui("ui.1_7_section_q_e_tab_wheel_page_esc_close")));
 
             UpdateBrowserSearchStatus();
             UpdateBrowserCatalogButtonStyle();
@@ -1785,197 +1078,46 @@ namespace ItemIntelligence
             if (_browserCatalogOpen) RefreshBrowserCatalog();
         }
 
+        private static string GetBrowserTabLabel(int tab)
+        {
+            switch ((BrowserTabId)tab)
+            {
+                case BrowserTabId.Overview: return Ui("tab.overview");
+                case BrowserTabId.Magnum: return Ui("tab.magnum");
+                case BrowserTabId.Recipes: return Ui("tab.recipes");
+                case BrowserTabId.Trade: return Ui("tab.trade");
+                case BrowserTabId.Ammo: return Ui("tab.ammo");
+                case BrowserTabId.Factions: return Ui("tab.factions");
+                case BrowserTabId.Loot: return Ui("tab.loot");
+                default: return string.Empty;
+            }
+        }
+
         private static void UpdateBrowserTabs()
         {
             bool ru = IsRussian();
-            string[] labels = new string[]
-            {
-                Ui("tab.overview"), Ui("tab.magnum"), Ui("tab.recipes"), Ui("tab.trade"),
-                Ui("tab.ammo"), Ui("tab.factions"), Ui("tab.loot")
-            };
+            float tabFontSize = GetBrowserInterfaceTabFontSize(ru);
 
             for (int i = 0; i < BrowserTabCount; i++)
             {
-                if (BrowserTabTexts[i] != null)
+                bool available = IsBrowserTabCompatibilityAvailable(i);
+                bool selected = i == BrowserNavigation.Tab;
+                TMP_Text tabText = BrowserTabTexts[i];
+                if (tabText != null)
                 {
-                    BrowserTabTexts[i].text = NormalizeModUiText(GetBrowserInterfaceTabLabel(i, labels[i]));
-                    BrowserTabTexts[i].fontSize = GetBrowserInterfaceTabFontSize(ru);
-                    bool available = IsBrowserTabCompatibilityAvailable(i);
-                    BrowserTabTexts[i].color = !available
+                    SetBrowserTextIfChanged(tabText, NormalizeModUiText(GetBrowserInterfaceTabLabel(i, GetBrowserTabLabel(i))));
+                    SetBrowserFontSizeIfChanged(tabText, tabFontSize);
+                    SetBrowserGraphicColorIfChanged(tabText, !available
                         ? new Color(0.38f, 0.38f, 0.38f, 1f)
-                        : (i == _browserTab
+                        : (selected
                             ? new Color(0.88f, 0.90f, 0.62f, 1f)
-                            : new Color(0.42f, 0.68f, 0.58f, 1f));
-                    UpdateBrowserTabInterfaceIconStyle(i, available, i == _browserTab);
+                            : new Color(0.42f, 0.68f, 0.58f, 1f)));
+                    UpdateBrowserTabInterfaceIconStyle(i, available, selected);
                 }
-                if (BrowserTabBackgrounds[i] != null)
-                    BrowserTabBackgrounds[i].color = i == _browserTab
-                        ? new Color(0.060f, 0.145f, 0.100f, 0.98f)
-                        : new Color(0.025f, 0.065f, 0.055f, 0.92f);
+                SetBrowserGraphicColorIfChanged(BrowserTabBackgrounds[i], selected
+                    ? new Color(0.060f, 0.145f, 0.100f, 0.98f)
+                    : new Color(0.025f, 0.065f, 0.055f, 0.92f));
             }
-        }
-
-        private static void AddWrappedBrowserValue(string label, IList<string> values, int maxChars)
-        {
-            if (values == null || values.Count == 0) return;
-            maxChars = Math.Max(12, maxChars);
-            string current = string.Empty;
-            bool first = true;
-            for (int i = 0; i < values.Count; i++)
-            {
-                string value = values[i] ?? string.Empty;
-                if (string.IsNullOrEmpty(value)) continue;
-                string candidate = string.IsNullOrEmpty(current) ? value : current + ", " + value;
-                if (!string.IsNullOrEmpty(current) && candidate.Length > maxChars)
-                {
-                    BrowserLines.Add(BrowserLine.Normal(first ? label : string.Empty, current));
-                    first = false;
-                    current = value;
-                }
-                else
-                {
-                    current = candidate;
-                }
-            }
-            if (!string.IsNullOrEmpty(current))
-                BrowserLines.Add(BrowserLine.Normal(first ? label : string.Empty, current));
-        }
-
-        private static void BuildBrowserOverview(string itemId)
-        {
-            bool ru = IsRussian();
-
-            BrowserLines.Add(BrowserLine.Section(Ui("ui.profile")));
-
-            int magnum = ShowMagnumUses ? GetVisibleMagnumRequired(itemId) : 0;
-            PriceSnapshot price = null;
-            bool havePrice = ShowMagnumUses && PriceByItem.TryGetValue(itemId, out price);
-            int used = ShowRecipes ? GetUniqueRecipeOutputCount(itemId) : 0;
-            int crafted = ShowRecipes ? GetStaticRelationListCount(CraftedFromRecipes, itemId) : 0;
-            int sources = ShowSources ? GetUniqueRelationCount(itemId, true) : 0;
-            int consumers = ShowTradeInformation ? GetUniqueRelationCount(itemId, false) : 0;
-            int ammo = ShowAmmoRelations ? GetAmmoRelationCount(itemId) : 0;
-
-            string relationId = ResolveStaticRelationItemId(itemId);
-
-            List<string> roles = new List<string>();
-            if ((ShowSources || ShowTradeInformation) && BarterItemIds.Contains(itemId)) roles.Add(Ui("ui.trade"));
-            if (ShowRecipes && crafted > 0) roles.Add(Ui("ui.craftable"));
-            if (ShowRecipes && used > 0) roles.Add(Ui("ui.ingredient"));
-            if (GetDisassemblyOutputCount(itemId) > 0) roles.Add(Ui("ui.recyclable"));
-            if (ShowAmmoRelations && CompatibleWeaponsByAmmo.ContainsKey(relationId)) roles.Add(Ui("ui.ammo"));
-            WeaponInfo weapon;
-            if (ShowAmmoRelations && WeaponsByItem.TryGetValue(relationId, out weapon) &&
-                weapon != null && weapon.CompatibleAmmo.Count > 0)
-                roles.Add(Ui("ui.weapon"));
-            if (roles.Count > 0)
-                AddWrappedBrowserValue(Ui("ui.role"), roles, ru ? 18 : 28);
-
-            if (UsesInheritedStaticRelations(itemId))
-                AddModifiedRelationBrowserNote(itemId);
-
-            BrowserLines.Add(BrowserLine.Section(Ui("ui.key_intel")));
-
-            if (ShowMagnumUses && magnum > 0)
-            {
-                string right = magnum.ToString(CultureInfo.InvariantCulture);
-                if (havePrice)
-                    right += Ui("ui.remaining");
-                BrowserLines.Add(BrowserLine.Accent(Ui("ui.magnum_research"), right));
-                if (havePrice)
-                {
-                    BrowserLines.Add(BrowserLine.Normal(Ui("ui.owned"), price.Owned.ToString(CultureInfo.InvariantCulture)));
-                    if (ShowMagnumSurplus)
-                        BrowserLines.Add(BrowserLine.Normal(Ui("ui.after_all_research"),
-                            Math.Max(0, price.Owned - magnum).ToString(CultureInfo.InvariantCulture)));
-                }
-            }
-            else if (ShowMagnumUses)
-            {
-                BrowserLines.Add(BrowserLine.Normal(Ui("ui.magnum"), Ui("ui.not_required")));
-            }
-
-            if (ShowRecipes)
-            {
-                BrowserLines.Add(BrowserLine.Normal(
-                    Ui("ui.used_by_recipes"),
-                    used > 0 ? used.ToString(CultureInfo.InvariantCulture) : (Ui("ui.none"))));
-                BrowserLines.Add(BrowserLine.Normal(
-                    Ui("ui.crafted_by_recipes"),
-                    crafted > 0 ? crafted.ToString(CultureInfo.InvariantCulture) : (Ui("ui.none"))));
-            }
-
-            if (ShowSources || ShowTradeInformation)
-            {
-                BrowserLines.Add(BrowserLine.Normal(
-                    Ui("ui.trade_links"),
-                    (sources + consumers) > 0
-                        ? FormatVisibleTradeCounts(sources, consumers)
-                        : Ui("ui.not_found")));
-            }
-
-            if (ShowAmmoRelations)
-            {
-                BrowserLines.Add(BrowserLine.Normal(
-                    Ui("ui.ammo_links"),
-                    ammo > 0 ? ammo.ToString(CultureInfo.InvariantCulture) : (Ui("ui.none"))));
-            }
-
-            List<WeaponModeDescriptor> weaponModes = GetWeaponModesForItem(itemId);
-            if (ShowAmmoRelations && weaponModes.Count > 0)
-            {
-                BrowserLines.Add(BrowserLine.Section(Ui("ui.weapon_modes")));
-                for (int i = 0; i < weaponModes.Count; i++)
-                {
-                    WeaponModeDescriptor mode = weaponModes[i];
-                    if (mode == null) continue;
-                    string modeLabel = ResolveWeaponModeDisplayLabel(mode);
-                    if (string.IsNullOrEmpty(modeLabel)) continue;
-                    BrowserLines.Add(BrowserLine.WeaponMode(modeLabel, mode.Key, string.Empty));
-                }
-            }
-
-            List<FactionTechUnlock> factionUnlocks;
-            int factionLinks = FactionTechUnlocksByItem.TryGetValue(itemId, out factionUnlocks) && factionUnlocks != null
-                ? factionUnlocks.Count : 0;
-            BrowserLines.Add(BrowserLine.Normal(
-                Ui("ui.faction_technology"),
-                factionLinks > 0 ? factionLinks.ToString(CultureInfo.InvariantCulture) : (Ui("ui.none"))));
-
-            // Chip/datadisk contents belong on the item itself rather than in another tab.
-            // The list reuses the datadisk graph already indexed for recipe chip indicators.
-            List<string> chipUnlockItems = GetDatadiskUnlockedItemsSorted(itemId);
-            if (chipUnlockItems.Count > 0)
-            {
-                BrowserLines.Add(BrowserLine.Section(
-                    Ui("ui.chip_unlocks") + "  •  " + chipUnlockItems.Count.ToString(CultureInfo.InvariantCulture)));
-                // Percentages are shown only while the current vanilla IL contract proves
-                // UnlockIds -> Count -> Random.Range -> get_Item -> SetUnlockId. Unlock
-                // contents remain useful even if a future game update invalidates that proof.
-                if (_chipUnlockChanceContractVerified)
-                    BrowserLines.Add(BrowserLine.ChipNote(Ui("ui.chip_unlock_chance_note")));
-
-                for (int i = 0; i < chipUnlockItems.Count; i++)
-                {
-                    string unlockedItemId = chipUnlockItems[i];
-                    int hits, total;
-                    float chance;
-                    string right = string.Empty;
-                    if (TryGetDatadiskUnlockChance(itemId, unlockedItemId, out hits, out total, out chance))
-                        right = FormatChipUnlockChance(chance);
-                    bool? learned = IsProductionItemUnlocked(unlockedItemId);
-                    int unlockStatus = !learned.HasValue ? 2 : (learned.Value ? 1 : -1);
-                    BrowserLines.Add(BrowserLine.ChipUnlockAction(unlockedItemId, right, unlockStatus));
-                }
-            }
-
-            if ((ShowSources || ShowTradeInformation) && BarterItemIds.Contains(itemId) &&
-                magnum == 0 && used == 0 && crafted == 0 && sources == 0 && consumers == 0 && ammo == 0)
-            {
-                BrowserLines.Add(BrowserLine.Note(Ui("ui.recognized_as_a_trade_item_but_current_game_tabl")));
-            }
-
-            AppendBrowserModderOverview(itemId);
         }
 
         private static void BuildBrowserMagnum(string itemId)

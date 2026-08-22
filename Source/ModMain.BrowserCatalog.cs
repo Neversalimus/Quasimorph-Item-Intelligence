@@ -141,7 +141,7 @@ namespace ItemIntelligence
         private static void ClearBrowserRecentItems()
         {
             BrowserRecentItemIds.Clear();
-            _browserCatalogPage = 0;
+            _browserCatalogScrollOffset = 0;
             RefreshBrowserCatalog();
             Debug.Log("[ItemIntelligence] Catalog session history cleared.");
         }
@@ -150,10 +150,10 @@ namespace ItemIntelligence
         {
             if (string.IsNullOrEmpty(_inspectorItemId)) return;
 
-            BrowserItemNavigationHistory.Add(new BrowserItemNavigationState(
-                _inspectorItemId, _browserTab, _browserPage));
-            if (BrowserItemNavigationHistory.Count > BrowserNavigationHistoryLimit)
-                BrowserItemNavigationHistory.RemoveAt(0);
+            BrowserNavigation.History.Add(new BrowserItemNavigationState(
+                _inspectorItemId, BrowserNavigation.Tab, BrowserNavigation.ScrollOffset));
+            if (BrowserNavigation.History.Count > BrowserNavigationHistoryLimit)
+                BrowserNavigation.History.RemoveAt(0);
         }
 
         private static bool NavigateBrowserToItem(string itemId, bool resetToOverview, string source)
@@ -161,25 +161,32 @@ namespace ItemIntelligence
             if (!_inspectorOpen || string.IsNullOrEmpty(itemId) || !IsKnownItemId(itemId))
                 return false;
 
+            float navigationStarted = Time.realtimeSinceStartup;
             bool changed = !string.Equals(_inspectorItemId, itemId, StringComparison.OrdinalIgnoreCase);
+            bool wasLandingContext = BrowserNavigation.Tab == (int)BrowserTabId.Overview;
             if (changed) PushBrowserNavigationState();
 
             CloseBrowserCatalog();
             HideBrowserPreviewTooltip();
             _inspectorItemId = itemId;
-            if (resetToOverview) _browserTab = (int)BrowserTabId.Overview;
-            _browserPage = 0;
-            if (_browserTab >= 0 && _browserTab < BrowserPageByTab.Length)
-                BrowserPageByTab[_browserTab] = 0;
+            if (resetToOverview || (changed && wasLandingContext))
+                BrowserNavigation.Tab = (int)ResolveAdaptiveEntryTab(itemId);
+            BrowserNavigation.ScrollOffset = 0;
+            if (BrowserNavigation.Tab >= 0 && BrowserNavigation.Tab < BrowserNavigation.ScrollOffsets.Length)
+                BrowserNavigation.ScrollOffsets[BrowserNavigation.Tab] = 0;
             _secretDataSelectedFactionId = string.Empty;
             _marketScanActive = false;
             _marketScanComplete = false;
 
             RecordBrowserItemVisit(itemId);
-            if (_browserTab == (int)BrowserTabId.Trade && (ShowSources || ShowTradeInformation))
+            if (BrowserNavigation.Tab == (int)BrowserTabId.Trade && (ShowSources || ShowTradeInformation))
                 StartMarketScan(itemId);
 
+            float renderStarted = Time.realtimeSinceStartup;
             RenderBrowser(itemId);
+            float renderMs = (Time.realtimeSinceStartup - renderStarted) * 1000f;
+            float navigationMs = (Time.realtimeSinceStartup - navigationStarted) * 1000f;
+            ReportBrowserPerformanceBudget(itemId, false, navigationMs, renderMs);
             if (!string.IsNullOrEmpty(source))
                 Debug.Log("[ItemIntelligence] " + source + " selected: " + itemId + ".");
             return true;
@@ -187,25 +194,25 @@ namespace ItemIntelligence
 
         private static bool NavigateBrowserBack()
         {
-            while (BrowserItemNavigationHistory.Count > 0)
+            while (BrowserNavigation.History.Count > 0)
             {
-                int last = BrowserItemNavigationHistory.Count - 1;
-                BrowserItemNavigationState state = BrowserItemNavigationHistory[last];
-                BrowserItemNavigationHistory.RemoveAt(last);
+                int last = BrowserNavigation.History.Count - 1;
+                BrowserItemNavigationState state = BrowserNavigation.History[last];
+                BrowserNavigation.History.RemoveAt(last);
                 if (state == null || string.IsNullOrEmpty(state.ItemId) || !IsKnownItemId(state.ItemId))
                     continue;
 
                 CloseBrowserCatalog();
                 HideBrowserPreviewTooltip();
                 _inspectorItemId = state.ItemId;
-                _browserTab = Math.Max(0, Math.Min(BrowserTabCount - 1, state.Tab));
-                _browserPage = Math.Max(0, state.Page);
-                BrowserPageByTab[_browserTab] = _browserPage;
+                BrowserNavigation.Tab = Math.Max(0, Math.Min(BrowserTabCount - 1, state.Tab));
+                BrowserNavigation.ScrollOffset = Math.Max(0, state.ScrollOffset);
+                BrowserNavigation.ScrollOffsets[BrowserNavigation.Tab] = BrowserNavigation.ScrollOffset;
                 _secretDataSelectedFactionId = string.Empty;
                 _marketScanActive = false;
                 _marketScanComplete = false;
                 RecordBrowserItemVisit(_inspectorItemId);
-                if (_browserTab == (int)BrowserTabId.Trade && (ShowSources || ShowTradeInformation))
+                if (BrowserNavigation.Tab == (int)BrowserTabId.Trade && (ShowSources || ShowTradeInformation))
                     StartMarketScan(_inspectorItemId);
                 RenderBrowser(_inspectorItemId);
                 Debug.Log("[ItemIntelligence] Browser Back restored: " + _inspectorItemId + ".");
@@ -239,7 +246,7 @@ namespace ItemIntelligence
             HideBrowserSearchDropdown();
             if (_browserSearchInput != null) _browserSearchInput.DeactivateInputField();
             _browserCatalogOpen = true;
-            _browserCatalogPage = 0;
+            _browserCatalogScrollOffset = 0;
             RefreshBrowserCatalog();
             _browserCatalogPanel.SetActive(true);
             _browserCatalogPanel.transform.SetAsLastSibling();
@@ -257,7 +264,7 @@ namespace ItemIntelligence
         {
             scope = Math.Max(0, Math.Min(BrowserCatalogScopeCount - 1, scope));
             _browserCatalogScope = (BrowserCatalogScope)scope;
-            _browserCatalogPage = 0;
+            _browserCatalogScrollOffset = 0;
             RefreshBrowserCatalog();
         }
 
@@ -265,7 +272,7 @@ namespace ItemIntelligence
         {
             category = Math.Max(0, Math.Min(BrowserCatalogCategoryCount - 1, category));
             _browserCatalogCategory = category;
-            _browserCatalogPage = 0;
+            _browserCatalogScrollOffset = 0;
             RefreshBrowserCatalog();
         }
 
@@ -278,7 +285,7 @@ namespace ItemIntelligence
                 BrowserCatalogDataFilter candidate = (BrowserCatalogDataFilter)((current + offset) % count);
                 if (!IsBrowserCatalogDataFilterAvailable(candidate)) continue;
                 _browserCatalogDataFilter = candidate;
-                _browserCatalogPage = 0;
+                _browserCatalogScrollOffset = 0;
                 RefreshBrowserCatalog();
                 return;
             }
@@ -289,7 +296,7 @@ namespace ItemIntelligence
             if (_browserCatalogScope == BrowserCatalogScope.Recent) return;
             int count = (int)BrowserCatalogSortMode.Count;
             _browserCatalogSortMode = (BrowserCatalogSortMode)(((int)_browserCatalogSortMode + 1) % count);
-            _browserCatalogPage = 0;
+            _browserCatalogScrollOffset = 0;
             RefreshBrowserCatalog();
         }
 
@@ -297,7 +304,7 @@ namespace ItemIntelligence
         {
             if (_browserCatalogScope == BrowserCatalogScope.Recent) return;
             _browserCatalogSortDescending = !_browserCatalogSortDescending;
-            _browserCatalogPage = 0;
+            _browserCatalogScrollOffset = 0;
             RefreshBrowserCatalog();
         }
 
@@ -313,19 +320,17 @@ namespace ItemIntelligence
             _browserCatalogDataFilter = BrowserCatalogDataFilter.Any;
             _browserCatalogSortMode = BrowserCatalogSortMode.Name;
             _browserCatalogSortDescending = false;
-            _browserCatalogPage = 0;
+            _browserCatalogScrollOffset = 0;
             RefreshBrowserCatalog();
         }
 
-        private static void ChangeBrowserCatalogPage(int delta)
+        private static void ScrollBrowserCatalogRows(int delta)
         {
             if (!_browserCatalogOpen || delta == 0) return;
-            int pages = Math.Max(1,
-                (BrowserCatalogFilteredItemIds.Count + BrowserCatalogVisibleRows - 1) /
-                BrowserCatalogVisibleRows);
-            int next = Mathf.Clamp(_browserCatalogPage + delta, 0, pages - 1);
-            if (next == _browserCatalogPage) return;
-            _browserCatalogPage = next;
+            int maxOffset = Math.Max(0, BrowserCatalogFilteredItemIds.Count - BrowserCatalogVisibleRows);
+            int next = Mathf.Clamp(_browserCatalogScrollOffset + delta, 0, maxOffset);
+            if (next == _browserCatalogScrollOffset) return;
+            _browserCatalogScrollOffset = next;
             RenderBrowserCatalogRows();
         }
 
@@ -467,6 +472,7 @@ namespace ItemIntelligence
                          name.IndexOf("Helmet", StringComparison.OrdinalIgnoreCase) >= 0 ||
                          name.IndexOf("Vest", StringComparison.OrdinalIgnoreCase) >= 0 ||
                          name.IndexOf("Backpack", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                         name.IndexOf("Glasses", StringComparison.OrdinalIgnoreCase) >= 0 ||
                          name.IndexOf("Boots", StringComparison.OrdinalIgnoreCase) >= 0 ||
                          name.IndexOf("Leggings", StringComparison.OrdinalIgnoreCase) >= 0) armor = true;
                 else if (name.IndexOf("Consumable", StringComparison.OrdinalIgnoreCase) >= 0 ||
@@ -493,57 +499,6 @@ namespace ItemIntelligence
             return 8;
         }
 
-        private static string GetBrowserCatalogScopeLabel(BrowserCatalogScope scope, bool compact)
-        {
-            switch (scope)
-            {
-                case BrowserCatalogScope.Favorites:
-                    return Ui(compact ? "catalog.scope.favorites.compact" : "catalog.scope.favorites");
-                case BrowserCatalogScope.Recent:
-                    return Ui(compact ? "catalog.scope.recent.compact" : "catalog.scope.recent");
-                default:
-                    return Ui(compact ? "catalog.scope.all.compact" : "catalog.scope.all");
-            }
-        }
 
-        private static string GetBrowserCatalogDataFilterLabel(BrowserCatalogDataFilter filter)
-        {
-            switch (filter)
-            {
-                case BrowserCatalogDataFilter.Recipes: return Ui("catalog.data.recipes");
-                case BrowserCatalogDataFilter.Sources: return Ui("catalog.data.sources");
-                case BrowserCatalogDataFilter.Consumers: return Ui("catalog.data.consumers");
-                case BrowserCatalogDataFilter.Magnum: return Ui("catalog.data.magnum");
-                case BrowserCatalogDataFilter.Factions: return Ui("catalog.data.factions");
-                case BrowserCatalogDataFilter.Ammo: return Ui("catalog.data.ammo");
-                case BrowserCatalogDataFilter.Disassembly: return Ui("catalog.data.disassembly");
-                default: return Ui("catalog.data.any");
-            }
-        }
-
-        private static string GetBrowserCatalogSortLabel(BrowserCatalogSortMode mode)
-        {
-            switch (mode)
-            {
-                case BrowserCatalogSortMode.Tech: return Ui("catalog.sort.tech");
-                case BrowserCatalogSortMode.ItemId: return Ui("catalog.sort.id");
-                default: return Ui("catalog.sort.name");
-            }
-        }
-
-        private static string GetBrowserCatalogRowMetadata(string itemId)
-        {
-            if (_browserCatalogScope == BrowserCatalogScope.Recent)
-                return Ui("catalog.sort.recent") + "  " + itemId;
-            if (_browserCatalogSortMode == BrowserCatalogSortMode.Tech)
-            {
-                int techLevel;
-                string techText = TryGetExactItemTechLevel(itemId, out techLevel)
-                    ? techLevel.ToString(CultureInfo.InvariantCulture)
-                    : "?";
-                return Ui("ui.tech") + " " + techText + "  " + itemId;
-            }
-            return itemId;
-        }
     }
 }

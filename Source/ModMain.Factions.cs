@@ -20,8 +20,6 @@ namespace ItemIntelligence
     {
         // Secret Data is a Factions feature even though BrowserUI renders it. Keep its
         // action contract and session selection state with the owning feature.
-        private const string SecretDataFactionActionPrefix = "QII_SECRET_DATA_FACTION:";
-        private const string SecretDataBackAction = "QII_SECRET_DATA_BACK";
         private static string _secretDataSelectedFactionId = string.Empty;
         private static bool _secretDataContractLogged;
 
@@ -60,12 +58,11 @@ namespace ItemIntelligence
         private static bool _factionEnabledContractResolved;
         private static bool _factionEnabledContractLogged;
         private static MethodInfo _factionsIsEnabledFactionMethod;
-        private static readonly Dictionary<string, FactionRewardPoolSnapshot> FactionRewardPoolCache =
-            new Dictionary<string, FactionRewardPoolSnapshot>(StringComparer.OrdinalIgnoreCase);
         private static void InitializeFactionSpaceSessionState()
         {
             _factionsState = null;
             _difficultyState = null;
+            CancelFactionTechnologyNavigation("space session reset");
         }
 
         private static void ResetFactionMenuSessionState()
@@ -73,8 +70,8 @@ namespace ItemIntelligence
             _factionsState = null;
             _difficultyState = null;
             RuntimeFactionsById.Clear();
-            FactionRewardPoolCache.Clear();
             _quasimorphFallbackFactionIcon = null;
+            CancelFactionTechnologyNavigation("menu session reset");
         }
 
         // v1.7.36-test5: factions own their runtime visual/reward/technology
@@ -101,7 +98,7 @@ namespace ItemIntelligence
             _factionEnabledContractResolved = false;
             _factionEnabledContractLogged = false;
             _factionsIsEnabledFactionMethod = null;
-            FactionRewardPoolCache.Clear();
+            CancelFactionTechnologyNavigation("faction index reset");
         }
 
         private static void StartFactionFeatureWarmup()
@@ -118,7 +115,11 @@ namespace ItemIntelligence
         private static void TickFactionFeatureFrameWork()
         {
             if (!_compatFactions) return;
-            try { TickFactionTechWarmup(); }
+            try
+            {
+                TickFactionTechWarmup();
+                TickFactionTechnologyNavigation();
+            }
             catch (Exception ex)
             {
                 StopFactionFeatureFrameWork();
@@ -131,6 +132,7 @@ namespace ItemIntelligence
             _factionTechWarmupActive = false;
             FactionTechWarmupFactions.Clear();
             _factionTechWarmupIndex = 0;
+            CancelFactionTechnologyNavigation("feature stopped");
         }
 
         private static string GetFactionWarmupStatus()
@@ -206,7 +208,7 @@ namespace ItemIntelligence
             FactionTechWarmupFactions.Clear();
             _factionTechWarmupIndex = 0;
 
-            if (_inspectorOpen && _browserTab == (int)BrowserTabId.Factions)
+            if (_inspectorOpen && BrowserNavigation.Tab == (int)BrowserTabId.Factions)
                 RenderBrowser(_inspectorItemId);
         }
 
@@ -223,6 +225,10 @@ namespace ItemIntelligence
 
             object runtimeFaction = ResolveFactionById(factionId);
             if (runtimeFaction == null || !EnsureFactionRewardApi(runtimeFaction)) return;
+
+            // Spread faction visual reflection across the existing one-faction-per-frame
+            // warmup. The first Factions click should only consume cached row visuals.
+            TryResolveFactionSmallIcon(factionId, runtimeFaction);
 
             int maxTech = 10;
             try
@@ -374,68 +380,6 @@ namespace ItemIntelligence
             return string.Empty;
         }
 
-        private static float GetFactionRewardRecordWeight(object record)
-        {
-            double value;
-            if (record != null && TryToDoubleSafe(GetMember(record, "Weight"), out value) && value > 0.0)
-                return (float)value;
-            return 0f;
-        }
-
-        private static FactionRewardPoolSnapshot GetFactionRewardPoolSnapshot(string factionId)
-        {
-            if (string.IsNullOrEmpty(factionId)) return null;
-            object faction = ResolveFactionById(factionId);
-            if (faction == null || !EnsureFactionRewardApi(faction)) return null;
-
-            int currentTech = GetCurrentFactionTechLevel(factionId);
-            int techLimit = GetFactionTechLevelLimit(faction);
-            if (currentTech < 0 || techLimit < 0) return null;
-            int effectiveTech = Math.Max(0, Math.Min(currentTech, techLimit));
-
-            FactionRewardPoolSnapshot cached;
-            if (FactionRewardPoolCache.TryGetValue(factionId, out cached) && cached != null &&
-                cached.CurrentTech == currentTech && cached.TechLimit == techLimit &&
-                cached.EffectiveTech == effectiveTech)
-                return cached;
-
-            FactionRewardPoolSnapshot snapshot =
-                new FactionRewardPoolSnapshot(factionId, currentTech, techLimit, effectiveTech);
-
-            string[] categoryNames = new string[] { "Equipment", "Chips", "Consumables" };
-
-            for (int c = 0; c < categoryNames.Length; c++)
-            {
-                object categoryValue = ParseFactionTradeCategory(categoryNames[c]);
-                if (categoryValue == null) continue;
-                IEnumerable records = InvokeFactionTradeItems(faction, effectiveTech, categoryValue);
-                if (records == null) continue;
-
-                int scanned = 0;
-                foreach (object record in records)
-                {
-                    if (++scanned > 4096) break;
-                    if (record == null) continue;
-
-                    // Match FactionTechnologyWindow.GetTotalWeight exactly: vanilla
-                    // sums every ContentDropRecord returned by all three AddRange calls.
-                    float weight = GetFactionRewardRecordWeight(record);
-                    if (weight <= 0f) continue;
-                    snapshot.TotalWeight += weight;
-
-                    string rewardItemId = GetFactionRewardRecordItemId(record);
-                    if (string.IsNullOrEmpty(rewardItemId)) continue;
-
-                    float existing;
-                    snapshot.ItemWeights.TryGetValue(rewardItemId, out existing);
-                    snapshot.ItemWeights[rewardItemId] = existing + weight;
-                }
-            }
-
-            FactionRewardPoolCache[factionId] = snapshot;
-            return snapshot;
-        }
-
         private static int ResolveFactionAvailabilityForCurrentSave(string factionId)
         {
             object rawFaction = ResolveFactionById(factionId);
@@ -471,12 +415,16 @@ namespace ItemIntelligence
         private static FactionRewardView BuildFactionRewardView(FactionTechUnlock unlock, string itemId)
         {
             if (unlock == null) return null;
-            FactionRewardPoolSnapshot snapshot = GetFactionRewardPoolSnapshot(unlock.FactionId);
-            int currentTech = snapshot == null ? GetCurrentFactionTechLevel(unlock.FactionId) : snapshot.CurrentTech;
-            int techLimit = snapshot == null ? -1 : snapshot.TechLimit;
+            object faction = ResolveFactionById(unlock.FactionId);
+            int currentTech = GetCurrentFactionTechLevel(unlock.FactionId);
+            int techLimit = faction == null ? -1 : GetFactionTechLevelLimit(faction);
 
             int state = 3; // unknown
-            float percent = 0f;
+            // Current EFF608 IL proves the reward records exposed for each technology
+            // level and the FactionTechnologyWindow total-weight helper, but the exact
+            // TechLevelRewardsPanel.Initialize denominator-to-row projection has not yet
+            // been closed on this exact binary. Never turn that gap into a percentage.
+            float percent = float.NaN;
 
             if (currentTech >= 0 && currentTech < unlock.TechLevel)
             {
@@ -486,12 +434,11 @@ namespace ItemIntelligence
             {
                 state = 2; // vanilla TechLevelRewardsPanel: unavailable, low reputation
             }
-            else if (snapshot != null)
+            else if (currentTech >= 0 && techLimit >= 0)
             {
                 state = 0;
-                float itemWeight;
-                if (snapshot.TotalWeight > 0f && snapshot.ItemWeights.TryGetValue(itemId, out itemWeight))
-                    percent = Mathf.Clamp(itemWeight / snapshot.TotalWeight * 100f, 0f, 100f);
+                // Percentage intentionally remains NaN until current-build panel math is
+                // directly proven. Availability/Tech state remains useful and exact.
             }
 
             return new FactionRewardView(
@@ -653,15 +600,15 @@ namespace ItemIntelligence
                 if (selected == null)
                 {
                     _secretDataSelectedFactionId = string.Empty;
-                    _browserPage = 0;
+                    BrowserNavigation.ScrollOffset = 0;
                     BuildBrowserSecretDataRewards();
                     return;
                 }
 
-                BrowserLines.Add(BrowserLine.Station(
+                BrowserLines.Add(BrowserLine.StationAction(
                     Ui("ui.secret_data_back"),
                     string.Empty,
-                    SecretDataBackAction,
+                    BrowserAction.SecretDataBack(),
                     string.Empty,
                     0));
 
@@ -735,10 +682,10 @@ namespace ItemIntelligence
                 string right = itemCount + "  •  " + reputationText + " " + Ui("ui.secret_data_rep") +
                     "  •  " + Ui("ui.secret_data_view");
 
-                BrowserLines.Add(BrowserLine.Station(
+                BrowserLines.Add(BrowserLine.StationAction(
                     ResolveFactionDisplayName(record.Id),
                     right,
-                    SecretDataFactionActionPrefix + record.Id,
+                    BrowserAction.SecretDataFaction(record.Id),
                     record.Id,
                     0));
             }
@@ -777,10 +724,13 @@ namespace ItemIntelligence
             if (!FactionTechUnlocksByItem.TryGetValue(itemId, out unlocks) || unlocks == null || unlocks.Count == 0)
             {
                 BrowserLines.Add(BrowserLine.Note(Ui("ui.this_item_was_not_found_in_faction_reward_pools")));
+                BuildBrowserScavengerMissionRewards(itemId);
                 return;
             }
 
             List<FactionRewardView> views = new List<FactionRewardView>();
+            Dictionary<string, string> viewNames =
+                new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             int unavailableForSave = 0;
             for (int i = 0; i < unlocks.Count; i++)
             {
@@ -794,12 +744,18 @@ namespace ItemIntelligence
                 }
 
                 FactionRewardView view = BuildFactionRewardView(unlock, itemId);
-                if (view != null) views.Add(view);
+                if (view != null)
+                {
+                    views.Add(view);
+                    if (!viewNames.ContainsKey(view.FactionId))
+                        viewNames[view.FactionId] = ResolveFactionDisplayName(view.FactionId);
+                }
             }
 
             if (views.Count == 0 && unavailableForSave > 0)
             {
                 BrowserLines.Add(BrowserLine.Note(Ui("ui.no_active_faction_reward_in_current_save")));
+                BuildBrowserScavengerMissionRewards(itemId);
                 return;
             }
 
@@ -815,8 +771,8 @@ namespace ItemIntelligence
                 int tech = a.UnlockTech.CompareTo(b.UnlockTech);
                 if (tech != 0) return tech;
                 return string.Compare(
-                    ResolveFactionDisplayName(a.FactionId),
-                    ResolveFactionDisplayName(b.FactionId),
+                    viewNames[a.FactionId],
+                    viewNames[b.FactionId],
                     StringComparison.CurrentCultureIgnoreCase);
             });
 
@@ -843,7 +799,7 @@ namespace ItemIntelligence
 
                 bool available = view.State == 0;
                 BrowserLines.Add(BrowserLine.FactionReward(
-                    ResolveFactionDisplayName(view.FactionId),
+                    viewNames[view.FactionId],
                     FormatFactionRewardPercent(view),
                     "T" + view.UnlockTech.ToString(CultureInfo.InvariantCulture),
                     "T" + (view.CurrentTech >= 0
@@ -853,15 +809,18 @@ namespace ItemIntelligence
                     view.FactionId,
                     available));
             }
+
+            BuildBrowserScavengerMissionRewards(itemId);
         }
 
         private static string FormatFactionRewardPercent(FactionRewardView view)
         {
-            if (view == null || view.State != 0) return "—";
-            if (view.RewardPercent <= 0f) return "0%";
-            if (view.RewardPercent < 1f) return "<1%";
-            return Mathf.Clamp(Mathf.RoundToInt(view.RewardPercent), 1, 100)
-                .ToString(CultureInfo.InvariantCulture) + "%";
+            if (view == null || view.State != 0 || float.IsNaN(view.RewardPercent) || float.IsInfinity(view.RewardPercent))
+                return "—";
+            float value = Mathf.Clamp(view.RewardPercent, 0f, 100f);
+            if (value >= 10f) return value.ToString("0.#", CultureInfo.InvariantCulture) + "%";
+            if (value >= 1f) return value.ToString("0.##", CultureInfo.InvariantCulture) + "%";
+            return value.ToString("0.###", CultureInfo.InvariantCulture) + "%";
         }
 
         private static int GetCurrentFactionTechLevel(string factionId)

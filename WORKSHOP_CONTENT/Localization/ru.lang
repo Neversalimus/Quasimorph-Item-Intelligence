@@ -47,6 +47,7 @@ chrome.close	[{KEY}] ЗАКРЫТЬ
 label.magnum	MAGNUM
 note.improved_variant	Улучшенный вариант
 stats.ammo	ПАТРОНЫ
+stats.weapons	ОРУЖИЕ
 stats.magnum	MAGNUM
 stats.recipes	РЕЦЕПТЫ
 stats.trade	ТОРГ. / ЭКОН.
@@ -57,7 +58,7 @@ tab.magnum	2 MAGNUM
 tab.overview	1 ОБЗОР
 tab.recipes	3 РЕЦЕПТЫ
 tab.trade	4 ТОРГОВЛЯ
-ui.1_7_section_q_e_tab_wheel_page_esc_close	[1-7] РАЗДЕЛ   [Q/E] ВКЛАДКА   [КОЛЕСО] СТР.   [ESC] ЗАКРЫТЬ
+ui.1_7_section_q_e_tab_wheel_page_esc_close	[1-7] РАЗДЕЛ   [Q/E] ВКЛАДКА   [КОЛЕСО] ПРОКРУТКА   [ESC] ЗАКРЫТЬ
 ui.lmb_open_item	[ЛКМ] ОТКРЫТЬ ПРЕДМЕТ
 ui.after_all_magnum	После всех Magnum
 ui.after_all_research	После всех исследований
@@ -86,7 +87,7 @@ ui.barter_recipes	Бартерные рецепты
 ui.barter_give_this_item	БАРТЕР — ОТДАТЬ ЭТОТ ПРЕДМЕТ
 ui.bonus	бонус
 ui.boots	обувь
-ui.buy_at_stations	КУПИТЬ НА СТАНЦИЯХ
+ui.buy_at_stations	В ПРОДАЖЕ НА СТАНЦИЯХ
 ui.item_id	ID ПРЕДМЕТА
 ui.catalog	КАТАЛОГ
 ui.chance	ШАНС
@@ -105,7 +106,7 @@ ui.consumers	ПОТРЕБИТЕЛИ
 ui.container	КОНТЕЙНЕР
 ui.container_2	Контейнер
 ui.container_3	Контейнер 
-ui.containers	КОНТЕЙНЕРЫ
+ui.containers	КОНТЕЙНЕРЫ С СОБСТВЕННЫМ ЛУТОМ
 ui.context	ТИП ЛОКАЦИИ
 ui.conveyor	конвейер
 ui.corporate_stations	Корпоративные станции
@@ -165,7 +166,7 @@ ui.mission_workbench	верстак на миссии
 ui.more_relationships	Ещё связей
 ui.more_rows_format	+ ещё {0} ({1})
 ui.no_disassembly_relationships	Данные разборки не найдены.
-ui.no_explicit_loot_sources_found_check_trade_recip	Явные источники добычи не найдены. Проверьте Торговлю, Рецепты, Фракции или специальные события.
+ui.no_explicit_loot_sources_found_check_trade_recip	Явные источники не найдены. Проверьте Торговлю, Рецепты, Фракции и особые события.
 ui.no_recipe_or_disassembly_relationships	Рецепты и данные разборки не найдены.
 ui.no_recipe_relationships	Рецепты не найдены.
 ui.no_related_magnum_research_was_found	Связанные исследования Magnum не найдены.
@@ -183,6 +184,15 @@ ui.page	СТР.
 ui.pirates	Пираты
 ui.possible_outcomes	Возможные результаты
 ui.price	ЦЕНА
+ui.trade_repricing_note	Первая → последняя цена в партии. Пересчёт поштучный; запас может измениться к прибытию.
+ui.next	СЛЕД.
+ui.batch	ПАРТИЯ
+ui.trade_previous_note	СЛЕД. — следующая единица; ПАРТИЯ — итог за 5 шт. или остаток. Пересчет поштучный.
+ui.trade_payout	ВЫПЛАТА
+ui.trade_stock_short	ОСТАТОК
+ui.trade_all	ВСЕ
+ui.trade_pcs	ШТ.
+ui.trade_total	ИТОГ
 ui.primary_ammo	патроны осн.
 ui.primary_weapon	осн. оружие
 ui.production	ПРОИЗВОДСТВО
@@ -208,7 +218,7 @@ ui.rows	 СТРОК
 ui.search_item	ПОИСК ПРЕДМЕТА...
 ui.secondary_ammo	патроны доп.
 ui.secondary_weapon	доп. оружие
-ui.sell_to_stations	ПРОДАТЬ СТАНЦИЯМ
+ui.sell_to_stations	СТАНЦИИ ПРИНИМАЮТ
 ui.show_ammo_relations	Связи оружия и патронов
 ui.show_barter_and_consumer_relationships	Показывать покупателей на станциях и входы рецептов экономики станций.
 ui.show_future_magnum_uses	Будущие улучшения Magnum
@@ -234,7 +244,6 @@ ui.stations	Станции
 ui.status	СОСТОЯНИЕ
 ui.status_2	СТАТУС
 ui.stock	ОСТАТОК
-ui.current_stock_may_change_during_travel	Текущий запас — может измениться за время перелёта
 ui.tech_lock	НИЗК. TECH
 ui.this_item	ЭТОТ ПРЕДМЕТ
 ui.this_is_not_a_safe_to_sell_value_the_item_has_ot	Есть и другие применения.
@@ -254,24 +263,24 @@ ui.vanilla_exposes_the_remaining_total_but_the_rela	Детали исследо�
 ui.var	 вар.
 ui.variants	 варианта
 ui.weapon	оружие
-ui.wheel_pgup_pgdn	   •   КОЛЕСО / PGUP / PGDN
+ui.wheel_pgup_pgdn	   •   КОЛЕСО: ПРОКРУТКА   PGUP/PGDN: БЫСТРО
 ui.workbench	Верстак: 
 ui.wound_slot	ЧАСТЬ ТЕЛА
 ui.wound_slot_2	часть тела
 ammo.index_prefix	Загрузка данных оружия: 
-loot.note.amputation	Условный шанс после успешной ампутации. Улучшения Magnum могут изменить результат.
+loot.note.amputation	Шанс после успешной ампутации. Улучшения Magnum могут изменить результат.
 loot.note.augmentation_woundslot	Может встречаться как модуль части тела врага.
 loot.note.augmentations	Шанс = вероятность наличия модуля у врага. Броски = попытки генерации.
-loot.note.container_chance	ШАНС — получить ≥1 предмет за все указанные броски. Бонус Мародёра уже учтён. TECH — минимальный Tech источника.
-loot.note.corpse_transfer	После смерти инвентарь и экипировка врага переходят в труп, кроме голых рук.
-loot.note.enemy_chance	Условный шанс при встрече с этим врагом. Диапазон зависит от Tech и фракции.
-loot.note.implants	Шанс = попытка установки. «Ампут. X%» = шанс извлечь уже установленный имплант.
-loot.note.mission_pools	Предмет входит в обычный пул добычи миссий для указанных источников. Может появиться в контейнере или на полу.
+loot.note.container_chance	Шанс ручного лута контейнера зависит от текущего контекста миссии.
+loot.note.corpse_transfer	После смерти инвентарь и экипировка переходят в труп, кроме голых рук. При полном инвентаре предмет может потеряться.
+loot.note.enemy_chance	ШАНС = генерация предмета у этого врага, не шанс встретить врага. Диапазон зависит от Tech и фракции.
+loot.note.implants	Шанс = попытка установки. «Ампут. X%» = шанс извлечь установленный имплант.
+loot.note.mission_pools	Предмет есть в обычном пуле добычи указанных миссий; может появиться в контейнере или на полу.
 loot.note.placement_generic	Лут из комнат может попасть в контейнер; в коридорах — на пол.
 loot.note.placement_percent_prefix	Размещение: комнаты — 
 loot.note.placement_percent_suffix	% попытка положить в контейнер; иначе на пол. В коридорах — всегда на пол.
-loot.note.random_equipment	Показан шанс генерации. При полном инвентаре врага предмет может потеряться.
-loot.note.tech	TECH = минимальный Tech источника с учетом Tech предмета и бонуса экипировки врага.
+loot.note.random_equipment	Шанс генерации. При полном инвентаре врага предмет может потеряться.
+loot.note.tech	TECH — минимум источника с учётом Tech предмета и бонуса экипировки врага.
 overview.trade.consumers_separator	 / потребители 
 overview.trade.sources_prefix	источники 
 tab.overview.short	ОБЗОР
@@ -313,13 +322,15 @@ mcm.header.tooltip	Тултип
 mcm.header.inspector	Браузер
 mcm.header.information	Информация
 mcm.show_f2_hint	Показывать подсказку горячей клавиши
-mcm.show_f2_hint_tip	Показывать подсказку клавиши браузера при наведении на предметы. Текущая клавиша: {KEY}.
+mcm.show_f2_hint_tip	Показывать подсказку клавиши браузера при наведении. Текущая клавиша: {KEY}.
 mcm.enable_browser	Включить браузер предметов
-mcm.enable_browser_tip	Нажмите {KEY} при наведении на предмет. Подробности по Alt остаются без изменений.
+mcm.enable_browser_tip	Нажмите {KEY} при наведении на предмет. Alt-подсказки игры не меняются.
 mcm.inspector_hotkey	Клавиша открытия браузера
-mcm.inspector_hotkey_tip	Выберите клавишу браузера. Буквы, цифры и знаки по-прежнему вводятся в поле поиска; во время ввода закрывайте окно через Esc.
+mcm.inspector_hotkey_tip	Выберите клавишу браузера. Поиск принимает обычный ввод; во время ввода Esc закрывает окно.
 mcm.show_interface_icons	Минималистичные иконки интерфейса
-mcm.show_interface_icons_tip	Показывать набор минималистичных пиктограмм в элементах Item Intelligence. Изображения предметов и функциональные маркеры статуса не отключаются.
+mcm.show_interface_icons_tip	Показывать минималистичные иконки интерфейса. Иконки предметов и маркеры статуса остаются.
+mcm.trade_previous_layout	Предыдущий дизайн торговли
+mcm.trade_previous_layout_tip	Вернуть прежнюю компактную однострочную таблицу. Расчет цен Quasimorph 1.0.3 не меняется.
 mcm.mod_name	Item Intelligence - База предметов и добычи
 compat.disabled_feature	Эта функция временно недоступна.
 mcm.save_failed	Не удалось сохранить настройки Item Intelligence.
@@ -348,6 +359,7 @@ loot.container.data	Контейнер данных
 loot.container.server	Серверный контейнер
 loot.container.tool_case	Кейс с инструментами
 loot.column.container_profile	ТИП / ПРОФИЛЬ
+loot.column.save_estimate	ОЦ. ШАНС
 loot.container.trash_can	Мусорный бак
 loot.container.armor_locker	Шкаф с броней
 loot.container.food	Контейнер с едой
@@ -382,9 +394,9 @@ loot.station_type.quasimorphic_temple	Квазиморфический храм
 loot.station_type.space_station	Космическая станция
 loot.station_type.bramfatura	Брамфатура
 ui.close_current_ship_screen_before_starmap	Закройте текущее окно корабля перед открытием звездной карты.
-ui.starmap_unavailable_in_bramfatura	Звездная карта недоступна из пространства брамфатуры. Сначала завершите или покиньте текущий спуск.
-ui.starmap_unavailable_during_raid_prep	Звездная карта недоступна во время подготовки к рейду. Сначала закройте экран подготовки.
-ui.starmap_unavailable_during_travel	Звездная карта недоступна, пока корабль уже летит. Дождитесь прибытия, прежде чем выбирать другую точку назначения.
+ui.starmap_unavailable_in_bramfatura	Звёздная карта недоступна в брамфатуре. Сначала завершите или покиньте спуск.
+ui.starmap_unavailable_during_raid_prep	Звёздная карта недоступна при подготовке к рейду. Закройте экран подготовки.
+ui.starmap_unavailable_during_travel	Звёздная карта недоступна в полёте. Дождитесь прибытия.
 ui.secret_data_rewards	СЕКРЕТНЫЕ ДАННЫЕ — НАГРАДЫ ФРАКЦИЙ
 ui.secret_data_rewards_note	Фиксированный стартовый набор и награда репутацией.
 ui.secret_data_items	предм.
@@ -393,14 +405,29 @@ ui.secret_data_view	ОТКРЫТЬ
 ui.secret_data_back	← К СПИСКУ ФРАКЦИЙ
 ui.secret_data_reputation	РЕПУТАЦИЯ
 ui.secret_data_package	СТАРТОВЫЙ НАБОР
-ui.secret_data_story_effect	У этой передачи есть отдельная сюжетная обработка; она также может продвинуть сюжет фракции.
+ui.secret_data_story_effect	Передача имеет отдельную сюжетную обработку и может продвинуть сюжет фракции.
 ui.secret_data_no_rewards	Награды за Секретные данные недоступны.
 ui.chip_unlocks	ОТКРЫВАЕТ
 ui.back_to	← НАЗАД К
 compat.module	Модуль
 compat.reason	Причина:
 
-ui.chip_unlock_chance_note	Шанс указан для одного созданного чипа. Уже открытые предметы остаются в пуле выбора.
+ui.chip_unlock_chance_note	Шанс указан для одного чипа. Уже открытые предметы остаются в пуле.
+ui.chip_summary_unlocked	открыто
+ui.chip_summary_locked	не открыто
+ui.chip_summary_unknown	неизвестно
+ui.baron_guaranteed_one_pact	1 пакт гарантированно
+ui.baron_this_pact	Этот пакт:
+ui.baron_depends_on_mission_tech	зависит от Tech миссии
+ui.overview_magnum_available_now	доступно сейчас
+ui.overview_magnum_not_available_now	сейчас недоступно
+ui.overview_magnum_all_completed	всё изучено
+ui.loot_accordion_hint	▶ / ▼  Нажмите раздел, чтобы раскрыть или свернуть
+ui.baron_habitat	Обитает
+ui.baron_guaranteed	Гарантированно
+ui.baron_one_pact	1 пакт
+ui.loot_quick_jump	БЫСТРЫЙ ПЕРЕХОД
+ui.jump	ПЕРЕЙТИ
 
 ui.weapon_modes	РЕЖИМЫ
 ui.mode_when_empty	Без патронов
@@ -433,7 +460,7 @@ ui.mode_ammo_consumption	Расход патронов
 
 # Modder Mode and advanced search
 mcm.modder_mode	Режим моддера
-mcm.modder_mode_tip	Показывать в Обзоре компактные технические данные записи. Нажмите техническую строку, чтобы скопировать её значение.
+mcm.modder_mode_tip	Показывать технические данные и панель создания предметов. Созданные предметы сохраняются в текущем сейве.
 ui.modder_section	МОДДИНГ
 ui.modder_record_type	Тип записи
 ui.modder_item_class	Класс предмета
@@ -442,11 +469,25 @@ ui.modder_relation_id	ID связи
 ui.modder_firemode_ids	ID режимов
 ui.modder_search_syntax	Расширенный поиск: id:  name:  type:  rel:  tech:  cat:   Пример: cat:оружие tech:>=5
 ui.search_item_modder	ПОИСК...  id: / tech: / cat:
-ui.other_containers	ДРУГИЕ КОНТЕЙНЕРЫ
+ui.open_item_link	ОТКРЫТЬ
+ui.modder_spawn_title	ИНСТРУМЕНТЫ МОДДЕРА
+ui.modder_spawn_save_warning	Создаёт реальный предмет в этом сохранении.
+ui.modder_spawn_clone	ДОБАВИТЬ 1 КЛОНУ
+ui.modder_spawn_cargo	ДОБАВИТЬ 1 В ГРУЗ
+ui.modder_spawn_failed	Предмет не добавлен.
+ui.modder_spawn_invalid_item	Эту запись предмета нельзя создать.
+ui.modder_spawn_wait	Дождитесь завершения текущего действия.
+ui.modder_spawn_clone_unavailable	Инвентарь клона недоступен.
+ui.modder_spawn_contract_unavailable	Создание предметов недоступно в этой версии игры.
+ui.modder_spawn_clone_success	Добавлено в инвентарь клона.
+ui.modder_spawn_inventory_full	Инвентарь клона заполнен.
+ui.modder_spawn_cargo_unavailable	Груз корабля недоступен.
+ui.modder_spawn_cargo_success	Добавлено в груз корабля.
+ui.other_containers	ОБЫЧНОЕ РАЗМЕЩЕНИЕ В КОНТЕЙНЕРАХ
 ui.mission	МИССИЯ
 ui.yes	ДА
-ui.mission_generation	МИССИЯ
-loot.note.general_spawn	Совместимый контейнер для обычного лута миссии. Итоговый шанс зависит от локации, фракции, Tech и бюджета.
+ui.mission_generation	МЕХАНИКА
+loot.note.general_spawn	✓ = контейнер может принять предмет после обычной генерации лута миссии. Это размещение, не отдельный шанс; предмет может остаться на полу.
 ui.loot_modifiers_current	МОДИФИКАТОРЫ: ТЕКУЩИЕ
 ui.loot_modifiers_manual	МОДИФИКАТОРЫ: РУЧНЫЕ
 ui.loot_marauder	Мародёр
@@ -458,16 +499,143 @@ ui.loot_pp	п.п.
 
 ui.bonus_corpse_loot	БОНУСНЫЙ ЛУТ С ТРУПОВ
 ui.bonus_rolls	ДОП. БРОСКИ
-loot.note.corpse_bonus_rolls	Мародёр и Организация добавляют отдельные дополнительные броски добычи с трупа. Диапазон выше показывает возможное число таких бросков; процент в скобках — шанс верхнего значения. ИТОГО — шанс получить предмет хотя бы один раз только из дополнительных бросков.
+loot.note.corpse_bonus_rolls	«Мародёр» и «Организация» дают броски с трупа. Диапазон = число бросков; % в скобках = шанс максимума; ИТОГО = шанс получить предмет хотя бы раз.
 
 ui.per_roll	ЗА БРОСОК
 ui.final_chance	ИТОГО
 ui.mode_damage_per_ap_default	Урон/ОД (станд.)
-loot.note.unknown_container_rolls	? = число бросков не удалось точно определить; общий шанс не рассчитывается.
+loot.note.unknown_container_rolls	? = число бросков точно не определено; общий шанс не рассчитывается.
 ui.station_economy_recipe_output	ЭКОНОМИКА СТАНЦИЙ — ВЫХОД РЕЦЕПТА
 ui.station_economy_recipe_input	ЭКОНОМИКА СТАНЦИЙ — ВХОД РЕЦЕПТА
 ui.economy_output	ВЫХОД
 ui.economy_input	ВХОД
 ui.economy_recipe	ЭКОН. РЕЦЕПТ
-loot.note.current_container_modifier_unknown	Текущий бонус Мародёра не удалось определить; ШАНС показывает точную базовую вероятность без этого бонуса. TECH — минимальный Tech источника.
-ui.no_active_faction_reward_in_current_save	Предмет есть только в пулах наград фракций, недоступных в текущем сохранении.
+ui.no_active_faction_reward_in_current_save	Предмет есть только в пулах наград фракций, недоступных в этом сейве.
+loot.note.enemy_bonus_separate	«Мародёр» и «Организация» не меняют шанс экипировки врага; они добавляют отдельные броски с трупа.
+ui.mode_critical_damage_per_ap_default	Крит. урон/ОД (станд.)
+ui.faction_technology_navigation_unavailable	Переход к технологиям фракции сейчас недоступен.
+ui.scavenger_mission_rewards	МУСОРЩИКИ — ШАНС ПОЛУЧИТЬ ПРЕДМЕТ
+ui.rows_visible	СТРОКИ
+ui.opponent	ПРОТИВНИК
+ui.scavenger_current_missions	ПОДХОДЯЩИХ МИССИЙ: 
+ui.scavenger_best_chance	ЛУЧШИЙ ШАНС: 
+ui.scavenger_time_left	ОСТАЛОСЬ
+stats.tech	TECH
+stats.modes	РЕЖИМЫ
+ui.overview_combat	БОЕВАЯ ЭФФЕКТИВНОСТЬ
+ui.overview_damage_ap_short	УРОН/ОД
+ui.overview_crit_short	КРИТ
+ui.overview_relationships	СВЯЗАНО С ПРЕДМЕТОМ
+ui.overview_magnum_research	Исследования Magnum
+ui.overview_used_in_recipes	Используется в рецептах
+ui.overview_crafted_by_recipes	Создаётся по рецептам
+ui.overview_obtainable_by_disassembly	Можно получить разборкой
+ui.overview_disassembles_into	Разбирается на
+ui.overview_compatible_ammo	Подходящие боеприпасы
+ui.overview_compatible_weapons	Совместимое оружие
+ui.overview_recipe_ingredients	Компоненты рецепта
+ui.overview_no_core_links	Нет основных связей — источники смотрите в Торговле, Фракциях и Добыче.
+loot.baron.section	ДОБЫЧА С БАРОНА
+loot.baron.column.baron	БАРОН
+loot.baron.column.qmorph	КВАЗИМОРФОЗИС
+loot.baron.column.item_chance	ЭТОТ ПАКТ
+loot.baron.column.any_pact	ПАКТ
+loot.baron.column.death_restore	ВОЗВРАТ
+loot.note.baron_ultimate_death	Барон оставляет 1 пакт. Вид пакта зависит от Tech миссии и доступной добычи.
+loot.note.baron_dynamic_tech	Диапазон = пул зависит от Tech миссии/фракции при создании Барона.
+loot.note.baron_ksiomara_exception	Сюжет: игра может заменить обычного Барона Ксиомарой. Эта строка к Ксиомаре не относится.
+loot.note.baron_consumption_bound	Если ВОЗВРАТ <100%, диапазон пакта учитывает точную границу возможного поглощения до смерти; тайминг AI не угадывается.
+loot.special.section	ПРОЧИЕ ИСТОЧНИКИ
+loot.special.condition	УСЛОВИЕ
+loot.special.result	РЕЗУЛЬТАТ
+loot.special.deterministic	ГАРАНТИРОВАНО ПРИ УСЛОВИИ
+loot.special.outcome_dependent	ЗАВИСИТ ОТ ИСХОДА
+loot.special.story_reward	СЮЖЕТНАЯ НАГРАДА
+loot.special.starting_loadout	СТАРТОВЫЙ НАБОР
+loot.special.ancom_exchange	ОБМЕН СЕКРЕТНЫХ ДАННЫХ
+loot.special.expire_conversion	ПРЕВРАЩЕНИЕ ПРЕДМЕТА
+loot.special.skull_ritual	РИТУАЛ С ЧЕРЕПОМ
+loot.special.story_script	СЮЖЕТНОЕ СОБЫТИЕ
+loot.special.complete_story_mission	Завершить сюжетную миссию
+loot.special.story_mission	Сюжетная миссия
+loot.special.selected_start_preset	Выбран фиксированный стартовый набор + случайное снаряжение выключено
+loot.special.exchange_secret_data	Обменять секретные данные AnCom
+loot.special.item_expires	Исходный предмет истекает
+loot.special.ritual_failed	Неудачный исход ритуала
+loot.special.ritual_outcome	Соответствующий исход ритуала
+loot.special.story_trigger	Сюжетное событие / заданное размещение
+loot.special.use_byproduct	ПОБОЧНЫЙ ПРОДУКТ
+loot.special.death_gift	ПОДАРОК ПОСЛЕ СМЕРТИ
+loot.special.mission_reward_pool	ПУЛ НАГРАД МИССИЙ
+loot.special.mission_orbit_reward_pool	ПУЛ НАГРАД МИССИЙ / ОРБИТАЛЬНЫХ СОБЫТИЙ
+loot.special.random_starting_pool	СЛУЧАЙНЫЙ СТАРТОВЫЙ ПУЛ
+loot.special.station_production_reward	НАГРАДА ИЗ ПРОИЗВОДСТВА СТАНЦИЙ
+loot.special.death_gift_source	Подарок после смерти
+loot.special.random_start_source	Случайное стартовое снаряжение
+loot.special.use_source_item	Использовать / израсходовать исходный предмет
+loot.special.death_gift_condition	Включён подарок после смерти + предмет допустим к выдаче
+loot.special.faction_reward_condition	Пул наград фракции / требование Tech
+loot.special.random_start_condition	Включено случайное стартовое снаряжение
+loot.special.station_production_condition	Сейчас в продукции станции + хватает очков награды
+loot.note.container_context_chance	≈ = шанс получить предмет хотя бы раз. Броски/«Мародёр» — ТЕКУЩИЕ/РУЧНЫЕ; Tech — активная миссия/фракция. Бюджет и временный Tech не учтены.
+loot.note.container_modifier_unavailable	* = только базовые броски: текущее значение «Мародёра» недоступно. В космосе выберите РУЧНЫЕ.
+loot.note.container_save_unavailable	— = точной оценки нет: неизвестен Tech сейва, подходящий пул или диапазон базовых бросков.
+loot.special.other_section	ОСОБЫЕ СПОСОБЫ ПОЛУЧЕНИЯ
+loot.special.reward_section	НАГРАДЫ ФРАКЦИЙ
+loot.special.start_section	СТАРТ НОВОЙ ИГРЫ
+loot.special.result_pool	ПУЛ
+loot.special.result_outcome	ИСХОД
+loot.special.result_guaranteed	ГАРАНТ.
+loot.special.result_conditional	УСЛОВНО
+loot.special.kind_story	СЮЖЕТНАЯ МИССИЯ
+loot.special.kind_start	СТАРТ
+loot.special.kind_secret_data	СЕКР. ДАННЫЕ
+loot.special.kind_expire	ИСТЕЧЕНИЕ
+loot.special.kind_ritual	РИТУАЛ
+loot.special.kind_story_script	СЮЖЕТ
+loot.special.story_source	Сюжетная ветка
+loot.special.kind_use	ИСПОЛЬЗОВАНИЕ
+loot.special.kind_death	ПОСЛЕ СМЕРТИ
+loot.special.kind_mission_reward	НАГРАДА МИССИИ
+loot.special.kind_reward	НАГРАДА
+loot.special.kind_start_pool	СТАРТОВЫЙ ПУЛ
+loot.special.kind_station_reward	ПРОИЗВОДСТВО
+loot.special.cond_complete	Завершить миссию
+loot.special.cond_fixed_start	Фикс. пресет • случ. старт выкл.
+loot.special.cond_exchange	Обмен
+loot.special.cond_expire	После истечения
+loot.special.cond_ritual_failed	Неудача
+loot.special.cond_ritual_upgrade	Улучшение
+loot.special.cond_ritual_sidegrade	Боковой исход
+loot.special.cond_ritual_downgrade	Понижение
+loot.special.cond_ritual_outcome	Исход ритуала
+loot.special.cond_story	При сюжетном событии
+loot.special.cond_use	После использования по правилу предмета
+loot.special.cond_death	После смерти: награда разрешена
+loot.special.cond_mission	Миссия
+loot.special.cond_mission_orbit	Миссия / орбита
+loot.special.cond_random_start	Случайный старт
+loot.special.cond_station_current	В продукции станции; очков хватает
+loot.special.result_in_pool	В ПУЛЕ
+loot.special.header_method	СПОСОБ
+loot.special.header_status	СТАТУС
+loot.special.header_faction	ФРАКЦИЯ
+loot.special.header_where	ГДЕ
+loot.special.header_requirement	ТРЕБОВАНИЕ
+loot.special.header_loadout	НАБОР
+loot.special.header_mode	РЕЖИМ
+loot.special.kind_fixed_start	ФИКС. НАБОР
+loot.special.kind_mission_only	МИССИЯ
+loot.special.kind_mission_orbit	МИССИЯ / ОРБИТА
+loot.special.kind_random_pool	СЛУЧАЙНЫЙ ПУЛ
+loot.special.cond_no_extra_requirement	БЕЗ ДОП. УСЛОВИЙ
+loot.special.cond_random_start_enabled	Случайное снаряжение вкл.
+loot.special.cond_fixed_start_enabled	Случайное снаряжение выкл.
+loot.note.faction_reward_sources	✓ = предмет есть в пуле, но не гарантирован. «Миссия/орбита» требует Tech. «Производство» = предмет есть на станции и очков награды хватает.
+loot.note.starting_sources	Только новая игра: фиксированный набор выдаёт предмет, случайный пул лишь может его выбрать.
+loot.general_spawn.placement	РАЗМЕЩЕНИЕ
+loot.column.container	КОНТЕЙНЕР
+loot.note.special_sources	Редкие способы. Для ритуала: «Источник» = исходный череп, «Условие» = нужный исход.
+loot.special.fixed_loadout_count	НАБОРОВ
+
+loot.special.story_missions_count	Сюжетные миссии ×{0}

@@ -1,4 +1,4 @@
-namespace ItemIntelligence
+﻿namespace ItemIntelligence
 {
     public static partial class ModMain
     {

@@ -21,10 +21,24 @@ namespace ItemIntelligence
         {
             public readonly string ItemId;
             public readonly double Weight;
-            public LootWeightedItem(string itemId, double weight)
+            public readonly int TechLevel;
+            public readonly bool TechResolved;
+            public readonly bool BonusEligible;
+            public readonly bool BonusEligibilityResolved;
+            public LootWeightedItem(
+                string itemId,
+                double weight,
+                int techLevel,
+                bool techResolved,
+                bool bonusEligible,
+                bool bonusEligibilityResolved)
             {
                 ItemId = itemId ?? string.Empty;
                 Weight = weight;
+                TechLevel = techLevel;
+                TechResolved = techResolved;
+                BonusEligible = bonusEligible;
+                BonusEligibilityResolved = bonusEligibilityResolved;
             }
         }
 
@@ -215,6 +229,9 @@ namespace ItemIntelligence
         private static void ResetLootIndexState()
         {
             LootContainerSourcesByItem.Clear();
+            ResetLootContainerSaveEstimateIndex();
+            ResetLootBaronSpecialIndex();
+            ResetLootSpecialSourcesIndex();
             ResetLootGeneralSpawnIndex();
             LootEnemySourcesByItem.Clear();
             LootAmputationSourcesByItem.Clear();
@@ -305,6 +322,10 @@ namespace ItemIntelligence
                 // audit every drop-like member without accepting unrelated string data.
                 BuildLootContainerDescriptors();
 
+                // Baron pact/death coverage is intentionally not built for ordinary Loot.
+                // It is tiny but item-metadata-wide, so it remains lazy until a Baron-usable
+                // Skull/Pact is actually inspected. This preserves the normal Loot start budget.
+
                 LootWarmupMobClasses.AddRange(
                     EnumerateData(GetStaticMember(typeof(Data), "MobClasses")));
                 LootWarmupBramfaturas.AddRange(
@@ -381,7 +402,7 @@ namespace ItemIntelligence
             }
 
             if (_lootWarmupActive && _inspectorOpen &&
-                _browserTab == (int)BrowserTabId.Loot &&
+                BrowserNavigation.Tab == (int)BrowserTabId.Loot &&
                 Time.frameCount - _lootLastBrowserRefreshFrame >= 120 &&
                 !string.IsNullOrEmpty(_inspectorItemId))
             {

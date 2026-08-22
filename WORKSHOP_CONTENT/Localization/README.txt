@@ -1,4 +1,4 @@
-Item Intelligence - Community Localization
+﻿Item Intelligence - Community Localization
 =========================================
 
 Item Intelligence UI text is loaded from UTF-8 .lang files.

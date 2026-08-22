@@ -62,6 +62,7 @@ namespace ItemIntelligence
             WeaponModeDamagePerApLoggedKeys.Clear();
             _weaponModeDamagePerApFormulaLogged = false;
             _weaponModeMeleeDamagePerApFormulaLogged = false;
+            ResetWeaponModeCriticalDamagePerApCache();
         }
 
         private static bool TryCalculateWeaponModeDamagePerAp(
@@ -105,6 +106,11 @@ namespace ItemIntelligence
                 }
 
                 float modeMult = stats.DamageMult.HasValue ? stats.DamageMult.Value : 1f;
+                if (float.IsNaN(modeMult) || float.IsInfinity(modeMult) || modeMult < 0f)
+                {
+                    WeaponModeDamagePerApMisses.Add(modeKey);
+                    return false;
+                }
                 int casts = stats.WeaponCastsCount;
                 if (casts <= 0)
                 {
@@ -126,8 +132,13 @@ namespace ItemIntelligence
                         return false;
                     }
 
-                    int meleeTotalMin = Mathf.RoundToInt(baseMin * modeMult) * casts;
-                    int meleeTotalMax = Mathf.RoundToInt(baseMax * modeMult) * casts;
+                    int meleeTotalMin, meleeTotalMax;
+                    if (!TryRoundAndScaleDamage(baseMin * modeMult, 1, casts, out meleeTotalMin) ||
+                        !TryRoundAndScaleDamage(baseMax * modeMult, 1, casts, out meleeTotalMax))
+                    {
+                        WeaponModeDamagePerApMisses.Add(modeKey);
+                        return false;
+                    }
                     if (meleeTotalMax < meleeTotalMin)
                     {
                         int swap = meleeTotalMin;
@@ -178,16 +189,24 @@ namespace ItemIntelligence
                 }
 
                 float ammoMult = ammo.DamageMult;
+                if (float.IsNaN(ammoMult) || float.IsInfinity(ammoMult) || ammoMult < 0f)
+                {
+                    WeaponModeDamagePerApMisses.Add(modeKey);
+                    return false;
+                }
                 int fragments = ((int)weapon.WeaponClass == 31) ? 1 : Mathf.Max(1, ammo.BulletCastsPerShot);
 
                 // ProcessShooting uses one fragment for vanilla WeaponClass 31; otherwise it
                 // divides the ranged multiplier by BulletCastsPerShot and executes that many fragments. Mirror that ordering so shotguns and
                 // other multi-projectile ammo are not incorrectly multiplied by pellet count.
                 float perFragmentMult = modeMult * ammoMult / fragments;
-                int minPerFragment = Mathf.RoundToInt(baseMin * perFragmentMult);
-                int maxPerFragment = Mathf.RoundToInt(baseMax * perFragmentMult);
-                int totalMin = minPerFragment * fragments * casts;
-                int totalMax = maxPerFragment * fragments * casts;
+                int totalMin, totalMax;
+                if (!TryRoundAndScaleDamage(baseMin * perFragmentMult, fragments, casts, out totalMin) ||
+                    !TryRoundAndScaleDamage(baseMax * perFragmentMult, fragments, casts, out totalMax))
+                {
+                    WeaponModeDamagePerApMisses.Add(modeKey);
+                    return false;
+                }
                 if (totalMax < totalMin)
                 {
                     int swap = totalMin;

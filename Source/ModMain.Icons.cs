@@ -15,7 +15,7 @@ namespace ItemIntelligence
 {
     /// <summary>
     /// Vanilla-first item icon discovery, scoring and cache owner.
-    /// Extracted in v1.7.36-test10 without changing runtime behavior.
+    /// Extracted in v1.7.36-test11 without changing runtime behavior.
     /// </summary>
     public static partial class ModMain
     {
@@ -917,53 +917,6 @@ namespace ItemIntelligence
             catch { }
 
             return null;
-        }
-
-        private static Sprite ResolveSpriteDeep(object value, int depth)
-        {
-            return ResolveIconToken(value, depth);
-        }
-
-        private static void LogIconSchemaOnce(string itemId, object record, List<object> graph)
-        {
-            if (_iconFailureSchemaLogged) return;
-            _iconFailureSchemaLogged = true;
-
-            try
-            {
-                List<string> details = new List<string>();
-                for (int i = 0; i < graph.Count && i < 12; i++)
-                {
-                    object node = graph[i];
-                    if (node == null) continue;
-                    Type type = node.GetType();
-                    object small = GetMember(node, "SmallIcon");
-                    string line = type.FullName;
-                    if (small != null)
-                        line += "[SmallIcon=" + small.GetType().FullName + "]";
-
-                    MethodInfo[] methods = type.GetMethods(InstanceFlags | StaticFlags);
-                    for (int m = 0; m < methods.Length; m++)
-                    {
-                        string methodName = methods[m].Name ?? string.Empty;
-                        if (methodName.IndexOf("ResolveSmallIcon", StringComparison.OrdinalIgnoreCase) < 0)
-                            continue;
-
-                        ParameterInfo[] parameters = methods[m].GetParameters();
-                        List<string> args = new List<string>();
-                        for (int a = 0; a < parameters.Length; a++)
-                            args.Add(parameters[a].ParameterType.FullName);
-                        line += "[ResolveSmallIcon(" + string.Join(",", args.ToArray()) + ")]";
-                    }
-
-                    details.Add(line);
-                }
-
-                Debug.LogWarning("[ItemIntelligence] Icon resolver diagnostic " + itemId +
-                    ": root=" + record.GetType().FullName +
-                    ", graph=" + string.Join(" -> ", details.ToArray()) + ".");
-            }
-            catch { }
         }
     }
 }

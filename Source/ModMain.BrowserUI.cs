@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -259,7 +259,7 @@ namespace ItemIntelligence
             if (string.Equals(binding.PreparedItemId, itemId, StringComparison.OrdinalIgnoreCase))
                 return;
 
-            // Pooled browser icons are reused between pages/tabs. Clear a tooltip from
+            // Pooled browser icons are reused between scroll positions/tabs. Clear a tooltip from
             // the previous binding before reinitializing this exact native handler.
             if (!string.IsNullOrEmpty(binding.PreparedItemId))
             {
@@ -460,7 +460,7 @@ namespace ItemIntelligence
 
         internal static void InspectorTick()
         {
-            TickTest3RowsRefresh(); // QII1739T3_MAGNUM_REFRESH_TICK
+            TickBrowserRowsRefresh(); // QII_MAGNUM_REFRESH_TICK
             if (_applicationQuitting) return;
             EnforceInspectorModalInvariantSafe();
 
@@ -491,12 +491,6 @@ namespace ItemIntelligence
                 return;
 
             HandleDiagnosticsHotkey();
-
-            if (Time.frameCount - _quickTooltipLastPruneFrame >= 600)
-            {
-                _quickTooltipLastPruneFrame = Time.frameCount;
-                PruneDeadQuickTooltipPools();
-            }
 
             TickFeatureFrameWork();
 
@@ -569,13 +563,13 @@ namespace ItemIntelligence
 
                 if (_browserCatalogOpen)
                 {
-                    if (Input.GetKeyDown(KeyCode.PageUp)) ChangeBrowserCatalogPage(-1);
-                    else if (Input.GetKeyDown(KeyCode.PageDown)) ChangeBrowserCatalogPage(1);
+                    if (Input.GetKeyDown(KeyCode.PageUp)) ScrollBrowserCatalogRows(-(BrowserCatalogVisibleRows - 1));
+                    else if (Input.GetKeyDown(KeyCode.PageDown)) ScrollBrowserCatalogRows(BrowserCatalogVisibleRows - 1);
                     else
                     {
                         float catalogWheel = Input.mouseScrollDelta.y;
-                        if (catalogWheel > 0.1f) ChangeBrowserCatalogPage(-1);
-                        else if (catalogWheel < -0.1f) ChangeBrowserCatalogPage(1);
+                        if (catalogWheel > 0.1f) ScrollBrowserCatalogRows(-3);
+                        else if (catalogWheel < -0.1f) ScrollBrowserCatalogRows(3);
                     }
 
                     TickMarketScanCompatibilitySafe();
@@ -591,7 +585,7 @@ namespace ItemIntelligence
                         _browserSearchCaptureLogged = true;
                         Debug.Log("[ItemIntelligence] Search field focused; InventorySearch-style modal input guard active.");
                         // onValueChanged owns normal query refreshes. Focus restoration only
-                        // needs one cache-aware refresh to re-show an existing result page.
+                        // needs one cache-aware refresh to re-show the existing result window.
                         if (!string.IsNullOrEmpty(_browserSearchInput.text))
                             RefreshBrowserSearchSuggestions(_browserSearchInput.text);
                     }
@@ -599,16 +593,14 @@ namespace ItemIntelligence
                     if (UnityEngine.EventSystems.EventSystem.current != null)
                         UnityEngine.EventSystems.EventSystem.current.sendNavigationEvents = false;
 
-                    PollBrowserPhysicalBackspace();
 
-                    // Search results are paged in the same fixed eight-row dropdown.
-                    // Mouse wheel moves through all matches instead of silently hiding
-                    // everything after the first eight suggestions.
+                    // Search keeps the fixed eight-row pool but scrolls through matches
+                    // by row, so the dropdown behaves like a normal virtualized list.
                     if (_browserSearchDropdown != null && _browserSearchDropdown.activeSelf)
                     {
                         float searchWheel = Input.mouseScrollDelta.y;
-                        if (searchWheel > 0.1f) ChangeBrowserSearchPage(-1);
-                        else if (searchWheel < -0.1f) ChangeBrowserSearchPage(1);
+                        if (searchWheel > 0.1f) ScrollBrowserSearchRows(-3);
+                        else if (searchWheel < -0.1f) ScrollBrowserSearchRows(3);
                     }
 
                     TickMarketScanCompatibilitySafe();
@@ -619,7 +611,6 @@ namespace ItemIntelligence
                     if (_browserSearchCaptureLogged)
                         _browserSearchCaptureLogged = false;
 
-                    ResetBrowserBackspacePollState();
 
                     if (UnityEngine.EventSystems.EventSystem.current != null)
                         UnityEngine.EventSystems.EventSystem.current.sendNavigationEvents = true;
@@ -634,13 +625,13 @@ namespace ItemIntelligence
                 else if (Input.GetKeyDown(KeyCode.Alpha7)) SetBrowserTab((int)BrowserTabId.Loot);
                 else if (Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.LeftArrow)) CycleBrowserTab(-1);
                 else if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.RightArrow)) CycleBrowserTab(1);
-                else if (Input.GetKeyDown(KeyCode.PageUp)) ChangeBrowserPage(-1);
-                else if (Input.GetKeyDown(KeyCode.PageDown)) ChangeBrowserPage(1);
+                else if (Input.GetKeyDown(KeyCode.PageUp)) ScrollBrowserRows(-(BrowserVisibleRows - 1));
+                else if (Input.GetKeyDown(KeyCode.PageDown)) ScrollBrowserRows(BrowserVisibleRows - 1);
                 else
                 {
                     float wheel = Input.mouseScrollDelta.y;
-                    if (wheel > 0.1f) ChangeBrowserPage(-1);
-                    else if (wheel < -0.1f) ChangeBrowserPage(1);
+                    if (wheel > 0.1f) ScrollBrowserRows(-3);
+                    else if (wheel < -0.1f) ScrollBrowserRows(3);
                 }
 
                 TickMarketScanCompatibilitySafe();
@@ -711,21 +702,17 @@ namespace ItemIntelligence
             try
             {
                 bool firstPanelBuild = _inspectorRoot == null;
-                float perfTotalStart = firstPanelBuild ? openRequestStarted : 0f;
-                float perfStageStart = firstPanelBuild ? Time.realtimeSinceStartup : 0f;
+                float perfTotalStart = openRequestStarted;
+                float perfStageStart = Time.realtimeSinceStartup;
 
                 EnsureRuntimeIndexesReady();
-                float perfIndexesMs = firstPanelBuild
-                    ? (Time.realtimeSinceStartup - perfStageStart) * 1000f
-                    : 0f;
+                float perfIndexesMs = (Time.realtimeSinceStartup - perfStageStart) * 1000f;
                 EnsureTradeStateDependencies();
                 EnsureCatalogPreferencesLoaded();
 
-                perfStageStart = firstPanelBuild ? Time.realtimeSinceStartup : 0f;
+                perfStageStart = Time.realtimeSinceStartup;
                 EnsureInspectorPanel();
-                float perfPanelMs = firstPanelBuild
-                    ? (Time.realtimeSinceStartup - perfStageStart) * 1000f
-                    : 0f;
+                float perfPanelMs = (Time.realtimeSinceStartup - perfStageStart) * 1000f;
                 if (_inspectorRoot == null) return;
 
                 _browserPreviewLiveItem = ResolveBrowserPreviewLiveItem(itemId);
@@ -733,13 +720,15 @@ namespace ItemIntelligence
                 _inspectorOpen = true;
                 HideHoverHint();
                 _inspectorItemId = itemId;
-                _browserTab = (int)BrowserTabId.Overview;
-                _browserPage = 0;
-                BrowserItemNavigationHistory.Clear();
-                Array.Clear(BrowserPageByTab, 0, BrowserPageByTab.Length);
+                BrowserTabId adaptiveEntryTab = ResolveAdaptiveEntryTab(itemId);
+                BrowserNavigation.Tab = (int)adaptiveEntryTab;
+                Debug.Log("[ItemIntelligence][AdaptiveEntry] item=" + itemId + ", tab=" + adaptiveEntryTab.ToString() + ".");
+                BrowserNavigation.ScrollOffset = 0;
+                BrowserNavigation.History.Clear();
+                Array.Clear(BrowserNavigation.ScrollOffsets, 0, BrowserNavigation.ScrollOffsets.Length);
                 _secretDataSelectedFactionId = string.Empty;
                 _browserCatalogOpen = false;
-                _browserCatalogPage = 0;
+                _browserCatalogScrollOffset = 0;
                 RecordBrowserItemVisit(itemId);
 
                 // Search/catalog indexing is deliberately demand-driven in the release-polish branch.
@@ -757,14 +746,13 @@ namespace ItemIntelligence
                 _inspectorRoot.transform.SetAsLastSibling();
                 PositionInspectorPanel();
                 RefreshInspectorAnchorFromTooltip();
-                perfStageStart = firstPanelBuild ? Time.realtimeSinceStartup : 0f;
+                perfStageStart = Time.realtimeSinceStartup;
                 RenderBrowser(itemId);
-                float perfRenderMs = firstPanelBuild
-                    ? (Time.realtimeSinceStartup - perfStageStart) * 1000f
-                    : 0f;
+                float perfRenderMs = (Time.realtimeSinceStartup - perfStageStart) * 1000f;
+                float perfTotalMs = (Time.realtimeSinceStartup - perfTotalStart) * 1000f;
+                ReportBrowserPerformanceBudget(itemId, firstPanelBuild, perfTotalMs, perfRenderMs);
                 if (firstPanelBuild)
                 {
-                    float perfTotalMs = (Time.realtimeSinceStartup - perfTotalStart) * 1000f;
                     float knownStagesMs = targetResolveMs + perfIndexesMs + perfPanelMs + perfRenderMs;
                     float perfMiscMs = Mathf.Max(0f, perfTotalMs - knownStagesMs);
                     float coreBuildMs = _lastCoreIndexBuildFrame == Time.frameCount ? _lastCoreIndexBuildMs : 0f;
@@ -808,8 +796,9 @@ namespace ItemIntelligence
             _inspectorOpen = false;
             _inspectorItemId = string.Empty;
             _browserPreviewLiveItem = null;
-            _browserPage = 0;
-            BrowserItemNavigationHistory.Clear();
+            BrowserNavigation.ScrollOffset = 0;
+            BrowserNavigation.History.Clear();
+            ResetLootAccordionState();
             _secretDataSelectedFactionId = string.Empty;
             _marketScanActive = false;
             HideBrowserSearchDropdown();
@@ -825,7 +814,6 @@ namespace ItemIntelligence
                     UnityEngine.EventSystems.EventSystem.current.sendNavigationEvents = true;
 
                 _browserSearchCaptureLogged = false;
-                ResetBrowserBackspacePollState();
 
                 if (_browserSearchInput != null)
                     _browserSearchInput.DeactivateInputField();
@@ -866,19 +854,12 @@ namespace ItemIntelligence
             catch { }
         }
 
-        private static void RefreshInspectorForHoveredItem(string itemId)
-        {
-            // F2 is intentionally pinned to the item that was under the cursor when the browser opened.
-            // Hovering inventory cells behind the inspector must never switch the inspected item.
-            return;
-        }
-
         private static void SetBrowserTab(int tab)
         {
             if (!_inspectorOpen) return;
             if (tab < 0) tab = 0;
             if (tab >= BrowserTabCount) tab = BrowserTabCount - 1;
-            if (_browserTab == tab)
+            if (BrowserNavigation.Tab == tab)
             {
                 if (tab == (int)BrowserTabId.Trade && (ShowSources || ShowTradeInformation))
                 {
@@ -888,14 +869,14 @@ namespace ItemIntelligence
                 return;
             }
 
-            if (_browserTab >= 0 && _browserTab < BrowserPageByTab.Length)
-                BrowserPageByTab[_browserTab] = Math.Max(0, _browserPage);
+            if (BrowserNavigation.Tab >= 0 && BrowserNavigation.Tab < BrowserNavigation.ScrollOffsets.Length)
+                BrowserNavigation.ScrollOffsets[BrowserNavigation.Tab] = Math.Max(0, BrowserNavigation.ScrollOffset);
 
-            _browserTab = tab;
-            _browserPage = BrowserPageByTab[_browserTab];
-            if (_browserTab != (int)BrowserTabId.Factions) _secretDataSelectedFactionId = string.Empty;
+            BrowserNavigation.Tab = tab;
+            BrowserNavigation.ScrollOffset = BrowserNavigation.ScrollOffsets[BrowserNavigation.Tab];
+            if (BrowserNavigation.Tab != (int)BrowserTabId.Factions) _secretDataSelectedFactionId = string.Empty;
             CloseBrowserCatalog();
-            if (_browserTab == (int)BrowserTabId.Trade && (ShowSources || ShowTradeInformation))
+            if (BrowserNavigation.Tab == (int)BrowserTabId.Trade && (ShowSources || ShowTradeInformation))
                 StartMarketScan(_inspectorItemId, true);
             RenderBrowser(_inspectorItemId);
         }
@@ -903,127 +884,28 @@ namespace ItemIntelligence
         private static void CycleBrowserTab(int delta)
         {
             if (!_inspectorOpen) return;
-            int next = (_browserTab + delta) % BrowserTabCount;
+            int next = (BrowserNavigation.Tab + delta) % BrowserTabCount;
             if (next < 0) next += BrowserTabCount;
             SetBrowserTab(next);
         }
 
-        private static void ChangeBrowserPage(int delta)
+        private static void ScrollBrowserRows(int delta)
         {
             if (!_inspectorOpen || delta == 0) return;
-            int pages = Math.Max(1, (BrowserLines.Count + BrowserVisibleRows - 1) / BrowserVisibleRows);
-            int next = _browserPage + delta;
-            if (next < 0) next = 0;
-            if (next >= pages) next = pages - 1;
-            if (next == _browserPage) return;
-            _browserPage = next;
-            if (_browserTab >= 0 && _browserTab < BrowserPageByTab.Length)
-                BrowserPageByTab[_browserTab] = _browserPage;
+            int maxOffset = Math.Max(0, BrowserLines.Count - BrowserVisibleRows);
+            int next = Mathf.Clamp(BrowserNavigation.ScrollOffset + delta, 0, maxOffset);
+            if (next == BrowserNavigation.ScrollOffset) return;
+            BrowserNavigation.ScrollOffset = next;
+            if (BrowserNavigation.Tab >= 0 && BrowserNavigation.Tab < BrowserNavigation.ScrollOffsets.Length)
+                BrowserNavigation.ScrollOffsets[BrowserNavigation.Tab] = BrowserNavigation.ScrollOffset;
             RenderBrowserRowsOnly();
         }
 
 
-        private static void DeleteOneBrowserSearchCharacter()
-        {
-            if (_browserSearchInput == null)
-                return;
-
-            string value = _browserSearchInput.text ?? string.Empty;
-            if (value.Length == 0)
-                return;
-
-            int caret = Mathf.Clamp(_browserSearchInput.caretPosition, 0, value.Length);
-            int anchor = Mathf.Clamp(_browserSearchInput.selectionAnchorPosition, 0, value.Length);
-            int focus = Mathf.Clamp(_browserSearchInput.selectionFocusPosition, 0, value.Length);
-
-            int selectionStart = Mathf.Min(anchor, focus);
-            int selectionEnd = Mathf.Max(anchor, focus);
-
-            string next;
-            int nextCaret;
-
-            if (selectionEnd > selectionStart)
-            {
-                next = value.Remove(selectionStart, selectionEnd - selectionStart);
-                nextCaret = selectionStart;
-            }
-            else if (caret > 0)
-            {
-                next = value.Remove(caret - 1, 1);
-                nextCaret = caret - 1;
-            }
-            else
-            {
-                // TMP sometimes loses a reliable caret after focus transitions.
-                // Match InventorySearch's practical fallback: delete from the end.
-                next = value.Remove(value.Length - 1, 1);
-                nextCaret = next.Length;
-            }
-
-            _browserSearchInput.text = next;
-            nextCaret = Mathf.Clamp(nextCaret, 0, next.Length);
-            _browserSearchInput.caretPosition = nextCaret;
-            _browserSearchInput.selectionAnchorPosition = nextCaret;
-            _browserSearchInput.selectionFocusPosition = nextCaret;
-
-            RefreshBrowserSearchSuggestions(next);
-        }
-
-        private static void PollBrowserPhysicalBackspace()
-        {
-            bool down = IsBrowserPhysicalBackspaceDown();
-            float now = Time.unscaledTime;
-
-            if (down && !_browserBackspaceWasDown)
-            {
-                DeleteOneBrowserSearchCharacter();
-                _browserNextBackspaceRepeat = now + BrowserBackspaceInitialRepeatDelay;
-            }
-            else if (down && _browserBackspaceWasDown && now >= _browserNextBackspaceRepeat)
-            {
-                DeleteOneBrowserSearchCharacter();
-                _browserNextBackspaceRepeat = now + BrowserBackspaceRepeatInterval;
-            }
-            else if (!down)
-            {
-                _browserNextBackspaceRepeat = 0f;
-            }
-
-            _browserBackspaceWasDown = down;
-        }
-
-        private static bool IsBrowserPhysicalBackspaceDown()
-        {
-            if (!_browserWin32BackspaceUnavailable &&
-                (Application.platform == RuntimePlatform.WindowsPlayer ||
-                 Application.platform == RuntimePlatform.WindowsEditor))
-            {
-                try
-                {
-                    return (GetAsyncKeyState(VkBackspace) & 0x8000) != 0;
-                }
-                catch
-                {
-                    _browserWin32BackspaceUnavailable = true;
-                }
-            }
-
-            try
-            {
-                return Input.GetKey(KeyCode.Backspace);
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        private static void ResetBrowserBackspacePollState()
-        {
-            _browserBackspaceWasDown = false;
-            _browserNextBackspaceRepeat = 0f;
-        }
-
+        // Text editing is owned exclusively by TMP_InputField while search has focus.
+        // Older builds also polled the physical Backspace key and manually removed text;
+        // TMP processed the same key independently, causing intermittent double deletion.
+        // Keep no second Backspace path here.
 
         private static BasePickupItem ResolveBrowserPreviewLiveItem(string itemId)
         {
@@ -1357,11 +1239,11 @@ namespace ItemIntelligence
         private static void ShowBrowserItemNavigationHint(int visibleRow, bool chipIcon)
         {
             if (_browserHelpText == null || visibleRow < 0 || visibleRow >= BrowserVisibleRows) return;
-            int index = _browserPage * BrowserVisibleRows + visibleRow;
+            int index = BrowserNavigation.ScrollOffset + visibleRow;
             if (index < 0 || index >= BrowserLines.Count) return;
             BrowserLine line = BrowserLines[index];
             if (line == null) return;
-            string targetItemId = chipIcon ? line.ChipItemId : (line.LeftMode == 1 ? line.Left : string.Empty);
+            string targetItemId = chipIcon ? line.ChipItemId : (line.LeftContentKind == BrowserLeftContentKind.Item ? line.Left : string.Empty);
             if (!string.IsNullOrEmpty(targetItemId) && IsKnownItemId(targetItemId))
                 _browserHelpText.text = NormalizeModUiText(Ui("ui.lmb_open_item"));
         }
@@ -1375,7 +1257,7 @@ namespace ItemIntelligence
         private static void HandleBrowserItemIconClick(int visibleRow, bool chipIcon)
         {
             if (!_inspectorOpen || visibleRow < 0 || visibleRow >= BrowserVisibleRows) return;
-            int index = _browserPage * BrowserVisibleRows + visibleRow;
+            int index = BrowserNavigation.ScrollOffset + visibleRow;
             if (index < 0 || index >= BrowserLines.Count) return;
 
             BrowserLine line = BrowserLines[index];
@@ -1383,7 +1265,7 @@ namespace ItemIntelligence
 
             string targetItemId = chipIcon
                 ? line.ChipItemId
-                : (line.LeftMode == 1 ? line.Left : string.Empty);
+                : (line.LeftContentKind == BrowserLeftContentKind.Item ? line.Left : string.Empty);
             if (string.IsNullOrEmpty(targetItemId) || !IsKnownItemId(targetItemId)) return;
 
             NavigateBrowserToItem(targetItemId, false, chipIcon ? "Chip icon" : "Item icon");
@@ -1392,66 +1274,63 @@ namespace ItemIntelligence
         private static void HandleBrowserRowClick(int visibleRow)
         {
             if (!_inspectorOpen || visibleRow < 0 || visibleRow >= BrowserVisibleRows) return;
-            int index = _browserPage * BrowserVisibleRows + visibleRow;
+            int index = BrowserNavigation.ScrollOffset + visibleRow;
             if (index < 0 || index >= BrowserLines.Count) return;
             BrowserLine line = BrowserLines[index];
-            if (line == null || string.IsNullOrEmpty(line.ActionSpaceObjectId)) return;
+            if (line == null || line.Action.IsNone) return;
 
-            if (string.Equals(line.ActionSpaceObjectId, SecretDataBackAction, StringComparison.Ordinal))
+            BrowserAction action = line.Action;
+            switch (action.Kind)
             {
-                _secretDataSelectedFactionId = string.Empty;
-                _browserPage = 0;
-                RenderBrowser(_inspectorItemId);
-                return;
-            }
-
-            if (line.ActionSpaceObjectId.StartsWith(SecretDataFactionActionPrefix, StringComparison.Ordinal))
-            {
-                string factionId = line.ActionSpaceObjectId.Substring(SecretDataFactionActionPrefix.Length);
-                if (!string.IsNullOrEmpty(factionId))
-                {
-                    _secretDataSelectedFactionId = factionId;
-                    _browserPage = 0;
-                    Debug.Log("[ItemIntelligence] Secret Data faction package selected: " + factionId + ".");
+                case BrowserActionKind.SecretDataBack:
+                    _secretDataSelectedFactionId = string.Empty;
+                    BrowserNavigation.ScrollOffset = 0;
                     RenderBrowser(_inspectorItemId);
-                }
-                return;
-            }
+                    return;
 
-            if (string.Equals(line.ActionSpaceObjectId, BrowserItemBackAction, StringComparison.Ordinal))
-            {
-                NavigateBrowserBack();
-                return;
-            }
+                case BrowserActionKind.SecretDataFaction:
+                    if (!string.IsNullOrEmpty(action.Payload))
+                    {
+                        _secretDataSelectedFactionId = action.Payload;
+                        BrowserNavigation.ScrollOffset = 0;
+                        Debug.Log("[ItemIntelligence] Secret Data faction package selected: " + action.Payload + ".");
+                        RenderBrowser(_inspectorItemId);
+                    }
+                    return;
 
-            if (line.ActionSpaceObjectId.StartsWith(BrowserCopyTextActionPrefix, StringComparison.Ordinal))
-            {
-                string copyValue = line.ActionSpaceObjectId.Substring(BrowserCopyTextActionPrefix.Length);
-                if (!string.IsNullOrEmpty(copyValue))
-                {
-                    GUIUtility.systemCopyBuffer = copyValue;
-                    Debug.Log("[ItemIntelligence][ModderMode] copied: " + copyValue + ".");
-                }
-                return;
-            }
+                case BrowserActionKind.CopyText:
+                    if (!string.IsNullOrEmpty(action.Payload))
+                    {
+                        GUIUtility.systemCopyBuffer = action.Payload;
+                        Debug.Log("[ItemIntelligence][ModderMode] copied: " + action.Payload + ".");
+                    }
+                    return;
 
-            if (line.ActionSpaceObjectId.StartsWith(LootModifierActionPrefix, StringComparison.Ordinal))
-            {
-                HandleLootModifierAction(line.ActionSpaceObjectId);
-                return;
-            }
+                case BrowserActionKind.ToggleLootSection:
+                    HandleLootSectionToggleAction(action.Payload, index);
+                    return;
 
-            if (line.ActionSpaceObjectId.StartsWith(BrowserItemActionPrefix, StringComparison.Ordinal))
-            {
-                string targetItemId = line.ActionSpaceObjectId.Substring(BrowserItemActionPrefix.Length);
-                if (!string.IsNullOrEmpty(targetItemId) && IsKnownItemId(targetItemId))
-                {
-                    NavigateBrowserToItem(targetItemId, false, "Related item");
-                }
-                return;
-            }
+                case BrowserActionKind.SwitchTab:
+                    SetBrowserTab((int)action.Tab);
+                    return;
 
-            BeginStarmapNavigation(line.ActionSpaceObjectId);
+                case BrowserActionKind.LootModifier:
+                    HandleLootModifierAction(action.LootModifierCommand);
+                    return;
+
+                case BrowserActionKind.OpenItem:
+                    if (!string.IsNullOrEmpty(action.Payload) && IsKnownItemId(action.Payload))
+                        NavigateBrowserToItem(action.Payload, false, "Related item");
+                    return;
+
+                case BrowserActionKind.FactionTechnology:
+                    BeginFactionTechnologyNavigation(action.Payload);
+                    return;
+
+                case BrowserActionKind.OpenStarmap:
+                    BeginStarmapNavigation(action.Payload);
+                    return;
+            }
         }
 
 

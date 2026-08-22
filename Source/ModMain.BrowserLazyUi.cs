@@ -75,7 +75,6 @@ namespace ItemIntelligence
             if (_inspectorRoot == null || BrowserRowChipIcons[0] != null) return;
             float started = Time.realtimeSinceStartup;
             EnsureQiiMarkerSprites();
-            const float rowHeight = 39f;
             for (int i = 0; i < BrowserVisibleRows; i++)
             {
                 GameObject row = BrowserRowRoots[i];
@@ -121,10 +120,19 @@ namespace ItemIntelligence
             for (int i = 0; i < BrowserLines.Count; i++)
             {
                 BrowserLine line = BrowserLines[i];
-                if (line != null && (line.ShowRecipeChipContext || line.RowKind == BrowserRowKind.ChipUnlock))
+                if (line != null && (line.ShowRecipeChipContext ||
+                    line.RowKind == BrowserRowKind.ChipUnlock ||
+                    IsBrowserEligibilityMarker(line.ColumnCurrent) ||
+                    IsBrowserEligibilityMarker(line.ColumnState)))
                     return true;
             }
             return false;
+        }
+
+        private static bool IsBrowserEligibilityMarker(string value)
+        {
+            return string.Equals(value, "eligible", StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(value, "ineligible", StringComparison.OrdinalIgnoreCase);
         }
 
         private static void EnsureBrowserLootProgressUi()

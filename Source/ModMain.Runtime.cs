@@ -21,24 +21,20 @@ namespace ItemIntelligence
     /// </summary>
     public static partial class ModMain
     {
-        public const string Version = "1.7.39";
-        // Architectural invariant: Item Intelligence is a read-only knowledge browser.
-        // It may inspect runtime data and open vanilla screens, but it does not mutate
-        // inventory, economy, story variables, faction progression, or save data.
+        public const string Version = "1.7.41.1";
+        // Ordinary Item Intelligence remains a read-only knowledge browser. The only
+        // save-affecting exception is one explicit item-spawn click inside MCM Modder Mode;
+        // economy, story variables and faction progression are never mutated.
         internal const bool ReadOnlyKnowledgePolicy = true;
+        internal const bool ModderModeExplicitSpawnException = true;
         private const string HarmonyId = "Quasimorph.ItemIntelligence.V1";
         private const string ModifiedItemMarker = "_custom";
-        private const int MaxQuickRows = 2;
 
         // v1.5.15: exact keyboard guard copied from the proven InventorySearch path.
         // Quasimorph maps gameplay/UI actions through InputController.IsKeyDown/IsKey/IsKeyUp.
-        private const int VkBackspace = 0x08;
-        private const float BrowserBackspaceInitialRepeatDelay = 0.36f;
-        private const float BrowserBackspaceRepeatInterval = 0.055f;
 
 
         private static bool _harmonyPatched;
-        private static bool _loggedTooltipTemplateFailure;
         private static IModContext _modContext;
 
         // v1.7.5 keeps the exact v1.7.4 enemy-loot model, but builds it lazily and in frame-safe slices.
@@ -46,9 +42,6 @@ namespace ItemIntelligence
 
         private static bool _exactMobNameResolverMethodSearched;
         private static MethodInfo _exactMobNameResolverMethod;
-
-        [DllImport("user32.dll")]
-        private static extern short GetAsyncKeyState(int vKey);
 
         [Hook(ModHookType.BeforeBootstrap)]
         public static void BeforeBootstrap(IModContext context)
@@ -62,7 +55,7 @@ namespace ItemIntelligence
         {
             if (context != null) _modContext = context;
             EnsureConfigLoaded();
-            Debug.Log("[ItemIntelligence] ACTIVE VERSION " + Version + " (StableRelease1739).");
+            Debug.Log("[ItemIntelligence] ACTIVE VERSION " + Version + " (StableRelease17411).");
             RunCompatibilityShieldStatic();
             RefreshBuildFingerprint();
             if (ShouldWriteAutomaticDiagnostics()) WriteDiagnosticsReportSafe("AfterConfigsLoaded");
@@ -79,17 +72,14 @@ namespace ItemIntelligence
             _applicationQuitting = false;
             if (context != null) _modContext = context;
             EnsureConfigLoaded();
+            ResetModderSpawnRuntime(false);
             CloseInspector();
             HideHoverHint();
 
             // BuildFix3 Memory Hygiene: entering the main menu is a real session
             // boundary. Release save/runtime references and the large reverse indexes
             // using the same ClearIndexes path already used before a normal rebuild.
-            // Live vanilla tooltip pools are only deactivated; we never destroy or
-            // mutate vanilla-owned tooltip objects here.
             ClearBrowserTooltipPreviewBindings();
-            DeactivateQuickTooltipPools();
-            PruneDeadQuickTooltipPools();
             ResetSessionRuntimeReferencesForMenu();
             ResetLootModifierSessionState();
             RunConservativeMemoryHygiene("MainMenuStarted");
@@ -123,10 +113,9 @@ namespace ItemIntelligence
             ResetMagnumRuntimeSessionState();
 
             EnsureConfigLoaded();
+            ResetModderSpawnRuntime(false);
             CloseInspector();
             ClearBrowserTooltipPreviewBindings();
-            DeactivateQuickTooltipPools();
-            PruneDeadQuickTooltipPools();
             InitializeBrowserSpaceSessionState();
             HideHoverHint();
 
@@ -323,7 +312,8 @@ namespace ItemIntelligence
                     string key = ConvertToStableString(entry.Key);
                     double weight;
                     if (!string.IsNullOrEmpty(key) &&
-                        TryToDoubleSafe(entry.Value, out weight) && weight > 0.0)
+                        TryToDoubleSafe(entry.Value, out weight) &&
+                        !double.IsNaN(weight) && !double.IsInfinity(weight))
                         result[key] = weight;
                 }
                 return result;
@@ -338,7 +328,8 @@ namespace ItemIntelligence
                     string key = ConvertToStableString(GetMember(entry, "Key"));
                     double weight;
                     if (!string.IsNullOrEmpty(key) &&
-                        TryToDoubleSafe(GetMember(entry, "Value"), out weight) && weight > 0.0)
+                        TryToDoubleSafe(GetMember(entry, "Value"), out weight) &&
+                        !double.IsNaN(weight) && !double.IsInfinity(weight))
                         result[key] = weight;
                 }
             }
@@ -359,43 +350,6 @@ namespace ItemIntelligence
 
 
 
-
-        private static double GetEnemyCategoryWeight(
-            LootItemMeta meta,
-            Dictionary<string, double> whitelist,
-            bool whitelistExists,
-            string factionId,
-            out bool eligible)
-        {
-            eligible = true;
-            if (!whitelistExists) return 0.0;
-
-            eligible = false;
-            double best = 0.0;
-            double factionWeight;
-            if (!string.IsNullOrEmpty(factionId) &&
-                whitelist.TryGetValue("Faction", out factionWeight) &&
-                meta != null && meta.Categories != null && meta.Categories.Contains(factionId))
-            {
-                eligible = true;
-                best = Math.Max(best, factionWeight);
-            }
-
-            if (meta != null && meta.Categories != null)
-            {
-                foreach (string category in meta.Categories)
-                {
-                    double value;
-                    if (!string.IsNullOrEmpty(category) && whitelist.TryGetValue(category, out value))
-                    {
-                        eligible = true;
-                        if (value > best) best = value;
-                    }
-                }
-            }
-
-            return best;
-        }
 
         private static List<LootItemMeta> CollectEnemyCandidates(
             Dictionary<string, double> classWeights,
@@ -431,14 +385,21 @@ namespace ItemIntelligence
             return meta.ItemClass;
         }
 
-        private static double GetEnemySlotGate(Dictionary<string, double> weights)
+        private static double GetEnemySlotGate(Dictionary<string, double> weights, string contextKey)
         {
             if (weights == null || weights.Count == 0) return 0.0;
             double total = 0.0;
             double none = 0.0;
             foreach (KeyValuePair<string, double> pair in weights)
             {
-                if (pair.Value <= 0.0) continue;
+                if (double.IsNaN(pair.Value) || double.IsInfinity(pair.Value) || pair.Value <= 0.0)
+                {
+                    LogRuntimeBoundaryWarningOnce(
+                        "weighted-slot.nonpositive." + (contextKey ?? "unknown"),
+                        "Weighted slot probability hidden because a configured class/None weight is non-positive or invalid.",
+                        null);
+                    return -1.0;
+                }
                 total += pair.Value;
                 if (string.Equals(pair.Key, "None", StringComparison.OrdinalIgnoreCase))
                     none += pair.Value;
@@ -543,9 +504,9 @@ namespace ItemIntelligence
             List<LootItemMeta> candidates = CollectEnemyCandidates(classWeights, index);
             if (candidates.Count == 0) return;
 
-            Dictionary<string, double> whitelist = ExtractWeightedStringMap(rawWhitelist);
+            Dictionary<string, double> whitelist = ExtractItemDropWeightMap(rawWhitelist);
             bool whitelistExists = rawWhitelist != null;
-            double gate = GetEnemySlotGate(classWeights);
+            double gate = GetEnemySlotGate(classWeights, mobClassId + "." + kind);
             if (gate <= 0.0) return;
 
             Dictionary<string, EnemyChanceAccumulator> accumulators =
@@ -588,12 +549,11 @@ namespace ItemIntelligence
                     if (!categoryEligible) continue;
 
                     double finalWeight = baseWeight + categoryWeight;
-                    if (finalWeight <= 0.0) continue;
                     eligibleWeights[meta.ItemId] = finalWeight;
-                    total += finalWeight;
                 }
 
-                if (total <= 0.0) continue;
+                if (!TryResolveStrictlyPositiveItemDropTotal(
+                    eligibleWeights, "enemy.slot." + mobClassId + "." + kind, out total)) continue;
                 Dictionary<string, double> ammoThisContext =
                     new Dictionary<string, double>(StringComparer.OrdinalIgnoreCase);
 
@@ -646,7 +606,7 @@ namespace ItemIntelligence
             int ammoMax)
         {
             object rawClasses = GetMember(mobRecord, "AdditItemClasses");
-            Dictionary<string, double> classWeights = ExtractWeightedStringMap(rawClasses);
+            Dictionary<string, double> classWeights = ExtractItemDropWeightMap(rawClasses);
             if (classWeights.Count == 0 || contexts == null || contexts.Count == 0) return;
 
             int minRolls, maxRolls;
@@ -654,7 +614,7 @@ namespace ItemIntelligence
             List<LootItemMeta> candidates = CollectEnemyCandidates(classWeights, LootItemsByItemClass);
             if (candidates.Count == 0) return;
 
-            Dictionary<string, double> whitelist = ExtractWeightedStringMap(rawWhitelist);
+            Dictionary<string, double> whitelist = ExtractItemDropWeightMap(rawWhitelist);
             bool whitelistExists = rawWhitelist != null;
             Dictionary<string, EnemyChanceAccumulator> inventoryAcc =
                 new Dictionary<string, EnemyChanceAccumulator>(StringComparer.OrdinalIgnoreCase);
@@ -691,26 +651,33 @@ namespace ItemIntelligence
                     if (string.IsNullOrEmpty(meta.ItemClass) ||
                         !classWeights.TryGetValue(meta.ItemClass, out baseWeight))
                         continue;
-                    double finalWeight = baseWeight;
-                    if (finalWeight <= 0.0) continue;
+                    // GenerateEquipment additional items use the same exact
+                    // ItemDropSystem.Randomize category/faction gate as other equipment
+                    // slots. The previous projection accidentally applied ItemClass + Tech
+                    // only, which could over-report random additional drops when a
+                    // MobClass.ItemCategoriesWhitelist is present.
+                    bool categoryEligible;
+                    double categoryWeight = GetItemDropCategoryWeight(
+                        meta.Categories, whitelist, whitelistExists,
+                        context.FactionId, out categoryEligible);
+                    double inventoryWeight = baseWeight + categoryWeight;
 
                     // GenerateEquipment applies EquipmentTechLevelBonus to the spawn
-                    // Tech limit. CloneInventoryForCorpse's FLootCorpseItem rolls use
-                    // the faction/current Tech directly, so these are intentionally two
-                    // different eligible pools.
-                    if (meta.TechLevel <= context.EffectiveTech)
-                    {
-                        eligible[meta.ItemId] = finalWeight;
-                        total += finalWeight;
-                    }
+                    // Tech limit. CloneInventoryForCorpse's FLootCorpseItem rolls are a
+                    // separate path: their audited selector uses AdditItemClasses and raw
+                    // faction/current Tech, without the GenerateEquipment whitelist gate.
+                    if (meta.TechLevel <= context.EffectiveTech && categoryEligible)
+                        eligible[meta.ItemId] = inventoryWeight;
                     if (meta.TechLevel <= context.RawTech)
-                    {
-                        corpseEligible[meta.ItemId] = finalWeight;
-                        corpseTotal += finalWeight;
-                    }
+                        corpseEligible[meta.ItemId] = baseWeight;
                 }
 
-                if (total > 0.0)
+                bool inventoryDistributionResolved = TryResolveStrictlyPositiveItemDropTotal(
+                    eligible, "enemy.additional." + mobClassId, out total);
+                bool corpseDistributionResolved = TryResolveStrictlyPositiveItemDropTotal(
+                    corpseEligible, "enemy.corpse." + mobClassId, out corpseTotal);
+
+                if (inventoryDistributionResolved)
                 {
                     foreach (KeyValuePair<string, double> pair in eligible)
                     {
@@ -738,7 +705,7 @@ namespace ItemIntelligence
                     }
                 }
 
-                if (corpseTotal > 0.0)
+                if (corpseDistributionResolved)
                 {
                     foreach (KeyValuePair<string, double> pair in corpseEligible)
                         UpdateEnemyAccumulator(
@@ -812,9 +779,10 @@ namespace ItemIntelligence
                 classWeights, LootImplantsByAugmentationClass);
             if (candidates.Count == 0) return;
 
-            Dictionary<string, double> whitelist = ExtractWeightedStringMap(rawWhitelist);
+            Dictionary<string, double> whitelist = ExtractItemDropWeightMap(rawWhitelist);
             bool whitelistExists = rawWhitelist != null;
-            double gate = GetEnemySlotGate(classWeights);
+            double gate = GetEnemySlotGate(classWeights, mobClassId + ".implant");
+            if (gate <= 0.0) return;
             Dictionary<string, EnemyChanceAccumulator> acc =
                 new Dictionary<string, EnemyChanceAccumulator>(StringComparer.OrdinalIgnoreCase);
 
@@ -842,11 +810,10 @@ namespace ItemIntelligence
                     if (!categoryEligible) continue;
 
                     double finalWeight = baseWeight + categoryWeight;
-                    if (finalWeight <= 0.0) continue;
                     eligible[meta.ItemId] = finalWeight;
-                    total += finalWeight;
                 }
-                if (total <= 0.0) continue;
+                if (!TryResolveStrictlyPositiveItemDropTotal(
+                    eligible, "enemy.implant." + mobClassId, out total)) continue;
                 foreach (KeyValuePair<string, double> pair in eligible)
                 {
                     double perAttempt = gate * pair.Value / total;
@@ -894,9 +861,10 @@ namespace ItemIntelligence
                 classWeights, LootAugmentationsByAugmentationClass);
             if (candidates.Count == 0) return;
 
-            Dictionary<string, double> whitelist = ExtractWeightedStringMap(rawWhitelist);
+            Dictionary<string, double> whitelist = ExtractItemDropWeightMap(rawWhitelist);
             bool whitelistExists = rawWhitelist != null;
-            double gate = GetEnemySlotGate(classWeights);
+            double gate = GetEnemySlotGate(classWeights, mobClassId + ".augmentation");
+            if (gate <= 0.0) return;
             Dictionary<string, EnemyChanceAccumulator> acc =
                 new Dictionary<string, EnemyChanceAccumulator>(StringComparer.OrdinalIgnoreCase);
 
@@ -924,11 +892,10 @@ namespace ItemIntelligence
                     if (!categoryEligible) continue;
 
                     double finalWeight = baseWeight + categoryWeight;
-                    if (finalWeight <= 0.0) continue;
                     eligible[meta.ItemId] = finalWeight;
-                    total += finalWeight;
                 }
-                if (total <= 0.0) continue;
+                if (!TryResolveStrictlyPositiveItemDropTotal(
+                    eligible, "enemy.augmentation." + mobClassId, out total)) continue;
                 foreach (KeyValuePair<string, double> pair in eligible)
                 {
                     double perAttempt = gate * pair.Value / total;
@@ -949,6 +916,9 @@ namespace ItemIntelligence
 
         private static double CorpseBonusAtLeastOnceChance(double perRoll, double expectedRolls)
         {
+            if (double.IsNaN(perRoll) || double.IsInfinity(perRoll) ||
+                double.IsNaN(expectedRolls) || double.IsInfinity(expectedRolls))
+                return double.NaN;
             perRoll = Math.Max(0.0, Math.Min(1.0, perRoll));
             expectedRolls = Math.Max(0.0, expectedRolls);
             if (perRoll <= 0.0 || expectedRolls <= 0.0) return 0.0;
@@ -1109,21 +1079,6 @@ namespace ItemIntelligence
             return result;
         }
 
-        private static bool StringSetsOverlap(
-            HashSet<string> left,
-            HashSet<string> right)
-        {
-            if (left == null || right == null ||
-                left.Count == 0 || right.Count == 0)
-                return false;
-
-            HashSet<string> small = left.Count <= right.Count ? left : right;
-            HashSet<string> large = object.ReferenceEquals(small, left) ? right : left;
-            foreach (string value in small)
-                if (large.Contains(value)) return true;
-            return false;
-        }
-
 
 
 
@@ -1132,8 +1087,12 @@ namespace ItemIntelligence
 
         private static string FormatPercentValue(float value)
         {
+            if (float.IsNaN(value) || float.IsInfinity(value)) return "—";
             if (value < 0f) return "n/a";
-            return value.ToString(value < 10f ? "0.#" : "0", CultureInfo.InvariantCulture) + "%";
+            value = Mathf.Clamp(value, 0f, 100f);
+            if (value >= 10f) return value.ToString("0.#", CultureInfo.InvariantCulture) + "%";
+            if (value >= 1f) return value.ToString("0.##", CultureInfo.InvariantCulture) + "%";
+            return value.ToString("0.###", CultureInfo.InvariantCulture) + "%";
         }
 
 
@@ -1211,24 +1170,7 @@ namespace ItemIntelligence
 
 
 
-        private static bool IsRandomDropMember(string name)
-        {
-            if (string.IsNullOrEmpty(name)) return false;
-            return name.IndexOf("Drop", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                   name.IndexOf("Pool", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                   name.IndexOf("Random", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                   name.IndexOf("Chance", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                   name.IndexOf("Loot", StringComparison.OrdinalIgnoreCase) >= 0;
-        }
 
-        private static bool IsContainerLikeItem(string itemId)
-        {
-            if (string.IsNullOrEmpty(itemId)) return false;
-            return itemId.IndexOf("container", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                   itemId.IndexOf("crate", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                   itemId.IndexOf("case", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                   itemId.IndexOf("box", StringComparison.OrdinalIgnoreCase) >= 0;
-        }
 
 
 
@@ -1236,13 +1178,6 @@ namespace ItemIntelligence
 
 
 
-        private static bool HasRandomWeight(object value)
-        {
-            if (value == null) return false;
-            return GetMember(value, "Weight") != null ||
-                   GetMember(value, "DropWeight") != null ||
-                   GetMember(value, "SelectionWeight") != null;
-        }
 
 
 
@@ -1252,341 +1187,6 @@ namespace ItemIntelligence
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        private static void AnalyzeDatadiskGraph(string datadiskItemId, List<object> graph)
-        {
-            if (string.IsNullOrEmpty(datadiskItemId) || graph == null) return;
-
-            for (int i = 0; i < graph.Count; i++)
-            {
-                object node = graph[i];
-                if (node == null) continue;
-
-                Type type = node.GetType();
-                string typeName = type.Name ?? string.Empty;
-                bool datadiskLike =
-                    typeName.IndexOf("Datadisk", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                    HasMemberNamed(type, "UnlockId") ||
-                    HasMemberNamed(type, "UnlockIds");
-
-                if (!datadiskLike) continue;
-
-                ProductionDatadiskItemIds.Add(datadiskItemId);
-
-                string unlockType = ConvertToStableString(GetMember(node, "UnlockType"));
-                List<string> unlockIds = new List<string>();
-
-                string direct = GetStringMember(node, "UnlockId");
-                if (!string.IsNullOrEmpty(direct)) unlockIds.Add(direct);
-
-                object unlockIdsValue = GetMember(node, "UnlockIds");
-                List<string> rawMany = ExtractRawStringIds(unlockIdsValue);
-                if (rawMany.Count > 0)
-                {
-                    // Exact MGSC.DatadiskRecord.UnlockIds is authoritative. If an unusual
-                    // object graph exposes only fallback datadisk-like wrappers, accept a
-                    // fallback pool only while every observation agrees exactly. Never use
-                    // the old "longest list wins" heuristic for probability data.
-                    bool exactDatadiskRecord = string.Equals(
-                        type.FullName,
-                        "MGSC.DatadiskRecord",
-                        StringComparison.Ordinal);
-                    ObserveDatadiskUnlockPool(datadiskItemId, rawMany, exactDatadiskRecord);
-                }
-
-                for (int n = 0; n < rawMany.Count; n++)
-                {
-                    string rawId = rawMany[n];
-                    if (!string.IsNullOrEmpty(rawId) && !ContainsIgnoreCase(unlockIds, rawId))
-                        unlockIds.Add(rawId);
-                }
-
-                if (unlockIds.Count == 0) continue;
-
-                bool explicitlyItem =
-                    unlockType.IndexOf("Item", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                    unlockType.IndexOf("Production", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                    unlockType.IndexOf("Receipt", StringComparison.OrdinalIgnoreCase) >= 0;
-
-                for (int n = 0; n < unlockIds.Count; n++)
-                {
-                    string unlockId = unlockIds[n];
-                    if (string.IsNullOrEmpty(unlockId)) continue;
-
-                    string outputItemId = ResolveDatadiskUnlockToItemId(unlockId);
-                    if (!explicitlyItem && !KnownItemIds.Contains(outputItemId))
-                        continue;
-
-                    if (!KnownItemIds.Contains(outputItemId))
-                        continue;
-
-                    AddUniqueString(DatadisksByUnlockedItem, outputItemId, datadiskItemId);
-                    AddUniqueString(ItemsUnlockedByDatadisk, datadiskItemId, outputItemId);
-                }
-            }
-        }
-
-        private static void ObserveDatadiskUnlockPool(
-            string datadiskItemId,
-            List<string> rawPool,
-            bool canonical)
-        {
-            if (string.IsNullOrEmpty(datadiskItemId) || rawPool == null || rawPool.Count == 0) return;
-
-            string fingerprint = BuildUnlockPoolFingerprint(rawPool);
-
-            if (canonical)
-            {
-                string canonicalPrevious;
-                if (CanonicalUnlockPoolFingerprintByDatadisk.TryGetValue(datadiskItemId, out canonicalPrevious) &&
-                    !string.Equals(canonicalPrevious, fingerprint, StringComparison.Ordinal))
-                {
-                    RawUnlockPoolByDatadisk.Remove(datadiskItemId);
-                    UnlockHitCountsByDatadisk.Remove(datadiskItemId);
-                    UnlockPoolSizeByDatadisk.Remove(datadiskItemId);
-                    AmbiguousUnlockPoolDatadisks.Add(datadiskItemId);
-                    LogRuntimeBoundaryWarningOnce(
-                        "chip.pool.canonical-conflict." + datadiskItemId,
-                        "Conflicting canonical DatadiskRecord.UnlockIds pools were observed for " + datadiskItemId +
-                        "; chip chance is hidden rather than choosing one.",
-                        null);
-                    return;
-                }
-
-                CanonicalUnlockPoolDatadisks.Add(datadiskItemId);
-                CanonicalUnlockPoolFingerprintByDatadisk[datadiskItemId] = fingerprint;
-                AmbiguousUnlockPoolDatadisks.Remove(datadiskItemId);
-                FallbackUnlockPoolFingerprintByDatadisk.Remove(datadiskItemId);
-                SetRawDatadiskUnlockPool(datadiskItemId, rawPool);
-                return;
-            }
-
-            // Once the concrete vanilla record was observed, wrapper/graph aliases cannot
-            // override it. This removes the old dependence on traversal order or list size.
-            if (CanonicalUnlockPoolDatadisks.Contains(datadiskItemId)) return;
-
-            string previous;
-            if (!FallbackUnlockPoolFingerprintByDatadisk.TryGetValue(datadiskItemId, out previous))
-            {
-                FallbackUnlockPoolFingerprintByDatadisk[datadiskItemId] = fingerprint;
-                SetRawDatadiskUnlockPool(datadiskItemId, rawPool);
-                return;
-            }
-
-            if (string.Equals(previous, fingerprint, StringComparison.Ordinal)) return;
-
-            // Conflicting graph-only candidates are not trustworthy enough for a percentage.
-            // Keep the unlock relations themselves, but remove chance caches until/unless an
-            // exact DatadiskRecord is later encountered in the same bounded graph.
-            RawUnlockPoolByDatadisk.Remove(datadiskItemId);
-            UnlockHitCountsByDatadisk.Remove(datadiskItemId);
-            UnlockPoolSizeByDatadisk.Remove(datadiskItemId);
-            AmbiguousUnlockPoolDatadisks.Add(datadiskItemId);
-            LogRuntimeBoundaryWarningOnce(
-                "chip.pool.ambiguous." + datadiskItemId,
-                "Conflicting graph-only UnlockIds pools were observed for " + datadiskItemId +
-                "; chip chance is hidden unless the canonical DatadiskRecord is found.",
-                null);
-        }
-
-        private static string BuildUnlockPoolFingerprint(List<string> rawPool)
-        {
-            if (rawPool == null || rawPool.Count == 0) return string.Empty;
-            StringBuilder sb = new StringBuilder(rawPool.Count * 16);
-            for (int i = 0; i < rawPool.Count; i++)
-            {
-                if (i > 0) sb.Append('\u001f');
-                sb.Append(rawPool[i] ?? string.Empty);
-            }
-            return sb.ToString();
-        }
-
-        private static void SetRawDatadiskUnlockPool(string datadiskItemId, List<string> rawPool)
-        {
-            if (string.IsNullOrEmpty(datadiskItemId) || rawPool == null || rawPool.Count == 0) return;
-
-            RawUnlockPoolByDatadisk[datadiskItemId] = new List<string>(rawPool);
-            Dictionary<string, int> counts = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-            for (int i = 0; i < rawPool.Count; i++)
-            {
-                string resolved = ResolveDatadiskUnlockToItemId(rawPool[i]);
-                if (string.IsNullOrEmpty(resolved)) continue;
-                int current;
-                counts.TryGetValue(resolved, out current);
-                counts[resolved] = current + 1;
-            }
-            UnlockHitCountsByDatadisk[datadiskItemId] = counts;
-            UnlockPoolSizeByDatadisk[datadiskItemId] = rawPool.Count;
-        }
-
-        private static string ResolveDatadiskUnlockToItemId(string unlockId)
-        {
-            if (string.IsNullOrEmpty(unlockId)) return string.Empty;
-            RecipeDef recipe;
-            if (RecipesById.TryGetValue(unlockId, out recipe) && recipe != null && !string.IsNullOrEmpty(recipe.OutputItemId))
-                return recipe.OutputItemId;
-            return unlockId;
-        }
-
-        private static bool ContainsIgnoreCase(List<string> values, string value)
-        {
-            if (values == null || string.IsNullOrEmpty(value)) return false;
-            for (int i = 0; i < values.Count; i++)
-                if (string.Equals(values[i], value, StringComparison.OrdinalIgnoreCase)) return true;
-            return false;
-        }
-
-        private static List<string> ExtractRawStringIds(object value)
-        {
-            List<string> result = new List<string>();
-            ExtractRawStringIdsInto(value, result);
-            return result;
-        }
-
-        private static void ExtractRawStringIdsInto(object value, List<string> result)
-        {
-            if (value == null || result == null) return;
-            string direct = value as string;
-            if (direct != null)
-            {
-                if (!string.IsNullOrEmpty(direct)) result.Add(direct);
-                return;
-            }
-
-            IEnumerable enumerable = value as IEnumerable;
-            if (enumerable != null && !(value is IDictionary))
-            {
-                foreach (object item in enumerable)
-                    ExtractRawStringIdsInto(item, result);
-                return;
-            }
-
-            if (value is IDictionary)
-            {
-                IDictionary dict = (IDictionary)value;
-                foreach (DictionaryEntry entry in dict)
-                {
-                    string id = GetItemId(entry.Key);
-                    if (string.IsNullOrEmpty(id)) id = ConvertToStableString(entry.Key);
-                    if (!string.IsNullOrEmpty(id)) result.Add(id);
-                }
-                return;
-            }
-
-            string candidate = FirstNonEmpty(
-                GetStringMember(value, "Id"),
-                GetStringMember(value, "ItemId"),
-                GetStringMember(value, "Key"));
-            if (!string.IsNullOrEmpty(candidate)) result.Add(candidate);
-        }
-
-        private static void AddUniqueString(Dictionary<string, List<string>> map, string key, string value)
-        {
-            if (map == null || string.IsNullOrEmpty(key) || string.IsNullOrEmpty(value)) return;
-            List<string> list;
-            if (!map.TryGetValue(key, out list))
-            {
-                list = new List<string>();
-                map[key] = list;
-            }
-
-            for (int i = 0; i < list.Count; i++)
-                if (string.Equals(list[i], value, StringComparison.OrdinalIgnoreCase))
-                    return;
-            list.Add(value);
-        }
-
-        private static bool TryGetDatadiskUnlockChance(string datadiskItemId, string outputItemId,
-            out int matchingEntries, out int totalEntries, out float chancePercent)
-        {
-            matchingEntries = 0;
-            totalEntries = 0;
-            chancePercent = 0f;
-            if (string.IsNullOrEmpty(datadiskItemId) || string.IsNullOrEmpty(outputItemId)) return false;
-            if (!_chipUnlockChanceContractVerified || AmbiguousUnlockPoolDatadisks.Contains(datadiskItemId)) return false;
-
-            Dictionary<string, int> counts;
-            int cachedTotal;
-            if (UnlockHitCountsByDatadisk.TryGetValue(datadiskItemId, out counts) && counts != null &&
-                UnlockPoolSizeByDatadisk.TryGetValue(datadiskItemId, out cachedTotal) && cachedTotal > 0)
-            {
-                totalEntries = cachedTotal;
-                counts.TryGetValue(outputItemId, out matchingEntries);
-                if (matchingEntries <= 0) return false;
-                chancePercent = (100f * matchingEntries) / totalEntries;
-                return true;
-            }
-
-            // Fallback for an unusual runtime graph that bypassed the normal warmup cache.
-            List<string> rawPool;
-            if (!RawUnlockPoolByDatadisk.TryGetValue(datadiskItemId, out rawPool) || rawPool == null || rawPool.Count == 0)
-                return false;
-            totalEntries = rawPool.Count;
-            for (int i = 0; i < rawPool.Count; i++)
-            {
-                string resolved = ResolveDatadiskUnlockToItemId(rawPool[i]);
-                if (string.Equals(resolved, outputItemId, StringComparison.OrdinalIgnoreCase)) matchingEntries++;
-            }
-            if (matchingEntries <= 0) return false;
-            chancePercent = (100f * matchingEntries) / totalEntries;
-            return true;
-        }
-
-        private static string FormatChipUnlockChance(float percent)
-        {
-            if (percent >= 99.995f) return "100%";
-            if (percent >= 10f) return percent.ToString("0.#", CultureInfo.InvariantCulture) + "%";
-            return percent.ToString("0.##", CultureInfo.InvariantCulture) + "%";
-        }
-
-        private static List<string> GetDatadiskUnlockedItemsSorted(string datadiskItemId)
-        {
-            List<string> raw;
-            if (string.IsNullOrEmpty(datadiskItemId) ||
-                !ItemsUnlockedByDatadisk.TryGetValue(datadiskItemId, out raw) ||
-                raw == null || raw.Count == 0)
-                return new List<string>();
-
-            List<string> result = new List<string>(raw);
-            result.Sort(delegate(string a, string b)
-            {
-                int ta = GetExactItemTechLevel(a);
-                int tb = GetExactItemTechLevel(b);
-                int byTech = ta.CompareTo(tb);
-                if (byTech != 0) return byTech;
-                int byName = string.Compare(LocalizeItem(a), LocalizeItem(b), StringComparison.OrdinalIgnoreCase);
-                if (byName != 0) return byName;
-                return string.Compare(a, b, StringComparison.OrdinalIgnoreCase);
-            });
-            return result;
-        }
-
-        private sealed class GraphScanNode
-        {
-            public readonly object Value;
-            public readonly int Depth;
-
-            public GraphScanNode(object value, int depth)
-            {
-                Value = value;
-                Depth = depth;
-            }
-        }
 
         private static List<object> BuildRelevantItemGraph(object root, int maxDepth, int maxObjects)
         {
@@ -2046,52 +1646,6 @@ namespace ItemIntelligence
             catch { }
         }
 
-        private static void BuildItemTooltipPostfix(object __instance, object[] __args)
-        {
-            // Not installed in v1.5.6. Guard only for unusual hot-reload cases.
-            if (!_itemPointerScope || _itemPointerScopeFrame != Time.frameCount) return;
-            if (!EnableItemIntelligence) return;
-            System.Diagnostics.Stopwatch timer = System.Diagnostics.Stopwatch.StartNew();
-            string itemId = string.Empty;
-            try
-            {
-                if (__instance != null) _activeTooltipFactory = __instance;
-                itemId = FindItemIdInArgs(__args);
-                if (string.IsNullOrEmpty(itemId) && _priceBlockFrame == Time.frameCount) itemId = _priceBlockItemId;
-
-                // Never reuse a previous hover ID here. BuildItemTooltip overloads are also
-                // reached by station/production UI; stale fallback was making QII process
-                // non-item tooltips as the last inventory item.
-                if (string.IsNullOrEmpty(itemId) || !IsKnownItemId(itemId)) return;
-
-                _lastHoveredItemId = itemId;
-                Component tooltip = FindPropertiesTooltip(__instance);
-                if (tooltip == null) tooltip = _activeTooltip;
-                if (QuickIntelligence) AppendQuick(tooltip, itemId);
-                RefreshInspectorForHoveredItem(itemId);
-            }
-            catch (Exception ex)
-            {
-                Debug.LogWarning("[ItemIntelligence] BuildItemTooltip integration skipped: " + ex.Message);
-            }
-            finally
-            {
-                timer.Stop();
-                if (timer.ElapsedMilliseconds >= 25 && _slowTooltipWarnings < 8)
-                {
-                    _slowTooltipWarnings++;
-                    Debug.LogWarning("[ItemIntelligence] Slow item tooltip hot path: " +
-                        timer.ElapsedMilliseconds.ToString(CultureInfo.InvariantCulture) + " ms, item=" +
-                        (string.IsNullOrEmpty(itemId) ? "<none>" : itemId) + ".");
-                }
-            }
-        }
-
-        private static void ItemTooltipBuildPostfix(object __instance, object[] __args)
-        {
-            BuildItemTooltipPostfix(__instance, __args);
-        }
-
 
         private static object ResolveItemTooltipHandlerFromSlot(object slot)
         {
@@ -2443,29 +1997,6 @@ namespace ItemIntelligence
             // No vanilla tooltip/layout mutation occurs here.
         }
 
-        private static void RestoreTooltipPostfix(object __instance, object[] __args)
-        {
-            // Not installed in v1.5.6. Guard only for unusual hot-reload cases.
-            if (!_itemPointerScope || _itemPointerScopeFrame != Time.frameCount) return;
-            if (!EnableItemIntelligence || !QuickIntelligence) return;
-            try
-            {
-                string itemId = FindItemIdInArgs(__args);
-                if (string.IsNullOrEmpty(itemId)) itemId = _priceBlockItemId;
-                if (string.IsNullOrEmpty(itemId)) itemId = _lastHoveredItemId;
-                if (string.IsNullOrEmpty(itemId)) return;
-                _lastHoveredItemId = itemId;
-                if (__instance != null) _activeTooltipFactory = __instance;
-                Component tooltip = FindPropertiesTooltip(__instance);
-                if (tooltip == null) tooltip = _activeTooltip;
-                AppendQuick(tooltip, itemId);
-            }
-            catch (Exception ex)
-            {
-                Debug.LogWarning("[ItemIntelligence] Restored quick tooltip skipped: " + ex.Message);
-            }
-        }
-
         private static void ShowHoverHint(string itemId)
         {
             if (!InspectorEnabled || _inspectorOpen || !ShowInspectorHint || string.IsNullOrEmpty(itemId))
@@ -2490,89 +2021,6 @@ namespace ItemIntelligence
                 _hoverHintCanvas.SetActive(true);
             }
             catch { }
-        }
-
-        private static bool TryGetActiveTooltipScreenRect(out float minX, out float minY, out float maxX, out float maxY)
-        {
-            minX = 0f;
-            minY = 0f;
-            maxX = 0f;
-            maxY = 0f;
-
-            try
-            {
-                if ((_activeTooltip == null || _activeTooltip.gameObject == null ||
-                     !_activeTooltip.gameObject.activeInHierarchy) &&
-                    _lastItemPointerHandler != null)
-                {
-                    Component createdTooltip = ResolveCreatedItemTooltip(_lastItemPointerHandler);
-                    if (createdTooltip != null)
-                        _activeTooltip = createdTooltip;
-                }
-
-                if ((_activeTooltip == null || _activeTooltip.gameObject == null ||
-                     !_activeTooltip.gameObject.activeInHierarchy) &&
-                    _lastItemSlot != null)
-                {
-                    Component createdTooltip = ResolveCreatedItemTooltipFromSlot(_lastItemSlot);
-                    if (createdTooltip != null)
-                        _activeTooltip = createdTooltip;
-                }
-
-                if (_activeTooltip == null || _activeTooltip.gameObject == null ||
-                    !_activeTooltip.gameObject.activeInHierarchy)
-                    return false;
-
-                RectTransform rect = _activeTooltip.transform as RectTransform;
-                if (rect == null) return false;
-
-                // PropertiesTooltip is normally on the tooltip root. If a game update moves
-                // it to a small child, climb only a few parents and choose the first sensible
-                // tooltip-sized rect. This is constant-time and never scans children/layout.
-                RectTransform candidate = rect;
-                RectTransform current = rect;
-                for (int depth = 0; depth < 3 && current != null; depth++)
-                {
-                    Rect localRect = current.rect;
-                    if (localRect.width >= 180f && localRect.height >= 80f)
-                    {
-                        candidate = current;
-                        break;
-                    }
-
-                    Transform parent = current.parent;
-                    current = parent as RectTransform;
-                }
-
-                Canvas tooltipCanvas = candidate.GetComponentInParent<Canvas>();
-                Camera camera = null;
-                if (tooltipCanvas != null && tooltipCanvas.renderMode != RenderMode.ScreenSpaceOverlay)
-                    camera = tooltipCanvas.worldCamera;
-
-                Vector3[] corners = new Vector3[4];
-                candidate.GetWorldCorners(corners);
-
-                Vector2 p0 = RectTransformUtility.WorldToScreenPoint(camera, corners[0]);
-                minX = p0.x;
-                maxX = p0.x;
-                minY = p0.y;
-                maxY = p0.y;
-
-                for (int i = 1; i < 4; i++)
-                {
-                    Vector2 p = RectTransformUtility.WorldToScreenPoint(camera, corners[i]);
-                    if (p.x < minX) minX = p.x;
-                    if (p.x > maxX) maxX = p.x;
-                    if (p.y < minY) minY = p.y;
-                    if (p.y > maxY) maxY = p.y;
-                }
-
-                return maxX > minX + 20f && maxY > minY + 20f;
-            }
-            catch
-            {
-                return false;
-            }
         }
 
         private static void EnsureHoverHintOverlay()
@@ -2663,46 +2111,6 @@ namespace ItemIntelligence
             catch { }
         }
 
-        private static void AppendQuick(Component tooltip, string itemId)
-        {
-            if (tooltip == null || string.IsNullOrEmpty(itemId)) return;
-            List<DisplayRow> rows = BuildQuickRows(itemId);
-            if (rows.Count == 0)
-            {
-                RemoveInjectedRows(tooltip);
-                return;
-            }
-            InjectQuickRowsPooled(tooltip, rows);
-        }
-
-        private static List<DisplayRow> BuildQuickRows(string itemId)
-        {
-            List<DisplayRow> rows = new List<DisplayRow>();
-            bool ru = IsRussian();
-
-            if (ShowMagnumUses)
-            {
-                int magnumRequired = 0;
-                MagnumSnapshot magnum = GetMagnumSnapshot(itemId);
-                if (magnum != null && magnum.TotalRemaining > 0)
-                    magnumRequired = magnum.TotalRemaining;
-
-                PriceSnapshot price;
-                if (magnumRequired <= 0 && ShowFutureMagnumUses &&
-                    PriceByItem.TryGetValue(itemId, out price) && price.Required > 0)
-                    magnumRequired = price.Required;
-
-                if (magnumRequired > 0)
-                    rows.Add(new DisplayRow((Ui("ui.magnum_required")) +
-                        magnumRequired.ToString(CultureInfo.InvariantCulture), string.Empty, false));
-            }
-
-            // v1.5.18: the F2 reminder is a single fixed HUD badge. Do not inject a
-            // second reminder into vanilla item tooltips; it adds visual noise and can move
-            // with different tooltip layouts.
-            return rows;
-        }
-
 
 
 
@@ -2767,44 +2175,6 @@ namespace ItemIntelligence
 
 
 
-
-        private static void DeactivateQuickTooltipPools()
-        {
-            // Conservative ownership rule: never Destroy pooled rows from here because
-            // their parent hierarchy belongs to vanilla. Deactivation releases active
-            // layout state without risking a MissingReference regression.
-            try
-            {
-                foreach (KeyValuePair<int, QuickTooltipPool> pair in QuickTooltipPools)
-                {
-                    QuickTooltipPool pool = pair.Value;
-                    if (pool == null) continue;
-                    pool.DeactivateFrom(0);
-                    pool.Signature = string.Empty;
-                }
-            }
-            catch { }
-        }
-
-        private static void PruneDeadQuickTooltipPools()
-        {
-            if (QuickTooltipPools.Count == 0) return;
-            List<int> deadKeys = null;
-            try
-            {
-                foreach (KeyValuePair<int, QuickTooltipPool> pair in QuickTooltipPools)
-                {
-                    QuickTooltipPool pool = pair.Value;
-                    if (pool != null && pool.Tooltip != null) continue;
-                    if (deadKeys == null) deadKeys = new List<int>();
-                    deadKeys.Add(pair.Key);
-                }
-                if (deadKeys == null) return;
-                for (int i = 0; i < deadKeys.Count; i++)
-                    QuickTooltipPools.Remove(deadKeys[i]);
-            }
-            catch { }
-        }
 
         private static void ResetSessionRuntimeReferencesForMenu()
         {
@@ -3141,14 +2511,6 @@ namespace ItemIntelligence
 
 
 
-        private static void ApplyBackgroundStyle(Image image)
-        {
-            if (image == null) return;
-            image.color = new Color(0.012f, 0.030f, 0.026f, 0.975f);
-        }
-
-
-
 
 
 
@@ -3299,345 +2661,6 @@ namespace ItemIntelligence
                 return value;
             }
         }
-
-        private static List<RecipeUseGroup> ConsolidateRecipeUseFamilies(List<RecipeUseGroup> raw)
-        {
-            if (raw == null || raw.Count <= 1) return raw ?? new List<RecipeUseGroup>();
-
-            Dictionary<string, List<RecipeUseGroup>> byDisplay =
-                new Dictionary<string, List<RecipeUseGroup>>(StringComparer.OrdinalIgnoreCase);
-
-            for (int i = 0; i < raw.Count; i++)
-            {
-                RecipeUseGroup group = raw[i];
-                if (group == null) continue;
-                string display = NormalizeGameText(LocalizeItem(group.OutputItemId));
-                string key = display + "|" + (group.Kind ?? string.Empty);
-                List<RecipeUseGroup> list;
-                if (!byDisplay.TryGetValue(key, out list))
-                {
-                    list = new List<RecipeUseGroup>();
-                    byDisplay[key] = list;
-                }
-                list.Add(group);
-            }
-
-            List<RecipeUseGroup> result = new List<RecipeUseGroup>();
-            foreach (KeyValuePair<string, List<RecipeUseGroup>> pair in byDisplay)
-            {
-                List<RecipeUseGroup> family = pair.Value;
-                if (family == null || family.Count == 0) continue;
-                if (family.Count == 1)
-                {
-                    result.Add(family[0]);
-                    continue;
-                }
-
-                HashSet<string> distinctChips = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-                for (int i = 0; i < family.Count; i++)
-                {
-                    RecipeUseGroup group = family[i];
-                    if (group == null) continue;
-                    for (int n = 0; n < group.OutputItemIds.Count; n++)
-                    {
-                        List<string> disks;
-                        if (!DatadisksByUnlockedItem.TryGetValue(group.OutputItemIds[n], out disks) || disks == null) continue;
-                        for (int d = 0; d < disks.Count; d++)
-                            if (!string.IsNullOrEmpty(disks[d])) distinctChips.Add(disks[d]);
-                    }
-                }
-
-                // Same displayed family + zero/one distinct chip is a single vanilla unlock
-                // family. If multiple different chips exist, keep rows separate: Quasimorph
-                // has a few same-name cases that really are unlocked independently.
-                if (distinctChips.Count <= 1)
-                {
-                    RecipeUseGroup merged = new RecipeUseGroup(family[0].OutputItemId, family[0].Kind);
-                    merged.OutputItemIds.Clear();
-                    merged.Variants = 0;
-                    merged.MinQuantity = 0;
-                    merged.MaxQuantity = 0;
-
-                    for (int i = 0; i < family.Count; i++)
-                    {
-                        RecipeUseGroup group = family[i];
-                        if (group == null) continue;
-                        merged.Variants += Math.Max(1, group.Variants);
-                        if (merged.MinQuantity <= 0 || (group.MinQuantity > 0 && group.MinQuantity < merged.MinQuantity))
-                            merged.MinQuantity = group.MinQuantity;
-                        if (group.MaxQuantity > merged.MaxQuantity) merged.MaxQuantity = group.MaxQuantity;
-
-                        for (int n = 0; n < group.OutputItemIds.Count; n++)
-                            if (!merged.OutputItemIds.Contains(group.OutputItemIds[n]))
-                                merged.OutputItemIds.Add(group.OutputItemIds[n]);
-                        for (int n = 0; n < group.RecipeIds.Count; n++)
-                            if (!merged.RecipeIds.Contains(group.RecipeIds[n]))
-                                merged.RecipeIds.Add(group.RecipeIds[n]);
-                    }
-
-                    result.Add(merged);
-                }
-                else
-                {
-                    result.AddRange(family);
-                }
-            }
-
-            return result;
-        }
-
-        private static string GetFamilyPrimaryDatadisk(List<string> outputItemIds)
-        {
-            if (outputItemIds == null || outputItemIds.Count == 0) return string.Empty;
-            HashSet<string> distinct = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            for (int i = 0; i < outputItemIds.Count; i++)
-            {
-                List<string> disks;
-                if (!DatadisksByUnlockedItem.TryGetValue(outputItemIds[i], out disks) || disks == null) continue;
-                for (int d = 0; d < disks.Count; d++)
-                    if (!string.IsNullOrEmpty(disks[d])) distinct.Add(disks[d]);
-            }
-
-            if (distinct.Count != 1) return string.Empty;
-            foreach (string value in distinct) return value;
-            return string.Empty;
-        }
-
-        private static int GetFamilyDatadiskStatus(List<string> outputItemIds, string datadiskItemId)
-        {
-            if (string.IsNullOrEmpty(datadiskItemId)) return 0;
-            if (outputItemIds == null || outputItemIds.Count == 0) return 2;
-
-            bool sawKnown = false;
-            for (int i = 0; i < outputItemIds.Count; i++)
-            {
-                bool? unlocked = IsProductionItemUnlocked(outputItemIds[i]);
-                if (!unlocked.HasValue) continue;
-                sawKnown = true;
-                if (unlocked.Value) return 1;
-            }
-
-            return sawKnown ? -1 : 2;
-        }
-
-        private static BrowserLine ItemWithProductionChip(string itemId, string right)
-        {
-            string chipItemId = GetPrimaryDatadiskForItem(itemId);
-            int chipStatus = GetDatadiskStatus(itemId, chipItemId);
-            return BrowserLine.RecipeItem(itemId, right, chipItemId, chipStatus);
-        }
-
-        private static void EnsureUnlockedProductionItemsResolved()
-        {
-            if (_unlockedProductionResolveAttempted) return;
-            _unlockedProductionResolveAttempted = true;
-
-            try
-            {
-                object state = null;
-                try { if (_modContext != null) state = _modContext.State; }
-                catch { if (_modContext != null) state = GetMember(_modContext, "State"); }
-                if (state == null) return;
-
-                _unlockedProductionItems = FindNamedStateValue(
-                    state,
-                    "UnlockedProductionItems",
-                    3,
-                    new HashSet<object>(ReferenceComparer.Instance),
-                    new int[] { 0 });
-
-                if (_unlockedProductionItems != null)
-                {
-                    Debug.Log("[ItemIntelligence] Production unlock state resolved: " +
-                        _unlockedProductionItems.GetType().FullName + ".");
-                        QueueTest3RowsRefresh(); // QII1739T3_MAGNUM_REFRESH_PRODUCTION
-                }
-                else
-                {
-                    Debug.LogWarning("[ItemIntelligence] Production unlock state member UnlockedProductionItems was not found.");
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.LogWarning("[ItemIntelligence] Production unlock state resolver failed: " + ex.Message);
-            }
-        }
-
-        private static object FindNamedStateValue(object value, string memberName, int depth, HashSet<object> visited, int[] inspected)
-        {
-            if (value == null || depth < 0 || visited == null || inspected == null) return null;
-            if (inspected[0]++ > 512) return null;
-
-            Type type = value.GetType();
-            if (IsSimple(type)) return null;
-            if (visited.Contains(value)) return null;
-            visited.Add(value);
-
-            object direct = GetMember(value, memberName);
-            if (direct != null) return direct;
-
-            if (depth == 0) return null;
-
-            IDictionary dict = value as IDictionary;
-            if (dict != null)
-            {
-                int count = 0;
-                foreach (DictionaryEntry entry in dict)
-                {
-                    if (++count > 96) break;
-                    object found = FindNamedStateValue(entry.Value, memberName, depth - 1, visited, inspected);
-                    if (found != null) return found;
-                }
-                return null;
-            }
-
-            string ns = type.Namespace ?? string.Empty;
-            if (!ns.StartsWith("MGSC", StringComparison.Ordinal))
-                return null;
-
-            List<MemberInfo> members = GetReadableMembers(type);
-            for (int i = 0; i < members.Count; i++)
-            {
-                object child = GetMemberValue(value, members[i]);
-                if (child == null || child is string) continue;
-
-                Type childType = child.GetType();
-                if (IsSimple(childType)) continue;
-
-                object found = FindNamedStateValue(child, memberName, depth - 1, visited, inspected);
-                if (found != null) return found;
-            }
-            return null;
-        }
-
-        private static bool? IsProductionItemUnlocked(string itemId)
-        {
-            if (string.IsNullOrEmpty(itemId)) return null;
-            EnsureUnlockedProductionItemsResolved();
-            if (_unlockedProductionItems == null) return null;
-
-            try
-            {
-                MethodInfo contains = _unlockedProductionItems.GetType().GetMethod(
-                    "Contains",
-                    InstanceFlags,
-                    null,
-                    new Type[] { typeof(string) },
-                    null);
-                if (contains != null)
-                {
-                    object raw = contains.Invoke(_unlockedProductionItems, new object[] { itemId });
-                    if (raw is bool) return (bool)raw;
-                }
-            }
-            catch { }
-
-            IDictionary dict = _unlockedProductionItems as IDictionary;
-            if (dict != null)
-            {
-                try
-                {
-                    if (dict.Contains(itemId)) return true;
-                    foreach (DictionaryEntry entry in dict)
-                    {
-                        string keyId = GetItemIdDeep(entry.Key, 0);
-                        if (string.IsNullOrEmpty(keyId)) keyId = entry.Key as string;
-                        if (string.Equals(keyId, itemId, StringComparison.OrdinalIgnoreCase)) return true;
-
-                        string valueId = GetItemIdDeep(entry.Value, 0);
-                        if (string.Equals(valueId, itemId, StringComparison.OrdinalIgnoreCase)) return true;
-                    }
-                    return false;
-                }
-                catch { }
-            }
-
-            IEnumerable enumerable = _unlockedProductionItems as IEnumerable;
-            if (enumerable != null && !(_unlockedProductionItems is string))
-            {
-                try
-                {
-                    int count = 0;
-                    foreach (object entry in enumerable)
-                    {
-                        if (++count > 4096) break;
-                        if (entry == null) continue;
-
-                        string id = entry as string;
-                        if (string.IsNullOrEmpty(id)) id = GetItemIdDeep(entry, 0);
-                        if (string.IsNullOrEmpty(id))
-                            id = FirstNonEmpty(GetStringMember(entry, "Id"), GetStringMember(entry, "ItemId"));
-
-                        if (string.Equals(id, itemId, StringComparison.OrdinalIgnoreCase))
-                            return true;
-                    }
-                    return false;
-                }
-                catch { }
-            }
-
-            return null;
-        }
-
-        private static string GetPrimaryDatadiskForItem(string outputItemId)
-        {
-            List<string> disks;
-            if (string.IsNullOrEmpty(outputItemId) ||
-                !DatadisksByUnlockedItem.TryGetValue(outputItemId, out disks) ||
-                disks == null ||
-                disks.Count == 0)
-                return string.Empty;
-
-            return disks[0] ?? string.Empty;
-        }
-
-        private static int GetDatadiskStatus(string outputItemId, string datadiskItemId)
-        {
-            if (string.IsNullOrEmpty(datadiskItemId)) return 0;
-            bool? unlocked = IsProductionItemUnlocked(outputItemId);
-            if (!unlocked.HasValue) return 2; // unknown state: neutral marker
-            return unlocked.Value ? 1 : -1;
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         private static void AddUniqueTextValue(List<string> values, string value)
         {
@@ -3955,7 +2978,7 @@ namespace ItemIntelligence
                     _magnumProgression, visited, 7, ref budget, ref skippedNodes);
                 Debug.Log("[ItemIntelligence] Runtime Magnum relation pass complete. Indexed items=" +
                     MagnumUses.Count + ", skippedNodes=" + skippedNodes + ".");
-                    QueueTest3RowsRefresh(); // QII1739T3_MAGNUM_REFRESH_RELATIONS
+                    QueueBrowserRowsRefresh(); // QII_MAGNUM_REFRESH_RELATIONS
             }
             catch (Exception ex)
             {
@@ -4070,28 +3093,6 @@ namespace ItemIntelligence
 
 
 
-        private static string GetRecipeAvailabilityLabel(RecipeDef recipe, bool ru)
-        {
-            if (recipe == null || recipe.RequiredPerks == null || recipe.RequiredPerks.Count == 0)
-                return string.Empty;
-            if (_magnumProgression == null)
-                return string.Empty;
-
-            bool unknown = false;
-            for (int i = 0; i < recipe.RequiredPerks.Count; i++)
-            {
-                bool? purchased = CallBool(_magnumProgression, "IsPerkPurchased", recipe.RequiredPerks[i]);
-                if (!purchased.HasValue) unknown = true;
-                else if (!purchased.Value) return Ui("ui.locked_2");
-            }
-            if (unknown) return string.Empty;
-            return Ui("ui.available_3");
-        }
-
-
-
-
-
 
 
 
@@ -4190,61 +3191,6 @@ namespace ItemIntelligence
             }
         }
 
-
-
-        private static List<object> GetRuntimeStations()
-        {
-            return GetRuntimeStationsLightweight();
-        }
-
-        private static object ResolveRuntimeObjectByTypeName(string fullTypeName)
-        {
-            Type target = AccessTools.TypeByName(fullTypeName);
-            if (target == null) return null;
-
-            object nested = FindNestedObject(_activeTooltipFactory, target, 5, new HashSet<object>(ReferenceComparer.Instance));
-            if (nested != null) return nested;
-
-            Type[] types;
-            try { types = typeof(Data).Assembly.GetTypes(); }
-            catch (ReflectionTypeLoadException ex) { types = ex.Types; }
-            if (types == null) return null;
-
-            for (int i = 0; i < types.Length; i++)
-            {
-                Type owner = types[i];
-                if (owner == null) continue;
-
-                FieldInfo[] fields;
-                try { fields = owner.GetFields(StaticFlags); } catch { fields = new FieldInfo[0]; }
-                for (int f = 0; f < fields.Length; f++)
-                {
-                    if (!target.IsAssignableFrom(fields[f].FieldType)) continue;
-                    try
-                    {
-                        object value = fields[f].GetValue(null);
-                        if (value != null) return value;
-                    }
-                    catch { }
-                }
-
-                PropertyInfo[] props;
-                try { props = owner.GetProperties(StaticFlags); } catch { props = new PropertyInfo[0]; }
-                for (int q = 0; q < props.Length; q++)
-                {
-                    PropertyInfo prop = props[q];
-                    if (!prop.CanRead || prop.GetIndexParameters().Length != 0 || !target.IsAssignableFrom(prop.PropertyType)) continue;
-                    try
-                    {
-                        object value = prop.GetValue(null, null);
-                        if (value != null) return value;
-                    }
-                    catch { }
-                }
-            }
-            return null;
-        }
-
         private static int GetContainerItemCount(object container, string itemId)
         {
             if (container == null || string.IsNullOrEmpty(itemId)) return 0;
@@ -4274,9 +3220,130 @@ namespace ItemIntelligence
             price = 0;
             EnsureTradeStateDependencies();
 
-            // Quasimorph exposes the authoritative economy calculation through
-            // TradeSystem.GetItemBuyPrice/GetItemSellPrice. Calling it avoids guessing a
-            // formula and automatically respects faction reputation and Magnum bonuses.
+            if (IsCurrent103FeatureAssembly())
+                return TryGetExactStationPanelPrice103(station, itemId, stationBuys, out price);
+            if (IsLegacy102FeatureAssembly())
+                return TryGetLegacyExactStationPrice102(station, itemId, stationBuys, out price);
+
+            // Price presentation changed in 1.0.3. Unknown binaries fail closed instead
+            // of silently mixing a similarly named per-item API with the vanilla panel.
+            return false;
+        }
+
+        private static bool TryGetExactStationPanelPrice103(
+            object station, string itemId, bool stationBuys, out int price)
+        {
+            price = 0;
+            if (station == null || string.IsNullOrEmpty(itemId)) return false;
+
+            try
+            {
+                Type tradeType = AccessTools.TypeByName("MGSC.TradeSystem");
+                Type stationType = AccessTools.TypeByName("MGSC.Station");
+                Type factionType = AccessTools.TypeByName("MGSC.Faction");
+                Type factionsType = AccessTools.TypeByName("MGSC.Factions");
+                Type pricesType = AccessTools.TypeByName("MGSC.ItemsPrices");
+                Type progressionType = AccessTools.TypeByName("MGSC.MagnumProgression");
+                if (tradeType == null || stationType == null || !stationType.IsInstanceOfType(station) ||
+                    pricesType == null || _itemsPrices == null || !pricesType.IsInstanceOfType(_itemsPrices) ||
+                    progressionType == null)
+                    return false;
+
+                if (stationBuys)
+                {
+                    object faction = ResolveStationFaction(station);
+                    if (faction == null || factionType == null || !factionType.IsInstanceOfType(faction))
+                        return false;
+
+                    MethodInfo sellPrice = null;
+                    MethodInfo[] methods = tradeType.GetMethods(StaticFlags);
+                    for (int i = 0; i < methods.Length; i++)
+                    {
+                        MethodInfo method = methods[i];
+                        if (!string.Equals(method.Name, "GetItemSellPrice", StringComparison.Ordinal)) continue;
+                        ParameterInfo[] p = method.GetParameters();
+                        if (p.Length != 6 || p[0].ParameterType != progressionType ||
+                            p[1].ParameterType != factionType || p[2].ParameterType != stationType ||
+                            p[3].ParameterType != pricesType || p[4].ParameterType != typeof(string) ||
+                            p[5].ParameterType != typeof(bool))
+                            continue;
+                        sellPrice = method;
+                        break;
+                    }
+                    if (sellPrice == null) return false;
+
+                    object rawBase = sellPrice.Invoke(
+                        null, new object[] { _magnumProgression, faction, station, _itemsPrices, itemId, false });
+                    int basePrice;
+                    if (!TryExtractPriceValue(rawBase, out basePrice) || basePrice < 0) return false;
+
+                    if (_difficultyState == null)
+                    {
+                        Type difficultyType = AccessTools.TypeByName("MGSC.Difficulty");
+                        if (difficultyType != null) _difficultyState = ResolveStateModule(difficultyType);
+                    }
+                    object preset = GetMember(_difficultyState, "Preset");
+                    double barterValue;
+                    if (preset == null || !TryToDoubleSafe(GetMember(preset, "BarterValue"), out barterValue) ||
+                        double.IsNaN(barterValue) || double.IsInfinity(barterValue) || barterValue < 0.0)
+                        return false;
+
+                    float displayed = (float)basePrice * (float)barterValue;
+                    if (float.IsNaN(displayed) || float.IsInfinity(displayed) || displayed < 0f || displayed > int.MaxValue)
+                        return false;
+                    price = Mathf.RoundToInt(displayed);
+                    return price >= 0;
+                }
+
+                object factions = _factionsState;
+                if (factions == null && factionsType != null)
+                    factions = ResolveStateModule(factionsType);
+                if (factions == null || factionsType == null || !factionsType.IsInstanceOfType(factions))
+                    return false;
+                _factionsState = factions;
+
+                MethodInfo buyPrice = null;
+                MethodInfo[] buyMethods = tradeType.GetMethods(StaticFlags);
+                Type quantityMapType = typeof(Dictionary<string, int>);
+                for (int i = 0; i < buyMethods.Length; i++)
+                {
+                    MethodInfo method = buyMethods[i];
+                    if (!string.Equals(method.Name, "GetBuyPrice", StringComparison.Ordinal)) continue;
+                    ParameterInfo[] p = method.GetParameters();
+                    if (p.Length != 5 || p[0].ParameterType != progressionType ||
+                        p[1].ParameterType != factionsType || p[2].ParameterType != pricesType ||
+                        p[3].ParameterType != stationType || !p[4].ParameterType.IsAssignableFrom(quantityMapType))
+                        continue;
+                    buyPrice = method;
+                    break;
+                }
+                if (buyPrice == null) return false;
+
+                Dictionary<string, int> oneItem = new Dictionary<string, int>(StringComparer.Ordinal)
+                {
+                    { itemId, 1 }
+                };
+                object raw = buyPrice.Invoke(
+                    null, new object[] { _magnumProgression, factions, _itemsPrices, station, oneItem });
+                int parsed;
+                if (!TryExtractPriceValue(raw, out parsed) || parsed < 0) return false;
+                price = parsed;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                LogRuntimeBoundaryWarningOnce(
+                    "trade.price.panel103",
+                    "Exact 1.0.3 TradeStationPanel price could not be reconstructed; price fails closed.",
+                    ex);
+                return false;
+            }
+        }
+
+        private static bool TryGetLegacyExactStationPrice102(
+            object station, string itemId, bool stationBuys, out int price)
+        {
+            price = 0;
             try
             {
                 Type tradeType = AccessTools.TypeByName("MGSC.TradeSystem");
@@ -4284,44 +3351,43 @@ namespace ItemIntelligence
                 Type factionType = AccessTools.TypeByName("MGSC.Faction");
                 Type pricesType = AccessTools.TypeByName("MGSC.ItemsPrices");
                 Type progressionType = AccessTools.TypeByName("MGSC.MagnumProgression");
-                if (tradeType != null && station != null && stationType != null && stationType.IsInstanceOfType(station) &&
-                    _itemsPrices != null && pricesType != null && pricesType.IsInstanceOfType(_itemsPrices))
+                if (tradeType == null || station == null || stationType == null || !stationType.IsInstanceOfType(station) ||
+                    _itemsPrices == null || pricesType == null || !pricesType.IsInstanceOfType(_itemsPrices))
+                    return false;
+
+                object faction = ResolveStationFaction(station);
+                if (faction == null || factionType == null || !factionType.IsInstanceOfType(faction)) return false;
+                string methodName = stationBuys ? "GetItemSellPrice" : "GetItemBuyPrice";
+                MethodInfo[] methods = tradeType.GetMethods(StaticFlags);
+                for (int i = 0; i < methods.Length; i++)
                 {
-                    object faction = ResolveStationFaction(station);
-                    if (faction != null && factionType != null && factionType.IsInstanceOfType(faction))
+                    MethodInfo method = methods[i];
+                    if (!string.Equals(method.Name, methodName, StringComparison.Ordinal)) continue;
+                    ParameterInfo[] p = method.GetParameters();
+                    if (p.Length != 6) continue;
+                    if (progressionType != null && p[0].ParameterType != progressionType) continue;
+                    if (p[1].ParameterType != factionType || p[2].ParameterType != stationType ||
+                        p[3].ParameterType != pricesType || p[4].ParameterType != typeof(string) ||
+                        p[5].ParameterType != typeof(bool)) continue;
+                    object raw = method.Invoke(
+                        null, new object[] { _magnumProgression, faction, station, _itemsPrices, itemId, false });
+                    int parsed;
+                    if (TryExtractPriceValue(raw, out parsed) && parsed >= 0)
                     {
-                        string methodName = stationBuys ? "GetItemSellPrice" : "GetItemBuyPrice";
-                        MethodInfo[] methods = tradeType.GetMethods(StaticFlags);
-                        for (int i = 0; i < methods.Length; i++)
-                        {
-                            MethodInfo method = methods[i];
-                            if (!string.Equals(method.Name, methodName, StringComparison.Ordinal)) continue;
-                            ParameterInfo[] p = method.GetParameters();
-                            if (p.Length != 6) continue;
-                            if (progressionType != null && p[0].ParameterType != progressionType) continue;
-                            if (p[1].ParameterType != factionType || p[2].ParameterType != stationType || p[3].ParameterType != pricesType || p[4].ParameterType != typeof(string) || p[5].ParameterType != typeof(bool)) continue;
-                            object raw = method.Invoke(null, new object[] { _magnumProgression, faction, station, _itemsPrices, itemId, false });
-                            int parsed;
-                            if (TryExtractPriceValue(raw, out parsed) && parsed >= 0)
-                            {
-                                price = parsed;
-                                return true;
-                            }
-                        }
+                        price = parsed;
+                        return true;
                     }
                 }
             }
             catch (Exception ex)
             {
-                Debug.LogWarning("[ItemIntelligence] Exact TradeSystem price failed for " + itemId + ": " + ex.Message);
+                LogRuntimeBoundaryWarningOnce(
+                    "trade.price.legacy102",
+                    "Exact legacy TradeSystem price could not be read; price fails closed.",
+                    ex);
             }
-
-            // Exact current-game contract was unavailable: do not infer a price from
-            // similarly named APIs or generic price records. Unknown stays unknown.
             return false;
         }
-
-
 
 
 
@@ -4340,21 +3406,26 @@ namespace ItemIntelligence
 
             try
             {
-                if (value is double) { result = (double)value; return true; }
-                if (value is float) { result = (double)(float)value; return true; }
-                if (value is decimal) { result = (double)(decimal)value; return true; }
-                if (value is int) { result = (double)(int)value; return true; }
-                if (value is long) { result = (double)(long)value; return true; }
-                if (value is short) { result = (double)(short)value; return true; }
-
-                return double.TryParse(
-                    ConvertToStableString(value),
-                    NumberStyles.Float,
-                    CultureInfo.InvariantCulture,
-                    out result);
+                bool parsed = true;
+                if (value is double) result = (double)value;
+                else if (value is float) result = (double)(float)value;
+                else if (value is decimal) result = (double)(decimal)value;
+                else if (value is int) result = (double)(int)value;
+                else if (value is long) result = (double)(long)value;
+                else if (value is short) result = (double)(short)value;
+                else parsed = double.TryParse(
+                        ConvertToStableString(value), NumberStyles.Float,
+                        CultureInfo.InvariantCulture, out result);
+                if (!parsed || double.IsNaN(result) || double.IsInfinity(result))
+                {
+                    result = 0.0;
+                    return false;
+                }
+                return true;
             }
             catch
             {
+                result = 0.0;
                 return false;
             }
         }
@@ -4371,14 +3442,6 @@ namespace ItemIntelligence
         {
             price = 0;
             return raw != null && TryToInt(raw, out price);
-        }
-
-        private static object GetItemRecord(string itemId)
-        {
-            if (string.IsNullOrEmpty(itemId)) return null;
-            object record;
-            if (ItemRecordsById.TryGetValue(itemId, out record) && record != null) return record;
-            return null;
         }
 
         private static string BuildStationLocationLabel(string spaceObjectId)
@@ -4439,162 +3502,6 @@ namespace ItemIntelligence
             return localized;
         }
 
-        private static bool HasNonMagnumUse(string itemId)
-        {
-            return GetStaticRelationListCount(UsedInRecipes, itemId) > 0 ||
-                   GetListCount(BarterConsumers, itemId) > 0;
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        private static Component FindPropertiesTooltip(object root)
-        {
-            Type target = AccessTools.TypeByName("MGSC.PropertiesTooltip");
-            if (target == null) return null;
-
-            Component component = root as Component;
-            if (component != null)
-            {
-                if (target.IsInstanceOfType(component))
-                {
-                    _activeTooltip = component;
-                    return component;
-                }
-                try
-                {
-                    Component parent = component.GetComponentInParent(target) as Component;
-                    if (parent != null)
-                    {
-                        _activeTooltip = parent;
-                        return parent;
-                    }
-                }
-                catch { }
-            }
-
-            // SetPriceBlock normally gives us the exact active PropertiesTooltip. Prefer
-            // that O(1) reference over a recursive factory walk on every hover.
-            if (_activeTooltip != null && _activeTooltip.gameObject != null && _activeTooltip.gameObject.activeInHierarchy)
-                return _activeTooltip;
-
-            object found = FindNestedObject(root, target, 2, new HashSet<object>(ReferenceComparer.Instance));
-            if (found is Component)
-            {
-                _activeTooltip = (Component)found;
-                return _activeTooltip;
-            }
-
-            // Last-resort compatibility path. It should run only once until an active
-            // tooltip reference is captured, never for every station/conveyor hover.
-            UnityEngine.Object[] all = Resources.FindObjectsOfTypeAll(target);
-            Component best = null;
-            int bestScore = int.MinValue;
-            for (int i = 0; i < all.Length; i++)
-            {
-                Component c = all[i] as Component;
-                if (c == null || c.gameObject == null || !c.gameObject.activeInHierarchy) continue;
-                int score = c.transform.GetSiblingIndex();
-                string n = c.gameObject.name ?? string.Empty;
-                if (n.IndexOf("item", StringComparison.OrdinalIgnoreCase) >= 0) score += 1000;
-                if (n.IndexOf("tooltip", StringComparison.OrdinalIgnoreCase) >= 0) score += 500;
-                if (score > bestScore) { best = c; bestScore = score; }
-            }
-            if (best != null) _activeTooltip = best;
-            return best;
-        }
-
-        private static object FindNestedObject(object root, Type target, int depth, HashSet<object> visited)
-        {
-            if (root == null || target == null) return null;
-            if (target.IsInstanceOfType(root)) return root;
-            if (depth <= 0 || IsSimple(root.GetType()) || visited.Contains(root)) return null;
-            visited.Add(root);
-            FieldInfo[] fields;
-            try { fields = root.GetType().GetFields(InstanceFlags); } catch { return null; }
-            for (int i = 0; i < fields.Length; i++)
-            {
-                object value;
-                try { value = fields[i].GetValue(root); } catch { continue; }
-                if (value == null) continue;
-                if (target.IsInstanceOfType(value)) return value;
-                Type t = value.GetType();
-                if (ShouldTraverse(t))
-                {
-                    object nested = FindNestedObject(value, target, depth - 1, visited);
-                    if (nested != null) return nested;
-                }
-            }
-            return null;
-        }
-
-
-        private static void EnsureMagnumProgressionResolved(object root)
-        {
-            if (_magnumProgression != null) return;
-            try
-            {
-                _magnumProgression = FindNestedObjectByTypeName(root, "MagnumProgression", 4, new HashSet<object>(ReferenceComparer.Instance));
-                if (_magnumProgression != null) return;
-
-                Type target = AccessTools.TypeByName("MGSC.MagnumProgression");
-                if (target == null) return;
-                Type[] types;
-                try { types = typeof(Data).Assembly.GetTypes(); }
-                catch (ReflectionTypeLoadException ex) { types = ex.Types; }
-                if (types == null) return;
-
-                for (int i = 0; i < types.Length; i++)
-                {
-                    Type t = types[i];
-                    if (t == null) continue;
-                    FieldInfo[] fields;
-                    try { fields = t.GetFields(StaticFlags); } catch { fields = new FieldInfo[0]; }
-                    for (int f = 0; f < fields.Length; f++)
-                    {
-                        if (!target.IsAssignableFrom(fields[f].FieldType)) continue;
-                        try
-                        {
-                            object value = fields[f].GetValue(null);
-                            if (value != null) { _magnumProgression = value; return; }
-                        }
-                        catch { }
-                    }
-                    PropertyInfo[] props;
-                    try { props = t.GetProperties(StaticFlags); } catch { props = new PropertyInfo[0]; }
-                    for (int q = 0; q < props.Length; q++)
-                    {
-                        if (props[q].GetIndexParameters().Length != 0 || !target.IsAssignableFrom(props[q].PropertyType)) continue;
-                        try
-                        {
-                            object value = props[q].GetValue(null, null);
-                            if (value != null) { _magnumProgression = value; return; }
-                        }
-                        catch { }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.LogWarning("[ItemIntelligence] MagnumProgression lookup failed; vanilla total requirement will be used when available: " + ex.Message);
-            }
-        }
-
         private static object FindNestedObjectByTypeName(object root, string typeNamePart, int depth, HashSet<object> visited)
         {
             if (root == null || depth < 0 || visited.Contains(root)) return null;
@@ -4631,194 +3538,6 @@ namespace ItemIntelligence
         private static bool IsSimple(Type t)
         {
             return t.IsPrimitive || t.IsEnum || t == typeof(string) || t == typeof(decimal) || t == typeof(DateTime) || t == typeof(Type);
-        }
-
-private static void InjectQuickRowsPooled(Component tooltip, List<DisplayRow> rows)
-        {
-            if (tooltip == null || rows == null) return;
-            Type rowType = AccessTools.TypeByName("MGSC.TooltipProperty");
-            if (rowType == null) return;
-
-            int key = tooltip.GetInstanceID();
-            QuickTooltipPool pool;
-            if (!QuickTooltipPools.TryGetValue(key, out pool) || pool == null || pool.Tooltip == null || pool.Tooltip != tooltip)
-            {
-                pool = new QuickTooltipPool(tooltip);
-                QuickTooltipPools[key] = pool;
-            }
-
-            string signature = BuildQuickSignature(rows);
-            if (string.Equals(pool.Signature, signature, StringComparison.Ordinal) && pool.AreRowsActive(rows.Count))
-                return;
-
-            Component template = pool.Template;
-            if (template == null)
-            {
-                template = FindBestTooltipPropertyTemplate(tooltip, rowType);
-                if (template == null)
-                {
-                    if (!_loggedTooltipTemplateFailure)
-                    {
-                        _loggedTooltipTemplateFailure = true;
-                        Debug.LogWarning("[ItemIntelligence] Vanilla TooltipProperty template was not found; intelligence block skipped.");
-                    }
-                    return;
-                }
-                pool.Template = template;
-                pool.Parent = template.transform.parent;
-            }
-
-            Transform parent = pool.Parent;
-            if (parent == null) parent = template.transform.parent;
-            if (parent == null) return;
-
-            for (int i = 0; i < rows.Count; i++)
-            {
-                GameObject clone = pool.GetRow(i);
-                if (clone == null)
-                {
-                    clone = UnityEngine.Object.Instantiate(template.gameObject, parent);
-                    clone.name = "QII_QuickPool_" + i.ToString(CultureInfo.InvariantCulture);
-                    pool.SetRow(i, clone);
-                }
-                else if (clone.transform.parent != parent)
-                {
-                    clone.transform.SetParent(parent, false);
-                }
-
-                clone.SetActive(true);
-                clone.transform.SetAsLastSibling();
-                Component row = clone.GetComponent(rowType);
-                ApplyTooltipRow(row, clone, rows[i]);
-            }
-
-            pool.DeactivateFrom(rows.Count);
-            pool.Signature = signature;
-            MarkTooltipLayout(tooltip);
-        }
-
-        private static string BuildQuickSignature(List<DisplayRow> rows)
-        {
-            if (rows == null || rows.Count == 0) return string.Empty;
-            System.Text.StringBuilder sb = new System.Text.StringBuilder(64);
-            for (int i = 0; i < rows.Count; i++)
-            {
-                if (i > 0) sb.Append('|');
-                sb.Append(rows[i].Name ?? string.Empty);
-                sb.Append('=');
-                sb.Append(rows[i].Value ?? string.Empty);
-            }
-            return sb.ToString();
-        }
-
-        private static void MarkTooltipLayout(Component tooltip)
-        {
-            if (tooltip == null) return;
-            try
-            {
-                RectTransform rt = tooltip.transform as RectTransform;
-                if (rt != null) LayoutRebuilder.MarkLayoutForRebuild(rt);
-                Transform parent = tooltip.transform.parent;
-                RectTransform parentRt = parent as RectTransform;
-                if (parentRt != null) LayoutRebuilder.MarkLayoutForRebuild(parentRt);
-            }
-            catch { }
-        }
-
-        private static Component FindBestTooltipPropertyTemplate(Component tooltip, Type rowType)
-        {
-            Component[] rows;
-            try { rows = tooltip.GetComponentsInChildren(rowType, true); }
-            catch { return null; }
-            Component best = null;
-            int bestScore = int.MinValue;
-            for (int i = 0; i < rows.Length; i++)
-            {
-                Component row = rows[i];
-                if (row == null || row.gameObject == null || row.gameObject.name.StartsWith("QII_", StringComparison.Ordinal)) continue;
-                int score = row.gameObject.activeInHierarchy ? 100 : 0;
-                Image[] images = row.gameObject.GetComponentsInChildren<Image>(true);
-                int activeImages = 0;
-                for (int x = 0; x < images.Length; x++) if (images[x] != null && images[x].gameObject.activeSelf) activeImages++;
-                score -= activeImages * 5;
-                TMP_Text[] texts = row.gameObject.GetComponentsInChildren<TMP_Text>(true);
-                if (texts.Length >= 2) score += 20;
-                if (score > bestScore) { best = row; bestScore = score; }
-            }
-            return best;
-        }
-
-        private static void ApplyTooltipRow(Component row, GameObject clone, DisplayRow display)
-        {
-            TMP_Text[] texts = clone.GetComponentsInChildren<TMP_Text>(true);
-            for (int i = 0; i < texts.Length; i++)
-                if (texts[i] != null) texts[i].text = string.Empty;
-
-            Image[] images = clone.GetComponentsInChildren<Image>(true);
-            for (int i = 0; i < images.Length; i++)
-            {
-                if (images[i] == null) continue;
-                if (images[i].transform != clone.transform)
-                    images[i].gameObject.SetActive(false);
-            }
-
-            bool named = InvokeStringSetter(row, "SetName", display.Name);
-            bool valued = InvokeStringSetter(row, "SetValue", display.Value);
-            texts = clone.GetComponentsInChildren<TMP_Text>(true);
-
-            if (!named && texts.Length > 0) texts[0].text = display.Name;
-            if (!valued)
-            {
-                if (texts.Length > 1) texts[texts.Length - 1].text = display.Value;
-                else if (texts.Length == 1 && !string.IsNullOrEmpty(display.Value)) texts[0].text = display.Name + "   " + display.Value;
-            }
-
-            if (string.IsNullOrEmpty(display.Value) && texts.Length > 1)
-                texts[texts.Length - 1].text = string.Empty;
-
-            if (display.Header)
-            {
-                for (int i = 0; i < texts.Length; i++)
-                {
-                    texts[i].fontStyle = texts[i].fontStyle | FontStyles.Bold;
-                    if (i > 0) texts[i].text = string.Empty;
-                }
-            }
-        }
-
-        private static bool InvokeStringSetter(object instance, string methodName, string value)
-        {
-            if (instance == null) return false;
-            try
-            {
-                MethodInfo[] methods = instance.GetType().GetMethods(InstanceFlags);
-                for (int i = 0; i < methods.Length; i++)
-                {
-                    MethodInfo method = methods[i];
-                    if (!string.Equals(method.Name, methodName, StringComparison.Ordinal)) continue;
-                    ParameterInfo[] p = method.GetParameters();
-                    if (p.Length == 1 && p[0].ParameterType == typeof(string))
-                    {
-                        method.Invoke(instance, new object[] { value ?? string.Empty });
-                        return true;
-                    }
-                }
-            }
-            catch { }
-            return false;
-        }
-
-        private static void RemoveInjectedRows(Component tooltip)
-        {
-            if (tooltip == null) return;
-            QuickTooltipPool pool;
-            if (QuickTooltipPools.TryGetValue(tooltip.GetInstanceID(), out pool) && pool != null)
-            {
-                pool.DeactivateFrom(0);
-                pool.Signature = string.Empty;
-                MarkTooltipLayout(tooltip);
-            }
-
         }
 
         private static bool IsModifiedItemId(string itemId)
@@ -4860,79 +3579,6 @@ private static void InjectQuickRowsPooled(Component tooltip, List<DisplayRow> ro
                    PriceByItem.ContainsKey(itemId) || BarterItemIds.Contains(itemId);
         }
 
-        private static string FindItemIdInArgs(object[] args)
-        {
-            if (args == null) return string.Empty;
-
-            // First pass is intentionally O(arguments): station names, localization keys and
-            // other arbitrary strings are NOT item IDs unless present in the loaded item table.
-            for (int i = 0; i < args.Length; i++)
-            {
-                string textValue = args[i] as string;
-                if (!string.IsNullOrEmpty(textValue) && IsKnownItemId(textValue)) return textValue;
-                BasePickupItem pickup = args[i] as BasePickupItem;
-                if (pickup != null && IsKnownItemId(pickup.Id)) return pickup.Id;
-            }
-
-            // Only then inspect small item wrappers. Do not recursively walk arbitrary station
-            // or production controller graphs from a tooltip callback.
-            for (int i = 0; i < args.Length; i++)
-            {
-                string id = FindItemIdFromObject(args[i], 2, new HashSet<object>(ReferenceComparer.Instance));
-                if (!string.IsNullOrEmpty(id)) return id;
-            }
-            return string.Empty;
-        }
-
-        private static string FindItemIdFromObject(object obj, int depth, HashSet<object> visited)
-        {
-            if (obj == null || obj is string) return string.Empty;
-            BasePickupItem pickup = obj as BasePickupItem;
-            if (pickup != null && IsKnownItemId(pickup.Id)) return pickup.Id ?? string.Empty;
-
-            Type t = obj.GetType();
-            string typeName = t.Name ?? string.Empty;
-            bool itemLike = typeName.IndexOf("Item", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                            typeName.IndexOf("Pickup", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                            typeName.IndexOf("Tooltip", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                            typeName.IndexOf("Slot", StringComparison.OrdinalIgnoreCase) >= 0;
-
-            if (itemLike)
-            {
-                string direct = GetStringMember(obj, "ItemId");
-                if (IsKnownItemId(direct)) return direct;
-                direct = GetStringMember(obj, "Id");
-                if (IsKnownItemId(direct)) return direct;
-            }
-
-            if (depth <= 0 || visited == null || visited.Contains(obj) || IsSimple(t)) return string.Empty;
-            visited.Add(obj);
-
-            FieldInfo[] fields;
-            try { fields = t.GetFields(InstanceFlags); }
-            catch { return string.Empty; }
-
-            for (int i = 0; i < fields.Length; i++)
-            {
-                FieldInfo field = fields[i];
-                if (field == null) continue;
-                string fieldName = field.Name ?? string.Empty;
-                if (fieldName.IndexOf("item", StringComparison.OrdinalIgnoreCase) < 0 &&
-                    fieldName.IndexOf("pickup", StringComparison.OrdinalIgnoreCase) < 0 &&
-                    fieldName.IndexOf("record", StringComparison.OrdinalIgnoreCase) < 0 &&
-                    fieldName.IndexOf("slot", StringComparison.OrdinalIgnoreCase) < 0)
-                    continue;
-
-                object value;
-                try { value = field.GetValue(obj); }
-                catch { continue; }
-                if (value == null) continue;
-                string id = FindItemIdFromObject(value, depth - 1, visited);
-                if (!string.IsNullOrEmpty(id)) return id;
-            }
-            return string.Empty;
-        }
-
 
 
 
@@ -4947,7 +3593,11 @@ private static void InjectQuickRowsPooled(Component tooltip, List<DisplayRow> ro
         private static string NormalizeGameText(string value)
         {
             if (string.IsNullOrEmpty(value)) return string.Empty;
-            value = value.Replace("Ё", "Е").Replace("ё", "е");
+            // Fast path: almost every EN string and most RU strings contain no Ё/ё.
+            // Avoid touching/allocating a replacement string unless normalization is actually needed.
+            if (value.IndexOf('Ё') < 0 && value.IndexOf('ё') < 0) return value;
+            if (value.IndexOf('Ё') >= 0) value = value.Replace("Ё", "Е");
+            if (value.IndexOf('ё') >= 0) value = value.Replace("ё", "е");
             return value;
         }
 
@@ -5026,12 +3676,43 @@ private static void InjectQuickRowsPooled(Component tooltip, List<DisplayRow> ro
             result = 0;
             if (value == null) return false;
             if (value is int) { result = (int)value; return true; }
-            if (value is uint) { result = unchecked((int)(uint)value); return true; }
+            if (value is uint)
+            {
+                uint raw = (uint)value;
+                if (raw > int.MaxValue) return false;
+                result = (int)raw;
+                return true;
+            }
             if (value is short) { result = (short)value; return true; }
-            if (value is long) { result = (int)(long)value; return true; }
-            if (value is float) { result = Mathf.RoundToInt((float)value); return true; }
-            if (value is double) { result = (int)Math.Round((double)value); return true; }
-            if (value is decimal) { result = (int)Math.Round((decimal)value); return true; }
+            if (value is long)
+            {
+                long raw = (long)value;
+                if (raw < int.MinValue || raw > int.MaxValue) return false;
+                result = (int)raw;
+                return true;
+            }
+            if (value is float)
+            {
+                float raw = (float)value;
+                double wide = raw;
+                if (float.IsNaN(raw) || float.IsInfinity(raw) || wide < int.MinValue || wide > int.MaxValue) return false;
+                result = Mathf.RoundToInt(raw);
+                return true;
+            }
+            if (value is double)
+            {
+                double raw = (double)value;
+                if (double.IsNaN(raw) || double.IsInfinity(raw) || raw < int.MinValue || raw > int.MaxValue) return false;
+                result = (int)Math.Round(raw);
+                return true;
+            }
+            if (value is decimal)
+            {
+                decimal raw = (decimal)value;
+                if (raw < int.MinValue || raw > int.MaxValue) return false;
+                result = (int)Math.Round(raw);
+                return true;
+            }
             return int.TryParse(Convert.ToString(value, CultureInfo.InvariantCulture), NumberStyles.Integer, CultureInfo.InvariantCulture, out result);
         }
 
@@ -5089,25 +3770,6 @@ private static void InjectQuickRowsPooled(Component tooltip, List<DisplayRow> ro
             list.Add(value);
         }
 
-        private sealed class FactionRewardPoolSnapshot
-        {
-            public readonly string FactionId;
-            public readonly int CurrentTech;
-            public readonly int TechLimit;
-            public readonly int EffectiveTech;
-            public float TotalWeight;
-            public readonly Dictionary<string, float> ItemWeights =
-                new Dictionary<string, float>(StringComparer.OrdinalIgnoreCase);
-
-            public FactionRewardPoolSnapshot(string factionId, int currentTech, int techLimit, int effectiveTech)
-            {
-                FactionId = factionId ?? string.Empty;
-                CurrentTech = currentTech;
-                TechLimit = techLimit;
-                EffectiveTech = effectiveTech;
-            }
-        }
-
         private sealed class FactionRewardView
         {
             public readonly string FactionId;
@@ -5141,15 +3803,6 @@ private static void InjectQuickRowsPooled(Component tooltip, List<DisplayRow> ro
                 TechLevel = techLevel;
             }
         }
-
-        private sealed class DisplayRow
-        {
-            public readonly string Name;
-            public readonly string Value;
-            public readonly bool Header;
-            public DisplayRow(string name, string value, bool header) { Name = name ?? string.Empty; Value = value ?? string.Empty; Header = header; }
-        }
-
         private sealed class PriceSnapshot
         {
             public readonly int Owned;
@@ -5260,6 +3913,12 @@ private static void InjectQuickRowsPooled(Component tooltip, List<DisplayRow> ro
             public readonly bool StationSells;
             public readonly int? StationBuyPrice;
             public readonly int? StationSellPrice;
+            public readonly int? StationBuyBatchPrice;
+            public readonly int? StationSellBatchPrice;
+            public readonly int? StationBuyLastBatchPrice;
+            public readonly int? StationSellLastBatchPrice;
+            public readonly int StationBuyBatchQuantity;
+            public readonly int StationSellBatchQuantity;
             public readonly int? Stock;
             public readonly string OwnerFactionId;
             public readonly int OwnerRelation;
@@ -5272,7 +3931,11 @@ private static void InjectQuickRowsPooled(Component tooltip, List<DisplayRow> ro
             public LiveMarketEntry(
                 string stationId, string spaceObjectId, string label,
                 bool stationBuys, bool stationSells,
-                int? stationBuyPrice, int? stationSellPrice, int? stock,
+                int? stationBuyPrice, int? stationSellPrice,
+                int? stationBuyBatchPrice, int? stationSellBatchPrice,
+                int? stationBuyLastBatchPrice, int? stationSellLastBatchPrice,
+                int stationBuyBatchQuantity, int stationSellBatchQuantity,
+                int? stock,
                 string ownerFactionId, int ownerRelation)
             {
                 StationId = stationId ?? string.Empty;
@@ -5282,6 +3945,12 @@ private static void InjectQuickRowsPooled(Component tooltip, List<DisplayRow> ro
                 StationSells = stationSells;
                 StationBuyPrice = stationBuyPrice;
                 StationSellPrice = stationSellPrice;
+                StationBuyBatchPrice = stationBuyBatchPrice;
+                StationSellBatchPrice = stationSellBatchPrice;
+                StationBuyLastBatchPrice = stationBuyLastBatchPrice;
+                StationSellLastBatchPrice = stationSellLastBatchPrice;
+                StationBuyBatchQuantity = Math.Max(0, stationBuyBatchQuantity);
+                StationSellBatchQuantity = Math.Max(0, stationSellBatchQuantity);
                 Stock = stock;
                 OwnerFactionId = ownerFactionId ?? string.Empty;
                 OwnerRelation = ownerRelation;
@@ -5374,55 +4043,7 @@ private static void InjectQuickRowsPooled(Component tooltip, List<DisplayRow> ro
             return null;
         }
 
-        private sealed class QuickTooltipPool
-        {
-            public readonly Component Tooltip;
-            public Component Template;
-            public Transform Parent;
-            public string Signature = string.Empty;
-            private readonly List<GameObject> _rows = new List<GameObject>();
 
-            public QuickTooltipPool(Component tooltip) { Tooltip = tooltip; }
-
-            public GameObject GetRow(int index)
-            {
-                if (index < 0 || index >= _rows.Count) return null;
-                GameObject row = _rows[index];
-                return row == null ? null : row;
-            }
-
-            public void SetRow(int index, GameObject row)
-            {
-                while (_rows.Count <= index) _rows.Add(null);
-                _rows[index] = row;
-            }
-
-            public bool AreRowsActive(int count)
-            {
-                if (count < 0 || _rows.Count < count) return false;
-                for (int i = 0; i < count; i++)
-                {
-                    GameObject row = _rows[i];
-                    if (row == null || !row.activeSelf) return false;
-                }
-                for (int i = count; i < _rows.Count; i++)
-                {
-                    GameObject row = _rows[i];
-                    if (row != null && row.activeSelf) return false;
-                }
-                return true;
-            }
-
-            public void DeactivateFrom(int first)
-            {
-                if (first < 0) first = 0;
-                for (int i = first; i < _rows.Count; i++)
-                {
-                    GameObject row = _rows[i];
-                    if (row != null && row.activeSelf) row.SetActive(false);
-                }
-            }
-        }
 
     }
 

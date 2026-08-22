@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Globalization;
 using TMPro;
 using UnityEngine;
@@ -79,32 +79,32 @@ namespace ItemIntelligence
                 IsKnownItemId(_inspectorItemId);
             bool favorite = canFavorite && IsBrowserFavorite(_inspectorItemId);
 
-            if (_browserFavoriteButton != null) _browserFavoriteButton.interactable = canFavorite;
+            SetBrowserInteractableIfChanged(_browserFavoriteButton, canFavorite);
             if (_browserFavoriteButtonText != null)
             {
-                _browserFavoriteButtonText.text = NormalizeModUiText(Ui("catalog.favorite.short"));
-                _browserFavoriteButtonText.color = favorite
+                SetBrowserTextIfChanged(_browserFavoriteButtonText, NormalizeModUiText(Ui("catalog.favorite.short")));
+                SetBrowserGraphicColorIfChanged(_browserFavoriteButtonText, favorite
                     ? new Color(0.96f, 0.91f, 0.55f, 1f)
-                    : new Color(0.48f, 0.74f, 0.62f, 1f);
+                    : new Color(0.48f, 0.74f, 0.62f, 1f));
             }
             if (_browserFavoriteButtonBackground != null)
-                _browserFavoriteButtonBackground.color = favorite
+                SetBrowserGraphicColorIfChanged(_browserFavoriteButtonBackground, favorite
                     ? new Color(0.105f, 0.205f, 0.120f, 0.98f)
-                    : new Color(0.017f, 0.047f, 0.040f, 0.55f);
+                    : new Color(0.017f, 0.047f, 0.040f, 0.55f));
 
-            bool canBack = _inspectorOpen && BrowserItemNavigationHistory.Count > 0;
-            if (_browserBackButton != null) _browserBackButton.interactable = canBack;
+            bool canBack = _inspectorOpen && BrowserNavigation.History.Count > 0;
+            SetBrowserInteractableIfChanged(_browserBackButton, canBack);
             if (_browserBackButtonText != null)
             {
-                _browserBackButtonText.text = NormalizeModUiText(Ui("ui.back"));
-                _browserBackButtonText.color = canBack
+                SetBrowserTextIfChanged(_browserBackButtonText, NormalizeModUiText(Ui("ui.back")));
+                SetBrowserGraphicColorIfChanged(_browserBackButtonText, canBack
                     ? new Color(0.56f, 0.80f, 0.66f, 1f)
-                    : new Color(0.31f, 0.45f, 0.39f, 0.72f);
+                    : new Color(0.31f, 0.45f, 0.39f, 0.72f));
             }
             if (_browserBackButtonBackground != null)
-                _browserBackButtonBackground.color = canBack
+                SetBrowserGraphicColorIfChanged(_browserBackButtonBackground, canBack
                     ? new Color(0.025f, 0.070f, 0.056f, 0.82f)
-                    : new Color(0.012f, 0.032f, 0.028f, 0.38f);
+                    : new Color(0.012f, 0.032f, 0.028f, 0.38f));
             UpdateBrowserHeaderInterfaceIconStyle(favorite, canBack);
         }
 
@@ -330,25 +330,23 @@ namespace ItemIntelligence
             }
 
             _browserCatalogScrollbar = CreateBrowserPageScrollbar(
-                "CatalogPageScrollbar", _browserCatalogPanel.transform,
+                "CatalogScrollbar", _browserCatalogPanel.transform,
                 new Vector2(687f, -175f), new Vector2(8f, 262f),
                 HandleBrowserCatalogScrollbar);
 
-            GameObject pageGo = CreateBrowserText("CatalogPage", _browserCatalogPanel.transform,
+            GameObject scrollGo = CreateBrowserText("CatalogScrollStatus", _browserCatalogPanel.transform,
                 new Vector2(8f, -441f), new Vector2(676f, 27f), 12f,
                 new Color(0.48f, 0.72f, 0.62f, 1f), FontStyles.Normal,
                 TextAlignmentOptions.Center);
-            _browserCatalogPageText = pageGo.GetComponent<TMP_Text>();
+            _browserCatalogScrollText = scrollGo.GetComponent<TMP_Text>();
             _browserCatalogPanel.SetActive(false);
         }
 
         private static void RenderBrowserCatalogRows()
         {
             int total = BrowserCatalogFilteredItemIds.Count;
-            int pages = Math.Max(1,
-                (total + BrowserCatalogVisibleRows - 1) / BrowserCatalogVisibleRows);
-            if (_browserCatalogPage >= pages) _browserCatalogPage = pages - 1;
-            if (_browserCatalogPage < 0) _browserCatalogPage = 0;
+            int maxOffset = Math.Max(0, total - BrowserCatalogVisibleRows);
+            _browserCatalogScrollOffset = Mathf.Clamp(_browserCatalogScrollOffset, 0, maxOffset);
 
             if (_browserCatalogHeaderText != null)
             {
@@ -356,10 +354,10 @@ namespace ItemIntelligence
                     GetBrowserCatalogCategoryLabel(_browserCatalogCategory, false) + "  /  " +
                     GetBrowserCatalogDataFilterLabel(_browserCatalogDataFilter) + "  •  " +
                     total.ToString(CultureInfo.InvariantCulture);
-                _browserCatalogHeaderText.text = NormalizeModUiText(header);
+                SetBrowserTextIfChanged(_browserCatalogHeaderText, NormalizeModUiText(header));
             }
 
-            int start = _browserCatalogPage * BrowserCatalogVisibleRows;
+            int start = _browserCatalogScrollOffset;
             for (int i = 0; i < BrowserCatalogVisibleRows; i++)
             {
                 GameObject row = BrowserCatalogRowRoots[i];
@@ -370,7 +368,7 @@ namespace ItemIntelligence
                     BrowserCatalogRowItemIds[i] = string.Empty;
                     if (BrowserCatalogRowIcons[i] != null)
                         SetBrowserItemTooltipTarget(BrowserCatalogRowIcons[i], string.Empty, false);
-                    row.SetActive(false);
+                    SetBrowserActiveIfChanged(row, false);
                     continue;
                 }
 
@@ -380,13 +378,14 @@ namespace ItemIntelligence
                 if (!BrowserSearchDisplayNames.TryGetValue(itemId, out name) || string.IsNullOrEmpty(name))
                     name = HumanizeIdentifier(itemId);
                 if (BrowserCatalogRowNames[i] != null)
-                    BrowserCatalogRowNames[i].text = NormalizeGameText(name);
+                    SetBrowserTextIfChanged(BrowserCatalogRowNames[i], NormalizeGameText(name));
                 if (BrowserCatalogRowIds[i] != null)
-                    BrowserCatalogRowIds[i].text = NormalizeModUiText(GetBrowserCatalogRowMetadata(itemId));
+                    SetBrowserTextIfChanged(BrowserCatalogRowIds[i], NormalizeModUiText(GetBrowserCatalogRowMetadata(itemId)));
                 if (BrowserCatalogRowIcons[i] != null)
                 {
-                    BrowserCatalogRowIcons[i].sprite = TryResolveItemSmallIcon(itemId);
-                    BrowserCatalogRowIcons[i].enabled = BrowserCatalogRowIcons[i].sprite != null;
+                    Sprite nextIcon = TryResolveItemSmallIcon(itemId);
+                    SetBrowserImageSpriteIfChanged(BrowserCatalogRowIcons[i], nextIcon);
+                    SetBrowserImageEnabledIfChanged(BrowserCatalogRowIcons[i], nextIcon != null);
                     SetBrowserItemTooltipTarget(
                         BrowserCatalogRowIcons[i], itemId, BrowserCatalogRowIcons[i].enabled);
                 }
@@ -394,27 +393,33 @@ namespace ItemIntelligence
                 bool favorite = IsBrowserFavorite(itemId);
                 if (BrowserCatalogRowFavoriteTexts[i] != null)
                 {
-                    BrowserCatalogRowFavoriteTexts[i].text = NormalizeModUiText(Ui("catalog.favorite.short"));
-                    BrowserCatalogRowFavoriteTexts[i].color = favorite
+                    SetBrowserTextIfChanged(BrowserCatalogRowFavoriteTexts[i], NormalizeModUiText(Ui("catalog.favorite.short")));
+                    SetBrowserGraphicColorIfChanged(BrowserCatalogRowFavoriteTexts[i], favorite
                         ? new Color(0.96f, 0.91f, 0.55f, 1f)
-                        : new Color(0.42f, 0.66f, 0.56f, 1f);
+                        : new Color(0.42f, 0.66f, 0.56f, 1f));
                 }
                 if (BrowserCatalogRowFavoriteBackgrounds[i] != null)
-                    BrowserCatalogRowFavoriteBackgrounds[i].color = favorite
+                    SetBrowserGraphicColorIfChanged(BrowserCatalogRowFavoriteBackgrounds[i], favorite
                         ? new Color(0.105f, 0.205f, 0.120f, 0.98f)
-                        : new Color(0.025f, 0.070f, 0.056f, 0.96f);
+                        : new Color(0.025f, 0.070f, 0.056f, 0.96f));
                 UpdateBrowserCatalogRowFavoriteInterfaceIconStyle(i, favorite);
-                row.SetActive(true);
+                SetBrowserActiveIfChanged(row, true);
             }
 
-            if (_browserCatalogPageText != null)
-                _browserCatalogPageText.text = NormalizeModUiText(
-                    Ui("ui.page") +
-                    (_browserCatalogPage + 1).ToString(CultureInfo.InvariantCulture) + "/" +
-                    pages.ToString(CultureInfo.InvariantCulture) +
-                    Ui("ui.wheel_pgup_pgdn"));
+            if (_browserCatalogScrollText != null)
+            {
+                int first = total <= 0 ? 0 : _browserCatalogScrollOffset + 1;
+                int last = Math.Min(total, _browserCatalogScrollOffset + BrowserCatalogVisibleRows);
+                SetBrowserTextIfChanged(_browserCatalogScrollText, NormalizeModUiText(
+                    Ui("ui.rows_visible") + " " +
+                    first.ToString(CultureInfo.InvariantCulture) + "-" +
+                    last.ToString(CultureInfo.InvariantCulture) + " / " +
+                    total.ToString(CultureInfo.InvariantCulture) +
+                    Ui("ui.wheel_pgup_pgdn")));
+            }
 
-            SyncBrowserPageScrollbar(_browserCatalogScrollbar, pages, _browserCatalogPage);
+            SyncBrowserContinuousScrollbar(
+                _browserCatalogScrollbar, total, BrowserCatalogVisibleRows, _browserCatalogScrollOffset);
             UpdateBrowserCatalogControls();
         }
 
@@ -443,37 +448,37 @@ namespace ItemIntelligence
             }
 
             if (_browserCatalogDataFilterText != null)
-                _browserCatalogDataFilterText.text = NormalizeModUiText(
+                SetBrowserTextIfChanged(_browserCatalogDataFilterText, NormalizeModUiText(
                     Ui("catalog.label.data") + ": " +
-                    GetBrowserCatalogDataFilterLabel(_browserCatalogDataFilter) + "  >");
+                    GetBrowserCatalogDataFilterLabel(_browserCatalogDataFilter) + "  ›"));
             if (_browserCatalogSortText != null)
-                _browserCatalogSortText.text = NormalizeModUiText(
+                SetBrowserTextIfChanged(_browserCatalogSortText, NormalizeModUiText(
                     Ui("catalog.label.sort") + ": " +
                     (_browserCatalogScope == BrowserCatalogScope.Recent
                         ? Ui("catalog.sort.recent")
-                        : GetBrowserCatalogSortLabel(_browserCatalogSortMode) + "  >"));
+                        : GetBrowserCatalogSortLabel(_browserCatalogSortMode) + "  ›")));
             if (_browserCatalogDirectionText != null)
-                _browserCatalogDirectionText.text = NormalizeModUiText(
+                SetBrowserTextIfChanged(_browserCatalogDirectionText, NormalizeModUiText(
                     _browserCatalogScope == BrowserCatalogScope.Recent
                         ? Ui("catalog.sort.fixed")
-                        : (_browserCatalogSortDescending ? Ui("catalog.sort.desc") : Ui("catalog.sort.asc")));
+                        : (_browserCatalogSortDescending ? Ui("catalog.sort.desc") : Ui("catalog.sort.asc"))));
             if (_browserCatalogResetText != null)
-                _browserCatalogResetText.text = NormalizeModUiText(
+                SetBrowserTextIfChanged(_browserCatalogResetText, NormalizeModUiText(
                     _browserCatalogScope == BrowserCatalogScope.Recent
                         ? Ui("catalog.clear.history")
-                        : Ui("catalog.reset"));
+                        : Ui("catalog.reset")));
 
             bool sortable = _browserCatalogScope != BrowserCatalogScope.Recent;
-            if (_browserCatalogSortButton != null) _browserCatalogSortButton.interactable = sortable;
-            if (_browserCatalogDirectionButton != null) _browserCatalogDirectionButton.interactable = sortable;
+            SetBrowserInteractableIfChanged(_browserCatalogSortButton, sortable);
+            SetBrowserInteractableIfChanged(_browserCatalogDirectionButton, sortable);
             if (_browserCatalogSortText != null)
-                _browserCatalogSortText.color = sortable
+                SetBrowserGraphicColorIfChanged(_browserCatalogSortText, sortable
                     ? new Color(0.48f, 0.74f, 0.62f, 1f)
-                    : new Color(0.31f, 0.45f, 0.39f, 0.72f);
+                    : new Color(0.31f, 0.45f, 0.39f, 0.72f));
             if (_browserCatalogDirectionText != null)
-                _browserCatalogDirectionText.color = sortable
+                SetBrowserGraphicColorIfChanged(_browserCatalogDirectionText, sortable
                     ? new Color(0.48f, 0.74f, 0.62f, 1f)
-                    : new Color(0.31f, 0.45f, 0.39f, 0.72f);
+                    : new Color(0.31f, 0.45f, 0.39f, 0.72f));
             UpdateBrowserCatalogToolbarInterfaceIconStyle(sortable);
         }
 
@@ -482,30 +487,30 @@ namespace ItemIntelligence
         {
             if (text != null)
             {
-                text.text = NormalizeModUiText(label);
-                text.color = selected
+                SetBrowserTextIfChanged(text, NormalizeModUiText(label));
+                SetBrowserGraphicColorIfChanged(text, selected
                     ? new Color(0.90f, 0.90f, 0.62f, 1f)
-                    : new Color(0.48f, 0.74f, 0.62f, 1f);
+                    : new Color(0.48f, 0.74f, 0.62f, 1f));
             }
             if (button != null && button.targetGraphic != null)
-                button.targetGraphic.color = selected
+                SetBrowserGraphicColorIfChanged(button.targetGraphic, selected
                     ? new Color(0.060f, 0.145f, 0.100f, 0.98f)
-                    : new Color(0.020f, 0.060f, 0.050f, 0.98f);
+                    : new Color(0.020f, 0.060f, 0.050f, 0.98f));
         }
 
         private static void UpdateBrowserCatalogButtonStyle()
         {
             if (_browserCatalogButtonText != null)
             {
-                _browserCatalogButtonText.text = NormalizeModUiText(Ui("ui.catalog"));
-                _browserCatalogButtonText.color = _browserCatalogOpen
+                SetBrowserTextIfChanged(_browserCatalogButtonText, NormalizeModUiText(Ui("ui.catalog")));
+                SetBrowserGraphicColorIfChanged(_browserCatalogButtonText, _browserCatalogOpen
                     ? new Color(0.96f, 0.97f, 0.84f, 1f)
-                    : new Color(0.92f, 0.94f, 0.78f, 1f);
+                    : new Color(0.92f, 0.94f, 0.78f, 1f));
             }
             if (_browserCatalogButtonBackground != null)
-                _browserCatalogButtonBackground.color = _browserCatalogOpen
+                SetBrowserGraphicColorIfChanged(_browserCatalogButtonBackground, _browserCatalogOpen
                     ? new Color(0.155f, 0.285f, 0.185f, 0.99f)
-                    : new Color(0.105f, 0.165f, 0.115f, 0.98f);
+                    : new Color(0.105f, 0.165f, 0.115f, 0.98f));
             UpdateBrowserCatalogLauncherInterfaceIconStyle();
         }
 
@@ -514,22 +519,32 @@ namespace ItemIntelligence
             category = Math.Max(0, Math.Min(BrowserCatalogCategoryCount - 1, category));
             if (compact)
             {
-                string[] labels = new string[]
+                switch (category)
                 {
-                    Ui("catalog.compact.all"), Ui("catalog.compact.weapons"), Ui("catalog.compact.armor"),
-                    Ui("catalog.compact.ammo"), Ui("catalog.compact.implants"), Ui("catalog.compact.consumables"),
-                    Ui("catalog.compact.chips"), Ui("catalog.compact.containers"), Ui("catalog.compact.other")
-                };
-                return labels[category];
+                    case 0: return Ui("catalog.compact.all");
+                    case 1: return Ui("catalog.compact.weapons");
+                    case 2: return Ui("catalog.compact.armor");
+                    case 3: return Ui("catalog.compact.ammo");
+                    case 4: return Ui("catalog.compact.implants");
+                    case 5: return Ui("catalog.compact.consumables");
+                    case 6: return Ui("catalog.compact.chips");
+                    case 7: return Ui("catalog.compact.containers");
+                    default: return Ui("catalog.compact.other");
+                }
             }
 
-            string[] fullLabels = new string[]
+            switch (category)
             {
-                Ui("catalog.full.all"), Ui("catalog.full.weapons"), Ui("catalog.full.armor"),
-                Ui("catalog.full.ammo"), Ui("catalog.full.implants"), Ui("catalog.full.consumables"),
-                Ui("catalog.full.chips"), Ui("catalog.full.containers"), Ui("catalog.full.other")
-            };
-            return fullLabels[category];
+                case 0: return Ui("catalog.full.all");
+                case 1: return Ui("catalog.full.weapons");
+                case 2: return Ui("catalog.full.armor");
+                case 3: return Ui("catalog.full.ammo");
+                case 4: return Ui("catalog.full.implants");
+                case 5: return Ui("catalog.full.consumables");
+                case 6: return Ui("catalog.full.chips");
+                case 7: return Ui("catalog.full.containers");
+                default: return Ui("catalog.full.other");
+            }
         }
     }
 }

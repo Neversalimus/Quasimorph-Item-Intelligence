@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 
@@ -48,11 +48,39 @@ namespace ItemIntelligence
             if (LootEnemyRegularPresentationBuffer.Count > 0)
             {
                 any = true;
+                bool buildRegular = AddLootSectionHeaderAndShouldBuild(
+                    Ui("ui.enemy_corpse_loot"), LootEnemyRegularPresentationBuffer.Count);
+                if (buildRegular)
+                {
                 LootEnemyRegularPresentationBuffer.Sort(CompareLootEnemySourcesForPresentation);
-                BrowserLines.Add(
-                    BrowserLine.Section(
-                        Ui("ui.enemy_corpse_loot") +
-                        "  •  " + LootEnemyRegularPresentationBuffer.Count.ToString(CultureInfo.InvariantCulture)));
+
+                bool hasImplantRows = false;
+                bool hasAugmentationRows = false;
+                for (int i = 0; i < LootEnemyRegularPresentationBuffer.Count; i++)
+                {
+                    LootEnemySource source = LootEnemyRegularPresentationBuffer[i];
+                    if (!hasImplantRows &&
+                        (string.Equals(source.Kind, "GrantedImplant", StringComparison.Ordinal) ||
+                         string.Equals(source.Kind, "RandomImplant", StringComparison.Ordinal)))
+                        hasImplantRows = true;
+                    if (!hasAugmentationRows &&
+                        (string.Equals(source.Kind, "GrantedAugmentation", StringComparison.Ordinal) ||
+                         string.Equals(source.Kind, "RandomAugmentation", StringComparison.Ordinal)))
+                        hasAugmentationRows = true;
+                }
+
+                AddWrappedBrowserNoteGroup(118, 128,
+                    "loot.note.tech",
+                    "loot.note.enemy_chance",
+                    "loot.note.corpse_transfer",
+                    "loot.note.enemy_bonus_separate");
+                if (hasImplantRows) AddWrappedLootNote("loot.note.implants");
+                if (hasAugmentationRows)
+                {
+                    AddWrappedLootNote("loot.note.augmentations");
+                    AddWrappedLootNote("loot.note.augmentation_woundslot");
+                }
+
                 BrowserLines.Add(
                     BrowserLine.LootHeader6(
                         Ui("ui.enemy"),
@@ -61,9 +89,6 @@ namespace ItemIntelligence
                         Ui("ui.tech"),
                         Ui("ui.qty_rolls"),
                         Ui("ui.result")));
-
-                bool hasImplantRows = false;
-                bool hasAugmentationRows = false;
                 for (int i = 0; i < LootEnemyRegularPresentationBuffer.Count; i++)
                 {
                     LootEnemySource source = LootEnemyRegularPresentationBuffer[i];
@@ -76,37 +101,19 @@ namespace ItemIntelligence
                             FormatEnemyLootQuantity(source, -1.0, ru),
                             GetEnemyLootResultLabelWithModifiers(source, modifiers, ru),
                             GetRepresentativeMobFactionId(source.MobClassId)));
-
-                    if (!hasImplantRows &&
-                        (string.Equals(source.Kind, "GrantedImplant", StringComparison.Ordinal) ||
-                         string.Equals(source.Kind, "RandomImplant", StringComparison.Ordinal)))
-                        hasImplantRows = true;
-                    if (!hasAugmentationRows &&
-                        (string.Equals(source.Kind, "GrantedAugmentation", StringComparison.Ordinal) ||
-                         string.Equals(source.Kind, "RandomAugmentation", StringComparison.Ordinal)))
-                        hasAugmentationRows = true;
                 }
-
-                AddWrappedLootNote("loot.note.tech");
-                AddWrappedLootNote("loot.note.enemy_chance");
-                AddWrappedLootNote("loot.note.corpse_transfer");
-                AddWrappedLootNote("loot.note.random_equipment");
-                if (hasImplantRows) AddWrappedLootNote("loot.note.implants");
-                if (hasAugmentationRows)
-                {
-                    AddWrappedLootNote("loot.note.augmentations");
-                    AddWrappedLootNote("loot.note.augmentation_woundslot");
                 }
             }
 
             if (LootEnemyCorpseBonusPresentationBuffer.Count > 0)
             {
                 any = true;
+                bool buildBonus = AddLootSectionHeaderAndShouldBuild(
+                    Ui("ui.bonus_corpse_loot"), LootEnemyCorpseBonusPresentationBuffer.Count);
+                if (buildBonus)
+                {
                 LootEnemyCorpseBonusPresentationBuffer.Sort(CompareLootEnemySourcesForPresentation);
-                BrowserLines.Add(
-                    BrowserLine.Section(
-                        Ui("ui.bonus_corpse_loot") +
-                        "  •  " + LootEnemyCorpseBonusPresentationBuffer.Count.ToString(CultureInfo.InvariantCulture)));
+                AddWrappedLootNote("loot.note.corpse_bonus_rolls");
                 BrowserLines.Add(
                     BrowserLine.FullNote(
                         Ui("ui.bonus_rolls") + ": " +
@@ -134,7 +141,7 @@ namespace ItemIntelligence
                             Ui("ui.corpse"),
                             GetRepresentativeMobFactionId(source.MobClassId)));
                 }
-                AddWrappedLootNote("loot.note.corpse_bonus_rolls");
+                }
             }
         }
 

@@ -9,7 +9,6 @@ namespace ItemIntelligence
         // v1.7.38: read-only Loot modifier simulation. Manual controls never touch the
         // mercenary, perk list, RNG, inventory, loot tables, or save state; they only
         // change how Item Intelligence projects the already-indexed Loot information.
-        private const string LootModifierActionPrefix = "QII_LOOT_MODIFIER:";
         private static bool _lootModifierUseManual;
         private static int _lootManualMarauderLevel;
         private static bool _lootManualOrganization;
@@ -101,29 +100,42 @@ namespace ItemIntelligence
         {
             if (snapshot == null) return;
 
-            BrowserLines.Add(BrowserLine.InternalAction(
-                _lootModifierUseManual ? Ui("ui.loot_modifiers_manual") : Ui("ui.loot_modifiers_current"),
-                FormatLootModifierSummary(snapshot),
-                LootModifierActionPrefix + "MODE"));
+            bool manualProjectionVerified = IsLootManualProjectionContractVerified();
+            if (_lootModifierUseManual || manualProjectionVerified)
+            {
+                BrowserLines.Add(BrowserLine.InternalAction(
+                    _lootModifierUseManual ? Ui("ui.loot_modifiers_manual") : Ui("ui.loot_modifiers_current"),
+                    FormatLootModifierSummary(snapshot),
+                    BrowserAction.LootModifier(BrowserLootModifierCommand.ToggleMode)));
+            }
+            else
+            {
+                // Manual values are an audited simulator, not live perk reads. Keep CURRENT
+                // read-only values but disable the projection unless its feature-owned
+                // assembly + Data.Perks parameter contract validates exactly.
+                BrowserLines.Add(BrowserLine.Accent(
+                    Ui("ui.loot_modifiers_current"),
+                    FormatLootModifierSummary(snapshot)));
+            }
 
             if (!_lootModifierUseManual) return;
 
             BrowserLines.Add(BrowserLine.InternalAction(
                 Ui("ui.loot_marauder"),
                 FormatManualMarauderState(),
-                LootModifierActionPrefix + "MARAUDER"));
+                BrowserAction.LootModifier(BrowserLootModifierCommand.CycleMarauder)));
             BrowserLines.Add(BrowserLine.InternalAction(
                 Ui("ui.loot_marika_organization"),
                 _lootManualOrganization
                     ? Ui("ui.loot_on") + "  +0.5 " + (IsRussian() ? "Т" : "B")
                     : Ui("ui.loot_off"),
-                LootModifierActionPrefix + "ORGANIZATION"));
+                BrowserAction.LootModifier(BrowserLootModifierCommand.ToggleOrganization)));
             BrowserLines.Add(BrowserLine.InternalAction(
                 Ui("ui.loot_laksha_field_medic"),
                 _lootManualFieldMedic
                     ? Ui("ui.loot_on") + "  +25 " + Ui("ui.loot_pp")
                     : Ui("ui.loot_off"),
-                LootModifierActionPrefix + "FIELD_MEDIC"));
+                BrowserAction.LootModifier(BrowserLootModifierCommand.ToggleFieldMedic)));
         }
 
         private static string FormatLootModifierSummary(LootModifierSnapshot snapshot)
@@ -151,36 +163,36 @@ namespace ItemIntelligence
 
         private static string FormatExpectedBonusCompact(double value, bool ru)
         {
-            if (value < 0.0) return "?";
+            if (value < 0.0 || double.IsNaN(value) || double.IsInfinity(value)) return "?";
             return "+" + FormatExpectedNumber(value, ru);
         }
 
         private static string FormatPercentPointBonusCompact(double value, bool ru)
         {
-            if (value < 0.0) return "?";
+            if (value < 0.0 || double.IsNaN(value) || double.IsInfinity(value)) return "?";
             return "+" + Math.Round(value * 100.0).ToString("0", CultureInfo.InvariantCulture) + "%";
         }
 
         private static string FormatExpectedNumber(double value, bool ru)
         {
+            if (double.IsNaN(value) || double.IsInfinity(value)) return "?";
             string text = value.ToString("0.##", CultureInfo.InvariantCulture);
             return ru ? text.Replace('.', ',') : text;
         }
 
-        private static void HandleLootModifierAction(string actionId)
+        private static void HandleLootModifierAction(BrowserLootModifierCommand command)
         {
-            if (string.IsNullOrEmpty(actionId) ||
-                !actionId.StartsWith(LootModifierActionPrefix, StringComparison.Ordinal))
-                return;
-
-            string action = actionId.Substring(LootModifierActionPrefix.Length);
-            if (string.Equals(action, "MODE", StringComparison.Ordinal))
+            if (command == BrowserLootModifierCommand.ToggleMode)
+            {
+                if (!_lootModifierUseManual && !IsLootManualProjectionContractVerified())
+                    return;
                 _lootModifierUseManual = !_lootModifierUseManual;
-            else if (string.Equals(action, "MARAUDER", StringComparison.Ordinal))
+            }
+            else if (command == BrowserLootModifierCommand.CycleMarauder)
                 _lootManualMarauderLevel = (_lootManualMarauderLevel + 1) % 5;
-            else if (string.Equals(action, "ORGANIZATION", StringComparison.Ordinal))
+            else if (command == BrowserLootModifierCommand.ToggleOrganization)
                 _lootManualOrganization = !_lootManualOrganization;
-            else if (string.Equals(action, "FIELD_MEDIC", StringComparison.Ordinal))
+            else if (command == BrowserLootModifierCommand.ToggleFieldMedic)
                 _lootManualFieldMedic = !_lootManualFieldMedic;
             else
                 return;
@@ -191,7 +203,7 @@ namespace ItemIntelligence
                 ", organization=" + _lootManualOrganization.ToString() +
                 ", fieldMedic=" + _lootManualFieldMedic.ToString() + ".");
 
-            _browserPage = 0;
+            BrowserNavigation.ScrollOffset = 0;
             if (_inspectorOpen && !string.IsNullOrEmpty(_inspectorItemId))
             {
                 if (ModderMode)
@@ -223,8 +235,9 @@ namespace ItemIntelligence
             {
                 LootContainerSource source = sources[i];
                 if (source == null) continue;
-                if (!source.RollRangeResolved || source.MaxRolls > 0 ||
-                    storageExpected < 0.0 || storageExpected > 0.0)
+                // A zero-base manual profile is not an ordinary source. It becomes
+                // relevant only when a resolved Marauder/storage bonus adds rolls.
+                if (!source.RollRangeResolved || source.MaxRolls > 0 || storageExpected > 0.0)
                     LootActiveContainerPresentationBuffer.Add(source);
             }
             return LootActiveContainerPresentationBuffer.Count == 0

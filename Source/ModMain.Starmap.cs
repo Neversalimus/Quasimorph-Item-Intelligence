@@ -21,12 +21,10 @@ namespace ItemIntelligence
         private static int _pendingStarmapFrames;
         private static int _pendingStarmapPhase;
         private static int _pendingStarmapPhaseFrames;
-        private static int _pendingStarmapBackAttempts;
         private static bool _pendingStarmapOpenIssued;
         // exp3: captured vanilla fallback for direct MGSC.UI.Show(StarmapScreen, fallback).
         private static Type _pendingStarmapFallbackType;
         private static string _pendingStarmapFallbackLabel = string.Empty;
-        private static int _starmapExperimentRecoveryLastFrame = -1000;
         // exp3: UI.Show correctly preserves the fallback chain. Quasimorph can keep several
         // layered source roots alive (for example SpaceshipScreen + Technology Tree +
         // Confirm window), while GetActiveViews may report only the top modal. Suspend the
@@ -105,11 +103,9 @@ namespace ItemIntelligence
             _pendingStarmapFrames = 0;
             _pendingStarmapPhase = 0;
             _pendingStarmapPhaseFrames = 0;
-            _pendingStarmapBackAttempts = 0;
             _pendingStarmapOpenIssued = false;
             _pendingStarmapFallbackType = null;
             _pendingStarmapFallbackLabel = string.Empty;
-            _starmapExperimentRecoveryLastFrame = -1000;
             ResetStarmapTravelSafetySession();
         }
 
@@ -466,7 +462,6 @@ namespace ItemIntelligence
             _pendingStarmapFrames = 0;
             _pendingStarmapPhase = 10;
             _pendingStarmapPhaseFrames = 0;
-            _pendingStarmapBackAttempts = 0;
             _pendingStarmapOpenIssued = false;
 
             Debug.Log("[ItemIntelligence][StarmapNav] Captured fallback=" +
@@ -977,32 +972,6 @@ namespace ItemIntelligence
             }
         }
 
-        private static void TryStarmapExperimentEmergencyRecovery()
-        {
-            if (Time.frameCount - _starmapExperimentRecoveryLastFrame < 20) return;
-            _starmapExperimentRecoveryLastFrame = Time.frameCount;
-            try
-            {
-                Type uiType = AccessTools.TypeByName("MGSC.UI");
-                MethodInfo backToDefault = uiType == null ? null :
-                    uiType.GetMethod("BackToDefault", StaticFlags, null, Type.EmptyTypes, null);
-                if (backToDefault == null)
-                {
-                    Debug.LogWarning("[ItemIntelligence][StarmapNav] Emergency recovery unavailable: UI.BackToDefault not found.");
-                    return;
-                }
-                CancelPendingStarmapNavigation("emergency recovery hotkey");
-                RestoreStarmapSourceViewVisuals("emergency recovery hotkey");
-                CloseInspector();
-                backToDefault.Invoke(null, null);
-                Debug.LogWarning("[ItemIntelligence][StarmapNav] EMERGENCY Ctrl+Shift+F10 -> UI.BackToDefault invoked.");
-            }
-            catch (Exception ex)
-            {
-                Debug.LogError("[ItemIntelligence][StarmapNav] Emergency recovery failed: " + ex);
-            }
-        }
-
         private static void ShowBlockedStarmapNavigationMessage()
         {
             ShowBlockedStarmapNavigationMessage("ui.close_current_ship_screen_before_starmap");
@@ -1020,98 +989,6 @@ namespace ItemIntelligence
             catch { }
         }
 
-        private static bool IsSafeVanillaStarmapHostReady(out string reason)
-        {
-            reason = string.Empty;
-            try
-            {
-                Component modal = FindActiveBlockingModalBeforeStarmap();
-                if (modal != null)
-                {
-                    reason = "blocking modal is active";
-                    return false;
-                }
-
-                Component tree = FindActiveTechnologyTreeOverlayBeforeStarmap();
-                if (tree != null)
-                {
-                    reason = "technology tree is active";
-                    return false;
-                }
-
-                // v1.7.28: ArsenalScreen is the actual stable host observed in the
-                // runtime logs for both cargo-only and character inventory screens.
-                // Child ItemsStorageView discovery was the reason v1.7.26/v1.7.27
-                // rejected valid inventory hosts.  A plain ArsenalScreen is safe only
-                // as a SOURCE context: BeginStarmapNavigation closes it exactly once
-                // and phase 3 still requires the real Space HUD button before invoking
-                // StarmapButtonOnClick.
-                Component arsenal = FindActiveArsenalScreen();
-                if (arsenal != null)
-                {
-                    reason = "active ArsenalScreen source host will be safely unwound once";
-                    return true;
-                }
-
-                return IsVanillaStarmapInvocationReady(out reason);
-            }
-            catch (Exception ex)
-            {
-                reason = "safe-host check failed: " + ex.Message;
-                return false;
-            }
-        }
-
-        private static bool IsVanillaStarmapInvocationReady(out string reason)
-        {
-            reason = string.Empty;
-            try
-            {
-                Component modal = FindActiveBlockingModalBeforeStarmap();
-                if (modal != null)
-                {
-                    reason = "blocking modal is active";
-                    return false;
-                }
-
-                Component tree = FindActiveTechnologyTreeOverlayBeforeStarmap();
-                if (tree != null)
-                {
-                    reason = "technology tree is active";
-                    return false;
-                }
-
-                Component arsenal = FindActiveArsenalScreen();
-                if (arsenal != null)
-                {
-                    reason = "ArsenalScreen is still active";
-                    return false;
-                }
-
-                Type hudType = AccessTools.TypeByName("MGSC.SpaceHudScreen");
-                object hud = FindActiveUnityObject(hudType);
-                if (hud == null)
-                {
-                    reason = "SpaceHudScreen is not active";
-                    return false;
-                }
-
-                object button = GetMember(hud, "_starmapButton");
-                if (!IsUiObjectActuallyUsable(button))
-                {
-                    reason = "the vanilla starmap button is not currently visible/usable";
-                    return false;
-                }
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                reason = "starmap invocation readiness check failed: " + ex.Message;
-                return false;
-            }
-        }
-
         private static void CancelPendingStarmapNavigation(string reason)
         {
             if (!string.IsNullOrEmpty(_pendingStarmapTargetId))
@@ -1121,184 +998,12 @@ namespace ItemIntelligence
             _pendingStarmapFrames = 0;
             _pendingStarmapPhase = 0;
             _pendingStarmapPhaseFrames = 0;
-            _pendingStarmapBackAttempts = 0;
             bool hadIssuedMap = _pendingStarmapOpenIssued;
             _pendingStarmapOpenIssued = false;
             _pendingStarmapFallbackType = null;
             _pendingStarmapFallbackLabel = string.Empty;
             if (!hadIssuedMap)
                 RestoreStarmapSourceViewVisuals("navigation cancelled before Starmap opened");
-        }
-
-        private static Component FindActiveTechnologyTreeOverlayBeforeStarmap()
-        {
-            try
-            {
-                TMP_Text[] texts = Resources.FindObjectsOfTypeAll<TMP_Text>();
-                if (texts == null) return null;
-
-                for (int i = 0; i < texts.Length; i++)
-                {
-                    TMP_Text label = texts[i];
-                    if (label == null || label.gameObject == null || !label.gameObject.activeInHierarchy) continue;
-                    if (_inspectorRoot != null &&
-                        (label.gameObject == _inspectorRoot || label.transform.IsChildOf(_inspectorRoot.transform)))
-                        continue;
-                    if (!IsTechnologyTreeHeaderText(label.text)) continue;
-
-                    // The visible header lives inside the actual technology-tree window.
-                    // Walk upward and prefer the first MGSC component whose GameObject is
-                    // still active.  We only need a stable identity for logging; UI.Back
-                    // performs the actual vanilla close operation.
-                    Transform current = label.transform;
-                    for (int depth = 0; current != null && depth < 8; depth++, current = current.parent)
-                    {
-                        Component[] components = current.GetComponents<Component>();
-                        if (components == null) continue;
-                        for (int c = 0; c < components.Length; c++)
-                        {
-                            Component component = components[c];
-                            if (component == null) continue;
-                            Type type = component.GetType();
-                            string ns = type.Namespace ?? string.Empty;
-                            if (string.Equals(ns, "MGSC", StringComparison.Ordinal) ||
-                                ns.StartsWith("MGSC.", StringComparison.Ordinal))
-                                return component;
-                        }
-                    }
-
-                    // Fallback: return the label itself.  The caller only uses this as a
-                    // positive structural signal and still closes through MGSC.UI.Back.
-                    return label;
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.LogWarning("[ItemIntelligence] Technology-tree probe failed: " + ex.Message);
-            }
-            return null;
-        }
-
-        private static Component FindActiveBlockingModalBeforeStarmap()
-        {
-            try
-            {
-                // v1.7.22: the Magnum technology confirmation shown by the game does not
-                // expose a reliable Popup/Dialog class or GameObject name. Detect it by
-                // its actual decision UI instead: two active YES/NO controls sharing a
-                // message-bearing UI ancestor. This also covers localized confirmations.
-                Component structuralDecision = FindActiveDecisionOverlayByStructure();
-                if (structuralDecision != null) return structuralDecision;
-
-                UnityEngine.Object[] components = Resources.FindObjectsOfTypeAll(typeof(Component));
-                for (int i = 0; i < components.Length; i++)
-                {
-                    Component component = components[i] as Component;
-                    if (component == null || component.gameObject == null ||
-                        !component.gameObject.activeInHierarchy)
-                        continue;
-
-                    GameObject go = component.gameObject;
-                    if (_inspectorRoot != null && (go == _inspectorRoot || go.transform.IsChildOf(_inspectorRoot.transform)))
-                        continue;
-
-                    Type type = component.GetType();
-                    string ns = type.Namespace ?? string.Empty;
-                    if (!string.Equals(ns, "MGSC", StringComparison.Ordinal) &&
-                        !ns.StartsWith("MGSC.", StringComparison.Ordinal))
-                        continue;
-
-                    string typeName = type.Name ?? string.Empty;
-                    string objectName = go.name ?? string.Empty;
-                    if (LooksLikeBlockingModalName(typeName) || LooksLikeBlockingModalName(objectName))
-                        return component;
-
-                    // Some modal roots have generic component types but descriptive parent names.
-                    Transform parent = go.transform.parent;
-                    for (int depth = 0; parent != null && depth < 3; depth++, parent = parent.parent)
-                    {
-                        if (LooksLikeBlockingModalName(parent.name))
-                            return component;
-                    }
-                }
-
-                // Fallback for modal roots composed mostly from Unity UI components.
-                // Keep this intentionally stricter than the MGSC-component probe so a
-                // permanently active generic PopupRoot cannot cause repeated Back calls.
-                UnityEngine.Object[] gameObjects = Resources.FindObjectsOfTypeAll(typeof(GameObject));
-                for (int i = 0; i < gameObjects.Length; i++)
-                {
-                    GameObject go = gameObjects[i] as GameObject;
-                    if (go == null || !go.activeInHierarchy) continue;
-                    if (_inspectorRoot != null && (go == _inspectorRoot || go.transform.IsChildOf(_inspectorRoot.transform)))
-                        continue;
-
-                    string key = (go.name ?? string.Empty).Trim().ToLowerInvariant();
-                    if (key.IndexOf("confirmationwindow", StringComparison.Ordinal) >= 0 ||
-                        key.IndexOf("upgradeconfirmation", StringComparison.Ordinal) >= 0 ||
-                        key.IndexOf("confirmpopup", StringComparison.Ordinal) >= 0 ||
-                        key.IndexOf("messagebox", StringComparison.Ordinal) >= 0 ||
-                        key.IndexOf("questionwindow", StringComparison.Ordinal) >= 0 ||
-                        key.IndexOf("modaldialog", StringComparison.Ordinal) >= 0)
-                        return go.transform;
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.LogWarning("[ItemIntelligence] Blocking-modal probe failed: " + ex.Message);
-            }
-            return null;
-        }
-
-        private static bool TryVanillaBackForStarmap(string context)
-        {
-            try
-            {
-                MGSC.UI.Back(false);
-                _pendingStarmapBackAttempts++;
-                _pendingStarmapPhaseFrames = 0;
-                Debug.Log("[ItemIntelligence] Vanilla UI.Back before starmap: " + context + ".");
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Debug.LogWarning("[ItemIntelligence] UI.Back failed before starmap (" + context + "): " + ex.Message);
-                return false;
-            }
-        }
-
-        private static bool TryOpenPendingStarmap()
-        {
-            if (_pendingStarmapOpenIssued) return true;
-            string unsafeReason;
-            if (!IsVanillaStarmapInvocationReady(out unsafeReason))
-                return false;
-            try
-            {
-                Type hudType = AccessTools.TypeByName("MGSC.SpaceHudScreen");
-                object hud = FindActiveUnityObject(hudType);
-                if (hud == null) return false;
-
-                object button = GetMember(hud, "_starmapButton");
-                MethodInfo method = hudType.GetMethod("StarmapButtonOnClick", InstanceFlags);
-                if (method == null)
-                {
-                    CancelPendingStarmapNavigation("vanilla StarmapButtonOnClick was not found");
-                    return false;
-                }
-
-                method.Invoke(hud, new object[] { button, 0 });
-                _pendingStarmapOpenIssued = true;
-                _pendingStarmapPhaseFrames = 0;
-                Debug.Log("[ItemIntelligence] Opening starmap after safe UI unwind for " +
-                    _pendingStarmapTargetId + ".");
-                return true;
-            }
-            catch (Exception ex)
-            {
-                CancelPendingStarmapNavigation("could not invoke vanilla starmap action: " + ex.Message);
-                return false;
-            }
         }
 
         private static void TickPendingStarmapNavigation()
@@ -1370,8 +1075,7 @@ namespace ItemIntelligence
                     _pendingStarmapFrames = 0;
                     _pendingStarmapPhase = 0;
                     _pendingStarmapPhaseFrames = 0;
-                    _pendingStarmapBackAttempts = 0;
-                    _pendingStarmapOpenIssued = false;
+                            _pendingStarmapOpenIssued = false;
                     _pendingStarmapFallbackType = null;
                     _pendingStarmapFallbackLabel = string.Empty;
                 }

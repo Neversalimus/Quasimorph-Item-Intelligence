@@ -61,19 +61,6 @@ namespace ItemIntelligence
                     delegate { BuildMagnumIndex(); },
                     ref failures);
 
-                RunCompatibilityIndexStage(
-                    "MagnumProjectPrices",
-                    "Magnum",
-                    delegate { BuildMagnumProjectPriceIndex(); },
-                    ref failures);
-
-                if (MagnumUses.Count == 0 &&
-                    _compatMagnum)
-                    RunCompatibilityIndexStage(
-                        "GenericMagnumFallback",
-                        "Magnum",
-                        delegate { BuildGenericMagnumCostIndex(); },
-                        ref failures);
             }
 
             if (_compatRecipes)
@@ -358,160 +345,30 @@ namespace ItemIntelligence
             object collection = GetStaticMember(typeof(Data), "MagnumPerks");
             if (collection == null) throw new MissingMemberException("Data.MagnumPerks not found.");
 
-            Dictionary<string, object> priceLookup = BuildMagnumPriceRecordLookup();
             List<DataEntry> records = EnumerateData(collection);
             for (int i = 0; i < records.Count; i++)
             {
                 object record = records[i].Value;
-                if (record == null) continue;
+                if (record == null || !string.Equals(
+                    record.GetType().FullName,
+                    "MGSC.MagnumPerkRecord",
+                    StringComparison.Ordinal))
+                    continue;
+
                 bool? enabled = GetBoolMember(record, "Enabled");
                 if (enabled.HasValue && !enabled.Value) continue;
                 string perkId = FirstNonEmpty(GetStringMember(record, "Id"), records[i].Key);
                 if (string.IsNullOrEmpty(perkId)) continue;
 
-                Dictionary<string, int> price = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-                object rawUpgradePrice = GetMember(record, "UpgradePrice");
-                MergeItemQuantities(price, ExtractKnownItemQuantitiesDeep(rawUpgradePrice, 5));
-
-                if (price.Count == 0 && rawUpgradePrice != null)
-                {
-                    string priceKey = ConvertToStableString(rawUpgradePrice);
-                    object priceRecord;
-                    if (!string.IsNullOrEmpty(priceKey) && priceLookup.TryGetValue(priceKey, out priceRecord))
-                        MergeItemQuantities(price, ExtractKnownItemQuantitiesDeep(priceRecord, 5));
-                }
-
-                if (price.Count == 0)
-                {
-                    List<MemberInfo> members = GetReadableMembers(record.GetType());
-                    for (int m = 0; m < members.Count; m++)
-                    {
-                        string name = members[m].Name ?? string.Empty;
-                        if (!IsCostLikeMemberName(name)) continue;
-                        MergeItemQuantities(price, ExtractKnownItemQuantitiesDeep(GetMemberValue(record, members[m]), 5));
-                    }
-                }
-
+                // Current-build schema proof: MagnumPerkRecord.UpgradePrice is List<string>.
+                // Count only known item ids from that exact field; no generic cost-like scan.
+                Dictionary<string, int> price = ExtractKnownItemQuantitiesDeep(
+                    GetMember(record, "UpgradePrice"), 3);
                 foreach (KeyValuePair<string, int> pair in price)
                     AddMagnumUseUnique(pair.Key, new MagnumUse(perkId, pair.Value, record));
             }
         }
 
-        private static Dictionary<string, object> BuildMagnumPriceRecordLookup()
-        {
-            Dictionary<string, object> result = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
-            object collection = GetStaticMember(typeof(Data), "MagnumProjectPrices");
-            if (collection == null) return result;
-            List<DataEntry> records = EnumerateData(collection);
-            for (int i = 0; i < records.Count; i++)
-            {
-                object record = records[i].Value;
-                if (record == null) continue;
-                string[] keys = new string[]
-                {
-                    records[i].Key,
-                    GetStringMember(record, "Id"),
-                    GetStringMember(record, "PriceId"),
-                    GetStringMember(record, "ProjectId")
-                };
-                for (int k = 0; k < keys.Length; k++)
-                    if (!string.IsNullOrEmpty(keys[k])) result[keys[k]] = record;
-            }
-            return result;
-        }
-
-        private static void BuildMagnumProjectPriceIndex()
-        {
-            object collection = GetStaticMember(typeof(Data), "MagnumProjectPrices");
-            if (collection == null) return;
-
-            List<DataEntry> records = EnumerateData(collection);
-            for (int i = 0; i < records.Count; i++)
-            {
-                object record = records[i].Value;
-                if (record == null) continue;
-
-                string projectId = FirstNonEmpty(
-                    GetStringMember(record, "Id"),
-                    GetStringMember(record, "ProjectId"),
-                    GetStringMember(record, "PerkId"),
-                    records[i].Key);
-                if (string.IsNullOrEmpty(projectId)) continue;
-
-                Dictionary<string, int> merged = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-                List<MemberInfo> members = GetReadableMembers(record.GetType());
-                for (int m = 0; m < members.Count; m++)
-                {
-                    MemberInfo member = members[m];
-                    string name = member.Name ?? string.Empty;
-                    if (name.IndexOf("Price", StringComparison.OrdinalIgnoreCase) < 0 &&
-                        name.IndexOf("Cost", StringComparison.OrdinalIgnoreCase) < 0 &&
-                        name.IndexOf("RequiredItems", StringComparison.OrdinalIgnoreCase) < 0)
-                        continue;
-
-                    Dictionary<string, int> part = ExtractKnownItemQuantitiesDeep(GetMemberValue(record, member), 5);
-                    foreach (KeyValuePair<string, int> pair in part)
-                        AddQuantity(merged, pair.Key, pair.Value);
-                }
-
-                foreach (KeyValuePair<string, int> pair in merged)
-                    AddMagnumUseUnique(pair.Key, new MagnumUse(projectId, pair.Value, record));
-            }
-        }
-
-        private static void BuildGenericMagnumCostIndex()
-        {
-            Type dataType = typeof(Data);
-            List<MemberInfo> staticMembers = new List<MemberInfo>();
-            PropertyInfo[] properties = dataType.GetProperties(StaticFlags);
-            for (int i = 0; i < properties.Length; i++)
-                if (properties[i].CanRead && properties[i].GetIndexParameters().Length == 0)
-                    staticMembers.Add(properties[i]);
-            FieldInfo[] fields = dataType.GetFields(StaticFlags);
-            for (int i = 0; i < fields.Length; i++)
-                staticMembers.Add(fields[i]);
-
-            for (int m = 0; m < staticMembers.Count; m++)
-            {
-                MemberInfo member = staticMembers[m];
-                string memberName = member.Name ?? string.Empty;
-                if (memberName.IndexOf("Magnum", StringComparison.OrdinalIgnoreCase) < 0) continue;
-
-                object collection = GetMemberValue(null, member);
-                if (collection == null) continue;
-                List<DataEntry> records = EnumerateData(collection);
-                for (int r = 0; r < records.Count; r++)
-                {
-                    object record = records[r].Value;
-                    if (record == null) continue;
-                    string projectId = FirstNonEmpty(
-                        GetStringMember(record, "Id"),
-                        GetStringMember(record, "PerkId"),
-                        GetStringMember(record, "ProjectId"),
-                        GetStringMember(record, "Name"),
-                        records[r].Key);
-                    if (string.IsNullOrEmpty(projectId)) continue;
-
-                    List<MemberInfo> recordMembers = GetReadableMembers(record.GetType());
-                    for (int i = 0; i < recordMembers.Count; i++)
-                    {
-                        MemberInfo priceMember = recordMembers[i];
-                        string name = priceMember.Name ?? string.Empty;
-                        bool relevant =
-                            name.IndexOf("Price", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                            name.IndexOf("Cost", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                            name.IndexOf("Required", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                            name.IndexOf("Resource", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                            name.IndexOf("Upgrade", StringComparison.OrdinalIgnoreCase) >= 0;
-                        if (!relevant) continue;
-
-                        Dictionary<string, int> price = ExtractKnownItemQuantitiesDeep(GetMemberValue(record, priceMember), 5);
-                        foreach (KeyValuePair<string, int> pair in price)
-                            AddMagnumUseUnique(pair.Key, new MagnumUse(projectId, pair.Value, record));
-                    }
-                }
-            }
-        }
 
         private static void AddMagnumUseUnique(string itemId, MagnumUse use)
         {

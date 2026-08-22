@@ -13,7 +13,7 @@ namespace ItemIntelligence
         // v1.7.37-test2: weapon-mode rows stay compact. The exact modeKey carried by
         // each row owns its hover payload, so two identically named modes can expose
         // different FireModeRecord stats without any label-based lookup.
-        private const int WeaponModeTooltipMaxRows = 6;
+        private const int WeaponModeTooltipMaxRows = 7;
         private static GameObject _browserWeaponModeTooltipRoot;
         private static RectTransform _browserWeaponModeTooltipRect;
         private static TMP_Text _browserWeaponModeTooltipTitle;
@@ -107,23 +107,30 @@ namespace ItemIntelligence
 
         private static List<KeyValuePair<string, string>> BuildWeaponModeTooltipRows(string modeKey, WeaponModeStaticStats stats)
         {
-            List<KeyValuePair<string, string>> rows = new List<KeyValuePair<string, string>>(6);
+            List<KeyValuePair<string, string>> rows = new List<KeyValuePair<string, string>>(7);
             if (stats == null) return rows;
 
             // Match MGSC.TooltipFactory.BuildFiremodeTooltip exactly for the fields it
             // presents. Delay remains indexed for diagnostics only.
             if (stats.WeaponCastsCount > 1)
                 rows.Add(new KeyValuePair<string, string>(Ui("ui.mode_rate_of_fire"), stats.WeaponCastsCount.ToString(CultureInfo.InvariantCulture)));
-            if (stats.DamageMult.HasValue)
+            if (stats.DamageMult.HasValue && !float.IsNaN(stats.DamageMult.Value) &&
+                !float.IsInfinity(stats.DamageMult.Value))
                 rows.Add(new KeyValuePair<string, string>(Ui("ui.mode_damage_modifier"), FormatWeaponModeMultiplierPercent(stats.DamageMult.Value)));
 
             int damagePerApMin;
             int damagePerApMax;
             if (TryCalculateWeaponModeDamagePerAp(modeKey, stats, out damagePerApMin, out damagePerApMax))
                 rows.Add(new KeyValuePair<string, string>(Ui("ui.mode_damage_per_ap_default"), FormatWeaponModeDamagePerAp(damagePerApMin, damagePerApMax)));
+
+            int criticalDamagePerApMin;
+            int criticalDamagePerApMax;
+            if (TryCalculateWeaponModeCriticalDamagePerAp(modeKey, stats, out criticalDamagePerApMin, out criticalDamagePerApMax))
+                rows.Add(new KeyValuePair<string, string>(Ui("ui.mode_critical_damage_per_ap_default"), FormatWeaponModeDamagePerAp(criticalDamagePerApMin, criticalDamagePerApMax)));
             if (stats.AmmoPerShot > 0)
                 rows.Add(new KeyValuePair<string, string>(Ui("ui.mode_ammo_consumption"), stats.AmmoPerShot.ToString(CultureInfo.InvariantCulture)));
-            if (stats.Accuracy.HasValue && Math.Abs(stats.Accuracy.Value) > 0.0001f)
+            if (stats.Accuracy.HasValue && !float.IsNaN(stats.Accuracy.Value) &&
+                !float.IsInfinity(stats.Accuracy.Value) && Math.Abs(stats.Accuracy.Value) > 0.0001f)
                 rows.Add(new KeyValuePair<string, string>(Ui("ui.mode_accuracy"), FormatSignedModePercent(stats.Accuracy.Value)));
 
             float scatter;

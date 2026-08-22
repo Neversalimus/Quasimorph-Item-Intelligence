@@ -5,9 +5,9 @@ using System.Globalization;
 namespace ItemIntelligence
 {
     /// <summary>
-    /// Optional technical presentation for mod authors. Read-only and deliberately
-    /// compact: it exposes stable IDs/types already present in the browser indexes and
-    /// never scans live scenes or mutates game data.
+    /// Optional technical presentation for mod authors. This Overview section remains
+    /// read-only and compact: it exposes stable IDs/types already present in the browser
+    /// indexes. The explicit save action is isolated in ModderSpawnRuntime/Panel.
     /// </summary>
     public static partial class ModMain
     {

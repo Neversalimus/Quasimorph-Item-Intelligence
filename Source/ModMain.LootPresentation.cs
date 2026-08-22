@@ -64,7 +64,7 @@ namespace ItemIntelligence
         private static void UpdateLootProgressUi()
         {
             if (_lootProgressRoot == null) return;
-            bool show = _inspectorOpen && _browserTab == (int)BrowserTabId.Loot && _lootWarmupActive;
+            bool show = _inspectorOpen && BrowserNavigation.Tab == (int)BrowserTabId.Loot && _lootWarmupActive;
             if (_lootProgressLastVisible != show)
             {
                 _lootProgressLastVisible = show;
@@ -104,12 +104,16 @@ namespace ItemIntelligence
         {
             if (column == null) return;
             RectTransform rt = column.rectTransform;
-            rt.anchoredPosition = new Vector2(x, 0f);
-            rt.sizeDelta = new Vector2(width, rt.sizeDelta.y);
+            SetBrowserRectPositionIfChanged(rt, x, 0f);
+            SetBrowserRectSizeIfChanged(rt, width, rt.sizeDelta.y);
             bool visible = width > 0f && !string.IsNullOrEmpty(value);
-            column.gameObject.SetActive(visible);
-            column.text = visible ? NormalizeModUiText(value) : string.Empty;
-            column.fontSize = fontSize;
+            SetBrowserActiveIfChanged(column.gameObject, visible);
+            SetBrowserTextIfChanged(column, visible ? NormalizeModUiText(value) : string.Empty);
+            SetBrowserFontSizeIfChanged(column, fontSize);
+            SetBrowserAutoSizingIfChanged(column, false);
+            SetBrowserWordWrappingIfChanged(column, false);
+            SetBrowserOverflowIfChanged(column, TextOverflowModes.Ellipsis);
+            if (visible) SetBrowserFontStyleIfChanged(column, FontStyles.Normal);
         }
 
         private static void SetLootColumnHeaderStyle(TMP_Text column, Color color)
@@ -135,7 +139,7 @@ namespace ItemIntelligence
 
             LootModifierSnapshot lootModifiers = GetLootModifierSnapshot();
             AppendLootModifierControlLines(lootModifiers);
-
+            int lootSectionsStartAt = BrowserLines.Count;
             bool any = false;
 
             // ContainerItemDrop.GetDrop exposes the weighted pool. The audited spawn path
@@ -154,73 +158,71 @@ namespace ItemIntelligence
             if (containers != null && containers.Count > 0)
             {
                 any = true;
-                containers.Sort(delegate(LootContainerSource a, LootContainerSource b)
+                bool buildContainers = AddLootSectionHeaderAndShouldBuild(
+                    Ui("ui.containers"), containers.Count);
+                if (buildContainers)
                 {
-                    int name = string.Compare(
-                        a.ContainerId,
-                        b.ContainerId,
-                        StringComparison.OrdinalIgnoreCase);
-                    if (name != 0) return name;
-                    int chance = b.BaseDrawPercent.CompareTo(a.BaseDrawPercent);
-                    if (chance != 0) return chance;
-                    int profile = string.Compare(
-                        a.DropId,
-                        b.DropId,
-                        StringComparison.OrdinalIgnoreCase);
-                    if (profile != 0) return profile;
-                    return string.Compare(
-                        a.BiomeId,
-                        b.BiomeId,
-                        StringComparison.OrdinalIgnoreCase);
-                });
+                    LootContainerSaveEstimateSnapshot containerEstimate =
+                        GetLootContainerSaveEstimateSnapshot();
+                    containers.Sort(delegate(LootContainerSource a, LootContainerSource b)
+                    {
+                        int name = string.Compare(a.ContainerId, b.ContainerId, StringComparison.OrdinalIgnoreCase);
+                        if (name != 0) return name;
+                        int profile = string.Compare(a.DropId, b.DropId, StringComparison.OrdinalIgnoreCase);
+                        if (profile != 0) return profile;
+                        return string.Compare(a.BiomeId, b.BiomeId, StringComparison.OrdinalIgnoreCase);
+                    });
 
-                BrowserLines.Add(
-                    BrowserLine.Section(
-                        (Ui("ui.containers")) +
-                        "  •  " + containers.Count.ToString(CultureInfo.InvariantCulture)));
-                BrowserLines.Add(
-                    BrowserLine.LootHeader(
+                    BrowserLines.Add(BrowserLine.LootHeader(
                         Ui("loot.column.container_profile"),
                         Ui("ui.context"),
-                        Ui("ui.chance"),
+                        Ui("loot.column.save_estimate"),
                         Ui("ui.tech"),
                         Ui("ui.rolls")));
 
-                bool hasUnknownRollRange = false;
-                for (int i = 0; i < containers.Count; i++)
-                {
-                    LootContainerSource source = containers[i];
-                    if (source == null) continue;
-                    if (!source.RollRangeResolved) hasUnknownRollRange = true;
+                    bool hasUnknownRollRange = false;
+                    bool hasUnavailableEstimate = false;
+                    for (int i = 0; i < containers.Count; i++)
+                    {
+                        LootContainerSource source = containers[i];
+                        if (source == null) continue;
+                        if (!source.RollRangeResolved) hasUnknownRollRange = true;
+                        string saveEstimate = FormatLootContainerEffectiveChance(
+                            itemId, source, containerEstimate, lootModifiers.StorageExpected);
+                        if (string.Equals(saveEstimate, "—", StringComparison.Ordinal))
+                            hasUnavailableEstimate = true;
 
-                    string context = string.IsNullOrEmpty(source.BiomeId)
-                        ? (Ui("ui.any"))
-                        : ResolveLootSourceName(source.BiomeId, "StationType");
-                    string rolls = FormatLootContainerRolls(
-                        source, lootModifiers.StorageExpected);
-
-                    BrowserLines.Add(
-                        BrowserLine.LootContainerRow(
+                        string context = string.IsNullOrEmpty(source.BiomeId)
+                            ? Ui("ui.any")
+                            : ResolveLootSourceName(source.BiomeId, "StationType");
+                        BrowserLines.Add(BrowserLine.LootContainerRow(
                             source.ContainerId,
                             ResolveLootContainerSourceLabel(source),
                             context,
-                            FormatLootContainerEffectiveChance(source, lootModifiers.StorageExpected),
+                            saveEstimate,
                             containerItemTech > 0
                                 ? "T" + containerItemTech.ToString(CultureInfo.InvariantCulture) + "+"
                                 : Ui("ui.any"),
-                            rolls));
+                            FormatLootContainerRolls(source, lootModifiers.StorageExpected)));
+                    }
+
+                    AddWrappedLootNote("loot.note.container_context_chance");
+                    if (lootModifiers.StorageExpected < 0.0)
+                        AddWrappedLootNote("loot.note.container_modifier_unavailable");
+                    if (hasUnavailableEstimate)
+                        AddWrappedLootNote("loot.note.container_save_unavailable");
+                    if (hasUnknownRollRange) AddWrappedLootNote("loot.note.unknown_container_rolls");
                 }
-
-                if (lootModifiers.StorageExpected < 0.0)
-                    AddWrappedLootNote("loot.note.current_container_modifier_unknown");
-                else
-                    AddWrappedLootNote("loot.note.container_chance");
-                if (hasUnknownRollRange)
-                    AddWrappedLootNote("loot.note.unknown_container_rolls");
             }
-
             AppendLootGeneralSpawnContainerLines(
                 itemId, rawContainers, containerItemTech, ref any);
+
+            // Scripted Baron loot is not part of MobClass equipment/drop generation.
+            // Keep it as its own audited source before normal enemy rows.
+            AppendLootBaronSpecialLines(itemId, ref any);
+
+            // Exact non-random acquisition paths proven by the current source-family audit.
+            AppendLootSpecialSourceLines(itemId, ref any);
 
             List<LootEnemySource> rawEnemies;
             LootEnemySourcesByItem.TryGetValue(itemId, out rawEnemies);
@@ -231,14 +233,14 @@ namespace ItemIntelligence
                 amputations != null && amputations.Count > 0)
             {
                 any = true;
+                bool buildAmputations = AddLootSectionHeaderAndShouldBuild(
+                    Ui("ui.amputation_drops"), amputations.Count);
+                if (buildAmputations)
+                {
                 amputations.Sort(delegate(LootAmputationSource a, LootAmputationSource b)
                 {
                     return string.Compare(a.WoundSlotId, b.WoundSlotId, StringComparison.OrdinalIgnoreCase);
                 });
-                BrowserLines.Add(
-                    BrowserLine.Section(
-                        (Ui("ui.amputation_drops")) +
-                        "  •  " + amputations.Count.ToString(CultureInfo.InvariantCulture)));
                 BrowserLines.Add(
                     BrowserLine.LootHeader(
                         Ui("ui.wound_slot"),
@@ -259,6 +261,7 @@ namespace ItemIntelligence
                             Ui("ui.floor")));
                 }
                 AddWrappedLootNote("loot.note.amputation");
+                }
             }
 
             List<LootMissionSource> bramfaturas;
@@ -272,14 +275,13 @@ namespace ItemIntelligence
                 (bramfaturas == null ? 0 : bramfaturas.Count) +
                 (stationTypes == null ? 0 : stationTypes.Count) +
                 (factions == null ? 0 : factions.Count);
-
             if (missionCount > 0)
             {
                 any = true;
-                BrowserLines.Add(
-                    BrowserLine.Section(
-                        (Ui("ui.mission_pools")) +
-                        "  •  " + missionCount.ToString(CultureInfo.InvariantCulture)));
+                bool buildMissionPools = AddLootSectionHeaderAndShouldBuild(
+                    Ui("ui.mission_pools"), missionCount);
+                if (buildMissionPools)
+                {
                 BrowserLines.Add(
                     BrowserLine.LootHeader(
                         Ui("ui.source"),
@@ -294,7 +296,10 @@ namespace ItemIntelligence
 
                 AddLootPlacementRules();
                 AddWrappedLootNote("loot.note.mission_pools");
+                }
             }
+
+            ApplyLootCollapsibleSections(lootSectionsStartAt);
 
             if (!any && !_lootWarmupActive)
                 BrowserLines.Add(
@@ -328,25 +333,6 @@ namespace ItemIntelligence
             if (string.Equals(kind, "GrantedImplant", StringComparison.Ordinal)) return Ui("ui.granted_implant");
             if (string.Equals(kind, "RandomImplant", StringComparison.Ordinal)) return Ui("ui.random_implant");
             return HumanizeLootIdentifier(kind);
-        }
-
-        private static string FormatLootContainerEffectiveChance(
-            LootContainerSource source,
-            double storageExpected)
-        {
-            if (source == null) return "-";
-            if (!source.RollRangeResolved) return "—";
-            double perRoll = Math.Max(0.0, Math.Min(1.0, source.BaseDrawPercent / 100.0));
-            if (perRoll <= 0.0) return FormatLootPercent(0f);
-
-            double baseHit = ProbabilityAtLeastOnceUniformCount(
-                perRoll, source.MinRolls, source.MaxRolls);
-            if (storageExpected < 0.0)
-                return FormatLootPercent((float)(baseHit * 100.0));
-
-            double bonusHit = CorpseBonusAtLeastOnceChance(perRoll, storageExpected);
-            double combined = 1.0 - (1.0 - baseHit) * (1.0 - bonusHit);
-            return FormatLootPercent((float)(combined * 100.0));
         }
 
         private static string FormatEnemyLootChance(
@@ -849,6 +835,7 @@ namespace ItemIntelligence
 
         private static string FormatLootPercent(float value)
         {
+            if (float.IsNaN(value) || float.IsInfinity(value)) return "—";
             value = Mathf.Clamp(value, 0f, 100f);
             if (value >= 10f)
                 return value.ToString("0.#", CultureInfo.InvariantCulture) + "%";

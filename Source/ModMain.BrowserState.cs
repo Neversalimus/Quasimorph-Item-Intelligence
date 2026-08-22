@@ -14,7 +14,6 @@ namespace ItemIntelligence
         private static Component _activeTooltip;
         private static object _activeTooltipFactory;
         private static int _priceBlockFrame = -1000;
-        private static int _slowTooltipWarnings;
 
         // Generic station/production tooltips never enter QII's item-discovery scope.
         private static bool _itemPointerScope;
@@ -28,9 +27,6 @@ namespace ItemIntelligence
         private static GameObject _hoverHintCanvas;
         private static RectTransform _hoverHintRect;
         private static TMP_Text _hoverHintText;
-        private static readonly Dictionary<int, QuickTooltipPool> QuickTooltipPools =
-            new Dictionary<int, QuickTooltipPool>();
-        private static int _quickTooltipLastPruneFrame = -1000;
 
         private static GameObject _inspectorRoot;
         private static RectTransform _inspectorRect;
@@ -60,13 +56,8 @@ namespace ItemIntelligence
         private const int BrowserCatalogScopeCount = (int)BrowserCatalogScope.Count;
         private const int BrowserRecentItemLimit = 32;
         private const int BrowserNavigationHistoryLimit = 64;
-        private static int _browserTab;
-        private static int _browserPage;
+        private static readonly BrowserNavigationSessionState BrowserNavigation = new BrowserNavigationSessionState();
 
-        private const string BrowserItemActionPrefix = "QII_BROWSER_ITEM:";
-        private const string BrowserItemBackAction = "QII_BROWSER_ITEM_BACK";
-        private const string BrowserCopyTextActionPrefix = "QII_BROWSER_COPY:";
-        private static readonly List<BrowserItemNavigationState> BrowserItemNavigationHistory = new List<BrowserItemNavigationState>();
 
         // v1.5.13 global item directory. Names are localized incrementally while the
         // browser is open, so the old hover/loading stutters are not reintroduced.
@@ -88,7 +79,7 @@ namespace ItemIntelligence
             new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         private static readonly List<BrowserSearchMatch> BrowserSearchCurrentMatches =
             new List<BrowserSearchMatch>();
-        private static int _browserSearchResultPage;
+        private static int _browserSearchScrollOffset;
         private static string _browserSearchLastNormalizedQuery = string.Empty;
         private static int _browserSearchWarmupIndex;
         private static bool _browserSearchWarmupActive;
@@ -102,16 +93,13 @@ namespace ItemIntelligence
         private static int _browserSearchLastResultCount;
         private static bool _browserSearchSuppressEvents;
         private static bool _browserSearchCaptureLogged;
-        private static bool _browserBackspaceWasDown;
-        private static float _browserNextBackspaceRepeat;
-        private static bool _browserWin32BackspaceUnavailable;
 
         // v1.6.1 item catalog. This reuses the already-localized global item index and
         // adds a lightweight cached category byte per item. The catalog is an overlay,
         // so opening it never rebuilds the main browser UI.
         private static bool _browserCatalogOpen;
         private static int _browserCatalogCategory;
-        private static int _browserCatalogPage;
+        private static int _browserCatalogScrollOffset;
         private static BrowserCatalogScope _browserCatalogScope = BrowserCatalogScope.All;
         private static BrowserCatalogDataFilter _browserCatalogDataFilter = BrowserCatalogDataFilter.Any;
         private static BrowserCatalogSortMode _browserCatalogSortMode = BrowserCatalogSortMode.Name;
@@ -120,7 +108,7 @@ namespace ItemIntelligence
         private static TMP_Text _browserCatalogButtonText;
         private static Image _browserCatalogButtonBackground;
         private static TMP_Text _browserCatalogHeaderText;
-        private static TMP_Text _browserCatalogPageText;
+        private static TMP_Text _browserCatalogScrollText;
         private static Button _browserCatalogDataFilterButton;
         private static TMP_Text _browserCatalogDataFilterText;
         private static Button _browserCatalogSortButton;
@@ -174,18 +162,16 @@ namespace ItemIntelligence
         private static Camera _browserRaisedTooltipOriginalWorldCamera;
 
         private static TMP_Text _browserStatsText;
-        private static TMP_Text _browserPageText;
+        private static TMP_Text _browserScrollText;
 
-        // v1.7.32: page-aware scrollbars. These intentionally control the
-        // existing fixed-page renderers instead of replacing them with ScrollRect,
-        // preserving the pooled-row architecture and all existing page hotkeys.
-        private static Scrollbar _browserPageScrollbar;
+        // v1.7.40-test7: normal virtualized scrolling. The fixed row pools stay
+        // allocation-safe, but the scrollbar/wheel now move by row rather than page.
+        private static Scrollbar _browserScrollScrollbar;
         private static Scrollbar _browserCatalogScrollbar;
         private static Scrollbar _browserSearchScrollbar;
         private static bool _browserScrollbarSync;
-        // v1.7.33-test1: remember page position per main tab. This is UI-only state and
+        // Remember the first visible row per main tab. This is UI-only state and
         // resets whenever a new inspector session is opened.
-        private static readonly int[] BrowserPageByTab = new int[BrowserTabCount];
 
         private static TMP_Text _browserHelpText;
         private static TMP_Text _browserCloseText;
@@ -199,6 +185,7 @@ namespace ItemIntelligence
         private static readonly Image[] BrowserRowBackground = new Image[BrowserVisibleRows];
         private static readonly Outline[] BrowserRowOutlines = new Outline[BrowserVisibleRows];
         private static readonly Image[] BrowserRowIcons = new Image[BrowserVisibleRows];
+        private static readonly Image[] BrowserRowActionIcons = new Image[BrowserVisibleRows];
         private static readonly Image[] BrowserRowChipIcons = new Image[BrowserVisibleRows];
         private static readonly Image[] BrowserRowChipStatusIcons = new Image[BrowserVisibleRows];
         private static readonly Button[] BrowserRowButtons = new Button[BrowserVisibleRows];
@@ -210,7 +197,6 @@ namespace ItemIntelligence
         {
             _priceBlockItemId = string.Empty;
             _priceBlockFrame = -1000;
-            _slowTooltipWarnings = 0;
             _itemPointerScope = false;
             _itemPointerScopeFrame = -1000;
             _itemPointerScopeItemId = string.Empty;
@@ -243,7 +229,7 @@ namespace ItemIntelligence
             BrowserSearchNormalizedNames.Clear();
             BrowserSearchNormalizedIds.Clear();
             BrowserSearchCurrentMatches.Clear();
-            _browserSearchResultPage = 0;
+            _browserSearchScrollOffset = 0;
             _browserSearchLastNormalizedQuery = string.Empty;
             _browserSearchWarmupIndex = 0;
             _browserSearchWarmupActive = false;
@@ -253,15 +239,12 @@ namespace ItemIntelligence
             _browserSearchLastResultLanguage = string.Empty;
             _browserSearchLastResultCount = 0;
             _browserSearchCaptureLogged = false;
-            _browserBackspaceWasDown = false;
-            _browserNextBackspaceRepeat = 0f;
-            _browserWin32BackspaceUnavailable = false;
             BrowserCatalogCategoryByItem.Clear();
             ResetBrowserAdvancedSearchIndexState();
             BrowserCatalogFilteredItemIds.Clear();
             _browserCatalogOpen = false;
             _browserCatalogCategory = 0;
-            _browserCatalogPage = 0;
+            _browserCatalogScrollOffset = 0;
             _browserCatalogScope = BrowserCatalogScope.All;
             _browserCatalogDataFilter = BrowserCatalogDataFilter.Any;
             _browserCatalogSortMode = BrowserCatalogSortMode.Name;

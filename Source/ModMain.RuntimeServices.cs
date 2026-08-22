@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -105,7 +105,7 @@ namespace ItemIntelligence
                         ", Factions=" + (_factionsState != null) +
                         ", Difficulty=" + (_difficultyState != null) +
                         ", CustomResources=" + (_customResources != null) + ".");
-                        QueueTest3RowsRefresh(); // QII1739T3_MAGNUM_REFRESH_STATE
+                        QueueBrowserRowsRefresh(); // QII_MAGNUM_REFRESH_STATE
                 }
             }
             catch { }
