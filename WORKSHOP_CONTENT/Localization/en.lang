@@ -18,8 +18,8 @@ catalog.favorite.short	FAV
 catalog.label.data	DATA
 catalog.data.any	ANY
 catalog.data.recipes	RECIPES
-catalog.data.sources	SOURCES
-catalog.data.consumers	CONSUMERS
+catalog.data.sources	STATION PRODUCES
+catalog.data.consumers	STATION USES
 catalog.data.magnum	MAGNUM
 catalog.data.factions	FACTIONS
 catalog.data.ammo	AMMO
@@ -505,11 +505,12 @@ ui.per_roll	PER ROLL
 ui.final_chance	FINAL
 ui.mode_damage_per_ap_default	Damage/AP (default)
 loot.note.unknown_container_rolls	? = roll count is not known exactly; total chance is not calculated.
-ui.station_economy_recipe_output	STATION ECONOMY — RECIPE OUTPUT
-ui.station_economy_recipe_input	STATION ECONOMY — RECIPE INPUT
-ui.economy_output	OUTPUT
-ui.economy_input	INPUT
-ui.economy_recipe	ECONOMY RECIPE
+ui.station_production_produced_from	STATION PRODUCTION — PRODUCED FROM
+ui.station_production_used_to_produce	STATION PRODUCTION — USED TO PRODUCE
+ui.station_production_note	Station production recipe. Active only on stations whose current production set includes it.
+ui.station_production_output	OUTPUT
+ui.station_production_input	INPUT
+ui.station_production_recipe	STATION RECIPE
 ui.no_active_faction_reward_in_current_save	This item is only in reward pools of factions unavailable in this save.
 loot.note.enemy_bonus_separate	Marauder and Organization do not change enemy-equipment chance; they add separate corpse-loot rolls.
 ui.mode_critical_damage_per_ap_default	Crit Damage/AP (default)

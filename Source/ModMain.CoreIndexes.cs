@@ -88,14 +88,17 @@ namespace ItemIntelligence
                     ref failures);
             }
 
-            if (_compatTrade)
+            if (_compatRecipes)
             {
                 RunCompatibilityIndexStage(
-                    "BarterReceipts",
-                    "Trade",
-                    delegate { BuildBarterIndex(); },
+                    "StationProduction",
+                    "Recipes",
+                    delegate { BuildStationProductionIndex(); },
                     ref failures);
+            }
 
+            if (_compatTrade)
+            {
                 RunCompatibilityIndexStage(
                     "SpaceObjects",
                     "Trade",
@@ -114,8 +117,8 @@ namespace ItemIntelligence
                       ", MagnumItems=" + MagnumUses.Count +
                       ", UsedIn=" + UsedInRecipes.Count +
                       ", CraftedFrom=" + CraftedFromRecipes.Count +
-                      ", BarterConsumers=" + BarterConsumers.Count +
-                      ", BarterSources=" + BarterSources.Count +
+                      ", StationProdInputs=" + StationProductionByInputItem.Count +
+                      ", StationProdOutputs=" + StationProductionByOutputItem.Count +
                       ", " + DescribeFeatureWarmupStates() +
                       ", partialFailures=" + failures + ".");
 
@@ -213,6 +216,7 @@ namespace ItemIntelligence
             RecipesById.Clear();
 
             ResetDisassemblyIndexState();
+            ResetStationProductionIndexState();
             ResetTradeIndexState();
             ResetAmmoWeaponIndexState();
 
@@ -416,7 +420,7 @@ namespace ItemIntelligence
             }
         }
 
-        private static void BuildBarterIndex()
+        private static void BuildStationProductionIndex()
         {
             object collection = GetStaticMember(typeof(Data), "BarterReceipts");
             if (collection == null) return;
@@ -431,20 +435,21 @@ namespace ItemIntelligence
                     "barter_" + i.ToString(CultureInfo.InvariantCulture));
                 Dictionary<string, int> inputs = ExtractItemQuantities(GetMember(record, "InputItems"));
                 Dictionary<string, int> outputs = ExtractItemQuantities(GetMember(record, "OutputItems"));
-                // BarterReceipt is used by the station economy/production system.
-                // Only the exact InputItems/OutputItems contract is indexed; broad
-                // name-based directional reflection is intentionally not used.
+                // Despite the historical BarterReceipt name, vanilla StationSystem uses
+                // these records as station production recipes. Only exact InputItems /
+                // OutputItems are indexed; CurrentReceipts decides which recipes a live
+                // station actually runs.
                 // Keep only stable item ids in the long-lived core index. Localized
                 // names belong to presentation and must follow an in-session language
                 // switch instead of being frozen when this index was built.
                 if (inputs.Count == 0 || outputs.Count == 0) continue;
 
                 foreach (KeyValuePair<string, int> input in inputs)
-                    AddToList(BarterConsumers, input.Key,
-                        new TradeRelation(id, input.Value, outputs));
+                    AddToList(StationProductionByInputItem, input.Key,
+                        new StationProductionRelation(id, input.Value, outputs));
                 foreach (KeyValuePair<string, int> output in outputs)
-                    AddToList(BarterSources, output.Key,
-                        new TradeRelation(id, output.Value, inputs));
+                    AddToList(StationProductionByOutputItem, output.Key,
+                        new StationProductionRelation(id, output.Value, inputs));
             }
         }
     }

@@ -1,4 +1,4 @@
-# Item Intelligence v1.7.41.1 stable release builder/stager.
+﻿# Item Intelligence v1.7.41.3 stable release builder/stager.
 # Builds RELEASE and prepares the existing PUBLIC Workshop payload.
 # It does not upload to Steam and does not overwrite the live subscribed Workshop copy.
 
@@ -14,7 +14,7 @@ if (-not (Test-Path -LiteralPath $buildScript -PathType Leaf)) {
     throw 'BUILD_AND_STAGE.ps1 not found.'
 }
 
-Write-Host 'Item Intelligence v1.7.41.1 - Stable Release' -ForegroundColor Cyan
+Write-Host 'Item Intelligence v1.7.41.3 - Stable Release' -ForegroundColor Cyan
 Write-Host ('Builds RELEASE and stages the existing PUBLIC Workshop item ' + $PublicWorkshopId + '.') -ForegroundColor DarkGray
 Write-Host 'No Steam upload is performed automatically.' -ForegroundColor DarkGray
 Write-Host ''
@@ -38,7 +38,7 @@ Write-Host ('Stage: ' + $stage) -ForegroundColor Green
 Write-Host ('DLL SHA256: ' + $hash) -ForegroundColor Green
 Write-Host ''
 Write-Host 'Expected runtime marker:' -ForegroundColor Yellow
-Write-Host '[ItemIntelligence] ACTIVE VERSION 1.7.41.1 (StableRelease17411).' -ForegroundColor Cyan
+Write-Host '[ItemIntelligence] ACTIVE VERSION 1.7.41.3 (StableRelease17413).' -ForegroundColor Cyan
 Write-Host ''
 Write-Host 'Publish the prepared stage to the EXISTING public Workshop item with:' -ForegroundColor Yellow
 Write-Host ('mod_updateworkshopitem ' + $PublicWorkshopId + ' ' + $stage + ' FALSE') -ForegroundColor Cyan

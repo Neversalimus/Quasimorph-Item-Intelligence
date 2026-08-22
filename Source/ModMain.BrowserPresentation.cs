@@ -1278,6 +1278,8 @@ namespace ItemIntelligence
 
             List<RecipeUse> used = null;
             List<RecipeDef> crafted = null;
+            List<StationProductionRelation> stationProduced = null;
+            List<StationProductionRelation> stationUsed = null;
             List<DisassemblyOutput> disassembly = null;
             List<DisassemblySource> disassemblySources = null;
 
@@ -1297,6 +1299,22 @@ namespace ItemIntelligence
                 crafted != null &&
                 crafted.Count > 0;
 
+            bool hasStationProduced =
+                recipesAvailable &&
+                StationProductionByOutputItem.TryGetValue(
+                    relationId,
+                    out stationProduced) &&
+                stationProduced != null &&
+                stationProduced.Count > 0;
+
+            bool hasStationUsed =
+                recipesAvailable &&
+                StationProductionByInputItem.TryGetValue(
+                    relationId,
+                    out stationUsed) &&
+                stationUsed != null &&
+                stationUsed.Count > 0;
+
             bool hasDisassembly =
                 disassemblyAvailable &&
                 DisassemblyOutputsByItem.TryGetValue(
@@ -1314,7 +1332,7 @@ namespace ItemIntelligence
                 disassemblySources != null &&
                 disassemblySources.Count > 0;
 
-            if (!hasUsed && !hasCrafted && !hasDisassembly && !hasDisassemblySources)
+            if (!hasUsed && !hasCrafted && !hasStationProduced && !hasStationUsed && !hasDisassembly && !hasDisassemblySources)
             {
                 if (_disassemblyWarmupActive)
                 {
@@ -1458,6 +1476,27 @@ namespace ItemIntelligence
                     DisassemblySource source = orderedSources[i];
                     if (source == null || string.IsNullOrEmpty(source.ItemId)) continue;
                     BrowserLines.Add(BrowserLine.Item(source.ItemId, FormatDisassemblySource(source, ru)));
+                }
+            }
+
+            if (hasStationProduced || hasStationUsed)
+            {
+                BrowserLines.Add(BrowserLine.Note(Ui("ui.station_production_note")));
+
+                if (hasStationProduced)
+                {
+                    BrowserLines.Add(BrowserLine.Section(
+                        Ui("ui.station_production_produced_from") + "  •  " +
+                        stationProduced.Count.ToString(CultureInfo.InvariantCulture)));
+                    AddBrowserStationProductionRelations(stationProduced, true);
+                }
+
+                if (hasStationUsed)
+                {
+                    BrowserLines.Add(BrowserLine.Section(
+                        Ui("ui.station_production_used_to_produce") + "  •  " +
+                        stationUsed.Count.ToString(CultureInfo.InvariantCulture)));
+                    AddBrowserStationProductionRelations(stationUsed, false);
                 }
             }
         }

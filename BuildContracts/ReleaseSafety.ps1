@@ -201,16 +201,6 @@ if ($Mode -eq 'TEST') {
     $targetWorkshopId = $PublicWorkshopId
 }
 
-$installText = Read-Utf8Strict -Path (Join-Path $root 'Install.ps1')
-$releaseInstallerTokens = @('$PublicWorkshopId = ''3780078201''','$buildArguments = @{ Mode = ''RELEASE''; WorkshopStage = $stage }','$stage = ''C:\QM_Workshop\ItemIntelligence''','STABLE RELEASE BUILD + STAGING OK.','mod_updateworkshopitem ')
-foreach ($token in $releaseInstallerTokens) {
-    if ($installText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "RELEASE installer safety token missing: $token" }
-}
-$forbiddenReleaseInstallerTokens = @('Mode = ''TEST''','Find-LiveDevWorkshopFolder','ItemIntelligence_DEV','.qii_install_tmp')
-foreach ($token in $forbiddenReleaseInstallerTokens) {
-    if ($installText.IndexOf($token,[StringComparison]::Ordinal) -ge 0) { throw "RELEASE installer regression: DEV/live-install token present: $token" }
-}
-
 foreach ($token in @(
     'public static partial class ModMain',
     'ReadOnlyKnowledgePolicy = true',

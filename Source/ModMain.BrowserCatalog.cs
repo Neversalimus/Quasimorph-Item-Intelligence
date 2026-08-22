@@ -339,8 +339,8 @@ namespace ItemIntelligence
             switch (filter)
             {
                 case BrowserCatalogDataFilter.Recipes: return _compatRecipes && ShowRecipes;
-                case BrowserCatalogDataFilter.Sources: return _compatTrade && ShowSources;
-                case BrowserCatalogDataFilter.Consumers: return _compatTrade && ShowTradeInformation;
+                case BrowserCatalogDataFilter.Sources: return _compatRecipes && ShowRecipes;
+                case BrowserCatalogDataFilter.Consumers: return _compatRecipes && ShowRecipes;
                 case BrowserCatalogDataFilter.Magnum: return _compatMagnum && ShowMagnumUses;
                 case BrowserCatalogDataFilter.Factions: return _compatFactions;
                 case BrowserCatalogDataFilter.Ammo: return _compatAmmo && ShowAmmoRelations;
@@ -356,11 +356,13 @@ namespace ItemIntelligence
             {
                 case BrowserCatalogDataFilter.Recipes:
                     return GetListCount(UsedInRecipes, relationId) > 0 ||
-                           GetListCount(CraftedFromRecipes, relationId) > 0;
+                           GetListCount(CraftedFromRecipes, relationId) > 0 ||
+                           GetListCount(StationProductionByOutputItem, relationId) > 0 ||
+                           GetListCount(StationProductionByInputItem, relationId) > 0;
                 case BrowserCatalogDataFilter.Sources:
-                    return GetListCount(BarterSources, itemId) > 0;
+                    return GetListCount(StationProductionByOutputItem, relationId) > 0;
                 case BrowserCatalogDataFilter.Consumers:
-                    return GetListCount(BarterConsumers, itemId) > 0;
+                    return GetListCount(StationProductionByInputItem, relationId) > 0;
                 case BrowserCatalogDataFilter.Magnum:
                     return HasVisibleMagnumUses(itemId);
                 case BrowserCatalogDataFilter.Factions:

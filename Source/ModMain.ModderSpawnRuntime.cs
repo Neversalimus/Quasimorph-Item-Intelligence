@@ -203,7 +203,7 @@ namespace ItemIntelligence
 
             // On audited 1.0.3 bypass the console command availability gate and use
             // vanilla CreateForInventory -> MagnumCargoSystem.AddCargo; keep legacy fallback.
-            if (IsCurrent103FeatureAssembly() && TrySpawnModderItemToCargoViaSystem103(cargo, itemId))
+            if (IsCurrent103CargoSpawnAssembly() && TrySpawnModderItemToCargoViaSystem103(cargo, itemId))
             {
                 statusKey = "ui.modder_spawn_cargo_success";
                 Debug.Log("[ItemIntelligence][ModderMode] Added one item through audited 1.0.3 cargo API: " + itemId + ".");

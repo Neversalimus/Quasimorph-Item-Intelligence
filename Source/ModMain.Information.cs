@@ -17,10 +17,10 @@ namespace ItemIntelligence
                 (GetVisibleMagnumRequired(itemId) > 0 || HasVisibleMagnumUses(itemId))) return true;
             if (ShowRecipes &&
                 (GetListCount(UsedInRecipes, relationId) > 0 ||
-                 GetListCount(CraftedFromRecipes, relationId) > 0)) return true;
+                 GetListCount(CraftedFromRecipes, relationId) > 0 ||
+                 GetListCount(StationProductionByOutputItem, relationId) > 0 ||
+                 GetListCount(StationProductionByInputItem, relationId) > 0)) return true;
             if (GetDisassemblyOutputCount(itemId) > 0) return true;
-            if (ShowSources && GetListCount(BarterSources, itemId) > 0) return true;
-            if (ShowTradeInformation && GetListCount(BarterConsumers, itemId) > 0) return true;
             if (ShowAmmoRelations)
             {
                 if (WeaponsByItem.ContainsKey(relationId)) return true;

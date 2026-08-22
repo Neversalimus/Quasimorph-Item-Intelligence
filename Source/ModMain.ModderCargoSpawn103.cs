@@ -9,7 +9,8 @@ namespace ItemIntelligence
     /// <summary>
     /// Exact Quasimorph 1.0.3 ship-cargo spawn boundary for Modder Mode.
     /// Uses the same CreateForInventory -> MagnumCargoSystem.AddCargo call shape
-    /// observed in vanilla space scenarios; no developer-console availability gate.
+    /// observed in vanilla space scenarios. The caller owns the audited-build gate;
+    /// this mutation boundary independently revalidates the exact AddCargo signature.
     /// </summary>
     public static partial class ModMain
     {

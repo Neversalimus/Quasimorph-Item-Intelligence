@@ -2,7 +2,7 @@
 
 **Item Intelligence** is an in-game item browser and reference tool for **Quasimorph**.
 
-Current stable version: **v1.7.41.1**
+Current stable version: **v1.7.41.3**
 
 Steam Workshop: https://steamcommunity.com/sharedfiles/filedetails/?id=3780078201
 
@@ -11,43 +11,41 @@ Steam Workshop: https://steamcommunity.com/sharedfiles/filedetails/?id=378007820
 - Fast item inspector opened with **F2**.
 - Search, catalog, favorites, history and advanced filters.
 - Smart item overview, recipes, production relationships and Magnum requirements.
+- Canonical disassembly relationships and reverse disassembly sources.
+- Station-production relationships shown under Recipes, separate from live Trade data.
 - Trade information with direct station navigation to the starmap.
-- Quasimorph 1.0.3 stock-sensitive trade pricing, including first-to-last unit price movement and exact batch totals.
-- Two Trade layouts: the new station-card design by default, with the previous compact table available from MCM.
+- Quasimorph 1.0.3 stock-sensitive pricing with first-to-last unit movement and exact batch totals on audited builds.
+- Two Trade layouts: station cards by default and the previous compact table via MCM.
 - Loot sources grouped by containers, general placement, enemies, faction rewards, mission pools and special sources.
-- Container drop-chance estimates based on verified weighted pools, roll counts, Tech context and supported loot modifiers.
+- Container chance estimates based on verified weighted pools, roll counts, Tech context and supported loot modifiers.
 - Manual loot-modifier calculator for Marauder / Organization / Field Medic contexts.
 - Faction technology information.
-- Weapon/ammo relationships and detailed fire-mode tooltips, including Damage/AP and Critical Damage/AP where the vanilla data contract is provable.
-- Disassembly relationships and chip/data unlock information.
+- Weapon/ammo relationships and detailed fire-mode tooltips, including Damage/AP and Critical Damage/AP where provable.
 - English and Russian localization.
-- Optional **Modder Mode**, including audited item creation for ship cargo and mission clone inventory. Ordinary mode remains inspection-only.
+- Optional **Modder Mode** with audited item creation for ship cargo and mission clone inventory.
 
-## v1.7.41.1
+## v1.7.41.3
 
-v1.7.41.1 is the stable Quasimorph 1.0.3 compatibility / Trade / Loot polish release.
+Compatibility hotfix for Quasimorph `1.0.3.578s.024ad60`.
 
-Highlights:
-
-- adapted Trade presentation to Quasimorph 1.0.3 per-unit stock-dependent repricing;
-- added exact batch totals and first-to-last unit price movement instead of presenting one misleading static price;
-- added a new readable two-line station card and an MCM option to restore the previous compact Trade layout;
-- clarified station stock as **IN STOCK / ОСТАТОК** and kept mission and travel information separate;
-- fixed station consumer presentation to stay aligned with the verified vanilla `Station.ConsumableItems` contract;
-- fixed Modder Mode item creation on Quasimorph 1.0.3 using the audited cargo API rather than relying on an unavailable console command;
-- polished and shortened long player-facing explanations, with text-safety contracts to prevent oversized explanatory strings from returning;
-- improved Loot/container chance presentation, including localized `≈ min–max%` formatting and current container subtype resolution;
-- retained feature-owned compatibility gates, architecture budgets, localization parity and fail-closed exact calculations.
+- Restored exact Trade prices after the game hotfix changed `Assembly-CSharp.dll`.
+- Audited the new Trade IL against `1.0.3.577`; the authoritative price, transaction and vanilla Trade-window paths used by Item Intelligence remain unchanged.
+- Added a dedicated Trade-only compatibility gate for the new Assembly SHA instead of broadening unrelated exact features.
+- Restored Modder Mode ship-cargo item spawning on the hotfix build through a separate cargo-only compatibility gate.
+- Cargo mutation still revalidates the exact vanilla `MagnumCargoSystem.AddCargo` signature before use.
+- Preserved the v1.7.41.2 Station Production / Recipes cleanup and Previous Trade Layout improvements.
 
 Stable runtime marker:
 
-`[ItemIntelligence] ACTIVE VERSION 1.7.41.1 (StableRelease17411).`
+`[ItemIntelligence] ACTIVE VERSION 1.7.41.3 (StableRelease17413).`
 
-Validated runtime game build: Quasimorph `1.0.3.577s.887ffe7`.
+Validated runtime game build: Quasimorph `1.0.3.578s.024ad60`.
 
-Validated Quasimorph 1.0.3 Assembly-CSharp SHA-256:
+Validated hotfix Assembly-CSharp SHA-256 for Trade and cargo-spawn feature gates:
 
-`FE68E4355D4ED9CBAB7F8B1BA7717DBC1CC3FD749D0D11A644A9A3DB5EAB478F`
+`A38C4D993C9BF60D0DDE0EDD348F201C97574F907808417A33C8A20F4772E9C1`
+
+Compatibility remains feature-scoped: recognizing this SHA for Trade/cargo does not automatically certify unrelated exact Loot or Scavenger calculations.
 
 ## Installation
 
@@ -67,8 +65,8 @@ Compiled binaries are intentionally kept out of Git history and are distributed 
 
 ## Compatibility and safety
 
-Exact numerical claims are guarded by feature-owned compatibility contracts. When a future game build cannot be verified, affected exact calculations are designed to fail closed rather than silently present unsupported numbers.
+Exact numerical claims are guarded by feature-owned compatibility contracts. When a future game build cannot be verified, affected exact calculations fail closed rather than silently presenting unsupported numbers. Presentation-only preferences remain independent from exact-math SHA gates.
 
-Modder Mode intentionally exposes save-mutating item creation actions and is disabled unless the player explicitly enables it.
+Modder Mode intentionally exposes save-mutating item creation actions and is disabled unless explicitly enabled.
 
 Item Intelligence is a third-party mod and is not affiliated with Magnum Scriptum.

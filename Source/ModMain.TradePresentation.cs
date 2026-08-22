@@ -19,44 +19,66 @@ namespace ItemIntelligence
             MarkTradeMissionCountdownUiRendered();
             int sellToPlayerCount = TradeSellEntries.Count;
             int buyFromPlayerCount = TradeBuyEntries.Count;
-            bool current103 = IsCurrent103FeatureAssembly();
-            bool cards103 = current103 && !UsePreviousTradeLayout;
-            bool table103 = current103 && UsePreviousTradeLayout;
+            bool exact103Pricing = IsCurrent103TradeAssembly();
+            bool previousLayout = UsePreviousTradeLayout;
+            LogTradeLayoutDiagnostic(exact103Pricing, previousLayout);
 
-            if (current103 && ((ShowSources && sellToPlayerCount > 0) || (ShowTradeInformation && buyFromPlayerCount > 0)))
-                BrowserLines.Add(BrowserLine.FullNote(Ui(table103 ? "ui.trade_previous_note" : "ui.trade_repricing_note")));
+            // Presentation choice is deliberately independent from the exact-pricing build gate.
+            // The build gate controls only which price math we are allowed to claim as exact.
+            if (exact103Pricing && ((ShowSources && sellToPlayerCount > 0) || (ShowTradeInformation && buyFromPlayerCount > 0)))
+                BrowserLines.Add(BrowserLine.FullNote(Ui(previousLayout ? "ui.trade_previous_note" : "ui.trade_repricing_note")));
 
             if (ShowSources && sellToPlayerCount > 0)
             {
                 BrowserLines.Add(BrowserLine.FullSection(Ui("ui.buy_at_stations") + "  •  " + sellToPlayerCount.ToString(CultureInfo.InvariantCulture)));
-                if (table103)
-                    BrowserLines.Add(BrowserLine.TradeHeader(Ui("ui.station"), Ui("ui.next"), Ui("ui.batch"), Ui("ui.stock"), Ui("ui.mission"), Ui("ui.travel")));
-                else if (!cards103)
-                    BrowserLines.Add(BrowserLine.TradeHeader(Ui("ui.station"), Ui("ui.price"), Ui("ui.stock"), Ui("ui.mission"), Ui("ui.travel")));
+                if (previousLayout)
+                {
+                    if (exact103Pricing)
+                        BrowserLines.Add(BrowserLine.TradeHeader(Ui("ui.station"), Ui("ui.next"), Ui("ui.batch"), Ui("ui.stock"), Ui("ui.mission"), Ui("ui.travel")));
+                    else
+                        BrowserLines.Add(BrowserLine.TradeHeader(Ui("ui.station"), Ui("ui.price"), Ui("ui.stock"), Ui("ui.mission"), Ui("ui.travel")));
+                }
 
                 for (int i = 0; i < TradeSellEntries.Count; i++)
                 {
                     LiveMarketEntry entry = TradeSellEntries[i];
-                    if (cards103) AddTradeStationCard103(entry, false);
-                    else if (table103) AddTradeStationTable103(entry, false);
-                    else AddLegacyTradeStationRow(entry, false);
+                    if (previousLayout)
+                    {
+                        if (exact103Pricing) AddTradeStationTable103(entry, false);
+                        else AddLegacyTradeStationRow(entry, false);
+                    }
+                    else
+                    {
+                        if (exact103Pricing) AddTradeStationCard103(entry, false);
+                        else AddTradeStationCardCompat(entry, false);
+                    }
                 }
             }
 
             if (ShowTradeInformation && buyFromPlayerCount > 0)
             {
                 BrowserLines.Add(BrowserLine.FullSection(Ui("ui.sell_to_stations") + "  •  " + buyFromPlayerCount.ToString(CultureInfo.InvariantCulture)));
-                if (table103)
-                    BrowserLines.Add(BrowserLine.TradeHeader(Ui("ui.station"), Ui("ui.next"), Ui("ui.batch"), string.Empty, Ui("ui.mission"), Ui("ui.travel")));
-                else if (!cards103)
-                    BrowserLines.Add(BrowserLine.TradeHeader(Ui("ui.station"), Ui("ui.price"), string.Empty, Ui("ui.mission"), Ui("ui.travel")));
+                if (previousLayout)
+                {
+                    if (exact103Pricing)
+                        BrowserLines.Add(BrowserLine.TradeHeader(Ui("ui.station"), Ui("ui.next"), Ui("ui.batch"), string.Empty, Ui("ui.mission"), Ui("ui.travel")));
+                    else
+                        BrowserLines.Add(BrowserLine.TradeHeader(Ui("ui.station"), Ui("ui.price"), string.Empty, Ui("ui.mission"), Ui("ui.travel")));
+                }
 
                 for (int i = 0; i < TradeBuyEntries.Count; i++)
                 {
                     LiveMarketEntry entry = TradeBuyEntries[i];
-                    if (cards103) AddTradeStationCard103(entry, true);
-                    else if (table103) AddTradeStationTable103(entry, true);
-                    else AddLegacyTradeStationRow(entry, true);
+                    if (previousLayout)
+                    {
+                        if (exact103Pricing) AddTradeStationTable103(entry, true);
+                        else AddLegacyTradeStationRow(entry, true);
+                    }
+                    else
+                    {
+                        if (exact103Pricing) AddTradeStationCard103(entry, true);
+                        else AddTradeStationCardCompat(entry, true);
+                    }
                 }
             }
 
@@ -69,16 +91,10 @@ namespace ItemIntelligence
             else if (_marketScanComplete && MarketStations.Count == 0)
                 BrowserLines.Add(BrowserLine.Note(Ui("ui.station_list_is_unavailable_from_the_current_gam")));
 
-            List<TradeRelation> sources = new List<TradeRelation>();
-            List<TradeRelation> consumers = new List<TradeRelation>();
-            List<TradeRelation> list;
-            if (ShowSources && BarterSources.TryGetValue(itemId, out list) && list != null) sources.AddRange(list);
-            if (ShowTradeInformation && BarterConsumers.TryGetValue(itemId, out list) && list != null) consumers.AddRange(list);
-
-            if (sources.Count > 0) { BrowserLines.Add(BrowserLine.Section(Ui("ui.station_economy_recipe_output"))); AddBrowserBarterRelations(sources, true); }
-            if (consumers.Count > 0) { BrowserLines.Add(BrowserLine.Section(Ui("ui.station_economy_recipe_input"))); AddBrowserBarterRelations(consumers, false); }
-            if (BrowserLines.Count == 0 && (ShowSources || ShowTradeInformation)) BrowserLines.Add(BrowserLine.Note(Ui("ui.no_trade_relationships_found_yet")));
+            if (BrowserLines.Count == 0 && (ShowSources || ShowTradeInformation))
+                BrowserLines.Add(BrowserLine.Note(Ui("ui.no_trade_relationships_found_yet")));
         }
+
 
         private static void AddTradeStationCard103(LiveMarketEntry entry, bool stationBuys)
         {

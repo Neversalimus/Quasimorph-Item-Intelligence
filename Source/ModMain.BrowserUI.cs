@@ -778,8 +778,8 @@ namespace ItemIntelligence
                         ". Magnum=" + GetListCount(MagnumUses, itemId) +
                         ", UsedIn=" + GetListCount(UsedInRecipes, itemId) +
                         ", CraftedFrom=" + GetListCount(CraftedFromRecipes, itemId) +
-                        ", BarterSources=" + GetListCount(BarterSources, itemId) +
-                        ", BarterConsumers=" + GetListCount(BarterConsumers, itemId) + ".");
+                        ", StationProdOutputs=" + GetListCount(StationProductionByOutputItem, ResolveStaticRelationItemId(itemId)) +
+                        ", StationProdInputs=" + GetListCount(StationProductionByInputItem, ResolveStaticRelationItemId(itemId)) + ".");
                 }
 
                 Debug.Log("[ItemIntelligence] Browser opened for " + itemId + ".");

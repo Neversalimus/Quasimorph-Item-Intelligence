@@ -16,7 +16,7 @@ foreach ($moduleFile in @(
     'ModMain.LootIndexes.cs','ModMain.LootContainerProfiles.cs','ModMain.LootContainerIcons.cs','ModMain.LootContainerSaveEstimate.cs','ModMain.LootContainerChanceMath.cs',
     'ModMain.LootPresentation.cs','ModMain.LootEnemyPresentation.cs','ModMain.LootGeneralSpawn.cs','ModMain.LootSpecialSources.cs','ModMain.LootRewardSources.cs','ModMain.ItemDropRandomizeMath.cs','ModMain.LootBaronSpecial.cs','ModMain.LootBaronUltimateData.cs','ModMain.LootBaronPactPool.cs','ModMain.LootBaronData.cs','ModMain.OverviewBaronSpecial.cs','ModMain.LootModifiers.cs','ModMain.LootModifierRuntime.cs',
     'ModMain.Configuration.cs','ModMain.CoreIndexes.cs','ModMain.DataAccess.cs','ModMain.FeatureLifecycle.cs','ModMain.CompatibilityFeatureGates.cs',
-    'ModMain.Icons.cs','ModMain.Information.cs','ModMain.Magnum.cs','ModMain.RuntimeServices.cs','ModMain.TradeMissionStatus.cs','ModMain.TradeFreshness.cs','ModMain.TradePresentation.cs','ModMain.TradeBatchPricing103.cs',
+    'ModMain.Icons.cs','ModMain.Information.cs','ModMain.Magnum.cs','ModMain.RuntimeServices.cs','ModMain.TradeMissionStatus.cs','ModMain.TradeFreshness.cs','ModMain.TradePresentation.cs','ModMain.TradeLayoutCompatibility.cs','ModMain.TradeBatchPricing103.cs','ModMain.StationProduction.cs',
     'ModMain.StarmapUiResolution.cs','ModMain.FactionTechnologyNavigation.cs','ModMain.FactionTechnologyPanelResolver.cs','ModMain.ScavengerMissionRewards.cs','ModMain.ScavengerMissionChance.cs','ModMain.ScavengerMissionPoolMath.cs','ModMain.ScavengerMissionPresentation.cs','ModMain.ScavengerMissionTiming.cs','ModMain.BrowserAdvancedSearch.cs','ModMain.ModderMode.cs',
     'ModMain.ModderSpawnRuntime.cs','ModMain.ModderCargoSpawn103.cs','ModMain.ModderSpawnPanel.cs','ModMain.BrowserLinkPresentation.cs')) {
     if (-not (Test-Path -LiteralPath (Join-Path $sourceDir $moduleFile) -PathType Leaf)) {
@@ -168,7 +168,8 @@ if ($coreIndexesLines -gt 650) { throw "Core-index ownership regressed: ModMain.
 if ($informationLines -gt 220) { throw "Information policy regressed: ModMain.Information.cs has $informationLines lines; current requires <= 220." }
 $stateOwnershipContracts = @{
     'ModMain.Starmap.cs' = @('_pendingStarmapTargetId','StarmapSourceViewVisualStates')
-    'ModMain.Trade.cs' = @('_marketItemId','MarketStations','MarketFactionRelations','BarterSources','BarterConsumers','_stationsState','_stationSystem','_tradeSystem','_worldPricesSystem','_itemsPrices','_marketEmptyRetryCooldown','_stationSchemaLogged')
+    'ModMain.Trade.cs' = @('_marketItemId','MarketStations','MarketFactionRelations','_stationsState','_stationSystem','_tradeSystem','_worldPricesSystem','_itemsPrices','_marketEmptyRetryCooldown','_stationSchemaLogged')
+    'ModMain.StationProduction.cs' = @('StationProductionByInputItem','StationProductionByOutputItem')
     'ModMain.Factions.cs' = @('RuntimeFactionsById','FactionTechUnlocksByItem','_secretDataSelectedFactionId','_secretDataContractLogged','_factionTradeSchemaLogged','_factionsState','_difficultyState')
     'ModMain.Magnum.cs' = @('_magnumProgression','_magnumLightLookupAttempted','_runtimeMagnumIndexBuilt','MagnumUses')
     'ModMain.RuntimeServices.cs' = @('_customResources','_runtimeResolveOwnerTypes','_runtimeFallbackResolveActive','_stateServicesResolved')
@@ -253,7 +254,7 @@ $runtimeDecompositionContracts = @{
     'ModMain.DataAccess.cs' = @('GetStaticMember','GetMember','FindCachedMember','EnumerateData','ExtractKnownItemQuantitiesDeep','ExtractItemQuantities','GetReadableMembers')
     'ModMain.Icons.cs' = @('TryResolveItemSmallIcon','TryResolveCanonicalItemSmallIcon','TryResolveCompositeInventoryIcon','CaptureVanillaItemSlotIcon')
     'ModMain.StarmapUiResolution.cs' = @('FindActiveUnityObject','IsUiObjectActuallyUsable')
-    'ModMain.CoreIndexes.cs' = @('BuildIndexesSafe','RunIndexStage','EnsureRuntimeIndexesReady','BuildSpaceObjectIndex','ClearIndexes','BuildItemCoverageIndex','IndexItemRecords','BuildMagnumIndex','AddMagnumUseUnique','BuildRecipeIndex','BuildBarterIndex')
+    'ModMain.CoreIndexes.cs' = @('BuildIndexesSafe','RunIndexStage','EnsureRuntimeIndexesReady','BuildSpaceObjectIndex','ClearIndexes','BuildItemCoverageIndex','IndexItemRecords','BuildMagnumIndex','AddMagnumUseUnique','BuildRecipeIndex','BuildStationProductionIndex')
     'ModMain.Information.cs' = @('HasInspectorData','HasVisibleMagnumUses','GetVisibleMagnumRequired','GetMagnumSnapshot')
 }
 foreach ($moduleName in $runtimeDecompositionContracts.Keys) {
@@ -752,9 +753,12 @@ $tradeText = Get-Content -LiteralPath $tradePath -Raw
 $configurationText = Get-Content -LiteralPath (Join-Path $sourceDir 'ModMain.Configuration.cs') -Raw
 # Feature-owned Trade presentation/recipe clarity tokens are validated by TradeArchitecture.ps1.
 # Keep this module focused on cross-feature ownership and retired-symbol guards.
-if ($runtimeText -match '\bclass\s+TradeRelation\b' -or
-    $tradeText -notmatch '\bclass\s+TradeRelation\b') {
-    throw 'Trade ownership regression: TradeRelation must remain owned by ModMain.Trade.cs.'
+$stationProductionPath = Join-Path $sourceDir 'ModMain.StationProduction.cs'
+$stationProductionText = Get-Content -LiteralPath $stationProductionPath -Raw
+if ($runtimeText -match '\bclass\s+StationProductionRelation\b' -or
+    $tradeText -match '\bclass\s+StationProductionRelation\b' -or
+    $stationProductionText -notmatch '\bclass\s+StationProductionRelation\b') {
+    throw 'Station production ownership regression: StationProductionRelation must remain owned by ModMain.StationProduction.cs.'
 }
 if ($runtimeText.IndexOf('GetUniqueRelationCount(',[StringComparison]::Ordinal) -ge 0 -or
     $informationText.IndexOf('GetUniqueRelationCount(',[StringComparison]::Ordinal) -ge 0 -or
@@ -780,9 +784,9 @@ foreach ($retiredTradeArchitectureToken in @(
     }
 }
 if ($sourceText.IndexOf('JoinLocalizedItemNames',[StringComparison]::Ordinal) -ge 0 -or
-    $coreIndexesText.IndexOf('new TradeRelation(id, input.Value, outputs)',[StringComparison]::Ordinal) -lt 0 -or
-    $coreIndexesText.IndexOf('new TradeRelation(id, output.Value, inputs)',[StringComparison]::Ordinal) -lt 0) {
-    throw 'Trade localization contract failed: Barter index must store stable related item ids, never localized labels.'
+    $coreIndexesText.IndexOf('new StationProductionRelation(id, input.Value, outputs)',[StringComparison]::Ordinal) -lt 0 -or
+    $coreIndexesText.IndexOf('new StationProductionRelation(id, output.Value, inputs)',[StringComparison]::Ordinal) -lt 0) {
+    throw 'Station production localization contract failed: recipe index must store stable related item ids, never localized labels.'
 }
 $interfaceIconConfigurationContracts = @(
     'string.Equals(key, "ShowInterfaceIcons", StringComparison.OrdinalIgnoreCase)',

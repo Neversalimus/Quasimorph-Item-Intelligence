@@ -66,26 +66,8 @@ namespace ItemIntelligence
         private static int _marketRenderThrottle;
         private static int _marketEntriesAtLastRender;
 
-        private static readonly Dictionary<string, List<TradeRelation>> BarterConsumers = new Dictionary<string, List<TradeRelation>>(StringComparer.OrdinalIgnoreCase);
-        private static readonly Dictionary<string, List<TradeRelation>> BarterSources = new Dictionary<string, List<TradeRelation>>(StringComparer.OrdinalIgnoreCase);
         private static readonly Dictionary<string, int> MarketFactionRelations =
             new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-
-        private sealed class TradeRelation
-        {
-            public readonly string Id;
-            public readonly int Quantity;
-            public readonly Dictionary<string, int> RelatedItems;
-
-            public TradeRelation(string id, int quantity, Dictionary<string, int> relatedItems)
-            {
-                Id = id;
-                Quantity = quantity;
-                RelatedItems = relatedItems == null
-                    ? new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase)
-                    : new Dictionary<string, int>(relatedItems, StringComparer.OrdinalIgnoreCase);
-            }
-        }
 
         private static void InitializeTradeSpaceSessionState()
         {
@@ -122,11 +104,10 @@ namespace ItemIntelligence
             MarketFactionRelations.Clear();
         }
 
-        // Trade owns exact barter indexes and live-market relation state.
+        // Trade owns live-market relation state only. Station production recipes have
+        // their own feature owner and are reset with the other immutable core indexes.
         private static void ResetTradeIndexState()
         {
-            BarterConsumers.Clear();
-            BarterSources.Clear();
             MarketFactionRelations.Clear();
         }
 
@@ -150,62 +131,6 @@ namespace ItemIntelligence
                 return raw as IEnumerable;
             }
             catch { return null; }
-        }
-
-        private static void AddBrowserBarterRelations(List<TradeRelation> relations, bool selectedItemIsOutput)
-        {
-            if (relations == null || relations.Count == 0) return;
-
-            List<TradeRelation> unique = new List<TradeRelation>();
-            HashSet<string> seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            for (int i = 0; i < relations.Count; i++)
-            {
-                TradeRelation relation = relations[i];
-                if (relation == null || string.IsNullOrEmpty(relation.Id) || !seen.Add(relation.Id)) continue;
-                unique.Add(relation);
-            }
-            unique.Sort(delegate(TradeRelation a, TradeRelation b)
-            {
-                return string.Compare(a.Id, b.Id, StringComparison.OrdinalIgnoreCase);
-            });
-
-            string selectedVerb = selectedItemIsOutput ? Ui("ui.economy_output") : Ui("ui.economy_input");
-            string relatedVerb = selectedItemIsOutput ? Ui("ui.economy_input") : Ui("ui.economy_output");
-            for (int i = 0; i < unique.Count; i++)
-            {
-                TradeRelation relation = unique[i];
-                int selectedQuantity = Math.Max(1, relation.Quantity);
-                if (unique.Count > 1)
-                {
-                    BrowserLines.Add(BrowserLine.Normal(
-                        Ui("ui.economy_recipe") + " " + (i + 1).ToString(CultureInfo.InvariantCulture),
-                        selectedVerb + "  x" + selectedQuantity.ToString(CultureInfo.InvariantCulture)));
-                }
-                else if (!selectedItemIsOutput || selectedQuantity > 1)
-                {
-                    BrowserLines.Add(BrowserLine.Normal(
-                        Ui("ui.this_item"),
-                        selectedVerb + "  x" + selectedQuantity.ToString(CultureInfo.InvariantCulture)));
-                }
-
-                List<KeyValuePair<string, int>> related =
-                    new List<KeyValuePair<string, int>>(relation.RelatedItems);
-                related.Sort(delegate(KeyValuePair<string, int> a, KeyValuePair<string, int> b)
-                {
-                    int localized = string.Compare(
-                        LocalizeItem(a.Key), LocalizeItem(b.Key), StringComparison.OrdinalIgnoreCase);
-                    if (localized != 0) return localized;
-                    return string.Compare(a.Key, b.Key, StringComparison.OrdinalIgnoreCase);
-                });
-                for (int r = 0; r < related.Count; r++)
-                {
-                    KeyValuePair<string, int> item = related[r];
-                    if (string.IsNullOrEmpty(item.Key)) continue;
-                    BrowserLines.Add(BrowserLine.Item(
-                        item.Key,
-                        relatedVerb + "  x" + Math.Max(1, item.Value).ToString(CultureInfo.InvariantCulture)));
-                }
-            }
         }
 
         private static void StartMarketScan(string itemId, bool forceRefresh = false)
@@ -709,7 +634,7 @@ namespace ItemIntelligence
                 int stationSellBatchQuantity = 0;
                 if (buys && TryGetExactStationPrice(station, itemId, true, out price)) stationBuyPrice = price;
                 if (sells && TryGetExactStationPrice(station, itemId, false, out price)) stationSellPrice = price;
-                if (IsCurrent103FeatureAssembly())
+                if (IsCurrent103TradeAssembly())
                 {
                     stationBuyBatchQuantity = GetTradeBatchSampleQuantity(true, null);
                     stationSellBatchQuantity = GetTradeBatchSampleQuantity(false, sells ? (int?)stock : null);

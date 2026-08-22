@@ -18,8 +18,8 @@ catalog.favorite.short	ИЗБ
 catalog.label.data	ДАННЫЕ
 catalog.data.any	ЛЮБЫЕ
 catalog.data.recipes	РЕЦЕПТЫ
-catalog.data.sources	ИСТОЧНИКИ
-catalog.data.consumers	ПОТРЕБИТЕЛИ
+catalog.data.sources	СТАНЦИЯ ПРОИЗВОДИТ
+catalog.data.consumers	СТАНЦИЯ ИСПОЛЬЗУЕТ
 catalog.data.magnum	MAGNUM
 catalog.data.factions	ФРАКЦИИ
 catalog.data.ammo	ПАТРОНЫ
@@ -505,11 +505,12 @@ ui.per_roll	ЗА БРОСОК
 ui.final_chance	ИТОГО
 ui.mode_damage_per_ap_default	Урон/ОД (станд.)
 loot.note.unknown_container_rolls	? = число бросков точно не определено; общий шанс не рассчитывается.
-ui.station_economy_recipe_output	ЭКОНОМИКА СТАНЦИЙ — ВЫХОД РЕЦЕПТА
-ui.station_economy_recipe_input	ЭКОНОМИКА СТАНЦИЙ — ВХОД РЕЦЕПТА
-ui.economy_output	ВЫХОД
-ui.economy_input	ВХОД
-ui.economy_recipe	ЭКОН. РЕЦЕПТ
+ui.station_production_produced_from	ПРОИЗВОДСТВО СТАНЦИЙ — ИЗ ЧЕГО
+ui.station_production_used_to_produce	ПРОИЗВОДСТВО СТАНЦИЙ — ДЛЯ ЧЕГО
+ui.station_production_note	Рецепт производства станции. Активен только на станциях, где входит в текущий набор производства.
+ui.station_production_output	ВЫХОД
+ui.station_production_input	ВХОД
+ui.station_production_recipe	РЕЦЕПТ СТАНЦИИ
 ui.no_active_faction_reward_in_current_save	Предмет есть только в пулах наград фракций, недоступных в этом сейве.
 loot.note.enemy_bonus_separate	«Мародёр» и «Организация» не меняют шанс экипировки врага; они добавляют отдельные броски с трупа.
 ui.mode_critical_damage_per_ap_default	Крит. урон/ОД (станд.)

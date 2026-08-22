@@ -686,13 +686,13 @@ foreach ($forbidden in @(
     if ($tradeText.IndexOf($forbidden,[StringComparison]::Ordinal) -ge 0) { throw "current retired sell heuristic returned: $forbidden" }
 }
 # Exact price presentation is feature-versioned: 1.0.3 mirrors TradeStationPanel, while the audited 1.0.2 path is retained separately.
-foreach ($token in @('IsCurrent103FeatureAssembly()','TryGetExactStationPanelPrice103','GetMember(preset, "BarterValue")','Mathf.RoundToInt(displayed)','"GetBuyPrice"','Dictionary<string, int> oneItem','{ itemId, 1 }','TryGetLegacyExactStationPrice102','string methodName = stationBuys ? "GetItemSellPrice" : "GetItemBuyPrice";')) {
+foreach ($token in @('IsCurrent103TradeAssembly()','TryGetExactStationPanelPrice103','GetMember(preset, "BarterValue")','Mathf.RoundToInt(displayed)','"GetBuyPrice"','Dictionary<string, int> oneItem','{ itemId, 1 }','TryGetLegacyExactStationPrice102','string methodName = stationBuys ? "GetItemSellPrice" : "GetItemBuyPrice";')) {
     if ($runtimeText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "current exact trade-price token missing: $token" }
 }
 
 # Quasimorph 1.0.3 per-unit stock repricing is shown as one two-line station card:
 # station + first→last marginal price, batch total, travel and mission stay readable.
-foreach ($token in @('TryGetExactStationBatchPrice103','GetTradeBatchSampleQuantity','lastUnitPrice','"GetItemSellTradePoints"','"GetBuyPrice"','TradeStationCard103','FormatTradePriceRange','FormatTradeBuyBatchCard','FormatTradeSellBatchCard','UsePreviousTradeLayout','AddTradeStationTable103','Ui(table103 ? "ui.trade_previous_note" : "ui.trade_repricing_note")')) {
+foreach ($token in @('TryGetExactStationBatchPrice103','GetTradeBatchSampleQuantity','lastUnitPrice','"GetItemSellTradePoints"','"GetBuyPrice"','TradeStationCard103','FormatTradePriceRange','FormatTradeBuyBatchCard','FormatTradeSellBatchCard','UsePreviousTradeLayout','AddTradeStationTable103','Ui(previousLayout ? "ui.trade_previous_note" : "ui.trade_repricing_note")')) {
     if ($sourceText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "Trade 1.0.3 card-price contract token missing: $token" }
 }
 $browserModelsTradeText = [IO.File]::ReadAllText((Join-Path $sourceDir 'ModMain.BrowserModels.cs'))
@@ -735,13 +735,8 @@ if ($browserPresentationText.IndexOf('if (ShowMagnumUses) { EnsureBrowserFaction
 foreach ($token in @('100%" + Ui("ui.roll")','chance + Ui("ui.roll")')) {
     if ($disassemblyText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "current disassembly per-roll token missing: $token" }
 }
-foreach ($token in @(
-    'Ui("ui.station_economy_recipe_output")',
-    'Ui("ui.station_economy_recipe_input")',
-    'Ui("ui.economy_output")',
-    'Ui("ui.economy_input")',
-    'object storage = GetMember(station, "InternalStorage");')) {
-    if ($tradeText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "current trade/economy truthfulness token missing: $token" }
+if ($tradeText.IndexOf('object storage = GetMember(station, "InternalStorage");',[StringComparison]::Ordinal) -lt 0) {
+    throw 'current Trade live-stock truthfulness token missing.'
 }
 foreach ($forbidden in @(
     'ExtractDirectionalTradeItems(',
@@ -756,7 +751,7 @@ if ($runtimeText.IndexOf('Defensive fallback for future versions whose signature
     throw 'current regression: heuristic trade-price fallback returned.'
 }
 foreach ($locText in @($enLocalizationText,$ruLocalizationText,$templateLocalizationText)) {
-    foreach ($token in @('ui.station_economy_recipe_output','ui.station_economy_recipe_input','loot.column.save_estimate','loot.note.container_context_chance','loot.note.container_modifier_unavailable','loot.note.container_save_unavailable')) {
+    foreach ($token in @('ui.station_production_produced_from','ui.station_production_used_to_produce','ui.station_production_note','loot.column.save_estimate','loot.note.container_context_chance','loot.note.container_modifier_unavailable','loot.note.container_save_unavailable')) {
         if ($locText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "current localization token missing: $token" }
     }
 }

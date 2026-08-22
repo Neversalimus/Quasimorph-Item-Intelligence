@@ -12,24 +12,28 @@ if (-not (Test-Path -LiteralPath $buildContractRoot -PathType Container)) {
 $buildContractBudgets = @{
     'Architecture.ps1' = 950
     'TradeArchitecture.ps1' = 120
+    'StationProductionArchitecture.ps1' = 120
     'FeatureSemantics.ps1' = 850
     'GameplayExactness.ps1' = 550
     'MathSafety.ps1' = 180
     'ModderActions.ps1' = 220
     'CodeHygiene.ps1' = 180
     'ReleaseSafety.ps1' = 380
+    'InstallSafety.ps1' = 80
     'TextSafety.ps1' = 120
     'Performance.ps1' = 160
 }
 $buildContractModules = @(
     'Architecture.ps1',
     'TradeArchitecture.ps1',
+    'StationProductionArchitecture.ps1',
     'FeatureSemantics.ps1',
     'GameplayExactness.ps1',
     'MathSafety.ps1',
     'ModderActions.ps1',
     'CodeHygiene.ps1',
     'ReleaseSafety.ps1',
+    'InstallSafety.ps1',
     'TextSafety.ps1',
     'Performance.ps1'
 )
@@ -50,7 +54,7 @@ foreach ($moduleName in $buildContractModules) {
     # Current contracts must explain invariants, not preserve experiment chronology.
     # The current test identity is allowed only where Runtime identity is explicitly checked.
     $contractText = Get-Content -LiteralPath $modulePath -Raw
-    $historyProbe = $contractText.Replace('1.7.41.1','').Replace('StableRelease17411','')
+    $historyProbe = $contractText.Replace('1.7.41.2','').Replace('StableRelease17412','')
     if ($historyProbe -match '(?i)v1\.7\.(?:3[0-9]|40)(?:\.\d+)?(?:-test\d+)?|\btest\d+\b|\bBuildFix\d*\b') {
         throw "Historical test/build provenance returned to current build contracts: $moduleName"
     }

@@ -3,23 +3,27 @@
 # ============================================================================
 $tradeFacadePath = Join-Path $sourceDir 'ModMain.Trade.cs'
 $tradePresentationPath = Join-Path $sourceDir 'ModMain.TradePresentation.cs'
+$tradeLayoutCompatibilityPath = Join-Path $sourceDir 'ModMain.TradeLayoutCompatibility.cs'
 $tradeBatchPricing103Path = Join-Path $sourceDir 'ModMain.TradeBatchPricing103.cs'
 $runtimeTradeOwnerPath = Join-Path $sourceDir 'ModMain.Runtime.cs'
 $tradeRowRendererPath = Join-Path $sourceDir 'ModMain.BrowserRowRendererTrade.cs'
 $configurationPath = Join-Path $sourceDir 'ModMain.Configuration.cs'
-foreach ($requiredPath in @($tradeFacadePath,$tradePresentationPath,$tradeBatchPricing103Path,$runtimeTradeOwnerPath,$tradeRowRendererPath,$configurationPath)) {
+foreach ($requiredPath in @($tradeFacadePath,$tradePresentationPath,$tradeLayoutCompatibilityPath,$tradeBatchPricing103Path,$runtimeTradeOwnerPath,$tradeRowRendererPath,$configurationPath)) {
     if (-not (Test-Path -LiteralPath $requiredPath -PathType Leaf)) { throw "Trade architecture source missing: $requiredPath" }
 }
 $tradeFacadeText = [IO.File]::ReadAllText($tradeFacadePath)
 $tradePresentationText = [IO.File]::ReadAllText($tradePresentationPath)
+$tradeLayoutCompatibilityText = [IO.File]::ReadAllText($tradeLayoutCompatibilityPath)
 $tradeBatchPricing103Text = [IO.File]::ReadAllText($tradeBatchPricing103Path)
 $runtimeTradeOwnerText = [IO.File]::ReadAllText($runtimeTradeOwnerPath)
 $tradeRowRendererText = [IO.File]::ReadAllText($tradeRowRendererPath)
 $configurationText = [IO.File]::ReadAllText($configurationPath)
 $tradePresentationLines = (Get-Content -LiteralPath $tradePresentationPath).Count
+$tradeLayoutCompatibilityLines = (Get-Content -LiteralPath $tradeLayoutCompatibilityPath).Count
 $tradeBatchPricing103Lines = (Get-Content -LiteralPath $tradeBatchPricing103Path).Count
 $tradeRowRendererLines = (Get-Content -LiteralPath $tradeRowRendererPath).Count
 if ($tradePresentationLines -gt 180) { throw "Trade presentation ownership regressed: $tradePresentationLines/180 lines." }
+if ($tradeLayoutCompatibilityLines -gt 100) { throw "Trade layout compatibility ownership regressed: $tradeLayoutCompatibilityLines/100 lines." }
 if ($tradeBatchPricing103Lines -gt 180) { throw "Trade 1.0.3 pricing ownership regressed: $tradeBatchPricing103Lines/180 lines." }
 if ($tradeRowRendererLines -gt 120) { throw "Trade row-renderer ownership regressed: $tradeRowRendererLines/120 lines." }
 
@@ -44,8 +48,18 @@ foreach ($retired in @('TradeHeader6(', 'TradeStation6(')) {
 foreach ($token in @('private static bool UsePreviousTradeLayout = false;', '"UsePreviousTradeLayout"', 'Ui("mcm.trade_previous_layout")')) {
     if ($configurationText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "Trade layout preference contract missing: $token" }
 }
-foreach ($token in @('bool cards103 = current103 && !UsePreviousTradeLayout;', 'bool table103 = current103 && UsePreviousTradeLayout;', 'AddTradeStationTable103', 'ui.trade_previous_note')) {
-    if ($tradePresentationText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "Optional previous Trade layout gate missing: $token" }
+foreach ($token in @('bool exact103Pricing = IsCurrent103TradeAssembly();', 'bool previousLayout = UsePreviousTradeLayout;', 'if (previousLayout)', 'if (exact103Pricing) AddTradeStationTable103', 'else AddLegacyTradeStationRow', 'if (exact103Pricing) AddTradeStationCard103', 'else AddTradeStationCardCompat', 'ui.trade_previous_note')) {
+    if ($tradePresentationText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "Optional previous Trade layout contract missing: $token" }
+}
+# Presentation selection must not be build-gated. Only exact price math is feature-versioned.
+foreach ($forbiddenGate in @('current103 && !UsePreviousTradeLayout', 'current103 && UsePreviousTradeLayout', 'exact103Pricing && UsePreviousTradeLayout')) {
+    if ($tradePresentationText.IndexOf($forbiddenGate,[StringComparison]::Ordinal) -ge 0) { throw "Trade layout preference became build-gated again: $forbiddenGate" }
+}
+foreach ($token in @('LogTradeLayoutDiagnostic(exact103Pricing, previousLayout);')) {
+    if ($tradePresentationText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "Trade layout diagnostic call missing: $token" }
+}
+foreach ($token in @('[ItemIntelligence][TradeLayout] layout=', 'PreviousTradeLayout=', 'Exact103Pricing=', '_lastTradeLayoutDiagnosticSignature', 'PreviousTableCompat', 'CardCompat', 'AddTradeStationCardCompat')) {
+    if ($tradeLayoutCompatibilityText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "Trade layout compatibility diagnostic contract missing: $token" }
 }
 foreach ($token in @('bool sixColumns = !string.IsNullOrEmpty(line.Right);', 'ConfigureLootColumn(right, 553f, 135f, line.Right, 12f);')) {
     if ($tradeRowRendererText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "Previous Trade table geometry contract missing: $token" }
@@ -68,9 +82,18 @@ $sharedRendererPartsText = [IO.File]::ReadAllText((Join-Path $sourceDir 'ModMain
 if ($sharedRendererPartsText.IndexOf('private static void RenderBrowserTradeRow',[StringComparison]::Ordinal) -ge 0) { throw 'Trade row renderer returned to shared BrowserRowRendererParts.cs.' }
 if ($sharedRendererPartsText.IndexOf('BrowserRowKind.TradeStationCard',[StringComparison]::Ordinal) -lt 0) { throw 'Trade card dispatch missing from shared renderer orchestration.' }
 
-foreach ($token in @('AddBrowserBarterRelations(sources, true)','AddBrowserBarterRelations(consumers, false)','Ui("ui.station_economy_recipe_output")','Ui("ui.station_economy_recipe_input")')) {
-    if ($tradePresentationText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "Trade presentation clarity contract missing: $token" }
+# Station-production recipes intentionally do not belong to Trade presentation.
+foreach ($retiredProductionToken in @('AddBrowserBarterRelations','ui.station_economy_recipe_output','ui.station_economy_recipe_input','StationProductionByInputItem','StationProductionByOutputItem')) {
+    if ($tradePresentationText.IndexOf($retiredProductionToken,[StringComparison]::Ordinal) -ge 0 -or
+        $tradeFacadeText.IndexOf($retiredProductionToken,[StringComparison]::Ordinal) -ge 0) {
+        throw "Trade clarity regression: station-production presentation leaked into Trade through $retiredProductionToken"
+    }
 }
-foreach ($token in @('private static void AddBrowserBarterRelations','unique.Sort(delegate(TradeRelation a, TradeRelation b)','new List<KeyValuePair<string, int>>(relation.RelatedItems)')) {
-    if ($tradeFacadeText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "Trade relation-renderer clarity contract missing: $token" }
+# The 1.0.3.578 compatibility hotfix is certified only for Trade. Do not broaden it to unrelated exact feature gates.
+$tradeFeatureGateText = [IO.File]::ReadAllText((Join-Path $sourceDir 'ModMain.CompatibilityFeatureGates.cs'))
+foreach ($token in @('AuditedTradeAssemblySha103Hotfix','A38C4D993C9BF60D0DDE0EDD348F201C97574F907808417A33C8A20F4772E9C1','IsCurrent103TradeAssembly()')) {
+    if ($tradeFeatureGateText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "Trade hotfix compatibility contract missing: $token" }
 }
+$modderSpawnRuntimeText = [IO.File]::ReadAllText((Join-Path $sourceDir 'ModMain.ModderSpawnRuntime.cs'))
+if ($modderSpawnRuntimeText.IndexOf('IsCurrent103TradeAssembly()',[StringComparison]::Ordinal) -ge 0) { throw 'Trade-only hotfix gate leaked into Modder Mode cargo spawning.' }
+

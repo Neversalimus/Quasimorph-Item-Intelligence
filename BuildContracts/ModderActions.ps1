@@ -26,6 +26,7 @@ $browserStateCurrentText = Read-Utf8Strict -Path (Join-Path $sourceDir 'ModMain.
 $interfaceIconsCurrentText = Read-Utf8Strict -Path (Join-Path $sourceDir 'ModMain.InterfaceIcons.cs')
 $runtimeCurrentText = Read-Utf8Strict -Path (Join-Path $sourceDir 'ModMain.Runtime.cs')
 $hardeningCurrentText = Read-Utf8Strict -Path (Join-Path $sourceDir 'ModMain.Hardening.cs')
+$compatFeatureGatesText = Read-Utf8Strict -Path (Join-Path $sourceDir 'ModMain.CompatibilityFeatureGates.cs')
 
 $ownerBudgets = @{
     $spawnRuntimePath = 280
@@ -57,13 +58,24 @@ if ([regex]::Matches($spawnRuntimeText,'!ModderMode').Count -lt 6) {
     throw 'Modder spawn boundary must recheck MCM state at the UI, context and both mutation boundaries.'
 }
 foreach ($token in @(
-    'IsCurrent103FeatureAssembly() && TrySpawnModderItemToCargoViaSystem103(cargo, itemId)',
+    'IsCurrent103CargoSpawnAssembly() && TrySpawnModderItemToCargoViaSystem103(cargo, itemId)',
     'AccessTools.TypeByName("MGSC.MagnumCargoSystem")','AccessTools.TypeByName("MGSC.SpaceTime")',
     'string.Equals(method.Name, "AddCargo", StringComparison.Ordinal)',
     'factory.CreateForInventory(itemId, false, false)',
     'addCargo.Invoke(null, new object[] { cargo, spaceTime, item, null, false, true })')) {
     if ($spawnMutationText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "Modder 1.0.3 cargo contract missing: $token" }
 }
+
+foreach ($token in @(
+    'AuditedCargoSpawnAssemblySha103Hotfix',
+    'A38C4D993C9BF60D0DDE0EDD348F201C97574F907808417A33C8A20F4772E9C1',
+    'IsCurrent103CargoSpawnAssembly()')) {
+    if ($compatFeatureGatesText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "Modder cargo hotfix compatibility gate missing: $token" }
+}
+if ($spawnMutationText.IndexOf('IsCurrent103TradeAssembly()',[StringComparison]::Ordinal) -ge 0) {
+    throw 'Modder cargo must own its compatibility gate; Trade gate may not be reused for save mutation.'
+}
+
 if ([regex]::Matches($spawnRuntimeText,[regex]::Escape('execute.Invoke(command')).Count -ne 1 -or
     [regex]::Matches($spawnRuntimeText,[regex]::Escape('add.Invoke(inventory')).Count -ne 1 -or
     [regex]::Matches($spawnCargo103Text,[regex]::Escape('addCargo.Invoke(null')).Count -ne 1) {

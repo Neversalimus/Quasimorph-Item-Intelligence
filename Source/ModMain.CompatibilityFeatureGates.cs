@@ -15,6 +15,13 @@ namespace ItemIntelligence
             "EFF608C5118735359CD07FEAD8A8219E1CFB557E3A5A57517DB4428F04834B8B";
         private const string AuditedFeatureAssemblySha103 =
             "FE68E4355D4ED9CBAB7F8B1BA7717DBC1CC3FD749D0D11A644A9A3DB5EAB478F";
+        // 1.0.3.578 hotfix was re-audited specifically for narrow feature paths.
+        // Keep these ownership-specific aliases separate from the broader feature gate: validating
+        // Trade or cargo spawning must not silently certify Loot/Scavenger/other exact families.
+        private const string AuditedTradeAssemblySha103Hotfix =
+            "A38C4D993C9BF60D0DDE0EDD348F201C97574F907808417A33C8A20F4772E9C1";
+        private const string AuditedCargoSpawnAssemblySha103Hotfix =
+            "A38C4D993C9BF60D0DDE0EDD348F201C97574F907808417A33C8A20F4772E9C1";
 
         private static int _lootManualProjectionContractState;
         private static int _containerSaveEstimateContractState;
@@ -28,10 +35,18 @@ namespace ItemIntelligence
                    string.Equals(_compatAssemblySha256, AuditedFeatureAssemblySha103, StringComparison.OrdinalIgnoreCase);
         }
 
-        private static bool IsCurrent103FeatureAssembly()
+        private static bool IsCurrent103CargoSpawnAssembly()
         {
             if (!_compatStaticChecked) RunCompatibilityShieldStatic();
-            return string.Equals(_compatAssemblySha256, AuditedFeatureAssemblySha103, StringComparison.OrdinalIgnoreCase);
+            return string.Equals(_compatAssemblySha256, AuditedFeatureAssemblySha103, StringComparison.OrdinalIgnoreCase) ||
+                   string.Equals(_compatAssemblySha256, AuditedCargoSpawnAssemblySha103Hotfix, StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static bool IsCurrent103TradeAssembly()
+        {
+            if (!_compatStaticChecked) RunCompatibilityShieldStatic();
+            return string.Equals(_compatAssemblySha256, AuditedFeatureAssemblySha103, StringComparison.OrdinalIgnoreCase) ||
+                   string.Equals(_compatAssemblySha256, AuditedTradeAssemblySha103Hotfix, StringComparison.OrdinalIgnoreCase);
         }
 
         private static bool IsLegacy102FeatureAssembly()
