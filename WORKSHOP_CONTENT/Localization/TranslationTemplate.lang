@@ -335,8 +335,9 @@ mcm.inspector_hotkey	Open Browser Hotkey
 mcm.inspector_hotkey_tip	Choose the browser key. Search accepts normal typing; Esc closes the window while typing.
 mcm.show_interface_icons	Minimal Interface Icons
 mcm.show_interface_icons_tip	Show minimalist interface icons. Item icons and functional status markers remain.
-mcm.trade_previous_layout	Previous trade layout
-mcm.trade_previous_layout_tip	Use the previous compact one-line Trade table. Quasimorph 1.0.3 price calculations stay unchanged.
+ui.trade_layout_view	VIEW
+ui.trade_layout_cards_short	C
+ui.trade_layout_table_short	T
 mcm.mod_name	Item Intelligence - Item Database & Loot Sources
 compat.disabled_feature	This feature is temporarily unavailable.
 mcm.save_failed	Could not save Item Intelligence settings.

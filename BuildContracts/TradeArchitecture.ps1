@@ -4,26 +4,30 @@
 $tradeFacadePath = Join-Path $sourceDir 'ModMain.Trade.cs'
 $tradePresentationPath = Join-Path $sourceDir 'ModMain.TradePresentation.cs'
 $tradeLayoutCompatibilityPath = Join-Path $sourceDir 'ModMain.TradeLayoutCompatibility.cs'
+$tradeLayoutControlsPath = Join-Path $sourceDir 'ModMain.TradeLayoutControls.cs'
 $tradeBatchPricing103Path = Join-Path $sourceDir 'ModMain.TradeBatchPricing103.cs'
 $runtimeTradeOwnerPath = Join-Path $sourceDir 'ModMain.Runtime.cs'
 $tradeRowRendererPath = Join-Path $sourceDir 'ModMain.BrowserRowRendererTrade.cs'
 $configurationPath = Join-Path $sourceDir 'ModMain.Configuration.cs'
-foreach ($requiredPath in @($tradeFacadePath,$tradePresentationPath,$tradeLayoutCompatibilityPath,$tradeBatchPricing103Path,$runtimeTradeOwnerPath,$tradeRowRendererPath,$configurationPath)) {
+foreach ($requiredPath in @($tradeFacadePath,$tradePresentationPath,$tradeLayoutCompatibilityPath,$tradeLayoutControlsPath,$tradeBatchPricing103Path,$runtimeTradeOwnerPath,$tradeRowRendererPath,$configurationPath)) {
     if (-not (Test-Path -LiteralPath $requiredPath -PathType Leaf)) { throw "Trade architecture source missing: $requiredPath" }
 }
 $tradeFacadeText = [IO.File]::ReadAllText($tradeFacadePath)
 $tradePresentationText = [IO.File]::ReadAllText($tradePresentationPath)
 $tradeLayoutCompatibilityText = [IO.File]::ReadAllText($tradeLayoutCompatibilityPath)
+$tradeLayoutControlsText = [IO.File]::ReadAllText($tradeLayoutControlsPath)
 $tradeBatchPricing103Text = [IO.File]::ReadAllText($tradeBatchPricing103Path)
 $runtimeTradeOwnerText = [IO.File]::ReadAllText($runtimeTradeOwnerPath)
 $tradeRowRendererText = [IO.File]::ReadAllText($tradeRowRendererPath)
 $configurationText = [IO.File]::ReadAllText($configurationPath)
 $tradePresentationLines = (Get-Content -LiteralPath $tradePresentationPath).Count
 $tradeLayoutCompatibilityLines = (Get-Content -LiteralPath $tradeLayoutCompatibilityPath).Count
+$tradeLayoutControlsLines = (Get-Content -LiteralPath $tradeLayoutControlsPath).Count
 $tradeBatchPricing103Lines = (Get-Content -LiteralPath $tradeBatchPricing103Path).Count
 $tradeRowRendererLines = (Get-Content -LiteralPath $tradeRowRendererPath).Count
 if ($tradePresentationLines -gt 180) { throw "Trade presentation ownership regressed: $tradePresentationLines/180 lines." }
 if ($tradeLayoutCompatibilityLines -gt 100) { throw "Trade layout compatibility ownership regressed: $tradeLayoutCompatibilityLines/100 lines." }
+if ($tradeLayoutControlsLines -gt 180) { throw "Trade layout controls ownership regressed: $tradeLayoutControlsLines/180 lines." }
 if ($tradeBatchPricing103Lines -gt 180) { throw "Trade 1.0.3 pricing ownership regressed: $tradeBatchPricing103Lines/180 lines." }
 if ($tradeRowRendererLines -gt 120) { throw "Trade row-renderer ownership regressed: $tradeRowRendererLines/120 lines." }
 
@@ -45,8 +49,14 @@ foreach ($navigationToken in @('public static BrowserLine TradeStation(', 'publi
 foreach ($retired in @('TradeHeader6(', 'TradeStation6(')) {
     if ($browserModelsText.IndexOf($retired,[StringComparison]::Ordinal) -ge 0) { throw "Retired duplicate six-column Trade model returned: $retired" }
 }
-foreach ($token in @('private static bool UsePreviousTradeLayout = false;', '"UsePreviousTradeLayout"', 'Ui("mcm.trade_previous_layout")')) {
-    if ($configurationText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "Trade layout preference contract missing: $token" }
+foreach ($token in @('private static bool UsePreviousTradeLayout = false;', '"UsePreviousTradeLayout=" + UsePreviousTradeLayout')) {
+    if ($configurationText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "Trade layout persistence contract missing: $token" }
+}
+foreach ($retiredMcmToken in @('AddMcmBool(add, list, configValueType, "UsePreviousTradeLayout"', 'ApplyMcmBool(currentConfig, "UsePreviousTradeLayout"')) {
+    if ($configurationText.IndexOf($retiredMcmToken,[StringComparison]::Ordinal) -ge 0) { throw "Retired Trade layout MCM binding returned: $retiredMcmToken" }
+}
+foreach ($token in @('CreateBrowserTradeLayoutControls','UpdateBrowserTradeLayoutControls','SetTradeLayoutFromBrowser','SaveConfig()','[ItemIntelligence][TradeLayoutSwitch] source=TradeWindow','BrowserInterfaceIconKind.Catalog','BrowserInterfaceIconKind.Sort')) {
+    if ($tradeLayoutControlsText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "Direct Trade layout switch contract missing: $token" }
 }
 foreach ($token in @('bool exact103Pricing = IsCurrent103TradeAssembly();', 'bool previousLayout = UsePreviousTradeLayout;', 'if (previousLayout)', 'if (exact103Pricing) AddTradeStationTable103', 'else AddLegacyTradeStationRow', 'if (exact103Pricing) AddTradeStationCard103', 'else AddTradeStationCardCompat', 'ui.trade_previous_note')) {
     if ($tradePresentationText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "Optional previous Trade layout contract missing: $token" }

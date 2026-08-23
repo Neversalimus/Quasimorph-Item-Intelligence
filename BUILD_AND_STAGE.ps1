@@ -11,7 +11,7 @@ Set-StrictMode -Version 2.0
 
 $DevWorkshopId = '3781927679'
 $PublicWorkshopId = '3780078201'
-$ExpectedReleaseVersion = '1.7.41.3'
+$ExpectedReleaseVersion = '1.7.42'
 
 function Resolve-GameRoot {
     param([string]$ExplicitRoot)

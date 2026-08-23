@@ -161,7 +161,7 @@ namespace ItemIntelligence
 
 
 
-        private static void SaveConfig()
+        private static bool SaveConfig()
         {
             try
             {
@@ -189,10 +189,12 @@ namespace ItemIntelligence
                     "ShowMagnumSurplus=" + ShowMagnumSurplus + "\r\n" +
                     "ShowAmmoRelations=" + ShowAmmoRelations + "\r\n";
                 File.WriteAllText(ConfigPath, text);
+                return true;
             }
             catch (Exception ex)
             {
                 Debug.LogWarning("[ItemIntelligence] Config save failed: " + ex.Message);
+                return false;
             }
         }
 
@@ -249,7 +251,6 @@ namespace ItemIntelligence
                 AddMcmBool(add, list, configValueType, "ShowRecipes", ShowRecipes, Ui("mcm.header.information"), Ui("ui.show_recipes"), Ui("ui.show_used_in_and_crafted_from_relationships"));
                 AddMcmBool(add, list, configValueType, "ShowSources", ShowSources, Ui("mcm.header.information"), Ui("ui.show_sources"), Ui("ui.show_production_and_barter_source_relationships"));
                 AddMcmBool(add, list, configValueType, "ShowTradeInformation", ShowTradeInformation, Ui("mcm.header.information"), Ui("ui.show_trade_information"), Ui("ui.show_barter_and_consumer_relationships"));
-                AddMcmBool(add, list, configValueType, "UsePreviousTradeLayout", UsePreviousTradeLayout, Ui("mcm.header.information"), Ui("mcm.trade_previous_layout"), Ui("mcm.trade_previous_layout_tip"));
                 AddMcmBool(add, list, configValueType, "ShowMagnumSurplus", ShowMagnumSurplus, Ui("mcm.header.information"), Ui("ui.show_magnum_surplus"), Ui("ui.show_remaining_amount_relative_to_all_unfinished"));
                 AddMcmBool(add, list, configValueType, "ShowAmmoRelations", ShowAmmoRelations, Ui("mcm.header.information"), Ui("ui.show_ammo_relations"), Ui("ui.show_weapon_ammo_relationships"));
 
@@ -339,7 +340,6 @@ namespace ItemIntelligence
                 ApplyMcmBool(currentConfig, "ShowRecipes", ref ShowRecipes);
                 ApplyMcmBool(currentConfig, "ShowSources", ref ShowSources);
                 ApplyMcmBool(currentConfig, "ShowTradeInformation", ref ShowTradeInformation);
-                ApplyMcmBool(currentConfig, "UsePreviousTradeLayout", ref UsePreviousTradeLayout);
                 ApplyMcmBool(currentConfig, "ShowMagnumSurplus", ref ShowMagnumSurplus);
                 ApplyMcmBool(currentConfig, "ShowAmmoRelations", ref ShowAmmoRelations);
                 if (!InspectorEnabled) CloseInspector();
@@ -361,7 +361,6 @@ namespace ItemIntelligence
                     ", Recipes=" + ShowRecipes +
                     ", Sources=" + ShowSources +
                     ", Trade=" + ShowTradeInformation +
-                    ", PreviousTradeLayout=" + UsePreviousTradeLayout +
                     ", MagnumSurplus=" + ShowMagnumSurplus +
                     ", AmmoRelations=" + ShowAmmoRelations + "}.");
                 return true;

@@ -2,7 +2,7 @@
 
 **Item Intelligence** is an in-game item browser and reference tool for **Quasimorph**.
 
-Current stable version: **v1.7.41.3**
+Current stable version: **v1.7.42**
 
 Steam Workshop: https://steamcommunity.com/sharedfiles/filedetails/?id=3780078201
 
@@ -15,7 +15,7 @@ Steam Workshop: https://steamcommunity.com/sharedfiles/filedetails/?id=378007820
 - Station-production relationships shown under Recipes, separate from live Trade data.
 - Trade information with direct station navigation to the starmap.
 - Quasimorph 1.0.3 stock-sensitive pricing with first-to-last unit movement and exact batch totals on audited builds.
-- Two Trade layouts: station cards by default and the previous compact table via MCM.
+- Two Trade layouts switchable directly inside the Trade tab; the selected layout is persisted.
 - Loot sources grouped by containers, general placement, enemies, faction rewards, mission pools and special sources.
 - Container chance estimates based on verified weighted pools, roll counts, Tech context and supported loot modifiers.
 - Manual loot-modifier calculator for Marauder / Organization / Field Medic contexts.
@@ -24,28 +24,32 @@ Steam Workshop: https://steamcommunity.com/sharedfiles/filedetails/?id=378007820
 - English and Russian localization.
 - Optional **Modder Mode** with audited item creation for ship cargo and mission clone inventory.
 
-## v1.7.41.3
+## v1.7.42
 
-Compatibility hotfix for Quasimorph `1.0.3.578s.024ad60`.
+Trade-layout UX and reliability update.
 
-- Restored exact Trade prices after the game hotfix changed `Assembly-CSharp.dll`.
-- Audited the new Trade IL against `1.0.3.577`; the authoritative price, transaction and vanilla Trade-window paths used by Item Intelligence remain unchanged.
-- Added a dedicated Trade-only compatibility gate for the new Assembly SHA instead of broadening unrelated exact features.
-- Restored Modder Mode ship-cargo item spawning on the hotfix build through a separate cargo-only compatibility gate.
-- Cargo mutation still revalidates the exact vanilla `MagnumCargoSystem.AddCargo` signature before use.
-- Preserved the v1.7.41.2 Station Production / Recipes cleanup and Previous Trade Layout improvements.
+- Added a compact **Cards / Table** switch directly to the Trade tab.
+- Layout changes apply immediately without opening MCM, closing Item Intelligence or reloading the tab.
+- The selected layout is persisted directly to the existing configuration key and survives reopening the browser / restarting the game.
+- Removed the old player-facing `Previous Trade Layout` MCM toggle; the persistent key remains for backwards-compatible configuration storage.
+- Added clear active-state feedback and localized `VIEW / ВИД` presentation.
+- Preserved exact Quasimorph `1.0.3.578s.024ad60` Trade pricing and station-consumer contracts.
+- Verified repeated `Cards -> Table -> Cards` switching with `persisted=True` and `Exact103Pricing=True`.
+- Published Steam payload and GitHub release asset use the exact same gate-approved DLL.
 
 Stable runtime marker:
 
-`[ItemIntelligence] ACTIVE VERSION 1.7.41.3 (StableRelease17413).`
+`[ItemIntelligence] ACTIVE VERSION 1.7.42 (StableRelease1742).`
 
 Validated runtime game build: Quasimorph `1.0.3.578s.024ad60`.
 
-Validated hotfix Assembly-CSharp SHA-256 for Trade and cargo-spawn feature gates:
+Validated Assembly-CSharp SHA-256:
 
 `A38C4D993C9BF60D0DDE0EDD348F201C97574F907808417A33C8A20F4772E9C1`
 
-Compatibility remains feature-scoped: recognizing this SHA for Trade/cargo does not automatically certify unrelated exact Loot or Scavenger calculations.
+Gate-approved / published Item Intelligence DLL SHA-256:
+
+`B7D441375169074B4E499A473B3C169FC253777D8BE3D793D7517B243116C6CE`
 
 ## Installation
 

@@ -200,10 +200,11 @@ namespace ItemIntelligence
             CreateBrowserSearchUi();
 
             GameObject statsGo = CreateBrowserText("Stats", _inspectorRoot.transform,
-                new Vector2(18f, -116f), new Vector2(700f, 34f),
+                new Vector2(18f, -116f), new Vector2(548f, 34f),
                 15f, new Color(0.43f, 0.69f, 0.59f, 1f), FontStyles.Normal,
                 TextAlignmentOptions.MidlineLeft);
             _browserStatsText = statsGo.GetComponent<TMP_Text>();
+            CreateBrowserTradeLayoutControls();
 
             // Tabs. They are constant objects and are only recolored/relabelled.
             string[] tabs = new string[]
@@ -1009,6 +1010,7 @@ namespace ItemIntelligence
             UpdateBrowserChromeLocalization();
             UpdateBrowserTabs();
             UpdateBrowserStats(itemId);
+            UpdateBrowserTradeLayoutControls();
 
             BrowserLines.Clear();
             switch ((BrowserTabId)BrowserNavigation.Tab)
@@ -1075,6 +1077,7 @@ namespace ItemIntelligence
             UpdateBrowserSearchStatus();
             UpdateBrowserCatalogButtonStyle();
             UpdateBrowserHeaderActions();
+            UpdateBrowserTradeLayoutControls();
             if (_browserCatalogOpen) RefreshBrowserCatalog();
         }
 

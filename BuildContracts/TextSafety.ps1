@@ -51,7 +51,7 @@ foreach ($path in $localizationPaths) {
         }
     }
 
-    foreach ($requiredKey in @('ui.trade_repricing_note','ui.trade_previous_note','ui.next','ui.batch','ui.trade_payout','ui.trade_stock_short','ui.trade_all','ui.trade_pcs','ui.trade_total','mcm.trade_previous_layout','mcm.trade_previous_layout_tip')) {
+    foreach ($requiredKey in @('ui.trade_repricing_note','ui.trade_previous_note','ui.next','ui.batch','ui.trade_payout','ui.trade_stock_short','ui.trade_all','ui.trade_pcs','ui.trade_total','ui.trade_layout_view','ui.trade_layout_cards_short','ui.trade_layout_table_short')) {
         if (-not $seen.ContainsKey($requiredKey)) {
             throw "Trade explanation localization missing: $requiredKey ($path)"
         }

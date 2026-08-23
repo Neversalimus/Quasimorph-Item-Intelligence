@@ -21,7 +21,7 @@ namespace ItemIntelligence
     /// </summary>
     public static partial class ModMain
     {
-        public const string Version = "1.7.41.3";
+        public const string Version = "1.7.42";
         // Ordinary Item Intelligence remains a read-only knowledge browser. The only
         // save-affecting exception is one explicit item-spawn click inside MCM Modder Mode;
         // economy, story variables and faction progression are never mutated.
@@ -55,7 +55,7 @@ namespace ItemIntelligence
         {
             if (context != null) _modContext = context;
             EnsureConfigLoaded();
-            Debug.Log("[ItemIntelligence] ACTIVE VERSION " + Version + " (StableRelease17413).");
+            Debug.Log("[ItemIntelligence] ACTIVE VERSION " + Version + " (StableRelease1742).");
             RunCompatibilityShieldStatic();
             RefreshBuildFingerprint();
             if (ShouldWriteAutomaticDiagnostics()) WriteDiagnosticsReportSafe("AfterConfigsLoaded");

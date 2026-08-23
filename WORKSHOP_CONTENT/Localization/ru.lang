@@ -329,8 +329,9 @@ mcm.inspector_hotkey	Клавиша открытия браузера
 mcm.inspector_hotkey_tip	Выберите клавишу браузера. Поиск принимает обычный ввод; во время ввода Esc закрывает окно.
 mcm.show_interface_icons	Минималистичные иконки интерфейса
 mcm.show_interface_icons_tip	Показывать минималистичные иконки интерфейса. Иконки предметов и маркеры статуса остаются.
-mcm.trade_previous_layout	Предыдущий дизайн торговли
-mcm.trade_previous_layout_tip	Вернуть прежнюю компактную однострочную таблицу. Расчет цен Quasimorph 1.0.3 не меняется.
+ui.trade_layout_view	ВИД
+ui.trade_layout_cards_short	К
+ui.trade_layout_table_short	Т
 mcm.mod_name	Item Intelligence - База предметов и добычи
 compat.disabled_feature	Эта функция временно недоступна.
 mcm.save_failed	Не удалось сохранить настройки Item Intelligence.
