@@ -11,7 +11,7 @@ $root = Split-Path -Parent $MyInvocation.MyCommand.Path
 $buildScript = Join-Path $root 'BUILD_AND_STAGE.ps1'
 if (-not (Test-Path -LiteralPath $buildScript -PathType Leaf)) { throw 'BUILD_AND_STAGE.ps1 not found.' }
 
-Write-Host 'Item Intelligence v1.7.42 - Stable Release' -ForegroundColor Cyan
+Write-Host 'Item Intelligence v1.7.42.1 - Stable Release' -ForegroundColor Cyan
 Write-Host 'Builds the accepted stable source and prepares the existing public Workshop payload.' -ForegroundColor DarkGray
 Write-Host 'No Steam upload is performed automatically.' -ForegroundColor DarkGray
 Write-Host 'This release installer does not overwrite the live subscribed Workshop copy.' -ForegroundColor DarkGray
@@ -33,7 +33,7 @@ Write-Host 'STABLE RELEASE BUILD + STAGING OK.' -ForegroundColor Green
 Write-Host ('Stage: ' + $stage) -ForegroundColor Green
 Write-Host ('Stage DLL SHA256: ' + $stageHash) -ForegroundColor Green
 Write-Host 'Expected runtime marker:' -ForegroundColor Yellow
-Write-Host '[ItemIntelligence] ACTIVE VERSION 1.7.42 (StableRelease1742).' -ForegroundColor Cyan
+Write-Host '[ItemIntelligence] ACTIVE VERSION 1.7.42.1 (StableRelease17421).' -ForegroundColor Cyan
 Write-Host ''
 Write-Host 'Publish THIS staged payload only after the pre-release gate passes:' -ForegroundColor Yellow
 Write-Host ('mod_updateworkshopitem ' + $PublicWorkshopId + ' ' + $stage + ' FALSE') -ForegroundColor Cyan

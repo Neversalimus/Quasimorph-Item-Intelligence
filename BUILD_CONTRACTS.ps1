@@ -15,6 +15,7 @@ $buildContractBudgets = @{
     'StationProductionArchitecture.ps1' = 120
     'FeatureSemantics.ps1' = 850
     'GameplayExactness.ps1' = 550
+    'SourceFamilyHotfix.ps1' = 80
     'MathSafety.ps1' = 180
     'ModderActions.ps1' = 220
     'CodeHygiene.ps1' = 180
@@ -29,6 +30,7 @@ $buildContractModules = @(
     'StationProductionArchitecture.ps1',
     'FeatureSemantics.ps1',
     'GameplayExactness.ps1',
+    'SourceFamilyHotfix.ps1',
     'MathSafety.ps1',
     'ModderActions.ps1',
     'CodeHygiene.ps1',
@@ -37,6 +39,10 @@ $buildContractModules = @(
     'TextSafety.ps1',
     'Performance.ps1'
 )
+
+$runtimeContractText = Get-Content -LiteralPath (Join-Path $sourceDir 'ModMain.Runtime.cs') -Raw
+$currentVersionToken = [regex]::Match($runtimeContractText, 'public const string Version = "([^"]+)";').Groups[1].Value
+$currentMarkerToken = [regex]::Match($runtimeContractText, 'ACTIVE VERSION.*?\(([^)"]+)\)\.').Groups[1].Value
 
 foreach ($moduleName in $buildContractModules) {
     $modulePath = Join-Path $buildContractRoot $moduleName
@@ -54,7 +60,8 @@ foreach ($moduleName in $buildContractModules) {
     # Current contracts must explain invariants, not preserve experiment chronology.
     # The current test identity is allowed only where Runtime identity is explicitly checked.
     $contractText = Get-Content -LiteralPath $modulePath -Raw
-    $historyProbe = $contractText.Replace('1.7.41.2','').Replace('StableRelease17412','')
+    $historyProbe = $contractText
+    if ($moduleName -eq 'GameplayExactness.ps1') { $historyProbe = $historyProbe.Replace($currentVersionToken,'').Replace($currentMarkerToken,'') }
     if ($historyProbe -match '(?i)v1\.7\.(?:3[0-9]|40)(?:\.\d+)?(?:-test\d+)?|\btest\d+\b|\bBuildFix\d*\b') {
         throw "Historical test/build provenance returned to current build contracts: $moduleName"
     }

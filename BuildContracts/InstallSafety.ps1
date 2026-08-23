@@ -10,16 +10,25 @@ if (-not (Test-Path -LiteralPath $installPath -PathType Leaf)) { throw 'Install.
 $installText = Read-Utf8Strict -Path $installPath
 
 if ($Mode -eq 'TEST') {
+    # Current TEST installer is intentionally stage-only: it builds the DEV payload
+    # under C:\QM_Workshop and prints the explicit developer-console upload command.
+    # It must never locate or overwrite Steam's live Workshop content directly.
     foreach ($token in @(
         '$DevWorkshopId = ''3781927679''',
-        '$buildArguments = @{ Mode = ''TEST'';',
-        'Find-LiveDevWorkshopFolder $resolvedGame $DevWorkshopId',
-        '$tempLive = Join-Path $liveParent ($DevWorkshopId + ''.qii_install_tmp'')',
-        '''mod_updateworkshopitem '' + $DevWorkshopId')) {
-        if ($installText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "DEV install safety token missing: $token" }
+        '$stage = ''C:\QM_Workshop\ItemIntelligence_DEV''',
+        '$buildArguments = @{ Mode = ''TEST''; WorkshopStage = $stage }',
+        'No Steam upload is performed automatically.',
+        '''mod_updateworkshopitem '' + $DevWorkshopId + '' '' + $stage + '' FALSE''')) {
+        if ($installText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "DEV stage/install safety token missing: $token" }
     }
-    if ($installText.IndexOf('$PublicWorkshopId',[StringComparison]::Ordinal) -ge 0 -or
-        [regex]::Matches($installText,'3780078201').Count -ne 1) { throw 'TEST Install.ps1 must never target the public Workshop item.' }
+    foreach ($forbidden in @('$PublicWorkshopId','Find-LiveDevWorkshopFolder','workshop\content','.qii_install_tmp')) {
+        if ($installText.IndexOf($forbidden,[StringComparison]::OrdinalIgnoreCase) -ge 0) {
+            throw "TEST Install.ps1 must remain DEV-stage-only and never touch live/public Workshop content: $forbidden"
+        }
+    }
+    if ([regex]::Matches($installText,'3780078201').Count -ne 1) {
+        throw 'TEST Install.ps1 may mention the public Workshop ID only once in the explicit protection message.'
+    }
 } else {
     foreach ($token in @(
         '$PublicWorkshopId = ''3780078201''',

@@ -233,8 +233,8 @@ if ($ruLocalizationText.IndexOf('ШАНС ≥1',[StringComparison]::Ordinal) -ge
     $enLocalizationText.IndexOf('≥1 CHANCE',[StringComparison]::Ordinal) -ge 0) {
     throw 'current font-safety regression: unsupported Scavengers heading glyph returned.'
 }
-if ($runtimeText.IndexOf('public const string Version = "1.7.42";',[StringComparison]::Ordinal) -lt 0 -or
-    $runtimeText.IndexOf('StableRelease1742',[StringComparison]::Ordinal) -lt 0) {
+if ($runtimeText.IndexOf('public const string Version = "1.7.42.1";',[StringComparison]::Ordinal) -lt 0 -or
+    $runtimeText.IndexOf('StableRelease17421',[StringComparison]::Ordinal) -lt 0) {
     throw 'current runtime version/marker contract missing.'
 }
 
@@ -280,6 +280,16 @@ foreach ($token in @('StoryMissions','PrizeItems','StartingItems','AnComDataRewa
 $featureGateText = [IO.File]::ReadAllText((Join-Path $sourceDir 'ModMain.CompatibilityFeatureGates.cs'))
 foreach ($token in @('AuditedFeatureAssemblySha102','AuditedFeatureAssemblySha103','FE68E4355D4ED9CBAB7F8B1BA7717DBC1CC3FD749D0D11A644A9A3DB5EAB478F','IsAuditedSourceFamilyContractVerified()')) {
     if ($featureGateText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "current feature-owned special-source gate contract missing: $token" }
+}
+foreach ($token in @(
+    'AuditedLootModifiersAssemblySha103Hotfix',
+    'AuditedContainerSaveEstimateAssemblySha103Hotfix',
+    'AuditedScavengerAssemblySha103Hotfix',
+    'IsCurrentLootModifiersAssembly()',
+    'IsCurrentContainerSaveEstimateAssembly()',
+    'IsCurrentScavengerAssembly()',
+    'A38C4D993C9BF60D0DDE0EDD348F201C97574F907808417A33C8A20F4772E9C1')) {
+    if ($featureGateText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "1.0.3.578 Loot/Scavenger narrow hotfix gate missing: $token" }
 }
 $factionChanceText = [IO.File]::ReadAllText((Join-Path $sourceDir 'ModMain.Factions.cs'))
 foreach ($token in @('float percent = float.NaN;','Percentage intentionally remains NaN until current-build panel math is','GetFactionRewardRecordItemId','float.IsNaN(view.RewardPercent)')) {

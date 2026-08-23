@@ -2,7 +2,7 @@
 
 **Item Intelligence** is an in-game item browser and reference tool for **Quasimorph**.
 
-Current stable version: **v1.7.42**
+Current stable version: **v1.7.42.1**
 
 Steam Workshop: https://steamcommunity.com/sharedfiles/filedetails/?id=3780078201
 
@@ -24,22 +24,22 @@ Steam Workshop: https://steamcommunity.com/sharedfiles/filedetails/?id=378007820
 - English and Russian localization.
 - Optional **Modder Mode** with audited item creation for ship cargo and mission clone inventory.
 
-## v1.7.42
+## v1.7.42.1
 
-Trade-layout UX and reliability update.
+Quasimorph `1.0.3.578s.024ad60` compatibility restoration.
 
-- Added a compact **Cards / Table** switch directly to the Trade tab.
-- Layout changes apply immediately without opening MCM, closing Item Intelligence or reloading the tab.
-- The selected layout is persisted directly to the existing configuration key and survives reopening the browser / restarting the game.
-- Removed the old player-facing `Previous Trade Layout` MCM toggle; the persistent key remains for backwards-compatible configuration storage.
-- Added clear active-state feedback and localized `VIEW / ВИД` presentation.
-- Preserved exact Quasimorph `1.0.3.578s.024ad60` Trade pricing and station-consumer contracts.
-- Verified repeated `Cards -> Table -> Cards` switching with `persisted=True` and `Exact103Pricing=True`.
-- Published Steam payload and GitHub release asset use the exact same gate-approved DLL.
+- Restored the exact Loot modifier calculator for Marauder I-IV, Organization and Field Medic on the current game hotfix.
+- Restored save-aware container chance estimates.
+- Restored exact Scavengers / Purge Brigade mission chance rows.
+- Restored verified scripted story acquisition sources and random starting equipment source pools.
+- Kept the new `A38...` game fingerprint feature-owned: Trade, cargo spawn, Loot modifiers, container estimates, Scavengers and source families have independent narrow compatibility gates instead of globally trusting unrelated exact domains.
+- Current-game IL audits passed `7/7` for Loot/Scavenger paths and `10/10` for the remaining source-family paths.
+- Runtime acceptance confirmed Marauder I-IV, Organization, Field Medic, `ContainerSaveEstimate`, `ScavengersExact`, `hardcodedCurrentBuild=enabled`, disassembly symmetry, ammo sanity and exact 1.0.3 Trade pricing.
+- The public Steam Workshop payload was verified byte-identical to the gate-approved payload before this GitHub release.
 
 Stable runtime marker:
 
-`[ItemIntelligence] ACTIVE VERSION 1.7.42 (StableRelease1742).`
+`[ItemIntelligence] ACTIVE VERSION 1.7.42.1 (StableRelease17421).`
 
 Validated runtime game build: Quasimorph `1.0.3.578s.024ad60`.
 
@@ -47,10 +47,9 @@ Validated Assembly-CSharp SHA-256:
 
 `A38C4D993C9BF60D0DDE0EDD348F201C97574F907808417A33C8A20F4772E9C1`
 
-Gate-approved / published Item Intelligence DLL SHA-256:
+Gate-approved / Steam-published / GitHub-release Item Intelligence DLL SHA-256:
 
-`B7D441375169074B4E499A473B3C169FC253777D8BE3D793D7517B243116C6CE`
-
+`FEFD4FD75A1BB13DE022BFC80E16A9D3773EAED86C2CA54768CACF71307CEFD0`
 ## Installation
 
 ### Steam Workshop

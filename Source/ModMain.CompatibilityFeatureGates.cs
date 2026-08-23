@@ -22,6 +22,19 @@ namespace ItemIntelligence
             "A38C4D993C9BF60D0DDE0EDD348F201C97574F907808417A33C8A20F4772E9C1";
         private const string AuditedCargoSpawnAssemblySha103Hotfix =
             "A38C4D993C9BF60D0DDE0EDD348F201C97574F907808417A33C8A20F4772E9C1";
+        // 1.0.3.578 hotfix exactness was re-audited independently for the Loot modifier,
+        // container save-estimate, and Scavengers/Purge Brigade paths. Keep separate
+        // aliases so passing one contract never certifies the other feature families.
+        private const string AuditedLootModifiersAssemblySha103Hotfix =
+            "A38C4D993C9BF60D0DDE0EDD348F201C97574F907808417A33C8A20F4772E9C1";
+        private const string AuditedContainerSaveEstimateAssemblySha103Hotfix =
+            "A38C4D993C9BF60D0DDE0EDD348F201C97574F907808417A33C8A20F4772E9C1";
+        private const string AuditedScavengerAssemblySha103Hotfix =
+            "A38C4D993C9BF60D0DDE0EDD348F201C97574F907808417A33C8A20F4772E9C1";
+        // 1.0.3.578 hardcoded story acquisition and random-start source-family
+        // paths were re-audited independently. This alias owns ONLY those source families.
+        private const string AuditedSourceFamilyAssemblySha103Hotfix =
+            "A38C4D993C9BF60D0DDE0EDD348F201C97574F907808417A33C8A20F4772E9C1";
 
         private static int _lootManualProjectionContractState;
         private static int _containerSaveEstimateContractState;
@@ -55,11 +68,39 @@ namespace ItemIntelligence
             return string.Equals(_compatAssemblySha256, AuditedFeatureAssemblySha102, StringComparison.OrdinalIgnoreCase);
         }
 
+        private static bool IsCurrentLootModifiersAssembly()
+        {
+            if (!_compatStaticChecked) RunCompatibilityShieldStatic();
+            return IsAuditedFeatureAssembly() ||
+                   string.Equals(_compatAssemblySha256, AuditedLootModifiersAssemblySha103Hotfix, StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static bool IsCurrentContainerSaveEstimateAssembly()
+        {
+            if (!_compatStaticChecked) RunCompatibilityShieldStatic();
+            return IsAuditedFeatureAssembly() ||
+                   string.Equals(_compatAssemblySha256, AuditedContainerSaveEstimateAssemblySha103Hotfix, StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static bool IsCurrentScavengerAssembly()
+        {
+            if (!_compatStaticChecked) RunCompatibilityShieldStatic();
+            return IsAuditedFeatureAssembly() ||
+                   string.Equals(_compatAssemblySha256, AuditedScavengerAssemblySha103Hotfix, StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static bool IsCurrentSourceFamilyAssembly()
+        {
+            if (!_compatStaticChecked) RunCompatibilityShieldStatic();
+            return IsAuditedFeatureAssembly() ||
+                   string.Equals(_compatAssemblySha256, AuditedSourceFamilyAssemblySha103Hotfix, StringComparison.OrdinalIgnoreCase);
+        }
+
         private static bool IsLootManualProjectionContractVerified()
         {
             if (_lootManualProjectionContractState > 0) return _compatLoot;
             if (_lootManualProjectionContractState < 0) return false;
-            if (!IsAuditedFeatureAssembly() || !_compatLoot)
+            if (!IsCurrentLootModifiersAssembly() || !_compatLoot)
             {
                 _lootManualProjectionContractState = -1;
                 return false;
@@ -147,7 +188,7 @@ namespace ItemIntelligence
         {
             if (_containerSaveEstimateContractState > 0) return _compatLoot && _compatFactions;
             if (_containerSaveEstimateContractState < 0) return false;
-            if (!IsAuditedFeatureAssembly() || !_compatLoot || !_compatFactions)
+            if (!IsCurrentContainerSaveEstimateAssembly() || !_compatLoot || !_compatFactions)
             {
                 _containerSaveEstimateContractState = -1;
                 return false;
@@ -192,7 +233,7 @@ namespace ItemIntelligence
             if (_scavengerChanceContractState > 0) return _compatFactions && _compatMagnum;
             if (_scavengerChanceContractState < 0) return false;
             _scavengerChanceContractState = -1;
-            if (!IsAuditedFeatureAssembly() || !_compatFactions || !_compatMagnum) return false;
+            if (!IsCurrentScavengerAssembly() || !_compatFactions || !_compatMagnum) return false;
 
             try
             {
@@ -229,7 +270,7 @@ namespace ItemIntelligence
             if (_sourceFamilyContractState > 0) return _compatLoot;
             if (_sourceFamilyContractState < 0) return false;
             _sourceFamilyContractState =
-                IsAuditedFeatureAssembly() && _compatLoot ? 1 : -1;
+                IsCurrentSourceFamilyAssembly() && _compatLoot ? 1 : -1;
             return _sourceFamilyContractState > 0 && _compatLoot;
         }
     }

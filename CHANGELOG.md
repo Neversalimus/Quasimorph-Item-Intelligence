@@ -1,5 +1,18 @@
 # Changelog
 
+## v1.7.42.1 — 2026-08-24
+
+- Restored Marauder I-IV, Organization and Field Medic exact Loot projections on Quasimorph `1.0.3.578s.024ad60`.
+- Restored save-aware container chance estimates and exact Scavengers / Purge Brigade mission chance presentation.
+- Restored the separately audited hardcoded story acquisition source family and random starting equipment pools.
+- Added independent A38 compatibility ownership for Loot modifiers, container estimates, Scavengers and source-family paths without promoting A38 into the broad `IsAuditedFeatureAssembly` gate.
+- Current-game exact IL audits passed `7 PASS / 0 FAIL` for Loot/Scavenger paths and `10 PASS / 0 FAIL` for source-family paths.
+- Runtime acceptance confirmed `hardcodedCurrentBuild=enabled`, Marauder I-IV, Organization, Field Medic, `ContainerSaveEstimate`, `ScavengersExact`, `Exact103Pricing=True`, `partialFailures=0`, disassembly `symmetry=OK` and ammo `falseAmmoLinks=0`.
+- Pre-release gate v1.2 passed `13 PASS / 0 WARN / 0 BLOCK`.
+- Steam Workshop download verification confirmed all 7 public payload files are byte-identical to the frozen Approved payload.
+- Gate-approved / published DLL SHA-256: `FEFD4FD75A1BB13DE022BFC80E16A9D3773EAED86C2CA54768CACF71307CEFD0`.
+- Stable runtime marker: `1.7.42.1 (StableRelease17421)`.
+
 ## v1.7.42 — 2026-08-23
 
 - Added an immediate Cards / Table switch directly inside the Trade tab.
