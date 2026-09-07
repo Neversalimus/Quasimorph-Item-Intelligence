@@ -20,6 +20,10 @@ namespace ItemIntelligence
         // Trade or cargo spawning must not silently certify Loot/Scavenger/other exact families.
         private const string AuditedTradeAssemblySha103Hotfix =
             "A38C4D993C9BF60D0DDE0EDD348F201C97574F907808417A33C8A20F4772E9C1";
+        // Quasimorph 1.0.4.581s.2952480 was re-audited specifically for Trade pricing.
+        // Do not promote this fingerprint to Loot, Scavenger, cargo or global exactness.
+        private const string AuditedTradeAssemblySha104 =
+            "BE78036434737521BB43DABBD934B579A08DC3E8370B834AEE36E40932F56FE0";
         private const string AuditedCargoSpawnAssemblySha103Hotfix =
             "A38C4D993C9BF60D0DDE0EDD348F201C97574F907808417A33C8A20F4772E9C1";
         // 1.0.3.578 hotfix exactness was re-audited independently for the Loot modifier,
@@ -59,7 +63,8 @@ namespace ItemIntelligence
         {
             if (!_compatStaticChecked) RunCompatibilityShieldStatic();
             return string.Equals(_compatAssemblySha256, AuditedFeatureAssemblySha103, StringComparison.OrdinalIgnoreCase) ||
-                   string.Equals(_compatAssemblySha256, AuditedTradeAssemblySha103Hotfix, StringComparison.OrdinalIgnoreCase);
+                   string.Equals(_compatAssemblySha256, AuditedTradeAssemblySha103Hotfix, StringComparison.OrdinalIgnoreCase) ||
+                   string.Equals(_compatAssemblySha256, AuditedTradeAssemblySha104, StringComparison.OrdinalIgnoreCase);
         }
 
         private static bool IsLegacy102FeatureAssembly()

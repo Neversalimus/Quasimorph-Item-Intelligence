@@ -1,8 +1,8 @@
-# Quasimorph Item Intelligence
+﻿# Quasimorph Item Intelligence
 
 **Item Intelligence** is an in-game item browser and reference tool for **Quasimorph**.
 
-Current stable version: **v1.7.42.1**
+Current stable version: **v1.7.42.2**
 
 Steam Workshop: https://steamcommunity.com/sharedfiles/filedetails/?id=3780078201
 
@@ -14,7 +14,7 @@ Steam Workshop: https://steamcommunity.com/sharedfiles/filedetails/?id=378007820
 - Canonical disassembly relationships and reverse disassembly sources.
 - Station-production relationships shown under Recipes, separate from live Trade data.
 - Trade information with direct station navigation to the starmap.
-- Quasimorph 1.0.3 stock-sensitive pricing with first-to-last unit movement and exact batch totals on audited builds.
+- Quasimorph 1.0.3 / 1.0.4 stock-sensitive pricing with first-to-last unit movement and exact batch totals on audited builds.
 - Two Trade layouts switchable directly inside the Trade tab; the selected layout is persisted.
 - Loot sources grouped by containers, general placement, enemies, faction rewards, mission pools and special sources.
 - Container chance estimates based on verified weighted pools, roll counts, Tech context and supported loot modifiers.
@@ -24,6 +24,27 @@ Steam Workshop: https://steamcommunity.com/sharedfiles/filedetails/?id=378007820
 - English and Russian localization.
 - Optional **Modder Mode** with audited item creation for ship cargo and mission clone inventory.
 
+## v1.7.42.2
+
+Quasimorph `1.0.4.581s.2952480` Trade-pricing compatibility hotfix.
+
+- Re-audited the vanilla Trade pricing IL on Quasimorph 1.0.4.
+- Restored exact station prices, batch totals and stock-sensitive next-unit prices instead of fail-closed `?`.
+- Added the 1.0.4 Assembly fingerprint only to the Trade-owned compatibility gate.
+- Loot, Scavenger, cargo-spawn and other exact feature families remain independently guarded and were not promoted by this hotfix.
+- Runtime acceptance confirmed `Exact103Pricing=True` on Assembly SHA `BE780...`.
+- A vanilla transaction check confirmed the displayed final price: vanilla `259` with `+50%` surcharge resolves to `388`, matching Item Intelligence.
+- Stable runtime marker: `1.7.42.2 (StableRelease17422)`.
+
+Validated game build: Quasimorph `1.0.4.581s.2952480`.
+
+Validated Assembly-CSharp SHA-256:
+
+`BE78036434737521BB43DABBD934B579A08DC3E8370B834AEE36E40932F56FE0`
+
+Gate-approved DLL SHA-256:
+
+`6E1E7DFD642CA5A5F735CC51BDE68CEB7E9A0D52D567681902C850682E5699D9`
 ## v1.7.42.1
 
 Quasimorph `1.0.3.578s.024ad60` compatibility restoration.

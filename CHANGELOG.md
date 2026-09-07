@@ -1,5 +1,14 @@
-# Changelog
+﻿# Changelog
 
+## v1.7.42.2 — 2026-09-07
+
+- Restored exact Trade pricing on Quasimorph `1.0.4.581s.2952480`.
+- Re-audited the vanilla Trade pricing structure and runtime contract against Assembly SHA `BE78036434737521BB43DABBD934B579A08DC3E8370B834AEE36E40932F56FE0`.
+- Added a dedicated Trade-only 1.0.4 compatibility fingerprint; unrelated Loot, Scavenger, cargo and global exactness gates remain fail-closed.
+- Runtime acceptance confirmed `Exact103Pricing=True`, 175 runtime stations, exact mission/station links, and numeric Trade rows.
+- Vanilla transaction check: row price `259` with `+50%` surcharge produces final cost `388`, matching Item Intelligence.
+- Stable runtime marker: `1.7.42.2 (StableRelease17422)`.
+- Gate-approved DLL SHA-256: `6E1E7DFD642CA5A5F735CC51BDE68CEB7E9A0D52D567681902C850682E5699D9`.
 ## v1.7.42.1 — 2026-08-24
 
 - Restored Marauder I-IV, Organization and Field Medic exact Loot projections on Quasimorph `1.0.3.578s.024ad60`.
