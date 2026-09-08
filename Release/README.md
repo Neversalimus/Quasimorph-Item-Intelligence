@@ -30,4 +30,8 @@ pwsh -NoProfile -File .\Release\Publish-Release.ps1 -ReceiptPath "C:\QM_Workshop
 
 After a connection failure, rerun the same publish command with the same receipt. Matching remote refs/assets are reused, partial uploads continue, and a completed release is verified without replacing assets. ZIPs and receipts remain on disk after any failure. If remote main advanced or a tag/asset differs, stop and review the conflict rather than rewriting history or forcing replacement.
 
+Draft discovery uses the authenticated, paginated release list, including after creation. The REST tag endpoint is documented for published releases and must not be used to discover a draft. Regression tests reproduce an existing draft with already-pushed main/tag and a 404 from that endpoint. They also check multiple pages, API failures and ambiguous entries.
+
+For a receipt frozen before this correction, use the separate v1.7.42.4 recovery kit. Do not edit the frozen checkout or its receipt to install the correction: the recovery kit runs the corrected publisher externally while still verifying the original source and payload hashes.
+
 Local regression coverage is in `Tests/Run-ReleaseTests.ps1`. Its native transports are mocks: it does not connect to GitHub or Steam. Build contracts execute that suite along with production C# behavior tests. Game acceptance and an actual authorized remote publication remain separate checks.

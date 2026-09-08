@@ -76,7 +76,7 @@ try {
 
     # Execute the real publisher with in-memory git/gh transports. These functions
     # intercept every native call; no remote command or network request is executed.
-    $mock = @{ remoteMain = $receipt.BaseMain; remoteTag = ''; release = $null; pushes = 0; uploads = 0; edits = 0; failCreate = $true; failUpload = $true; remoteFiles = (Join-Path $temp 'remote-assets') }
+    $mock = @{ remoteMain = $receipt.SourceCommit; remoteTag = $receipt.SourceCommit; release = [pscustomobject]@{ id = 17424; tag_name = $receipt.Tag; draft = $true; assets = @() }; pushes = 0; uploads = 0; edits = 0; creates = 0; tagQueries = 0; failList = $false; duplicateList = $false; failCreate = $false; failUpload = $false; remoteFiles = (Join-Path $temp 'remote-resume-assets') }
     New-Item -ItemType Directory -Path $mock.remoteFiles | Out-Null
     function git {
         $v = @($args); $global:LASTEXITCODE = 0
@@ -102,15 +102,29 @@ try {
         $v = @($args); $global:LASTEXITCODE = 0
         if ($v[0] -eq 'auth') { return }
         if ($v[0] -eq 'api') {
-            if ($v -contains '--slurp') {
-                if ($null -eq $mock.release) { return '[[]]' }
-                return '[[' + ($mock.release | ConvertTo-Json -Depth 8 -Compress) + ']]'
+            if ($v[1] -eq ('repos/' + $receipt.Repo + '/releases') -and $v -contains '--slurp') {
+                if ($mock.failList) { $global:LASTEXITCODE = 1; return '{"message":"Not Found"}' }
+                $older = '{"id":17422,"tag_name":"v1.7.42.2","draft":false,"assets":[]}'
+                if ($null -eq $mock.release) { return '[[' + $older + '],[]]' }
+                $current = $mock.release | ConvertTo-Json -Depth 8 -Compress
+                if ($mock.duplicateList) { return '[[' + $current + '],[' + $current + ']]' }
+                return '[[' + $older + '],[' + $current + ']]'
             }
-            return $mock.release | ConvertTo-Json -Depth 8
+            if ($v[1] -eq ('repos/' + $receipt.Repo + '/releases/tags/' + $receipt.Tag)) {
+                $mock.tagQueries++
+                # Published-tag API must not stand in for authenticated draft discovery.
+                if ($null -eq $mock.release -or $mock.release.draft) {
+                    $global:LASTEXITCODE = 1; return '{"message":"Not Found"}'
+                }
+                return $mock.release | ConvertTo-Json -Depth 8
+            }
+            throw ('Unmocked gh API endpoint: ' + $v[1])
         }
         if ($v[1] -eq 'create') {
             if ($mock.failCreate) { $mock.failCreate = $false; $global:LASTEXITCODE = 9; return }
-            $mock.release = [pscustomobject]@{ tag_name = $receipt.Tag; draft = $true; assets = @() }
+            if ($null -ne $mock.release) { throw 'Attempted to recreate an existing release.' }
+            $mock.release = [pscustomobject]@{ id = 17424; tag_name = $receipt.Tag; draft = $true; assets = @() }
+            $mock.creates++
             return
         }
         if ($v[1] -eq 'upload') {
@@ -129,6 +143,25 @@ try {
         throw ('Unmocked gh call: ' + ($v -join ' '))
     }
     $publisher = Join-Path $root 'Release/Publish-Release.ps1'
+    # Reproduce the reported state: main/tag already pushed, draft exists, no assets.
+    $beforeReceipt = (Get-FileHash -LiteralPath $receiptPath -Algorithm SHA256).Hash
+    & $publisher -ReceiptPath $receiptPath -WorkshopPublished 6>$null
+    Check ($mock.pushes -eq 0 -and $mock.creates -eq 0 -and $mock.uploads -eq 2 -and $mock.edits -eq 1) 'existing draft resumes without ref updates or duplicate creation'
+    Check ($mock.tagQueries -eq 0) 'draft lookup does not call published-tag endpoint'
+    Check ((Get-FileHash -LiteralPath $receiptPath -Algorithm SHA256).Hash -eq $beforeReceipt) 'recovery keeps frozen receipt bytes'
+    $mock.failList = $true
+    Reject { & $publisher -ReceiptPath $receiptPath -WorkshopPublished } 'release-list API failure is not treated as absence'
+    Check ($mock.creates -eq 0 -and $mock.uploads -eq 2) 'failed list does not create or upload'
+    $mock.failList = $false; $mock.duplicateList = $true
+    Reject { & $publisher -ReceiptPath $receiptPath -WorkshopPublished } 'ambiguous same-tag release list blocks continuation'
+    $mock.duplicateList = $false
+
+    # Fresh publication still handles failures before creation and during asset upload.
+    $mock.remoteMain = $receipt.BaseMain; $mock.remoteTag = ''; $mock.release = $null
+    $mock.pushes = 0; $mock.uploads = 0; $mock.edits = 0; $mock.creates = 0
+    $mock.failCreate = $true; $mock.failUpload = $true
+    $mock.remoteFiles = Join-Path $temp 'remote-assets'
+    New-Item -ItemType Directory -Path $mock.remoteFiles | Out-Null
     Reject { & $publisher -ReceiptPath $receiptPath } 'Steam acknowledgement required before publication'
     Reject { & $publisher -ReceiptPath $receiptPath -WorkshopPublished } 'interruption after atomic push reported'
     Check ((Test-Path -LiteralPath $asset) -and (Test-Path -LiteralPath $receiptPath)) 'frozen evidence survives failure'

@@ -35,17 +35,16 @@ if ($plan.PushMain -or $plan.PushTag) {
 # Remote state is the retry journal: existing matching refs and assets are accepted.
 # Query releases with a checked API call; authentication/network failure is never treated
 # as absence. Include drafts so an interrupted upload can resume.
-$releases = (Invoke-ReleaseNative gh @('api',"repos/$repo/releases",'--paginate','--slurp') | Out-String | ConvertFrom-Json)
-$matches = @($releases | ForEach-Object { $_ } | Where-Object tag_name -eq $tag)
-if ($matches.Count -gt 1) { throw 'Ambiguous release state.' }
-if ($matches.Count -eq 0) {
+$release = Find-ReleaseIncludingDrafts $repo $tag
+if ($null -eq $release) {
     $notes = Join-Path $directory 'release-notes.md'
     if (-not (Test-Path -LiteralPath $notes)) {
         [IO.File]::WriteAllText($notes, ("Item Intelligence " + $receipt.Version + "`n`nSource commit: " + $commit + "`nGame SHA256: " + $receipt.GameSHA256 + "`n"), [Text.UTF8Encoding]::new($false))
     }
     Invoke-ReleaseNative gh @('release','create',$tag,'--repo',$repo,'--verify-tag','--draft','--title',"Item Intelligence $($receipt.Version)",'--notes-file',$notes) | Out-Null
+    $release = Find-ReleaseIncludingDrafts $repo $tag
+    if ($null -eq $release) { throw 'Created release is not visible in the authenticated release list. Frozen files are retained; retry after checking GitHub access.' }
 }
-$release = Invoke-ReleaseNative gh @('api',"repos/$repo/releases/tags/$tag") | Out-String | ConvertFrom-Json
 $assetNames = @($receipt.Assets | ForEach-Object Path)
 foreach ($remoteAsset in $release.assets) {
     if ($assetNames -cnotcontains $remoteAsset.name) { throw "Unexpected remote asset: $($remoteAsset.name)" }

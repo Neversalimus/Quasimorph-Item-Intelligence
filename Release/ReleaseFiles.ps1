@@ -59,6 +59,23 @@ function Get-RemoteReleaseRefs([string]$Source, [string]$Tag) {
     return $state
 }
 
+function Find-ReleaseIncludingDrafts([string]$Repo, [string]$Tag) {
+    # The tag endpoint is documented for published releases. Authenticated listing
+    # includes drafts and is also the retry journal after a successful create.
+    $json = Invoke-ReleaseNative gh @('api',"repos/$Repo/releases",'--paginate','--slurp') | Out-String
+    $pages = ConvertFrom-Json -InputObject $json -NoEnumerate
+    $found = [Collections.Generic.List[object]]::new()
+    foreach ($page in $pages) {
+        foreach ($entry in $page) {
+            if ($null -eq $entry -or -not $entry.PSObject.Properties['tag_name']) { throw 'Unexpected GitHub release-list response.' }
+            if ([string]$entry.tag_name -ceq $Tag) { $found.Add($entry) }
+        }
+    }
+    if ($found.Count -gt 1) { throw 'Ambiguous release state.' }
+    if ($found.Count -eq 1) { return $found[0] }
+    return $null
+}
+
 function Write-ReleaseJson([object]$Value, [string]$Path) {
     $tmp = $Path + '.' + [guid]::NewGuid().ToString('N') + '.tmp'
     try {
