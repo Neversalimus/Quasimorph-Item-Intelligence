@@ -8,7 +8,7 @@ namespace ItemIntelligence
 {
     public static partial class ModMain
     {
-        // Feature-owned compatibility fingerprints. The 1.0.3 hash is deliberately NOT
+        // Feature-owned compatibility fingerprints. New hashes are deliberately NOT
         // promoted to the global VERIFIED build identity until a full runtime regression
         // pass is complete. Only the exact contracts re-audited for these features use it.
         private const string AuditedFeatureAssemblySha102 =
@@ -21,7 +21,7 @@ namespace ItemIntelligence
         private const string AuditedTradeAssemblySha103Hotfix =
             "A38C4D993C9BF60D0DDE0EDD348F201C97574F907808417A33C8A20F4772E9C1";
         // Quasimorph 1.0.4.581s.2952480 was re-audited specifically for Trade pricing.
-        // Do not promote this fingerprint to Loot, Scavenger, cargo or global exactness.
+        // This alias owns Trade only; other features require their own audited contracts.
         private const string AuditedTradeAssemblySha104 =
             "BE78036434737521BB43DABBD934B579A08DC3E8370B834AEE36E40932F56FE0";
         private const string AuditedCargoSpawnAssemblySha103Hotfix =
@@ -39,6 +39,19 @@ namespace ItemIntelligence
         // paths were re-audited independently. This alias owns ONLY those source families.
         private const string AuditedSourceFamilyAssemblySha103Hotfix =
             "A38C4D993C9BF60D0DDE0EDD348F201C97574F907808417A33C8A20F4772E9C1";
+        // Independent 1.0.4.581s.2952480 reviews: Support/Compatibility104.json.
+        // Source families require the version-specific RandomStart_* pool policy.
+        // Runtime data checks remain mandatory; none of these aliases certifies global exactness.
+        private const string AuditedCargoSpawnAssemblySha104 =
+            "BE78036434737521BB43DABBD934B579A08DC3E8370B834AEE36E40932F56FE0";
+        private const string AuditedLootModifiersAssemblySha104 =
+            "BE78036434737521BB43DABBD934B579A08DC3E8370B834AEE36E40932F56FE0";
+        private const string AuditedContainerSaveEstimateAssemblySha104 =
+            "BE78036434737521BB43DABBD934B579A08DC3E8370B834AEE36E40932F56FE0";
+        private const string AuditedScavengerAssemblySha104 =
+            "BE78036434737521BB43DABBD934B579A08DC3E8370B834AEE36E40932F56FE0";
+        private const string AuditedSourceFamilyAssemblySha104 =
+            "BE78036434737521BB43DABBD934B579A08DC3E8370B834AEE36E40932F56FE0";
 
         private static int _lootManualProjectionContractState;
         private static int _containerSaveEstimateContractState;
@@ -56,7 +69,8 @@ namespace ItemIntelligence
         {
             if (!_compatStaticChecked) RunCompatibilityShieldStatic();
             return string.Equals(_compatAssemblySha256, AuditedFeatureAssemblySha103, StringComparison.OrdinalIgnoreCase) ||
-                   string.Equals(_compatAssemblySha256, AuditedCargoSpawnAssemblySha103Hotfix, StringComparison.OrdinalIgnoreCase);
+                   string.Equals(_compatAssemblySha256, AuditedCargoSpawnAssemblySha103Hotfix, StringComparison.OrdinalIgnoreCase) ||
+                   string.Equals(_compatAssemblySha256, AuditedCargoSpawnAssemblySha104, StringComparison.OrdinalIgnoreCase);
         }
 
         private static bool IsCurrent103TradeAssembly()
@@ -77,28 +91,38 @@ namespace ItemIntelligence
         {
             if (!_compatStaticChecked) RunCompatibilityShieldStatic();
             return IsAuditedFeatureAssembly() ||
-                   string.Equals(_compatAssemblySha256, AuditedLootModifiersAssemblySha103Hotfix, StringComparison.OrdinalIgnoreCase);
+                   string.Equals(_compatAssemblySha256, AuditedLootModifiersAssemblySha103Hotfix, StringComparison.OrdinalIgnoreCase) ||
+                   string.Equals(_compatAssemblySha256, AuditedLootModifiersAssemblySha104, StringComparison.OrdinalIgnoreCase);
         }
 
         private static bool IsCurrentContainerSaveEstimateAssembly()
         {
             if (!_compatStaticChecked) RunCompatibilityShieldStatic();
             return IsAuditedFeatureAssembly() ||
-                   string.Equals(_compatAssemblySha256, AuditedContainerSaveEstimateAssemblySha103Hotfix, StringComparison.OrdinalIgnoreCase);
+                   string.Equals(_compatAssemblySha256, AuditedContainerSaveEstimateAssemblySha103Hotfix, StringComparison.OrdinalIgnoreCase) ||
+                   string.Equals(_compatAssemblySha256, AuditedContainerSaveEstimateAssemblySha104, StringComparison.OrdinalIgnoreCase);
         }
 
         private static bool IsCurrentScavengerAssembly()
         {
             if (!_compatStaticChecked) RunCompatibilityShieldStatic();
             return IsAuditedFeatureAssembly() ||
-                   string.Equals(_compatAssemblySha256, AuditedScavengerAssemblySha103Hotfix, StringComparison.OrdinalIgnoreCase);
+                   string.Equals(_compatAssemblySha256, AuditedScavengerAssemblySha103Hotfix, StringComparison.OrdinalIgnoreCase) ||
+                   string.Equals(_compatAssemblySha256, AuditedScavengerAssemblySha104, StringComparison.OrdinalIgnoreCase);
         }
 
         private static bool IsCurrentSourceFamilyAssembly()
         {
             if (!_compatStaticChecked) RunCompatibilityShieldStatic();
             return IsAuditedFeatureAssembly() ||
-                   string.Equals(_compatAssemblySha256, AuditedSourceFamilyAssemblySha103Hotfix, StringComparison.OrdinalIgnoreCase);
+                   string.Equals(_compatAssemblySha256, AuditedSourceFamilyAssemblySha103Hotfix, StringComparison.OrdinalIgnoreCase) ||
+                   string.Equals(_compatAssemblySha256, AuditedSourceFamilyAssemblySha104, StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static bool IsCurrent104SourceFamilyAssembly()
+        {
+            if (!_compatStaticChecked) RunCompatibilityShieldStatic();
+            return string.Equals(_compatAssemblySha256, AuditedSourceFamilyAssemblySha104, StringComparison.OrdinalIgnoreCase);
         }
 
         private static bool IsLootManualProjectionContractVerified()
@@ -180,6 +204,10 @@ namespace ItemIntelligence
                 bool marauder = marauderTenths.Contains(3) && marauderTenths.Contains(6) &&
                     marauderTenths.Contains(9) && marauderTenths.Contains(12);
                 _lootManualProjectionContractState = marauder && organization && fieldMedic ? 1 : -1;
+                UnityEngine.Debug.Log("[ItemIntelligence][LootManualContract] perkValues=" +
+                    (_lootManualProjectionContractState > 0 ? "verified" : "mismatch") +
+                    ", Marauder=" + marauder + ", Organization=" + organization +
+                    ", FieldMedic=" + fieldMedic + ".");
             }
             // A transient read during vanilla data bootstrap is not evidence that the
             // audited constants changed. Definitive complete-data mismatch above still

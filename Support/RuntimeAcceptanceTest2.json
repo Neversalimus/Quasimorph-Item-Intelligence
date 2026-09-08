@@ -1,0 +1,142 @@
+{
+  "Version": "1.7.42.4-test2",
+  "RuntimeMarker": "Compat104Test02",
+  "InputFile": "Вставленный текст(9).txt",
+  "InputSHA256": "3CD4E477F7D6089CB0545E3322AA088234070BAB32FC7D51ABBF6C0FAFF2AED1",
+  "Scope": "Observed campaign/Space interaction with two items in English. This is partial runtime acceptance, not complete UI/mission acceptance.",
+  "Evidence": {
+    "Version": [
+      {
+        "Line": 523,
+        "Text": "[ItemIntelligence] ACTIVE VERSION 1.7.42.4-test2 (Compat104Test02)."
+      }
+    ],
+    "GameLoad": [
+      {
+        "Line": 1671,
+        "Text": "GameModeStateMachine load game, slot 2 (Success). Load process took 2,7753781 seconds."
+      }
+    ],
+    "Core": [
+      {
+        "Line": 2012,
+        "Text": "[ItemIntelligence] Core indexes ready in 42 ms: KnownItems=1869, BarterItems=0, MagnumItems=51, UsedIn=80, CraftedFrom=630, StationProdInputs=22, StationProdOutputs=62, AmmoWarmup=pending, DisassemblyWarmup=pending, FactionTech=pending, Loot=deferred, partialFailures=0."
+      }
+    ],
+    "PerkTable": [
+      {
+        "Line": 2043,
+        "Text": "[ItemIntelligence][LootManualContract] perkValues=verified, Marauder=True, Organization=True, FieldMedic=True."
+      }
+    ],
+    "ContainerEstimate": [
+      {
+        "Line": 2074,
+        "Text": "[ItemIntelligence][ContainerSaveEstimate] neutralTechContext=true, RNG=untouched, missionContexts=71, enabledFactionContexts=16, missionPointBudget=excluded."
+      }
+    ],
+    "Scavengers": [
+      {
+        "Line": 2064,
+        "Text": "[ItemIntelligence][ScavengersExact] item=electrical_parts_container, missionEntries=74, eligibleRows=56, expiredSkipped=0, proxyUnknownSkipped=0, whitelistUnresolvedSkipped=0."
+      }
+    ],
+    "SourceFamilies": [
+      {
+        "Line": 2045,
+        "Text": "[ItemIntelligence][LootSpecialSources] items=1001, links=6368, hardcodedCurrentBuild=enabled."
+      }
+    ],
+    "ManualControls": [
+      {
+        "Line": 2075,
+        "Text": "[ItemIntelligence][LootModifiers] mode=MANUAL, marauder=0, organization=False, fieldMedic=False."
+      },
+      {
+        "Line": 2076,
+        "Text": "[ItemIntelligence][LootModifiers] mode=MANUAL, marauder=1, organization=False, fieldMedic=False."
+      },
+      {
+        "Line": 2077,
+        "Text": "[ItemIntelligence][LootModifiers] mode=MANUAL, marauder=2, organization=False, fieldMedic=False."
+      },
+      {
+        "Line": 2079,
+        "Text": "[ItemIntelligence][LootModifiers] mode=CURRENT, marauder=2, organization=False, fieldMedic=False."
+      }
+    ],
+    "Trade": [
+      {
+        "Line": 2035,
+        "Text": "[ItemIntelligence][TradeLayout] layout=PreviousTable, PreviousTradeLayout=True, Exact103Pricing=True, BuildStatus=UNVERIFIED BUILD, AssemblySHA256=BE78036434737521BB43DABBD934B579A08DC3E8370B834AEE36E40932F56FE0."
+      },
+      {
+        "Line": 2038,
+        "Text": "[ItemIntelligence][TradeLayout] layout=Card, PreviousTradeLayout=False, Exact103Pricing=True, BuildStatus=UNVERIFIED BUILD, AssemblySHA256=BE78036434737521BB43DABBD934B579A08DC3E8370B834AEE36E40932F56FE0."
+      },
+      {
+        "Line": 2040,
+        "Text": "[ItemIntelligence][TradeLayout] layout=PreviousTable, PreviousTradeLayout=True, Exact103Pricing=True, BuildStatus=UNVERIFIED BUILD, AssemblySHA256=BE78036434737521BB43DABBD934B579A08DC3E8370B834AEE36E40932F56FE0."
+      }
+    ],
+    "TradeSwitches": [
+      {
+        "Line": 2037,
+        "Text": "[ItemIntelligence][TradeLayoutSwitch] source=TradeWindow, Table -> Cards, persisted=True."
+      },
+      {
+        "Line": 2039,
+        "Text": "[ItemIntelligence][TradeLayoutSwitch] source=TradeWindow, Cards -> Table, persisted=True."
+      }
+    ],
+    "Disassembly": [
+      {
+        "Line": 2019,
+        "Text": "[ItemIntelligence] Canonical disassembly warmup complete: items=1347, outputs=4667, reverseItems=273, reverseLinks=4667, symmetry=OK, rollChance=33%."
+      }
+    ],
+    "Ammo": [
+      {
+        "Line": 2021,
+        "Text": "[ItemIntelligence][AmmoSanity] staticMelee=106, falseAmmoLinks=0, energyMelee=21, energyMeleeWithAmmo=21."
+      }
+    ],
+    "Performance": [
+      {
+        "Line": 2028,
+        "Text": "[ItemIntelligence][FirstOpenPerf] targetResolve=0.4ms, coreBuild=0.0ms, runtimeReady=0.2ms, panel=20.5ms, render=9.0ms, misc=19.3ms, total=49.4ms, searchIndex=deferred, searchDropdown=deferred, catalog=deferred, factionColumns=deferred, recipeContext=deferred, lootProgress=deferred."
+      }
+    ],
+    "LootIndex": [
+      {
+        "Line": 2049,
+        "Text": "[ItemIntelligence] Loot Sources warmup complete: metadata=1869, items(container/enemy/amputation/bramfatura/station/faction)=403/1339/0/61/726/1404, enemyLinks=102099, containerProfilesIndexed=28/28, emptyContainerProfiles=0, containerItemLinks=4239, generalSpawnItems=1581, generalSpawnPairs=11274."
+      }
+    ],
+    "ContainerMapping": [
+      {
+        "Line": 2010,
+        "Text": "[ItemIntelligence] Loot container profiles: profiles=28, mapped=27, unmapped=1, physicalRecords=42, descriptorLinks=36, additionalDropMembers=0, multiProfilePhysical=0; relationCoverage=27/28; unmappedIds=AztecAltar."
+      }
+    ]
+  },
+  "ExceptionMatches": [],
+  "ConfirmedDefect": {
+    "Symptom": "Amputation item index has zero entries.",
+    "Cause": "IndexLootAmputationSlot passed WoundSlotRecord.AmputatedDrop to ExtractWeightedStringMap. That helper reads Dictionary / Key-Value pairs only; the current game supplies List<Tuple<float,string>>.",
+    "FixVersion": "1.7.42.4-test3",
+    "Fix": "Dedicated typed tuple parser; duplicate weights summed; malformed/nonpositive/nonfinite/overflowing tables omitted; explicitly labelled base probabilities."
+  },
+  "RemainingChecks": [
+    "Test3 amputation index and displayed sources",
+    "Dungeon/mission UI",
+    "RU UI",
+    "Marauder III-IV and Organization/Field Medic control actions",
+    "Same-name armor/helmet recipe display",
+    "Optional Modder Mode cargo creation"
+  ],
+  "NotPromoted": [
+    "Global VERIFIED build identity",
+    "Public Steam/GitHub release"
+  ]
+}

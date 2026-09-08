@@ -268,7 +268,7 @@ ui.workbench	Верстак:
 ui.wound_slot	ЧАСТЬ ТЕЛА
 ui.wound_slot_2	часть тела
 ammo.index_prefix	Загрузка данных оружия: 
-loot.note.amputation	Шанс после успешной ампутации. Улучшения Magnum могут изменить результат.
+loot.note.amputation	Базовый шанс после успешной ампутации, без улучшения Magnum на гарантированную аугментацию. Установленные импланты учитываются отдельно.
 loot.note.augmentation_woundslot	Может встречаться как модуль части тела врага.
 loot.note.augmentations	Шанс = вероятность наличия модуля у врага. Броски = попытки генерации.
 loot.note.container_chance	Шанс ручного лута контейнера зависит от текущего контекста миссии.
@@ -361,6 +361,7 @@ loot.container.server	Серверный контейнер
 loot.container.tool_case	Кейс с инструментами
 loot.column.container_profile	ТИП / ПРОФИЛЬ
 loot.column.save_estimate	ОЦ. ШАНС
+loot.column.base_chance	БАЗ. ШАНС
 loot.container.trash_can	Мусорный бак
 loot.container.armor_locker	Шкаф с броней
 loot.container.food	Контейнер с едой
@@ -579,7 +580,7 @@ loot.special.death_gift_condition	Включён подарок после см�
 loot.special.faction_reward_condition	Пул наград фракции / требование Tech
 loot.special.random_start_condition	Включено случайное стартовое снаряжение
 loot.special.station_production_condition	Сейчас в продукции станции + хватает очков награды
-loot.note.container_context_chance	≈ = шанс получить предмет хотя бы раз. Броски/«Мародёр» — ТЕКУЩИЕ/РУЧНЫЕ; Tech — активная миссия/фракция. Бюджет и временный Tech не учтены.
+loot.note.container_context_chance	≈ = шанс получить предмет хотя бы раз. Броски/Мародёр — ТЕКУЩИЕ/РУЧНЫЕ; Tech — миссия/фракция. Не учтены бюджет, временный Tech и события локации.
 loot.note.container_modifier_unavailable	* = только базовые броски: текущее значение «Мародёра» недоступно. В космосе выберите РУЧНЫЕ.
 loot.note.container_save_unavailable	— = точной оценки нет: неизвестен Tech сейва, подходящий пул или диапазон базовых бросков.
 loot.special.other_section	ОСОБЫЕ СПОСОБЫ ПОЛУЧЕНИЯ
@@ -641,3 +642,9 @@ loot.note.special_sources	Редкие способы. Для ритуала: «
 loot.special.fixed_loadout_count	НАБОРОВ
 
 loot.special.story_missions_count	Сюжетные миссии ×{0}
+
+loot.note.container_modifier_basic	* = только базовые броски: текущее значение «Мародёра» недоступно.
+loot.note.container_save_compatibility	— = расчёт шанса для сейва временно недоступен после обновления игры.
+loot.note.manual_unavailable	Ручной расчёт временно недоступен.
+loot.note.manual_compatibility	Ручной расчёт временно недоступен после обновления игры.
+loot.note.container_calculation_unavailable	— = расчёт шанса для сейва временно недоступен.

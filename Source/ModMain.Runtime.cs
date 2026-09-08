@@ -21,7 +21,7 @@ namespace ItemIntelligence
     /// </summary>
     public static partial class ModMain
     {
-        public const string Version = "1.7.42.2";
+        public const string Version = "1.7.42.4";
         // Ordinary Item Intelligence remains a read-only knowledge browser. The only
         // save-affecting exception is one explicit item-spawn click inside MCM Modder Mode;
         // economy, story variables and faction progression are never mutated.
@@ -55,7 +55,7 @@ namespace ItemIntelligence
         {
             if (context != null) _modContext = context;
             EnsureConfigLoaded();
-            Debug.Log("[ItemIntelligence] ACTIVE VERSION " + Version + " (StableRelease17422).");
+            Debug.Log("[ItemIntelligence] ACTIVE VERSION " + Version + " (StableRelease17424).");
             RunCompatibilityShieldStatic();
             RefreshBuildFingerprint();
             if (ShouldWriteAutomaticDiagnostics()) WriteDiagnosticsReportSafe("AfterConfigsLoaded");
@@ -914,25 +914,7 @@ namespace ItemIntelligence
 
 
 
-        private static double CorpseBonusAtLeastOnceChance(double perRoll, double expectedRolls)
-        {
-            if (double.IsNaN(perRoll) || double.IsInfinity(perRoll) ||
-                double.IsNaN(expectedRolls) || double.IsInfinity(expectedRolls))
-                return double.NaN;
-            perRoll = Math.Max(0.0, Math.Min(1.0, perRoll));
-            expectedRolls = Math.Max(0.0, expectedRolls);
-            if (perRoll <= 0.0 || expectedRolls <= 0.0) return 0.0;
 
-            // CreatureData.RollExpectedCount(expected) resolves floor(expected) rolls
-            // plus one extra roll with probability equal to the fractional remainder.
-            // Integrating both outcomes gives the exact chance without consuming the
-            // gameplay RNG from the information UI.
-            int floorRolls = Math.Max(0, (int)Math.Floor(expectedRolls));
-            double fraction = expectedRolls - floorRolls;
-            double pFloor = 1.0 - Math.Pow(1.0 - perRoll, floorRolls);
-            double pCeil = 1.0 - Math.Pow(1.0 - perRoll, floorRolls + 1);
-            return (1.0 - fraction) * pFloor + fraction * pCeil;
-        }
 
 
 

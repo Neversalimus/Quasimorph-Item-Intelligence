@@ -1,5 +1,43 @@
 ﻿# Changelog
 
+## v1.7.42.4 — 2026-09-08
+
+- Promote the accepted Test3 gameplay code to stable; runtime marker `1.7.42.4 (StableRelease17424)`.
+- Fix missing amputation source data and recipe identity collisions; restore independently reviewed 1.0.4 Loot, Scavenger, start/story and cargo API support.
+- Record Test3 acceptance in Space and Dungeon, RU/EN switching and two amputation index builds with 236 slots / 120 items.
+- Retain feature-specific compatibility guards and documented probability limits; no global VERIFIED promotion.
+- Prepare the existing public Workshop item through the stable installer and frozen release workflow. Final Windows payload hashes are captured during preparation.
+- Preserve the 660 production behavior assertions and 26 release assertions. Three isolated runtime performance-budget overruns are recorded in the acceptance evidence.
+
+## v1.7.42.4-test3 — 2026-09-08
+
+- Test2 campaign logs confirm perk values, container estimates, Scavengers, source-family activation and exact Trade contracts; record the observed scope in `Support/RuntimeAcceptanceTest2.json`.
+- Fix the empty amputation index: vanilla `AmputatedDrop` is a list of weight/ID tuples, not a dictionary. Sum duplicate outcomes and reject invalid intervals without publishing partial probabilities.
+- Clearly label base amputation chances and disclose the guaranteed-augmentation upgrade exclusion; installed implant recovery remains separate.
+- Add coverage through the production indexer and two mutation checks. 660 behavior assertions, 26 release assertions and 101-file C# 5 compilation pass.
+- Add `[AmputationSources]` index diagnostics. The later Test3 game log confirmed index recovery; see the stable entry above.
+
+## v1.7.42.4-test2 — 2026-09-08
+
+- Reviewed current game 1.0.4.581s.2952480 from the supplied 118 Managed DLLs; recorded evidence in `Support/Compatibility104.json`.
+- Restored independently audited Loot modifier, container-estimate, Scavenger, source-family and direct cargo API paths for exact game SHA `BE780...`, retaining runtime data guards and global unverified status.
+- Corrected random-start tables: 1.0.4 uses `RandomStart_rewardEquipment` / `RandomStart_rewardConsumables`; prior audited builds keep `General_*`.
+- Added behavioral coverage for version boundaries, source table selection, container probability composition and Scavenger candidate multiplicity. Five deliberate mutations are detected.
+- Clarified that container estimates exclude location events as well as budget and temporary Tech.
+- Added a runtime perk-table contract diagnostic; removed repeated automatic game-DLL collection from the DEV installer.
+- Full 100-file C# 5 compilation against current game dependencies passes; campaign/mission acceptance remains pending.
+
+## v1.7.42.4-test1 — 2026-09-08
+
+- Recipe consolidation now includes canonical item identity, incorporating the prepared same-name recipe fix.
+- Loot notes distinguish compatibility limitations from missing save data and never direct players to a blocked manual control.
+- Extracted deterministic probability and availability helpers; probability roll counts no longer overflow an integer on extreme finite inputs.
+- Replaced duplicated PowerShell math checks with execution of production C# methods and independent expected outcomes.
+- Added mutation sensitivity checks for probability, recipe identity and unavailable-action guidance.
+- Release preparation freezes the complete staged file set and tracked source hashes. Publishing uses atomic leased Git updates, resumable draft/asset uploads and downloaded asset verification.
+- DEV installer also collects current game DLL metadata for the outstanding compatibility review, without executing it or including campaign saves.
+- No additional game SHA has been enabled. Runtime acceptance on the current game remains required.
+
 ## v1.7.42.2 — 2026-09-07
 
 - Restored exact Trade pricing on Quasimorph `1.0.4.581s.2952480`.

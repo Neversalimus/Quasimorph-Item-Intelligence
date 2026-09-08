@@ -208,9 +208,10 @@ namespace ItemIntelligence
 
                     AddWrappedLootNote("loot.note.container_context_chance");
                     if (lootModifiers.StorageExpected < 0.0)
-                        AddWrappedLootNote("loot.note.container_modifier_unavailable");
+                        AddWrappedLootNote(GetLootModifierUnavailableNoteKey(IsLootManualProjectionContractVerified()));
                     if (hasUnavailableEstimate)
-                        AddWrappedLootNote("loot.note.container_save_unavailable");
+                        AddWrappedLootNote(GetLootContainerUnavailableNoteKey(
+                            IsContainerSaveEstimateContractVerified(), IsCurrentContainerSaveEstimateAssembly()));
                     if (hasUnknownRollRange) AddWrappedLootNote("loot.note.unknown_container_rolls");
                 }
             }
@@ -245,7 +246,7 @@ namespace ItemIntelligence
                     BrowserLine.LootHeader(
                         Ui("ui.wound_slot"),
                         Ui("ui.source"),
-                        Ui("ui.chance"),
+                        Ui("loot.column.base_chance"),
                         Ui("ui.qty"),
                         Ui("ui.result")));
                 for (int i = 0; i < amputations.Count; i++)

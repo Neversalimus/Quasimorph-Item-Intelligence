@@ -800,6 +800,8 @@ namespace ItemIntelligence
                 return false;
             }
 
+            Debug.Log("[ItemIntelligence][AmputationSources] slots=" + LootAmputationWarmupSlots.Count +
+                ", items=" + LootAmputationSourcesByItem.Count + ", chance=base, RNG=untouched.");
             ResetLootAmputationBuildState();
             return true;
         }
@@ -808,9 +810,16 @@ namespace ItemIntelligence
         {
             if (entry == null || entry.Value == null) return;
             string slotId = FirstNonEmpty(GetStringMember(entry.Value, "Id"), entry.Key);
-            Dictionary<string, double> drops = ExtractWeightedStringMap(
-                GetMember(entry.Value, "AmputatedDrop"));
-            if (drops.Count == 0) return;
+            object rawDrops = GetMember(entry.Value, "AmputatedDrop");
+            Dictionary<string, double> drops;
+            if (!TryExtractAmputationDropWeights(rawDrops, out drops))
+            {
+                ICollection collection = rawDrops as ICollection;
+                if (rawDrops != null && (collection == null || collection.Count > 0))
+                    LogRuntimeBoundaryWarningOnce("loot.amputation.weights",
+                        "An amputation drop table has unsupported or invalid weights; base chances omitted.", null);
+                return;
+            }
             double total;
             if (!TryResolveStrictlyPositiveItemDropTotal(
                 drops, "amputation." + slotId, out total)) return;

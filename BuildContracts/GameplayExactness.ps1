@@ -233,8 +233,8 @@ if ($ruLocalizationText.IndexOf('ШАНС ≥1',[StringComparison]::Ordinal) -ge
     $enLocalizationText.IndexOf('≥1 CHANCE',[StringComparison]::Ordinal) -ge 0) {
     throw 'current font-safety regression: unsupported Scavengers heading glyph returned.'
 }
-if ($runtimeText.IndexOf('public const string Version = "1.7.42.2";',[StringComparison]::Ordinal) -lt 0 -or
-    $runtimeText.IndexOf('StableRelease17422',[StringComparison]::Ordinal) -lt 0) {
+if ($runtimeText.IndexOf('public const string Version = "1.7.42.4";',[StringComparison]::Ordinal) -lt 0 -or
+    $runtimeText.IndexOf('StableRelease17424',[StringComparison]::Ordinal) -lt 0) {
     throw 'current runtime version/marker contract missing.'
 }
 
@@ -274,6 +274,7 @@ if ($containerProfileText.IndexOf('AddLootContainerDescriptor(dropId, dropId, 0,
     throw 'current container regression: unmapped ContainerItemDrop profile is fabricated as a physical descriptor.'
 }
 $specialSourceText = [IO.File]::ReadAllText((Join-Path $sourceDir 'ModMain.LootSpecialSources.cs')) + [IO.File]::ReadAllText((Join-Path $sourceDir 'ModMain.LootRewardSources.cs'))
+$specialSourceText += [IO.File]::ReadAllText((Join-Path $sourceDir 'ModMain.SourceFamilyPolicy.cs'))
 foreach ($token in @('StoryMissions','PrizeItems','StartingItems','AnComDataRewards','ConvertedItemId','FailedRitualItemId','GarbageItemId','DeathGiftId','InvokeFactionRewardTradeItems','General_rewardEquipment','General_rewardConsumables','CurrentReceipts','IsAuditedSourceFamilyContractVerified()')) {
     if ($specialSourceText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "current special-source exactness contract missing: $token" }
 }

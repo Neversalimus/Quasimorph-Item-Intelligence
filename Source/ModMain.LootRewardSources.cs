@@ -199,8 +199,8 @@ namespace ItemIntelligence
 
         private static void BuildRandomStartingRewardPoolSources()
         {
-            // V3 proves random starting equipment reads the two General_* reward pools
-            // directly at tech bucket 10. Keep this literal current-build path hash-gated.
+            // GenerateStartingItems uses General_* on legacy audited builds and
+            // RandomStart_* on 1.0.4, both at bucket 10. Unknown builds fail closed.
             if (!IsAuditedSourceFamilyContractVerified()) return;
 
             object drop = null;
@@ -221,11 +221,7 @@ namespace ItemIntelligence
             catch { getRawData = null; }
             if (getRawData == null) return;
 
-            string[] keys = new string[]
-            {
-                "General_rewardEquipment",
-                "General_rewardConsumables"
-            };
+            string[] keys = GetRandomStartingPoolKeys(IsCurrent104SourceFamilyAssembly());
 
             for (int k = 0; k < keys.Length; k++)
             {

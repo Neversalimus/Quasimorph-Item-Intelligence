@@ -4,7 +4,7 @@
 # state mutation or sampled simulation is used here.
 # ============================================================================
 
-$runtimeMathText = Read-Utf8Strict -Path (Join-Path $sourceDir 'ModMain.Runtime.cs')
+$runtimeMathText = (Read-Utf8Strict -Path (Join-Path $sourceDir 'ModMain.Runtime.cs')) + (Read-Utf8Strict -Path (Join-Path $sourceDir 'ModMain.LootProbabilityMath.cs'))
 $containerMathText = Read-Utf8Strict -Path (Join-Path $sourceDir 'ModMain.LootContainerChanceMath.cs')
 $lootPresentationMathText = Read-Utf8Strict -Path (Join-Path $sourceDir 'ModMain.LootPresentation.cs')
 $lootModifiersMathText = Read-Utf8Strict -Path (Join-Path $sourceDir 'ModMain.LootModifiers.cs')
@@ -76,71 +76,6 @@ foreach ($owner in $rngNeutralOwners) {
     }
 }
 
-function Get-FractionalExpectedChance([double]$p, [double]$expected) {
-    $p = [Math]::Max(0.0,[Math]::Min(1.0,$p))
-    $expected = [Math]::Max(0.0,$expected)
-    $floor = [Math]::Floor($expected)
-    $fraction = $expected - $floor
-    $a = 1.0 - [Math]::Pow(1.0 - $p,$floor)
-    $b = 1.0 - [Math]::Pow(1.0 - $p,$floor + 1.0)
-    return (1.0 - $fraction) * $a + $fraction * $b
-}
-
-foreach ($p in @(0.0,0.0001,0.01,0.1,0.5,0.9999,1.0)) {
-    $previous = -1.0
-    foreach ($expected in @(0.0,0.1,0.3,0.9,1.0,1.2,2.7,5.0,12.75)) {
-        $actual = Get-FractionalExpectedChance $p $expected
-        $floor = [Math]::Floor($expected)
-        $fraction = $expected - $floor
-        $closed = 1.0 - [Math]::Pow(1.0 - $p,$floor) * (1.0 - $fraction * $p)
-        if ([double]::IsNaN($actual) -or $actual -lt -1e-12 -or $actual -gt 1.0 + 1e-12 -or
-            [Math]::Abs($actual - $closed) -gt 1e-12 -or $actual + 1e-12 -lt $previous) {
-            throw "Fractional expected-roll probability property failed: p=$p expected=$expected actual=$actual closed=$closed"
-        }
-        $previous = $actual
-    }
-}
-
-$random = [Random]::new(174125)
-for ($i = 0; $i -lt 1000; $i++) {
-    $base = $random.NextDouble()
-    $bonus = $random.NextDouble()
-    $combined = 1.0 - (1.0 - $base) * (1.0 - $bonus)
-    if ($combined -lt $base - 1e-12 -or $combined -lt $bonus - 1e-12 -or $combined -gt 1.0 + 1e-12) {
-        throw "Independent probability composition property failed: base=$base bonus=$bonus"
-    }
-}
-
-# Rounding must happen per damage instance, matching the vanilla pipeline.
-$perFragment = [Math]::Round(11.0 / 3.0)
-$rangedTotal = [int]$perFragment * 3 * 2
-if ($rangedTotal -ne 24) { throw "Per-fragment damage rounding property failed: $rangedTotal" }
-$criticalTotal = [int][Math]::Round($perFragment * 1.5) * 3 * 2
-if ($criticalTotal -ne 36) { throw "Per-hit critical rounding property failed: $criticalTotal" }
-
-function Test-DamageScaleProjection([double]$value, [int]$first, [int]$second, [ref]$result) {
-    $result.Value = 0
-    if ([double]::IsNaN($value) -or [double]::IsInfinity($value) -or $value -lt 0.0 -or
-        $value -gt [int]::MaxValue -or $first -le 0 -or $second -le 0) { return $false }
-    $rounded = [long][Math]::Round($value,[MidpointRounding]::ToEven)
-    $wide = $rounded * [long]$first
-    if ($wide -gt [int]::MaxValue) { return $false }
-    $wide *= [long]$second
-    if ($wide -gt [int]::MaxValue) { return $false }
-    $result.Value = [int]$wide
-    return $true
-}
-$damageScaleCases = @(
-    @{ Value=(11.0/3.0); First=3; Second=2; Ok=$true; Result=24 },
-    @{ Value=2.5; First=1; Second=1; Ok=$true; Result=2 },
-    @{ Value=1.0; First=[int]::MaxValue; Second=2; Ok=$false; Result=0 },
-    @{ Value=2147483648.0; First=1; Second=1; Ok=$false; Result=0 },
-    @{ Value=[double]::NaN; First=1; Second=1; Ok=$false; Result=0 },
-    @{ Value=[double]::PositiveInfinity; First=1; Second=1; Ok=$false; Result=0 })
-foreach ($case in $damageScaleCases) {
-    $scaled = 0
-    $ok = Test-DamageScaleProjection $case.Value $case.First $case.Second ([ref]$scaled)
-    if ($ok -ne $case.Ok -or $scaled -ne $case.Result) {
-        throw "Damage scale overflow/rounding property failed: value=$($case.Value), first=$($case.First), second=$($case.Second), ok=$ok, result=$scaled"
-    }
-}
+# Execute actual production C#; duplicated PowerShell formulas cannot validate it.
+& (Join-Path $root 'Tests/Run-BehaviorTests.ps1') -SourceRoot $root
+& (Join-Path $root 'Tests/Run-ReleaseTests.ps1')

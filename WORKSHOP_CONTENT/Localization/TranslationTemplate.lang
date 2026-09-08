@@ -274,7 +274,7 @@ ui.workbench	Workbench:
 ui.wound_slot	WOUND SLOT
 ui.wound_slot_2	wound slot
 ammo.index_prefix	Loading weapon data: 
-loot.note.amputation	Chance after a successful amputation. Magnum upgrades may change the result.
+loot.note.amputation	Base chance after a successful amputation, without Magnum's guaranteed augmentation upgrade. Installed implants are separate.
 loot.note.augmentation_woundslot	Can appear as an enemy body-part module.
 loot.note.augmentations	Chance = probability the enemy has this module. Rolls = generation attempts.
 loot.note.container_chance	Manual-container chance depends on the live mission context.
@@ -367,6 +367,7 @@ loot.container.server	Server container
 loot.container.tool_case	Tool case
 loot.column.container_profile	TYPE / PROFILE
 loot.column.save_estimate	EST. CHANCE
+loot.column.base_chance	BASE CHANCE
 loot.container.trash_can	Trash can
 loot.container.armor_locker	Armor locker
 loot.container.food	Food container
@@ -585,7 +586,7 @@ loot.special.death_gift_condition	Death Gift enabled + reward eligibility
 loot.special.faction_reward_condition	Faction reward pool / Tech requirement
 loot.special.random_start_condition	Random starting equipment enabled
 loot.special.station_production_condition	Currently in station production + enough reward points
-loot.note.container_context_chance	≈ = chance to get the item at least once. Rolls/Marauder use CURRENT/MANUAL; Tech uses mission/faction. Loot budget and temporary Tech are excluded.
+loot.note.container_context_chance	≈ = chance to get the item at least once. CURRENT/MANUAL rolls/Marauder; mission/faction Tech. Budget, temporary Tech and location events excluded.
 loot.note.container_modifier_unavailable	* = base rolls only: current Marauder value is unavailable. In space, choose MANUAL.
 loot.note.container_save_unavailable	— = no exact estimate: save Tech, eligible pool, or base-roll range is unavailable.
 loot.special.other_section	SPECIAL ACQUISITION
@@ -647,3 +648,9 @@ loot.note.special_sources	Rare routes. For rituals: “Source” = starting skul
 loot.special.fixed_loadout_count	LOADOUTS
 
 loot.special.story_missions_count	Story missions ×{0}
+
+loot.note.container_modifier_basic	* = base rolls only: the current Marauder value is unavailable.
+loot.note.container_save_compatibility	— = chance estimates for this save are temporarily unavailable after a game update.
+loot.note.manual_unavailable	Manual calculation is temporarily unavailable.
+loot.note.manual_compatibility	Manual calculation is temporarily unavailable after a game update.
+loot.note.container_calculation_unavailable	— = chance estimates for this save are temporarily unavailable.

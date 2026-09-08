@@ -21,7 +21,11 @@ namespace ItemIntelligence
                 RecipeUseGroup group = raw[i];
                 if (group == null) continue;
                 string display = NormalizeGameText(LocalizeItem(group.OutputItemId));
-                string key = display + "|" + (group.Kind ?? string.Empty);
+                // Localized names can be shared by unrelated items (for example Chitin Shell).
+                // Only variants of the same canonical item may form one recipe family.
+                string relationId = ResolveStaticRelationItemId(group.OutputItemId);
+                if (string.IsNullOrEmpty(relationId)) relationId = group.OutputItemId;
+                string key = display + "|" + (group.Kind ?? string.Empty) + "|" + relationId;
                 List<RecipeUseGroup> list;
                 if (!byDisplay.TryGetValue(key, out list))
                 {
@@ -56,7 +60,7 @@ namespace ItemIntelligence
                     }
                 }
 
-                // Same displayed family + zero/one distinct chip is a single vanilla unlock
+                // Same canonical/display family + zero/one distinct chip is a single vanilla unlock
                 // family. If multiple different chips exist, keep rows separate: Quasimorph
                 // has a few same-name cases that really are unlocked independently.
                 if (distinctChips.Count <= 1)

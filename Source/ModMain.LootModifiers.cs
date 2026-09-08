@@ -116,6 +116,7 @@ namespace ItemIntelligence
                 BrowserLines.Add(BrowserLine.Accent(
                     Ui("ui.loot_modifiers_current"),
                     FormatLootModifierSummary(snapshot)));
+                AddWrappedLootNote(GetLootManualUnavailableNoteKey(IsCurrentLootModifiersAssembly()));
             }
 
             if (!_lootModifierUseManual) return;

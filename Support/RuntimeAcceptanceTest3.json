@@ -1,0 +1,169 @@
+{
+  "Version": "1.7.42.4-test3",
+  "RuntimeMarker": "AmputationIndexTest03",
+  "InputFile": "Player(20260908-163112).log",
+  "InputSHA256": "FE62A844F88B1CA0B11D1E4463829FE17DE680A48DDEC39166730DFBA2790AB9",
+  "GameVersion": "1.0.4.581s.2952480",
+  "GameAssemblySHA256": "BE78036434737521BB43DABBD934B579A08DC3E8370B834AEE36E40932F56FE0",
+  "Verdict": "PASS for observed Space/Dungeon operation, EN/RU language switching and amputation index recovery. Three minor performance-threshold overruns recorded; no new functional defect established.",
+  "Evidence": {
+    "Version": [
+      {
+        "Line": 526,
+        "Text": "[ItemIntelligence] ACTIVE VERSION 1.7.42.4-test3 (AmputationIndexTest03)."
+      }
+    ],
+    "Sessions": [
+      {
+        "Line": 1170,
+        "Text": "GameModeStateMachine transition -> MainMenu"
+      },
+      {
+        "Line": 1674,
+        "Text": "GameModeStateMachine load game, slot 2 (Success). Load process took 2,9930986 seconds."
+      },
+      {
+        "Line": 1675,
+        "Text": "GameModeStateMachine transition -> Space (slot: 2)"
+      },
+      {
+        "Line": 2098,
+        "Text": "GameModeStateMachine transition -> MainMenu"
+      },
+      {
+        "Line": 2102,
+        "Text": "GameModeStateMachine start new game, slot 1"
+      },
+      {
+        "Line": 2103,
+        "Text": "GameModeStateMachine transition -> Space (slot: 1)"
+      },
+      {
+        "Line": 2453,
+        "Text": "GameModeStateMachine transition -> Dungeon (slot: 1)"
+      },
+      {
+        "Line": 2497,
+        "Text": "GameModeStateMachine transition -> MainMenu"
+      }
+    ],
+    "AmputationIndex": [
+      {
+        "Line": 2050,
+        "Text": "[ItemIntelligence][AmputationSources] slots=236, items=120, chance=base, RNG=untouched."
+      },
+      {
+        "Line": 2469,
+        "Text": "[ItemIntelligence][AmputationSources] slots=236, items=120, chance=base, RNG=untouched."
+      }
+    ],
+    "Core": [
+      {
+        "Line": 2015,
+        "Text": "[ItemIntelligence] Core indexes ready in 43 ms: KnownItems=1869, BarterItems=0, MagnumItems=51, UsedIn=80, CraftedFrom=630, StationProdInputs=22, StationProdOutputs=62, AmmoWarmup=pending, DisassemblyWarmup=pending, FactionTech=pending, Loot=deferred, partialFailures=0."
+      },
+      {
+        "Line": 2443,
+        "Text": "[ItemIntelligence] Core indexes ready in 23 ms: KnownItems=1868, BarterItems=0, MagnumItems=51, UsedIn=80, CraftedFrom=630, StationProdInputs=22, StationProdOutputs=62, AmmoWarmup=pending, DisassemblyWarmup=pending, FactionTech=pending, Loot=deferred, partialFailures=0."
+      }
+    ],
+    "Languages": [
+      {
+        "Line": 1175,
+        "Text": "[ItemIntelligence] UI localization: language=English, file=en.lang, entries=641, english=641."
+      },
+      {
+        "Line": 2057,
+        "Text": "[ItemIntelligence] UI localization: language=Russian, file=ru.lang, entries=641, english=641."
+      },
+      {
+        "Line": 2475,
+        "Text": "[ItemIntelligence] UI localization: language=English, file=en.lang, entries=641, english=641."
+      }
+    ],
+    "Loot": [
+      {
+        "Line": 2053,
+        "Text": "[ItemIntelligence] Loot Sources warmup complete: metadata=1869, items(container/enemy/amputation/bramfatura/station/faction)=403/1339/120/61/726/1404, enemyLinks=102099, containerProfilesIndexed=28/28, emptyContainerProfiles=0, containerItemLinks=4239, generalSpawnItems=1581, generalSpawnPairs=11274."
+      },
+      {
+        "Line": 2471,
+        "Text": "[ItemIntelligence] Loot Sources warmup complete: metadata=1868, items(container/enemy/amputation/bramfatura/station/faction)=403/1339/120/61/725/1403, enemyLinks=102099, containerProfilesIndexed=28/28, emptyContainerProfiles=0, containerItemLinks=4239, generalSpawnItems=1580, generalSpawnPairs=11269."
+      }
+    ],
+    "Perks": [
+      {
+        "Line": 2044,
+        "Text": "[ItemIntelligence][LootManualContract] perkValues=verified, Marauder=True, Organization=True, FieldMedic=True."
+      }
+    ],
+    "Scavengers": [
+      {
+        "Line": 2041,
+        "Text": "[ItemIntelligence][ScavengersExact] item=armor_container, missionEntries=74, eligibleRows=44, expiredSkipped=0, proxyUnknownSkipped=0, whitelistUnresolvedSkipped=0."
+      },
+      {
+        "Line": 2063,
+        "Text": "[ItemIntelligence][ScavengersExact] item=electrical_parts_container, missionEntries=74, eligibleRows=56, expiredSkipped=0, proxyUnknownSkipped=0, whitelistUnresolvedSkipped=0."
+      },
+      {
+        "Line": 2071,
+        "Text": "[ItemIntelligence][ScavengersExact] item=chemical_analyzer, missionEntries=74, eligibleRows=27, expiredSkipped=0, proxyUnknownSkipped=0, whitelistUnresolvedSkipped=0."
+      }
+    ],
+    "Trade": [
+      {
+        "Line": 2039,
+        "Text": "[ItemIntelligence][TradeLayout] layout=PreviousTable, PreviousTradeLayout=True, Exact103Pricing=True, BuildStatus=UNVERIFIED BUILD, AssemblySHA256=BE78036434737521BB43DABBD934B579A08DC3E8370B834AEE36E40932F56FE0."
+      },
+      {
+        "Line": 2493,
+        "Text": "[ItemIntelligence][TradeLayout] layout=Card, PreviousTradeLayout=False, Exact103Pricing=True, BuildStatus=UNVERIFIED BUILD, AssemblySHA256=BE78036434737521BB43DABBD934B579A08DC3E8370B834AEE36E40932F56FE0."
+      }
+    ],
+    "NavigationGuard": [
+      {
+        "Line": 2494,
+        "Text": "[ItemIntelligence][StarmapNav] Navigation blocked for mercury: current MGSC.UI default view is MGSC.DungeonHudScreen, not SpaceHudScreen."
+      }
+    ],
+    "Performance": [
+      {
+        "Line": 2031,
+        "Text": "[ItemIntelligence][PerfBudget] item=armor_container, mode=cold, total=51.2ms/50ms, render=13.0ms/20ms, violations=1."
+      },
+      {
+        "Line": 2085,
+        "Text": "[ItemIntelligence][PerfBudget] item=augment_chip, mode=warm, total=20.5ms/20ms, render=1.8ms/20ms, violations=2."
+      },
+      {
+        "Line": 2093,
+        "Text": "[ItemIntelligence][PerfBudget] item=spider_brain, mode=warm, total=24.0ms/20ms, render=0.8ms/20ms, violations=3."
+      }
+    ],
+    "Disassembly": [
+      {
+        "Line": 2022,
+        "Text": "[ItemIntelligence] Canonical disassembly warmup complete: items=1347, outputs=4667, reverseItems=273, reverseLinks=4667, symmetry=OK, rollChance=33%."
+      },
+      {
+        "Line": 2450,
+        "Text": "[ItemIntelligence] Canonical disassembly warmup complete: items=1346, outputs=4663, reverseItems=273, reverseLinks=4663, symmetry=OK, rollChance=33%."
+      }
+    ],
+    "Ammo": [
+      {
+        "Line": 2025,
+        "Text": "[ItemIntelligence][AmmoSanity] staticMelee=106, falseAmmoLinks=0, energyMelee=21, energyMeleeWithAmmo=21."
+      }
+    ]
+  },
+  "ExceptionsFound": 0,
+  "PerformanceNote": "Cold 51.2 ms vs 50 ms budget; warm 20.5 and 24.0 ms vs 20 ms budget. Render times within 20 ms budget. This log alone does not establish a sustained performance regression.",
+  "ScopeLimits": [
+    "Log does not establish visual correctness of all rows or exact in-game transaction/drop outcomes.",
+    "No explicit Modder Mode cargo-spawn action or same-name armor/helmet comparison recorded.",
+    "No final DLL hash or Windows build receipt supplied in this log."
+  ],
+  "ReleaseState": "DEV candidate; no public publication or global VERIFIED promotion performed."
+}
