@@ -56,9 +56,11 @@ namespace ItemIntelligence
 
                 bool hasImplantRows = false;
                 bool hasAugmentationRows = false;
+                bool hasConditionalBodyRows = false;
                 for (int i = 0; i < LootEnemyRegularPresentationBuffer.Count; i++)
                 {
                     LootEnemySource source = LootEnemyRegularPresentationBuffer[i];
+                    if (float.IsNaN(source.MaxPercent)) hasConditionalBodyRows = true;
                     if (!hasImplantRows &&
                         (string.Equals(source.Kind, "GrantedImplant", StringComparison.Ordinal) ||
                          string.Equals(source.Kind, "RandomImplant", StringComparison.Ordinal)))
@@ -75,6 +77,7 @@ namespace ItemIntelligence
                     "loot.note.corpse_transfer",
                     "loot.note.enemy_bonus_separate");
                 if (hasImplantRows) AddWrappedLootNote("loot.note.implants");
+                if (hasConditionalBodyRows) AddWrappedLootNote("loot.note.body_dependent");
                 if (hasAugmentationRows)
                 {
                     AddWrappedLootNote("loot.note.augmentations");

@@ -138,8 +138,8 @@ ui.floor	podłoga
 ui.future	  przyszłe
 ui.future_2	Przyszłe
 ui.future_3	PRZYSZŁE
-ui.granted_augmentation	przyznana augmentacja
-ui.granted_implant	przyznany implant
+ui.granted_augmentation	ustalona augmentacja
+ui.granted_implant	ustalony implant
 ui.granted_item	przyznany przedmiot
 ui.granted_weapon_ammo	amunicja do przyznanej broni
 ui.head_gear	nakrycie głowy
@@ -270,11 +270,11 @@ ui.wound_slot_2	miejsce rany
 ammo.index_prefix	Ładowanie danych broni: 
 loot.note.amputation	Bazowa szansa po udanej amputacji, bez ulepszenia Magnum gwarantującego augmentację. Zainstalowane implanty są osobno.
 loot.note.augmentation_woundslot	Może pojawić się jako moduł części ciała przeciwnika.
-loot.note.augmentations	Szansa = prawdopodobieństwo, że przeciwnik ma ten moduł. Losowania = próby generowania.
+loot.note.augmentations	Szansa = obecność zainstalowanej augmentacji. Losowania = próby generowania; szanse losowych augmentacji są warunkowe.
 loot.note.container_chance	Szansa ręcznego pojemnika zależy od aktualnego kontekstu misji.
 loot.note.corpse_transfer	Po śmierci ekwipunek i wyposażenie trafiają na zwłoki, z wyjątkiem gołych rąk. Pełny ekwipunek może odrzucić przedmiot.
 loot.note.enemy_chance	SZANSA = wygenerowanie przedmiotu u tego przeciwnika, nie szansa spotkania przeciwnika. Zakres zależy od Tech i frakcji.
-loot.note.implants	Szansa = próba instalacji. „Amputuj X%” = szansa odzyskania zainstalowanego implantu.
+loot.note.implants	Szansa = obecność zainstalowanego implantu przy generowaniu wroga. „Amputacja X%” = szansa jego odzyskania.
 loot.note.mission_pools	Przedmiot znajduje się w normalnej puli łupu tych misji i może pojawić się w pojemniku lub na podłodze.
 loot.note.placement_generic	Łup z pomieszczeń może trafić do pojemników; łup z korytarzy trafia na podłogę.
 loot.note.placement_percent_prefix	Umieszczenie: pomieszczenia mają 
@@ -652,3 +652,5 @@ loot.note.container_save_compatibility	— = szacowanie szans dla tego zapisu je
 loot.note.manual_unavailable	Ręczne obliczenia są tymczasowo niedostępne.
 loot.note.manual_compatibility	Ręczne obliczenia są tymczasowo niedostępne po aktualizacji gry.
 loot.note.container_calculation_unavailable	— = szacowanie szans dla tego zapisu jest tymczasowo niedostępne.
+ui.body_dependent	Warunkowo
+loot.note.body_dependent	„Warunkowo” oznacza możliwe źródło bez potwierdzonej wartości procentowej. Dostępność zależy od generowania ciała i ograniczeń instalacji.

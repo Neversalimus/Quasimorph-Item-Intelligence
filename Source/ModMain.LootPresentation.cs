@@ -341,6 +341,8 @@ namespace ItemIntelligence
             double corpseBonusExpectedRolls)
         {
             if (source == null) return "-";
+            if (float.IsNaN(source.MinPercent) || float.IsNaN(source.MaxPercent))
+                return Ui("ui.body_dependent");
             float min = source.MinPercent;
             float max = source.MaxPercent;
 

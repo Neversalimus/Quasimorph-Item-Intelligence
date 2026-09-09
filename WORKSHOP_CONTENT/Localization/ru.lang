@@ -138,8 +138,8 @@ ui.floor	пол
 ui.future	  позже
 ui.future_2	Будущие
 ui.future_3	БУДУЩИЕ
-ui.granted_augmentation	аугм. гарант.
-ui.granted_implant	имплант гарант.
+ui.granted_augmentation	заданная аугм.
+ui.granted_implant	заданный имплант
 ui.granted_item	выдано
 ui.granted_weapon_ammo	патроны гарант.оруж.
 ui.head_gear	шлем
@@ -270,11 +270,11 @@ ui.wound_slot_2	часть тела
 ammo.index_prefix	Загрузка данных оружия: 
 loot.note.amputation	Базовый шанс после успешной ампутации, без улучшения Magnum на гарантированную аугментацию. Установленные импланты учитываются отдельно.
 loot.note.augmentation_woundslot	Может встречаться как модуль части тела врага.
-loot.note.augmentations	Шанс = вероятность наличия модуля у врага. Броски = попытки генерации.
+loot.note.augmentations	Шанс = наличие установленной аугментации. Броски = попытки генерации; шанс случайных аугментаций указан условно.
 loot.note.container_chance	Шанс ручного лута контейнера зависит от текущего контекста миссии.
 loot.note.corpse_transfer	После смерти инвентарь и экипировка переходят в труп, кроме голых рук. При полном инвентаре предмет может потеряться.
 loot.note.enemy_chance	ШАНС = генерация предмета у этого врага, не шанс встретить врага. Диапазон зависит от Tech и фракции.
-loot.note.implants	Шанс = попытка установки. «Ампут. X%» = шанс извлечь установленный имплант.
+loot.note.implants	Шанс = наличие установленного импланта при генерации врага. «Ампут. X%» = шанс его извлечения.
 loot.note.mission_pools	Предмет есть в обычном пуле добычи указанных миссий; может появиться в контейнере или на полу.
 loot.note.placement_generic	Лут из комнат может попасть в контейнер; в коридорах — на пол.
 loot.note.placement_percent_prefix	Размещение: комнаты — 
@@ -660,3 +660,5 @@ ui.loot_storage_corpse_short	К/Т
 ui.unit_day_short	д
 ui.unit_hour_short	ч
 ui.unit_minute_short	м
+ui.body_dependent	Условно
+loot.note.body_dependent	«Условно»: возможный источник без подтверждённого процента. Доступность зависит от генерации тела и ограничений установки.

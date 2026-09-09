@@ -228,6 +228,7 @@ namespace ItemIntelligence
         // a mechanical extraction of the former Runtime.ClearIndexes() block.
         private static void ResetLootIndexState()
         {
+            ResetEnemyBodySources();
             LootContainerSourcesByItem.Clear();
             ResetLootContainerSaveEstimateIndex();
             ResetLootBaronSpecialIndex();
@@ -342,7 +343,7 @@ namespace ItemIntelligence
                 _lootWarmupTotal =
                     LootWarmupItemIds.Count +
                     LootWarmupContainerDropIds.Count +
-                    (LootWarmupMobClasses.Count * 10) + // init + 9 small enemy stages
+                    (LootWarmupMobClasses.Count * 9) + // init + 8 enemy stages; body work yields within its stage
                     LootWarmupBramfaturas.Count +
                     LootWarmupStationTypes.Count +
                     LootWarmupFactions.Count + 3; // spawn-context + amputation + general-spawn phases

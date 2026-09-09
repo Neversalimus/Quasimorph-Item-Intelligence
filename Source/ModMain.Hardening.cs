@@ -278,6 +278,8 @@ namespace ItemIntelligence
                 lines.Add("ManualExportHotkey=Ctrl+Shift+F10");
                 lines.Add("ReadOnlySelfTestHotkey=" + (ModderMode ? "Ctrl+Shift+F11 (Modder Mode)" : "disabled"));
 
+                if (string.Equals(trigger, "ManualCtrlShiftF10", StringComparison.Ordinal))
+                    AppendSelectedEnemyImplantDiagnostics(lines);
                 File.WriteAllLines(reportPath, lines.ToArray(), Encoding.UTF8);
                 WriteLocalizationHealthReportSafe(true);
             }

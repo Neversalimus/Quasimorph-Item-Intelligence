@@ -201,11 +201,13 @@ namespace ItemIntelligence
                 {
                     if (_lootWarmupIndex < LootWarmupMobClasses.Count)
                     {
+                        int previousStage = _lootMobWorkStage;
                         bool completedMob =
                             TickLootMobClassSlice(LootWarmupMobClasses[_lootWarmupIndex]);
                         // Progress is measured per actual enemy sub-step so the bar moves
                         // smoothly through the expensive phase instead of stalling on a mob.
-                        _lootWarmupProcessed++;
+                        if (completedMob || previousStage != _lootMobWorkStage)
+                            _lootWarmupProcessed++;
                         if (completedMob)
                             _lootWarmupIndex++;
                         continue;
@@ -290,6 +292,7 @@ namespace ItemIntelligence
             _lootWarmupProcessed = Math.Max(_lootWarmupProcessed, _lootWarmupTotal);
             _lootWarmupActive = false;
             _lootWarmupComplete = true;
+            LogEnemyBodySourceSummary();
 
             int enemyLinks = 0;
             foreach (KeyValuePair<string, List<LootEnemySource>> pair in LootEnemySourcesByItem)
@@ -843,6 +846,7 @@ namespace ItemIntelligence
 
         private static void ResetLootMobWork()
         {
+            _enemyBodySourceWork = null;
             _lootMobWorkEntry = null;
             _lootMobWorkRecord = null;
             _lootMobWorkId = string.Empty;
@@ -957,14 +961,13 @@ namespace ItemIntelligence
                     _lootMobWorkWhitelist, _lootMobWorkContexts,
                     _lootMobWorkAmmoMin, _lootMobWorkAmmoMax);
             else if (_lootMobWorkStage == 8)
-                IndexEnemyAugmentationAttempts(_lootMobWorkId, _lootMobWorkRecord,
-                    _lootMobWorkWhitelist, _lootMobWorkContexts);
-            else if (_lootMobWorkStage == 9)
-                IndexEnemyImplantAttempts(_lootMobWorkId, _lootMobWorkRecord,
-                    _lootMobWorkWhitelist, _lootMobWorkContexts);
+            {
+                if (!TickEnemyBodySources(_lootMobWorkId, _lootMobWorkRecord, _lootMobWorkContexts))
+                    return false;
+            }
 
             _lootMobWorkStage++;
-            if (_lootMobWorkStage > 9)
+            if (_lootMobWorkStage > 8)
             {
                 ResetLootMobWork();
                 return true;

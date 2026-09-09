@@ -21,7 +21,7 @@ namespace ItemIntelligence
     /// </summary>
     public static partial class ModMain
     {
-        public const string Version = "1.7.42.5-test1";
+        public const string Version = "1.7.42.5-test2";
         // Ordinary Item Intelligence remains a read-only knowledge browser. The only
         // save-affecting exception is one explicit item-spawn click inside MCM Modder Mode;
         // economy, story variables and faction progression are never mutated.
@@ -55,7 +55,7 @@ namespace ItemIntelligence
         {
             if (context != null) _modContext = context;
             EnsureConfigLoaded();
-            Debug.Log("[ItemIntelligence] ACTIVE VERSION " + Version + " (LanguagesMcmTest01).");
+            Debug.Log("[ItemIntelligence] ACTIVE VERSION " + Version + " (ImplantBodyLanguagesTest02).");
             RunCompatibilityShieldStatic();
             RefreshBuildFingerprint();
             if (ShouldWriteAutomaticDiagnostics()) WriteDiagnosticsReportSafe("AfterConfigsLoaded");
@@ -749,180 +749,6 @@ namespace ItemIntelligence
                 mobClassId, "CorpseBonus", "per-roll",
                 0, 0, contexts.Count, corpseBonusPerRollAcc);
         }
-
-        // v1.7.11 Quasi-source audit: mirrors vanilla Randomize category/faction eligibility.
-        private static void IndexEnemyImplantAttempts(
-            string mobClassId,
-            object mobRecord,
-            object rawWhitelist,
-            List<EnemyLootContext> contexts)
-        {
-            List<string> granted = ExtractStringIds(GetMember(mobRecord, "GrantedImplants"));
-            for (int i = 0; i < granted.Count; i++)
-            {
-                string itemId = granted[i];
-                if (!string.IsNullOrEmpty(itemId) && KnownItemIds.Contains(itemId))
-                    AddLootEnemySource(itemId, new LootEnemySource(
-                        mobClassId, 100f, 100f, "GrantedImplant", "install attempt", 1, 1,
-                        GetEarliestEnemyContextTech(contexts)));
-            }
-
-            Dictionary<string, double> classWeights =
-                ExtractWeightedStringMap(GetMember(mobRecord, "ImplantClasses"));
-            if (classWeights.Count == 0 || contexts == null || contexts.Count == 0) return;
-
-            int minRolls, maxRolls;
-            ReadIntRange(GetMember(mobRecord, "ImplantCount"), out minRolls, out maxRolls);
-            if (maxRolls <= 0) return;
-
-            List<LootItemMeta> candidates = CollectEnemyCandidates(
-                classWeights, LootImplantsByAugmentationClass);
-            if (candidates.Count == 0) return;
-
-            Dictionary<string, double> whitelist = ExtractItemDropWeightMap(rawWhitelist);
-            bool whitelistExists = rawWhitelist != null;
-            double gate = GetEnemySlotGate(classWeights, mobClassId + ".implant");
-            if (gate <= 0.0) return;
-            Dictionary<string, EnemyChanceAccumulator> acc =
-                new Dictionary<string, EnemyChanceAccumulator>(StringComparer.OrdinalIgnoreCase);
-
-            for (int c = 0; c < contexts.Count; c++)
-            {
-                EnemyLootContext context = contexts[c];
-                Dictionary<string, double> eligible =
-                    new Dictionary<string, double>(StringComparer.OrdinalIgnoreCase);
-                double total = 0.0;
-                for (int i = 0; i < candidates.Count; i++)
-                {
-                    LootItemMeta meta = candidates[i];
-                    if (meta == null || meta.TechLevel > context.EffectiveTech) continue;
-                    double baseWeight;
-                    if (string.IsNullOrEmpty(meta.AugmentationClass) ||
-                        !classWeights.TryGetValue(meta.AugmentationClass, out baseWeight)) continue;
-
-                    // Match CreatureSystem.GenerateAugmentations -> ItemDropSystem.Randomize.
-                    // Quasi* class weights alone are not enough: with a MobClass
-                    // ItemCategoriesWhitelist the candidate must also match a whitelist
-                    // category or the current spawn faction through the Faction entry.
-                    bool categoryEligible;
-                    double categoryWeight = GetEnemyCategoryWeight(
-                        meta, whitelist, whitelistExists, context.FactionId, out categoryEligible);
-                    if (!categoryEligible) continue;
-
-                    double finalWeight = baseWeight + categoryWeight;
-                    eligible[meta.ItemId] = finalWeight;
-                }
-                if (!TryResolveStrictlyPositiveItemDropTotal(
-                    eligible, "enemy.implant." + mobClassId, out total)) continue;
-                foreach (KeyValuePair<string, double> pair in eligible)
-                {
-                    double perAttempt = gate * pair.Value / total;
-                    double overall = ProbabilityAtLeastOnceUniformCount(perAttempt, minRolls, maxRolls) * 100.0;
-                    UpdateEnemyAccumulator(acc, pair.Key, overall, c, context.RawTech);
-                }
-            }
-
-            FinalizeEnemyAccumulatorSources(
-                mobClassId, "RandomImplant", "install attempt",
-                Math.Max(0, minRolls), Math.Max(0, maxRolls),
-                contexts.Count, acc);
-        }
-
-
-
-        // v1.7.11 Quasi-source audit: random augmentations use vanilla category/faction eligibility.
-        private static void IndexEnemyAugmentationAttempts(
-            string mobClassId,
-            object mobRecord,
-            object rawWhitelist,
-            List<EnemyLootContext> contexts)
-        {
-            List<string> granted = ExtractStringIds(GetMember(mobRecord, "GrantedAugmentations"));
-            for (int i = 0; i < granted.Count; i++)
-            {
-                List<string> itemIds = ResolveLootExternalItemIds(granted[i]);
-                for (int j = 0; j < itemIds.Count; j++)
-                {
-                    AddLootEnemySource(itemIds[j], new LootEnemySource(
-                        mobClassId, 100f, 100f, "GrantedAugmentation", "installed", 1, 1,
-                        GetEarliestEnemyContextTech(contexts)));
-                }
-            }
-
-            Dictionary<string, double> classWeights =
-                ExtractWeightedStringMap(GetMember(mobRecord, "AugmentationClasses"));
-            if (classWeights.Count == 0 || contexts == null || contexts.Count == 0) return;
-
-            int minRolls, maxRolls;
-            ReadIntRange(GetMember(mobRecord, "AugCount"), out minRolls, out maxRolls);
-            if (maxRolls <= 0) return;
-
-            List<LootItemMeta> candidates = CollectEnemyCandidates(
-                classWeights, LootAugmentationsByAugmentationClass);
-            if (candidates.Count == 0) return;
-
-            Dictionary<string, double> whitelist = ExtractItemDropWeightMap(rawWhitelist);
-            bool whitelistExists = rawWhitelist != null;
-            double gate = GetEnemySlotGate(classWeights, mobClassId + ".augmentation");
-            if (gate <= 0.0) return;
-            Dictionary<string, EnemyChanceAccumulator> acc =
-                new Dictionary<string, EnemyChanceAccumulator>(StringComparer.OrdinalIgnoreCase);
-
-            for (int c = 0; c < contexts.Count; c++)
-            {
-                EnemyLootContext context = contexts[c];
-                Dictionary<string, double> eligible =
-                    new Dictionary<string, double>(StringComparer.OrdinalIgnoreCase);
-                double total = 0.0;
-                for (int i = 0; i < candidates.Count; i++)
-                {
-                    LootItemMeta meta = candidates[i];
-                    if (meta == null || meta.TechLevel > context.EffectiveTech) continue;
-                    double baseWeight;
-                    if (string.IsNullOrEmpty(meta.AugmentationClass) ||
-                        !classWeights.TryGetValue(meta.AugmentationClass, out baseWeight)) continue;
-
-                    // Match CreatureSystem.GenerateAugmentations -> ItemDropSystem.Randomize.
-                    // Quasi* class weights alone are not enough: with a MobClass
-                    // ItemCategoriesWhitelist the candidate must also match a whitelist
-                    // category or the current spawn faction through the Faction entry.
-                    bool categoryEligible;
-                    double categoryWeight = GetEnemyCategoryWeight(
-                        meta, whitelist, whitelistExists, context.FactionId, out categoryEligible);
-                    if (!categoryEligible) continue;
-
-                    double finalWeight = baseWeight + categoryWeight;
-                    eligible[meta.ItemId] = finalWeight;
-                }
-                if (!TryResolveStrictlyPositiveItemDropTotal(
-                    eligible, "enemy.augmentation." + mobClassId, out total)) continue;
-                foreach (KeyValuePair<string, double> pair in eligible)
-                {
-                    double perAttempt = gate * pair.Value / total;
-                    double overall = ProbabilityAtLeastOnceUniformCount(perAttempt, minRolls, maxRolls) * 100.0;
-                    UpdateEnemyAccumulator(acc, pair.Key, overall, c, context.RawTech);
-                }
-            }
-
-            FinalizeEnemyAccumulatorSources(
-                mobClassId, "RandomAugmentation", "install attempt",
-                Math.Max(0, minRolls), Math.Max(0, maxRolls),
-                contexts.Count, acc);
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         private static string ResolveEquipmentSlotKindFromNode(
             object node, string typeName, string itemId, HashSet<string> categories, string itemClass)

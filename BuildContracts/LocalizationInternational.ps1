@@ -48,8 +48,8 @@ foreach ($spec in $internationalLanguageSpecs) {
 }
 
 $internationalEnglish = $internationalMaps['EN']
-if ($internationalEnglish.Count -ne 651) {
-    throw "international localization key count drifted: $($internationalEnglish.Count), expected 651"
+if ($internationalEnglish.Count -ne 653) {
+    throw "international localization key count drifted: $($internationalEnglish.Count), expected 653"
 }
 foreach ($name in @('RU','DE','PL','ZH','TPL')) {
     $map = $internationalMaps[$name]

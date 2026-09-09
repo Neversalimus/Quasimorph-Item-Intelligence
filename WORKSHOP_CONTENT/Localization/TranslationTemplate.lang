@@ -144,8 +144,8 @@ ui.floor	floor
 ui.future	  future
 ui.future_2	Future
 ui.future_3	FUTURE
-ui.granted_augmentation	granted augmentation
-ui.granted_implant	granted implant
+ui.granted_augmentation	preset augmentation
+ui.granted_implant	preset implant
 ui.granted_item	granted item
 ui.granted_weapon_ammo	granted-weapon ammo
 ui.head_gear	head gear
@@ -276,11 +276,11 @@ ui.wound_slot_2	wound slot
 ammo.index_prefix	Loading weapon data: 
 loot.note.amputation	Base chance after a successful amputation, without Magnum's guaranteed augmentation upgrade. Installed implants are separate.
 loot.note.augmentation_woundslot	Can appear as an enemy body-part module.
-loot.note.augmentations	Chance = probability the enemy has this module. Rolls = generation attempts.
+loot.note.augmentations	Chance = an installed augmentation. Rolls = generation attempts; random augmentation chances are conditional.
 loot.note.container_chance	Manual-container chance depends on the live mission context.
 loot.note.corpse_transfer	On death, inventory and equipment move to the corpse, except bare hands. A full inventory can discard the item.
 loot.note.enemy_chance	CHANCE = item generation on this enemy, not enemy encounter chance. The range depends on Tech and faction.
-loot.note.implants	Chance = installation attempt. “Amputate X%” = chance to recover an installed implant.
+loot.note.implants	Chance = an installed implant at enemy generation. “Amputate X%” = chance to recover it.
 loot.note.mission_pools	The item is in the normal loot pool of these missions and may appear in a container or on the floor.
 loot.note.placement_generic	Room loot may go to containers; corridor loot goes to the floor.
 loot.note.placement_percent_prefix	Placement: rooms use a 
@@ -666,3 +666,5 @@ ui.loot_storage_corpse_short	C/B
 ui.unit_day_short	d
 ui.unit_hour_short	h
 ui.unit_minute_short	m
+ui.body_dependent	Conditional
+loot.note.body_dependent	“Conditional” marks a possible source whose chance is not confirmed. Availability depends on body generation and installation limits.

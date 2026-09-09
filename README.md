@@ -2,13 +2,21 @@
 
 **Item Intelligence** is an in-game item browser and reference tool for **Quasimorph**.
 
-DEV candidate: **v1.7.42.5-test1 — LanguagesMcmTest01**.
+DEV candidate: **v1.7.42.5-test2 — ImplantBodyLanguagesTest02**.
 Gameplay base: released **v1.7.42.4**, commit `05fba90596241f30d09fa47b1ddb0d8ad210bba7`.
 The branch also retains the frozen GitHub release recovery correction from `2314b29931be5b7dd80a426edba970a2f315f8b3`.
 
+## Implant source correction
+
+Enemy implant sources now follow pre-selection body-slot eligibility, then post-selection nature and socket constraints. Failed installations remain in the selection denominator. The numeric percentage is successful installation at ordinary enemy generation, including earlier preset implants, shared socket competition, uniform socket ranges and ordinary body variants. The amputation recovery percentage remains separate.
+
+When random augmentations can change the body, the model excludes outcomes impossible across the retained body possibilities and marks the remaining sources **Conditional**. It does not claim exact probabilities for the sequence of random augmentations, health-threshold checks or explicit body overrides in special spawns. Random augmentation source rows also use this label. “Preset” describes a configured attempt and does not promise a guaranteed installation.
+
+The index runs in slices and reads game records without creating creatures/items or advancing gameplay RNG. Ctrl+Shift+F10 with an implant selected appends record evidence to the normal manual diagnostics report; this supports investigation without farming a rare drop.
+
 ## Localization candidate
 
-German, Polish and Simplified Chinese were recovered from the older `Languages_MCM_Test2_Full_BuildFix2` source package and selectively ported. All five languages and the community template contain 651 keys. Current availability and amputation explanations are preserved and translated.
+German, Polish and Simplified Chinese were recovered from the older `Languages_MCM_Test2_Full_BuildFix2` source package and selectively ported. All five languages and the community template contain 653 keys. Current availability and amputation explanations are preserved and translated.
 
 MCM offers Auto (Game), English, Русский, Deutsch, Polski and 简体中文 / Chinese. Auto reads the selected Quasimorph language, including inherited singleton metadata and the current EnglishUS / ChineseSimp identifiers. Manual selection changes QII UI and numeric formatting; game-provided entity names and search continue to use the game's language. Changes refresh the browser without restarting. MCM's own registered captions refresh on the next game launch.
 
@@ -18,10 +26,11 @@ The candidate is for DEV item **3781927679** and stages into `C:\QM_Workshop\Ite
 
 ## Verification
 
-- All 105 production C# files compile as C# 5 against the 118 supplied game dependencies, with zero warnings.
+- All 108 production C# files compile as C# 5 against the 118 supplied game dependencies, with zero warnings.
 - 660 existing production behavior assertions and 32 release workflow assertions pass.
-- 3321 localization assertions cover real language-file selection and key resolution, metadata precedence, cache replacement, manual/Auto behavior, damaged files, fallback text, formatting, CJK wrapping and private font fallback ownership. Game/TMP/MCM services are fixtures; these are not Unity visual tests.
-- Runtime language switching, MCM captions/options, font appearance and narrow-column fit still require the new candidate to be tested in-game. Earlier stable logs do not certify this candidate.
+- 4923 body/implant assertions include an independent exhaustive draw-sequence oracle, socket-range averaging, runtime record-adapter fixtures, missing data and conditional UI formatting.
+- 3331 localization assertions cover real language-file selection and key resolution, metadata precedence, cache replacement, manual/Auto behavior, damaged files, fallback text, formatting, CJK wrapping and private font fallback ownership. Game/TMP/MCM services are fixtures; these are not Unity visual tests.
+- Runtime body-source indexing, the manual record export, language switching, MCM captions/options, font appearance and narrow-column fit still require the new candidate to be tested in-game. Earlier stable logs do not certify this candidate.
 
 Run `pwsh -NoProfile -File ./BUILD_AND_STAGE.ps1 -Mode TEST -ContractsOnly` for the contracts and behavior suites. No game files are needed for that command. The installer performs the actual Windows build against the local game.
 

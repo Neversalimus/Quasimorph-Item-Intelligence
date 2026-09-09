@@ -68,7 +68,8 @@ foreach ($token in @(
 $rngNeutralOwners = @(
     'ModMain.LootContainerChanceMath.cs','ModMain.LootContainerSaveEstimate.cs',
     'ModMain.ScavengerMissionChance.cs','ModMain.ScavengerMissionPoolMath.cs',
-    'ModMain.LootBaronUltimateData.cs')
+    'ModMain.LootBaronUltimateData.cs',
+    'ModMain.EnemyImplantMath.cs','ModMain.EnemyBodySources.cs')
 foreach ($owner in $rngNeutralOwners) {
     $text = Read-Utf8Strict -Path (Join-Path $sourceDir $owner)
     foreach ($forbidden in @('UnityEngine.Random.','System.Random(','DropManager.GenerateDrop','CreateForInventory(')) {
@@ -78,4 +79,5 @@ foreach ($owner in $rngNeutralOwners) {
 
 # Execute actual production C#; duplicated PowerShell formulas cannot validate it.
 & (Join-Path $root 'Tests/Run-BehaviorTests.ps1') -SourceRoot $root
+& (Join-Path $root 'Tests/Run-EnemyBodyTests.ps1') -SourceRoot $root
 & (Join-Path $root 'Tests/Run-ReleaseTests.ps1')

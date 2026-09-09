@@ -138,8 +138,8 @@ ui.floor	地面
 ui.future	  未来
 ui.future_2	未来
 ui.future_3	未来
-ui.granted_augmentation	固定强化体
-ui.granted_implant	固定植入体
+ui.granted_augmentation	预设强化体
+ui.granted_implant	预设植入体
 ui.granted_item	固定物品
 ui.granted_weapon_ammo	固定武器弹药
 ui.head_gear	头部装备
@@ -270,11 +270,11 @@ ui.wound_slot_2	伤口部位
 ammo.index_prefix	正在加载武器数据： 
 loot.note.amputation	成功截肢后的基础概率，不计入 Magnum 必定获得强化体的升级效果。已安装的植入体单独列出。
 loot.note.augmentation_woundslot	可作为敌人的身体部位模块出现。
-loot.note.augmentations	概率 = 敌人拥有此模块的概率。次数 = 生成尝试次数。
+loot.note.augmentations	概率表示已安装该强化体的可能性。抽取次数表示生成尝试次数；随机强化体的概率取决于条件。
 loot.note.container_chance	手动容器概率取决于当前任务环境。
 loot.note.corpse_transfer	死亡时，库存和装备会转移到尸体上，空手除外。库存已满时物品可能被丢弃。
 loot.note.enemy_chance	概率 = 此敌人生成该物品的概率，而不是遇到该敌人的概率。范围取决于科技和派系。
-loot.note.implants	概率 = 安装尝试。“截肢 X%” = 回收已安装植入体的概率。
+loot.note.implants	概率表示敌人生成时已安装该植入体的可能性。“截肢 X%”表示取回该植入体的概率。
 loot.note.mission_pools	该物品位于这些任务的常规战利品池中，可能出现在容器内或地面上。
 loot.note.placement_generic	房间战利品可能进入容器；走廊战利品会落在地面。
 loot.note.placement_percent_prefix	放置：房间有 
@@ -652,3 +652,5 @@ loot.note.container_save_compatibility	— = 游戏更新后，暂时无法估�
 loot.note.manual_unavailable	手动计算暂时不可用。
 loot.note.manual_compatibility	游戏更新后，手动计算暂时不可用。
 loot.note.container_calculation_unavailable	— = 暂时无法估算当前存档的获取概率。
+ui.body_dependent	有条件
+loot.note.body_dependent	“有条件”表示可能的来源，尚无确定的概率。能否获得取决于身体生成结果和安装限制。

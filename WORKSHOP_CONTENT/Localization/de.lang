@@ -138,8 +138,8 @@ ui.floor	Boden
 ui.future	  zukünftig
 ui.future_2	Zukünftig
 ui.future_3	ZUKÜNFTIG
-ui.granted_augmentation	gewährte Augmentation
-ui.granted_implant	gewährtes Implantat
+ui.granted_augmentation	vorgegebene Augmentation
+ui.granted_implant	vorgegebenes Implantat
 ui.granted_item	gewährter Gegenstand
 ui.granted_weapon_ammo	Munition für gewährte Waffe
 ui.head_gear	Kopfbedeckung
@@ -270,11 +270,11 @@ ui.wound_slot_2	Wundenplatz
 ammo.index_prefix	Waffendaten werden geladen: 
 loot.note.amputation	Basischance nach erfolgreicher Amputation, ohne Magnum-Upgrade für garantierte Augmentationen. Installierte Implantate sind separat.
 loot.note.augmentation_woundslot	Kann als Körperteilmodul eines Gegners erscheinen.
-loot.note.augmentations	Chance = Wahrscheinlichkeit, dass der Gegner dieses Modul besitzt. Würfe = Generierungsversuche.
+loot.note.augmentations	Chance = eine installierte Augmentation. Würfe = Erzeugungsversuche; Chancen zufälliger Augmentationen sind bedingt.
 loot.note.container_chance	Die Chance eines manuellen Behälters hängt vom aktuellen Missionskontext ab.
 loot.note.corpse_transfer	Beim Tod wandern Inventar und Ausrüstung auf die Leiche, außer bloßen Händen. Ein volles Inventar kann den Gegenstand verwerfen.
 loot.note.enemy_chance	CHANCE = Gegenstandserzeugung bei diesem Gegner, nicht die Begegnungswahrscheinlichkeit. Der Bereich hängt von Tech und Fraktion ab.
-loot.note.implants	Chance = Installationsversuch. „Amputieren X %“ = Chance, ein installiertes Implantat zu bergen.
+loot.note.implants	Chance = ein bei der Gegnererzeugung installiertes Implantat. „Amputieren X%“ = Chance, es zu bergen.
 loot.note.mission_pools	Der Gegenstand befindet sich im normalen Beutepool dieser Missionen und kann in einem Behälter oder auf dem Boden erscheinen.
 loot.note.placement_generic	Raumbeute kann in Behältern landen; Korridorbeute landet auf dem Boden.
 loot.note.placement_percent_prefix	Platzierung: Räume verwenden einen 
@@ -652,3 +652,5 @@ loot.note.container_save_compatibility	— = Chancen für diesen Spielstand sind
 loot.note.manual_unavailable	Die manuelle Berechnung ist vorübergehend nicht verfügbar.
 loot.note.manual_compatibility	Die manuelle Berechnung ist nach einem Spielupdate vorübergehend nicht verfügbar.
 loot.note.container_calculation_unavailable	— = Chancen für diesen Spielstand können vorübergehend nicht geschätzt werden.
+ui.body_dependent	Bedingt
+loot.note.body_dependent	„Bedingt“ kennzeichnet eine mögliche Quelle ohne bestätigte Prozentangabe. Die Verfügbarkeit hängt vom erzeugten Körper und den Einbaubeschränkungen ab.
