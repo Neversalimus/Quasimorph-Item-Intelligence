@@ -32,7 +32,7 @@ namespace ItemIntelligence
             string middleLine = stationBuys
                 ? string.Empty
                 : Ui("ui.trade_stock_short") + " " + (entry.Stock.HasValue ? entry.Stock.Value.ToString(CultureInfo.InvariantCulture) : "—");
-            string travelMissionLine = Ui("ui.travel") + ": " + SafeTradeText(entry.TravelTime) + "\n" + Ui("ui.mission") + ": " + SafeTradeText(GetTradeMissionDisplay(entry));
+            string travelMissionLine = Ui("ui.travel") + ": " + SafeTradeText(GetTradeTravelDisplay(entry)) + "\n" + Ui("ui.mission") + ": " + SafeTradeText(GetTradeMissionDisplay(entry));
 
             BrowserLines.Add(BrowserLine.TradeStationCard103(
                 entry.Label, priceLine, middleLine, travelMissionLine, entry.SpaceObjectId,

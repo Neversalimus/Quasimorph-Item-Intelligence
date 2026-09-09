@@ -149,8 +149,8 @@ namespace ItemIntelligence
         {
             if (float.IsNaN(percent) || float.IsInfinity(percent)) return "—";
             if (percent >= 99.995f) return "100%";
-            if (percent >= 10f) return percent.ToString("0.#", CultureInfo.InvariantCulture) + "%";
-            return percent.ToString("0.##", CultureInfo.InvariantCulture) + "%";
+            if (percent >= 10f) return percent.ToString("0.#", GetUiNumberCulture()) + GetUiPercentSuffix();
+            return percent.ToString("0.##", GetUiNumberCulture()) + GetUiPercentSuffix();
         }
 
         private static List<string> GetDatadiskUnlockedItemsSorted(string datadiskItemId)

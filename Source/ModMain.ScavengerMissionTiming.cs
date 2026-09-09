@@ -80,6 +80,10 @@ namespace ItemIntelligence
                 }
             }
 
+            if (row.TravelHours.HasValue && UiLanguagePreference != "Auto (Game)")
+                row.TravelText = string.Equals(row.SpaceObjectId, _tradeTravelOriginSpaceObjectId, StringComparison.OrdinalIgnoreCase)
+                    ? Ui("ui.here") : FormatUiDaysAndHours(row.TravelHours.Value);
+
             if (row.TravelHours.HasValue && row.RemainingHours.HasValue)
                 row.ArrivalState = row.TravelHours.Value <= row.RemainingHours.Value ? 1 : 2;
         }
@@ -90,19 +94,7 @@ namespace ItemIntelligence
             string vanilla = FormatTradeMissionRemainingVanilla(hours);
             if (!string.IsNullOrWhiteSpace(vanilla)) return vanilla;
 
-            int totalHours = (int)Math.Floor(hours);
-            if (totalHours >= 24)
-            {
-                int days = totalHours / 24;
-                int remainderHours = totalHours % 24;
-                return IsRussian()
-                    ? days.ToString() + "д " + remainderHours.ToString() + "ч"
-                    : days.ToString() + "d " + remainderHours.ToString() + "h";
-            }
-            if (totalHours >= 1) return IsRussian() ? totalHours.ToString() + "ч" : totalHours.ToString() + "h";
-
-            int minutes = Math.Max(1, (int)Math.Floor(hours * 60d));
-            return IsRussian() ? minutes.ToString() + "м" : minutes.ToString() + "m";
+            return FormatCompactUiDurationFallback(hours);
         }
     }
 }

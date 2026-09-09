@@ -1,4 +1,4 @@
-﻿@language=English;english;en;Английский
+﻿@language=EnglishUS;English;english;en;Английский
 catalog.compact.all	ALL
 catalog.compact.ammo	AMMO
 catalog.compact.armor	ARMOR
@@ -648,3 +648,15 @@ loot.note.container_save_compatibility	— = chance estimates for this save are 
 loot.note.manual_unavailable	Manual calculation is temporarily unavailable.
 loot.note.manual_compatibility	Manual calculation is temporarily unavailable after a game update.
 loot.note.container_calculation_unavailable	— = chance estimates for this save are temporarily unavailable.
+
+# Interface language and compact units
+mcm.header.language	Language
+mcm.language	Item Intelligence language
+mcm.language_tip	Auto follows Quasimorph. Manual selection changes Item Intelligence UI only; game-provided item and faction names stay in the game language.
+ui.loot_storage_short	C
+ui.loot_corpse_short	B
+ui.loot_implant_short	I
+ui.loot_storage_corpse_short	C/B
+ui.unit_day_short	d
+ui.unit_hour_short	h
+ui.unit_minute_short	m

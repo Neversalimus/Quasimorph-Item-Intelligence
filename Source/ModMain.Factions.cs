@@ -818,9 +818,9 @@ namespace ItemIntelligence
             if (view == null || view.State != 0 || float.IsNaN(view.RewardPercent) || float.IsInfinity(view.RewardPercent))
                 return "—";
             float value = Mathf.Clamp(view.RewardPercent, 0f, 100f);
-            if (value >= 10f) return value.ToString("0.#", CultureInfo.InvariantCulture) + "%";
-            if (value >= 1f) return value.ToString("0.##", CultureInfo.InvariantCulture) + "%";
-            return value.ToString("0.###", CultureInfo.InvariantCulture) + "%";
+            if (value >= 10f) return value.ToString("0.#", GetUiNumberCulture()) + GetUiPercentSuffix();
+            if (value >= 1f) return value.ToString("0.##", GetUiNumberCulture()) + GetUiPercentSuffix();
+            return value.ToString("0.###", GetUiNumberCulture()) + GetUiPercentSuffix();
         }
 
         private static int GetCurrentFactionTechLevel(string factionId)

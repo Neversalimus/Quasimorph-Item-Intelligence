@@ -21,6 +21,7 @@ $buildContractBudgets = @{
     'CodeHygiene.ps1' = 180
     'ReleaseSafety.ps1' = 380
     'InstallSafety.ps1' = 80
+    'LocalizationInternational.ps1' = 230
     'TextSafety.ps1' = 120
     'Performance.ps1' = 160
 }
@@ -36,6 +37,7 @@ $buildContractModules = @(
     'CodeHygiene.ps1',
     'ReleaseSafety.ps1',
     'InstallSafety.ps1',
+    'LocalizationInternational.ps1',
     'TextSafety.ps1',
     'Performance.ps1'
 )

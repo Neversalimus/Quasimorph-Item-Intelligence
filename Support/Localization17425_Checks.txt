@@ -1,0 +1,7 @@
+Production C# behavior: PASS (660 assertions).
+Release behavior: PASS (32 assertions; native transports mocked).
+Production localization behavior: PASS (3321 assertions).
+Static build contracts: PASS
+C# 5 compile against supplied game dependencies: PASS (105 source files).
+Game Assembly SHA256: BE78036434737521BB43DABBD934B579A08DC3E8370B834AEE36E40932F56FE0
+Compiler warnings: 0

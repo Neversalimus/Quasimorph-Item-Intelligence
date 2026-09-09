@@ -128,7 +128,7 @@ namespace ItemIntelligence
             BrowserLines.Add(BrowserLine.InternalAction(
                 Ui("ui.loot_marika_organization"),
                 _lootManualOrganization
-                    ? Ui("ui.loot_on") + "  +0.5 " + (IsRussian() ? "Т" : "B")
+                    ? Ui("ui.loot_on") + "  +" + FormatExpectedNumber(0.5) + " " + Ui("ui.loot_corpse_short")
                     : Ui("ui.loot_off"),
                 BrowserAction.LootModifier(BrowserLootModifierCommand.ToggleOrganization)));
             BrowserLines.Add(BrowserLine.InternalAction(
@@ -141,10 +141,9 @@ namespace ItemIntelligence
 
         private static string FormatLootModifierSummary(LootModifierSnapshot snapshot)
         {
-            bool ru = IsRussian();
-            return (ru ? "К " : "C ") + FormatExpectedBonusCompact(snapshot.StorageExpected, ru) +
-                "   " + (ru ? "Т " : "B ") + FormatExpectedBonusCompact(snapshot.CorpseExpected, ru) +
-                "   " + (ru ? "И " : "I ") + FormatPercentPointBonusCompact(snapshot.ImplantAdditionalChance, ru);
+            return Ui("ui.loot_storage_short") + " " + FormatExpectedBonusCompact(snapshot.StorageExpected) +
+                "   " + Ui("ui.loot_corpse_short") + " " + FormatExpectedBonusCompact(snapshot.CorpseExpected) +
+                "   " + Ui("ui.loot_implant_short") + " " + FormatPercentPointBonusCompact(snapshot.ImplantAdditionalChance);
         }
 
         private static string FormatManualMarauderState()
@@ -158,27 +157,26 @@ namespace ItemIntelligence
                 case 3: roman = "III"; break;
                 default: roman = "IV"; break;
             }
-            return roman + "  +" + FormatExpectedNumber(GetManualMarauderExpectedBonus(_lootManualMarauderLevel), IsRussian()) +
-                " " + (IsRussian() ? "К/Т" : "C/B");
+            return roman + "  +" + FormatExpectedNumber(GetManualMarauderExpectedBonus(_lootManualMarauderLevel)) +
+                " " + Ui("ui.loot_storage_corpse_short");
         }
 
-        private static string FormatExpectedBonusCompact(double value, bool ru)
+        private static string FormatExpectedBonusCompact(double value)
         {
             if (value < 0.0 || double.IsNaN(value) || double.IsInfinity(value)) return "?";
-            return "+" + FormatExpectedNumber(value, ru);
+            return "+" + FormatExpectedNumber(value);
         }
 
-        private static string FormatPercentPointBonusCompact(double value, bool ru)
+        private static string FormatPercentPointBonusCompact(double value)
         {
             if (value < 0.0 || double.IsNaN(value) || double.IsInfinity(value)) return "?";
-            return "+" + Math.Round(value * 100.0).ToString("0", CultureInfo.InvariantCulture) + "%";
+            return "+" + Math.Round(value * 100.0).ToString("0", GetUiNumberCulture()) + GetUiPercentSuffix();
         }
 
-        private static string FormatExpectedNumber(double value, bool ru)
+        private static string FormatExpectedNumber(double value)
         {
             if (double.IsNaN(value) || double.IsInfinity(value)) return "?";
-            string text = value.ToString("0.##", CultureInfo.InvariantCulture);
-            return ru ? text.Replace('.', ',') : text;
+            return value.ToString("0.##", GetUiNumberCulture());
         }
 
         private static void HandleLootModifierAction(BrowserLootModifierCommand command)
@@ -254,7 +252,7 @@ namespace ItemIntelligence
             if (!source.RollRangeResolved)
             {
                 if (storageExpected > 0.0)
-                    return "? +" + FormatExpectedNumber(storageExpected, IsRussian());
+                    return "? +" + FormatExpectedNumber(storageExpected);
                 return "?";
             }
 
@@ -265,7 +263,7 @@ namespace ItemIntelligence
 
             if (storageExpected > 0.0)
             {
-                string bonus = "+" + FormatExpectedNumber(storageExpected, IsRussian());
+                string bonus = "+" + FormatExpectedNumber(storageExpected);
                 return baseRolls + " " + bonus;
             }
             return baseRolls;

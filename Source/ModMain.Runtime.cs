@@ -21,7 +21,7 @@ namespace ItemIntelligence
     /// </summary>
     public static partial class ModMain
     {
-        public const string Version = "1.7.42.4";
+        public const string Version = "1.7.42.5-test1";
         // Ordinary Item Intelligence remains a read-only knowledge browser. The only
         // save-affecting exception is one explicit item-spawn click inside MCM Modder Mode;
         // economy, story variables and faction progression are never mutated.
@@ -55,7 +55,7 @@ namespace ItemIntelligence
         {
             if (context != null) _modContext = context;
             EnsureConfigLoaded();
-            Debug.Log("[ItemIntelligence] ACTIVE VERSION " + Version + " (StableRelease17424).");
+            Debug.Log("[ItemIntelligence] ACTIVE VERSION " + Version + " (LanguagesMcmTest01).");
             RunCompatibilityShieldStatic();
             RefreshBuildFingerprint();
             if (ShouldWriteAutomaticDiagnostics()) WriteDiagnosticsReportSafe("AfterConfigsLoaded");
@@ -1072,9 +1072,9 @@ namespace ItemIntelligence
             if (float.IsNaN(value) || float.IsInfinity(value)) return "—";
             if (value < 0f) return "n/a";
             value = Mathf.Clamp(value, 0f, 100f);
-            if (value >= 10f) return value.ToString("0.#", CultureInfo.InvariantCulture) + "%";
-            if (value >= 1f) return value.ToString("0.##", CultureInfo.InvariantCulture) + "%";
-            return value.ToString("0.###", CultureInfo.InvariantCulture) + "%";
+            if (value >= 10f) return value.ToString("0.#", GetUiNumberCulture()) + GetUiPercentSuffix();
+            if (value >= 1f) return value.ToString("0.##", GetUiNumberCulture()) + GetUiPercentSuffix();
+            return value.ToString("0.###", GetUiNumberCulture()) + GetUiPercentSuffix();
         }
 
 
@@ -1993,6 +1993,7 @@ namespace ItemIntelligence
                 if (_hoverHintCanvas == null || _hoverHintRect == null || _hoverHintText == null) return;
 
                 bool ru = IsRussian();
+                ApplyUiFont(_hoverHintText);
                 _hoverHintText.text = HotkeyUi("ui.f2_item_analysis");
 
                 // v1.5.18: the hint is intentionally NOT attached to the active tooltip.
@@ -2064,7 +2065,7 @@ namespace ItemIntelligence
 
                 TextMeshProUGUI tmp = textGo.AddComponent<TextMeshProUGUI>();
                 _hoverHintText = tmp;
-                if (_inspectorFont != null) tmp.font = _inspectorFont;
+                ApplyUiFont(tmp);
                 tmp.fontSize = 15f;
                 tmp.fontStyle = FontStyles.Normal;
                 tmp.color = new Color(0.66f, 0.90f, 0.72f, 1f);

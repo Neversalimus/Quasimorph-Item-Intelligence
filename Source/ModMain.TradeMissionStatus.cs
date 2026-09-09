@@ -204,32 +204,18 @@ namespace ItemIntelligence
             double hours = Math.Max(0d, entry.MissionRemainingHours.Value);
             // Story missions use vanilla's +100-year expiry. Keep the compact table truthful
             // without letting a five-digit day count overflow the fixed 80 px mission column.
-            if (hours >= 24000d) return IsRussian() ? ">999д" : ">999d";
+            if (hours >= 24000d) return ">999" + Ui("ui.unit_day_short");
 
             string vanilla = FormatTradeMissionRemainingVanilla(hours);
             if (!string.IsNullOrWhiteSpace(vanilla)) return vanilla;
 
             // Fail-soft formatting only if the exact vanilla formatter is unavailable.
-            int totalHours = (int)Math.Floor(hours);
-            if (totalHours >= 24)
-            {
-                int days = totalHours / 24;
-                int remainderHours = totalHours % 24;
-                return IsRussian()
-                    ? days.ToString() + "д " + remainderHours.ToString() + "ч"
-                    : days.ToString() + "d " + remainderHours.ToString() + "h";
-            }
-
-            if (totalHours >= 1)
-                return IsRussian() ? totalHours.ToString() + "ч" : totalHours.ToString() + "h";
-
-            int minutes = (int)Math.Floor(hours * 60d);
-            if (minutes < 1) minutes = 1;
-            return IsRussian() ? minutes.ToString() + "м" : minutes.ToString() + "m";
+            return FormatCompactUiDurationFallback(hours);
         }
 
         private static string FormatTradeMissionRemainingVanilla(double hours)
         {
+            if (UiLanguagePreference != "Auto (Game)") return FormatUiDaysAndHours(hours);
             try
             {
                 if (!_tradeMissionFormatChecked)

@@ -69,10 +69,9 @@ namespace ItemIntelligence
                     itemId, pool, techContexts, source.MaxRolls, bonusExpected, out maximum))
                 return "—";
 
-            bool ru = IsRussian();
-            string minText = FormatContainerEstimateNumber(minimum * 100.0, ru);
-            string maxText = FormatContainerEstimateNumber(maximum * 100.0, ru);
-            string percentSuffix = ru ? " %" : "%";
+            string minText = FormatContainerEstimateNumber(minimum * 100.0);
+            string maxText = FormatContainerEstimateNumber(maximum * 100.0);
+            string percentSuffix = GetUiPercentSuffix();
             string estimate = string.Equals(minText, maxText, StringComparison.Ordinal) ||
                 Math.Abs(maximum - minimum) < 0.0000005
                 ? "≈ " + maxText + percentSuffix
@@ -181,15 +180,14 @@ namespace ItemIntelligence
             return true;
         }
 
-        private static string FormatContainerEstimateNumber(double percent, bool russian)
+        private static string FormatContainerEstimateNumber(double percent)
         {
             if (double.IsNaN(percent) || double.IsInfinity(percent)) return "—";
             percent = Math.Max(0.0, Math.Min(100.0, percent));
-            string text;
-            if (percent > 0.0 && percent < 0.01) text = "<0.01";
-            else if (percent >= 1.0) text = percent.ToString("0.#", CultureInfo.InvariantCulture);
-            else text = percent.ToString("0.##", CultureInfo.InvariantCulture);
-            return russian ? text.Replace('.', ',') : text;
+            CultureInfo culture = GetUiNumberCulture();
+            if (percent > 0.0 && percent < 0.01) return "<" + 0.01.ToString("0.00", culture);
+            if (percent >= 1.0) return percent.ToString("0.#", culture);
+            return percent.ToString("0.##", culture);
         }
     }
 }

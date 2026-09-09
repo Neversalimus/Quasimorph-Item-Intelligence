@@ -13,7 +13,7 @@ namespace ItemIntelligence
         private static void AddWrappedBrowserNote(
             string localizationKey, int russianFallbackChars, int englishFallbackChars)
         {
-            int fallback = IsRussian() ? russianFallbackChars : englishFallbackChars;
+            int fallback = GetLanguageAwareWrapFallback(russianFallbackChars, englishFallbackChars);
             List<string> lines = WrapBrowserFullWidthText(Ui(localizationKey), fallback);
             for (int i = 0; i < lines.Count; i++)
                 BrowserLines.Add(BrowserLine.FullNote(lines[i]));
@@ -25,7 +25,7 @@ namespace ItemIntelligence
         private static void AddWrappedBrowserNoteGroup(
             int russianFallbackChars, int englishFallbackChars, params string[] localizationKeys)
         {
-            int fallback = IsRussian() ? russianFallbackChars : englishFallbackChars;
+            int fallback = GetLanguageAwareWrapFallback(russianFallbackChars, englishFallbackChars);
             if (localizationKeys == null) return;
             for (int i = 0; i < localizationKeys.Length; i++)
             {
@@ -58,6 +58,9 @@ namespace ItemIntelligence
             try
             {
                 float fullWidthWrapLimit = BrowserFullNoteWidth - 4f;
+                if (ContainsHanScript(value) || ContainsKanaScript(value) || ContainsHangulScript(value))
+                    return WrapUnspacedBrowserText(value, delegate(string candidate)
+                    { return IsBrowserFullWidthTextTooWide(measure, candidate, fullWidthWrapLimit, fallbackMaxChars); });
                 List<string> sentences = SplitBrowserNoteSentences(value);
                 StringBuilder line = new StringBuilder();
 

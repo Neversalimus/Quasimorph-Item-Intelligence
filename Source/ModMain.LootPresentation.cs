@@ -502,7 +502,7 @@ namespace ItemIntelligence
                 string placementText = Ui("loot.note.placement_percent_prefix") +
                     containersPercent.ToString(CultureInfo.InvariantCulture) +
                     Ui("loot.note.placement_percent_suffix");
-                int placementLimit = IsRussian() ? 72 : 86;
+                int placementLimit = GetLanguageAwareWrapFallback(72, 86);
                 List<string> placementLines = WrapBrowserFullWidthText(placementText, placementLimit);
                 for (int i = 0; i < placementLines.Count; i++)
                     BrowserLines.Add(BrowserLine.FullNote(placementLines[i]));
@@ -839,10 +839,10 @@ namespace ItemIntelligence
             if (float.IsNaN(value) || float.IsInfinity(value)) return "—";
             value = Mathf.Clamp(value, 0f, 100f);
             if (value >= 10f)
-                return value.ToString("0.#", CultureInfo.InvariantCulture) + "%";
+                return value.ToString("0.#", GetUiNumberCulture()) + GetUiPercentSuffix();
             if (value >= 1f)
-                return value.ToString("0.##", CultureInfo.InvariantCulture) + "%";
-            return value.ToString("0.###", CultureInfo.InvariantCulture) + "%";
+                return value.ToString("0.##", GetUiNumberCulture()) + GetUiPercentSuffix();
+            return value.ToString("0.###", GetUiNumberCulture()) + GetUiPercentSuffix();
         }
     }
 }

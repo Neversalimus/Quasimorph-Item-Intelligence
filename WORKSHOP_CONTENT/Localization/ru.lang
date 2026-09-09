@@ -648,3 +648,15 @@ loot.note.container_save_compatibility	— = расчёт шанса для се
 loot.note.manual_unavailable	Ручной расчёт временно недоступен.
 loot.note.manual_compatibility	Ручной расчёт временно недоступен после обновления игры.
 loot.note.container_calculation_unavailable	— = расчёт шанса для сейва временно недоступен.
+
+# Interface language and compact units
+mcm.header.language	Язык
+mcm.language	Язык Item Intelligence
+mcm.language_tip	Авто следует языку Quasimorph. Ручной выбор меняет только интерфейс Item Intelligence; названия предметов и фракций из игры остаются на языке игры.
+ui.loot_storage_short	К
+ui.loot_corpse_short	Т
+ui.loot_implant_short	И
+ui.loot_storage_corpse_short	К/Т
+ui.unit_day_short	д
+ui.unit_hour_short	ч
+ui.unit_minute_short	м

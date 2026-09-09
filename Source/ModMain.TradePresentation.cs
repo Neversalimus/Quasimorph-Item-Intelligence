@@ -105,7 +105,7 @@ namespace ItemIntelligence
             string priceLabel = stationBuys ? Ui("ui.trade_payout") : Ui("ui.price");
             string priceLine = priceLabel + " " + FormatTradePriceRange(first, last);
             string middleLine = stationBuys ? FormatTradeSellBatchCard(total, quantity) : FormatTradeBuyBatchCard(total, quantity, entry.Stock);
-            string travelMissionLine = Ui("ui.travel") + ": " + SafeTradeText(entry.TravelTime) + "\n" + Ui("ui.mission") + ": " + SafeTradeText(GetTradeMissionDisplay(entry));
+            string travelMissionLine = Ui("ui.travel") + ": " + SafeTradeText(GetTradeTravelDisplay(entry)) + "\n" + Ui("ui.mission") + ": " + SafeTradeText(GetTradeMissionDisplay(entry));
 
             BrowserLines.Add(BrowserLine.TradeStationCard103(
                 entry.Label, priceLine, middleLine, travelMissionLine, entry.SpaceObjectId,
@@ -120,7 +120,7 @@ namespace ItemIntelligence
             string stock = !stationBuys && entry.Stock.HasValue ? entry.Stock.Value.ToString(CultureInfo.InvariantCulture) : string.Empty;
             BrowserLines.Add(BrowserLine.TradeStation(
                 entry.Label, next.HasValue ? next.Value.ToString(CultureInfo.InvariantCulture) : "?", FormatTradeTableBatch(total, quantity), stock,
-                GetTradeMissionDisplay(entry), entry.SpaceObjectId, entry.OwnerFactionId, entry.OwnerRelation, entry.MissionArrivalState, entry.TravelTime));
+                GetTradeMissionDisplay(entry), entry.SpaceObjectId, entry.OwnerFactionId, entry.OwnerRelation, entry.MissionArrivalState, GetTradeTravelDisplay(entry)));
         }
 
         private static string FormatTradeTableBatch(int? total, int quantity)
@@ -136,7 +136,7 @@ namespace ItemIntelligence
             string stock = !stationBuys && entry.Stock.HasValue ? entry.Stock.Value.ToString(CultureInfo.InvariantCulture) : string.Empty;
             BrowserLines.Add(BrowserLine.TradeStation(
                 entry.Label, price.HasValue ? price.Value.ToString(CultureInfo.InvariantCulture) : "?", stock,
-                GetTradeMissionDisplay(entry), entry.TravelTime, entry.SpaceObjectId,
+                GetTradeMissionDisplay(entry), GetTradeTravelDisplay(entry), entry.SpaceObjectId,
                 entry.OwnerFactionId, entry.OwnerRelation, entry.MissionArrivalState));
         }
 

@@ -2,33 +2,32 @@
 
 **Item Intelligence** is an in-game item browser and reference tool for **Quasimorph**.
 
-Prepared stable version: **v1.7.42.4**
+DEV candidate: **v1.7.42.5-test1 — LanguagesMcmTest01**.
+Gameplay base: released **v1.7.42.4**, commit `05fba90596241f30d09fa47b1ddb0d8ad210bba7`.
+The branch also retains the frozen GitHub release recovery correction from `2314b29931be5b7dd80a426edba970a2f315f8b3`.
 
-Base stable source: **v1.7.42.2**, commit `c9e3f98d7202599f3d14629780fbf438b3069b8b`.
+## Localization candidate
 
-Steam Workshop: https://steamcommunity.com/sharedfiles/filedetails/?id=3780078201
+German, Polish and Simplified Chinese were recovered from the older `Languages_MCM_Test2_Full_BuildFix2` source package and selectively ported. All five languages and the community template contain 651 keys. Current availability and amputation explanations are preserved and translated.
 
-## v1.7.42.4
+MCM offers Auto (Game), English, Русский, Deutsch, Polski and 简体中文 / Chinese. Auto reads the selected Quasimorph language, including inherited singleton metadata and the current EnglishUS / ChineseSimp identifiers. Manual selection changes QII UI and numeric formatting; game-provided entity names and search continue to use the game's language. Changes refresh the browser without restarting. MCM's own registered captions refresh on the next game launch.
 
-- Prevents unrelated same-name items from merging into one recipe row; preserves canonical custom variants and independent chip unlocks.
-- Explains unavailable Loot calculations and suggests manual mode only when it is usable.
-- Runs actual production C# behavior tests in every build; release retries and complete payload hashes also have automated coverage.
-- Adds reusable frozen-release scripts in `Release/` with atomic Git ref updates and resumable verified assets.
-- The installer builds against the locally installed game and stages the existing public item `3780078201`. The release kit freezes the exact Windows-built payload before publication.
-- Re-audits Loot modifiers, container estimates, Scavengers, story/start sources and direct cargo creation against the supplied 1.0.4 assemblies, with independent feature fingerprints.
-- Fixes the 1.0.4 random-start table migration to `RandomStart_*`; older audited builds retain their `General_*` pools.
-- Corrects amputation source parsing for vanilla weight/ID tuples, sums repeated outcomes and explicitly labels base probabilities.
-- Runs 660 production behavior assertions and 26 release assertions; all 101 C# source files compile against the 118 current game dependencies.
+QII reads Quasimorph's font presets for the chosen language. For mixed scripts it creates a private font asset with a separate fallback list; vanilla fonts and global TMP settings are untouched. CJK notes wrap at text-element boundaries. Windows-installed Chinese fonts are not required by this implementation.
 
-Test3 game acceptance confirms Space and Dungeon operation, RU/EN switching, and 236 amputation slots covering 120 items in two campaigns. Core indexes report no partial failures; perk values, exact Trade contracts and Scavenger rows are present. Three isolated performance-budget overruns (51.2 ms cold, 20.5/24.0 ms warm) are recorded without evidence of a sustained slowdown. See `Support/RuntimeAcceptanceTest3.json` for scope and limits.
+The candidate is for DEV item **3781927679** and stages into `C:\QM_Workshop\ItemIntelligence_DEV`. Run `Install.ps1` in PowerShell 7, then use the developer-console command it prints. No Workshop or GitHub upload runs automatically. The stable-source gate blocks public release of this test version.
 
-Promotion changes only the runtime version and marker in production C#; gameplay and localization are identical to Test3. Stable runtime marker: `1.7.42.4 (StableRelease17424)`. The final Windows DLL and public publication require the release kit's build/freeze and Steam steps.
+## Verification
 
-Runtime data guards remain active, and game SHA `BE780...` is not promoted to the global VERIFIED identity. Container estimates disclose excluded budget, temporary Tech and location events. See `Support/Compatibility104.json` for the independent feature audit.
+- All 105 production C# files compile as C# 5 against the 118 supplied game dependencies, with zero warnings.
+- 660 existing production behavior assertions and 32 release workflow assertions pass.
+- 3321 localization assertions cover real language-file selection and key resolution, metadata precedence, cache replacement, manual/Auto behavior, damaged files, fallback text, formatting, CJK wrapping and private font fallback ownership. Game/TMP/MCM services are fixtures; these are not Unity visual tests.
+- Runtime language switching, MCM captions/options, font appearance and narrow-column fit still require the new candidate to be tested in-game. Earlier stable logs do not certify this candidate.
 
-Run `pwsh -NoProfile -File ./BUILD_AND_STAGE.ps1 -Mode RELEASE -ContractsOnly` for build checks and behavior tests. Run `Tests/Run-MutationTests.ps1` to verify that deliberately broken production algorithms are rejected. No game files are needed for those tests. PowerShell 7 is required.
+Run `pwsh -NoProfile -File ./BUILD_AND_STAGE.ps1 -Mode TEST -ContractsOnly` for the contracts and behavior suites. No game files are needed for that command. The installer performs the actual Windows build against the local game.
 
-Russian release instructions: [INSTRUCTIONS_RU.md](INSTRUCTIONS_RU.md). Changes and validation scope: [FIX_REPORT_RU.md](FIX_REPORT_RU.md).
+Russian setup and game test: [INSTRUCTIONS_RU.md](INSTRUCTIONS_RU.md).
+Changes and limits: [FIX_REPORT_RU.md](FIX_REPORT_RU.md).
+Previous stable audit: [Support/Audit17424.md](Support/Audit17424.md).
 
 ## Features
 
@@ -45,7 +44,7 @@ Russian release instructions: [INSTRUCTIONS_RU.md](INSTRUCTIONS_RU.md). Changes 
 - Manual loot-modifier calculator for Marauder / Organization / Field Medic contexts.
 - Faction technology information.
 - Weapon/ammo relationships and detailed fire-mode tooltips, including Damage/AP and Critical Damage/AP where provable.
-- English and Russian localization.
+- English, Russian, German, Polish and Simplified Chinese UI with a separate MCM language selector.
 - Optional **Modder Mode** with audited item creation for ship cargo and mission clone inventory.
 
 ## v1.7.42.2

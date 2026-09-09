@@ -178,10 +178,7 @@ namespace ItemIntelligence
 
         private static string FormatWeaponModeScatter(float value)
         {
-            CultureInfo culture = IsRussian()
-                ? CultureInfo.GetCultureInfo("ru-RU")
-                : CultureInfo.InvariantCulture;
-            return value.ToString("0.0", culture) + "°";
+            return value.ToString("0.0", GetUiNumberCulture()) + "°";
         }
     }
 }

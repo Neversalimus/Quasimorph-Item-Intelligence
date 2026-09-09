@@ -1,3 +1,5 @@
+﻿> This branch is a DEV localization candidate. Install and test via `Install.ps1`. The stable workflow examples below document the accepted 1.7.42.4 release; this test version cannot be published by the stable version gate.
+
 # Frozen release workflow
 
 These reusable scripts replace the release implementation supplied with the earlier candidate. They reject DEV source. The default destination remains public Workshop item 3780078201 and GitHub repository Neversalimus/Quasimorph-Item-Intelligence.

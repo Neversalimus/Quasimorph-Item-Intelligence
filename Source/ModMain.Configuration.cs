@@ -38,6 +38,10 @@ namespace ItemIntelligence
         private static bool ShowMagnumSurplus = true;
         private static bool ShowAmmoRelations = true;
 
+        // Auto follows Quasimorph. Manual choices affect Item Intelligence-owned UI only;
+        // vanilla item/faction/station names continue to come from the game's localization.
+        private static string UiLanguagePreference = "Auto (Game)";
+
         // InspectorKey is one validated runtime value shared by config, MCM, hints
         // and the browser toggle.
         private static string InspectorKeyName = "F2";
@@ -133,6 +137,8 @@ namespace ItemIntelligence
         {
             if (string.Equals(key, "InspectorKey", StringComparison.OrdinalIgnoreCase))
                 SetInspectorKey(value, "config.ini");
+            else if (string.Equals(key, "UiLanguage", StringComparison.OrdinalIgnoreCase))
+                SetUiLanguagePreference(value, "config.ini");
         }
 
 
@@ -170,7 +176,8 @@ namespace ItemIntelligence
                     "# Quasimorph Item Intelligence " + Version + "\r\n" +
                     "# Better Item Info - Uses & Sources\r\n\r\n" +
                     "[General]\r\n" +
-                    "EnableItemIntelligence=" + EnableItemIntelligence + "\r\n\r\n" +
+                    "EnableItemIntelligence=" + EnableItemIntelligence + "\r\n" +
+                    "UiLanguage=" + UiLanguagePreference + "\r\n\r\n" +
                     "[Tooltip]\r\n" +
                     "QuickIntelligence=" + QuickIntelligence + "\r\n" +
                     "ShowInspectorHint=" + ShowInspectorHint + "\r\n\r\n" +
@@ -241,6 +248,7 @@ namespace ItemIntelligence
                 // but its legacy tooltip-builder hook is intentionally not installed.
                 // Do not expose a switch in MCM until a safe pointer-path replacement
                 // exists; showing it currently promises behavior the runtime cannot use.
+                AddMcmStringDropdown(add, list, dropdownConfigType, configValueType, "UiLanguage", UiLanguagePreference, Ui("mcm.header.language"), "Auto (Game)", Ui("mcm.language_tip"), Ui("mcm.language"), GetUiLanguageOptions());
                 AddMcmBool(add, list, configValueType, "ShowInspectorHint", ShowInspectorHint, Ui("mcm.header.tooltip"), HotkeyUi("mcm.show_f2_hint"), HotkeyUi("mcm.show_f2_hint_tip"));
                 AddMcmBool(add, list, configValueType, "InspectorEnabled", InspectorEnabled, Ui("mcm.header.inspector"), Ui("ui.enable_item_intelligence"), HotkeyUi("mcm.enable_browser_tip"));
                 AddMcmStringDropdown(add, list, dropdownConfigType, configValueType, "InspectorKey", GetInspectorKeyDisplayName(), Ui("mcm.header.inspector"), "F2", HotkeyUi("mcm.inspector_hotkey_tip"), Ui("mcm.inspector_hotkey"), GetInspectorHotkeyOptions());
@@ -330,6 +338,9 @@ namespace ItemIntelligence
                 SetShowInspectorHint(savedShowInspectorHint);
 
                 ApplyMcmBool(currentConfig, "InspectorEnabled", ref InspectorEnabled);
+                string savedUiLanguage;
+                if (TryReadMcmString(currentConfig, "UiLanguage", out savedUiLanguage))
+                    SetUiLanguagePreference(savedUiLanguage, "MCM");
                 string savedInspectorKey;
                 if (TryReadMcmString(currentConfig, "InspectorKey", out savedInspectorKey))
                     SetInspectorKey(savedInspectorKey, "MCM");
@@ -353,6 +364,7 @@ namespace ItemIntelligence
                 if (_inspectorOpen && !string.IsNullOrEmpty(_inspectorItemId)) RenderBrowser(_inspectorItemId);
                 SaveConfig();
                 Debug.Log("[ItemIntelligence] MCM saved: ShowInspectorHint=" + ShowInspectorHint +
+                    ", UiLanguage=" + UiLanguagePreference +
                     ", InspectorKey=" + InspectorKeyName +
                     ", InterfaceIcons=" + ShowInterfaceIcons +
                     ", ModderMode=" + ModderMode +

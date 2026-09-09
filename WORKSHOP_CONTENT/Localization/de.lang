@@ -1,0 +1,654 @@
+﻿@language=German;german;Deutsch;de;de-DE
+catalog.compact.all	ALLE
+catalog.compact.ammo	MUN.
+catalog.compact.armor	RÜST.
+catalog.compact.chips	CHIPS
+catalog.compact.consumables	VERBR.
+catalog.compact.containers	BEH.
+catalog.compact.implants	IMPL.
+catalog.compact.other	SONST.
+catalog.compact.weapons	WAFF.
+catalog.scope.all.compact	ALLE
+catalog.scope.favorites.compact	FAV
+catalog.scope.recent.compact	ZULETZT
+catalog.scope.all	ALLE GEGENSTÄNDE
+catalog.scope.favorites	FAVORITEN
+catalog.scope.recent	VERLAUF
+catalog.favorite.short	FAV
+catalog.label.data	DATEN
+catalog.data.any	ALLE
+catalog.data.recipes	REZEPTE
+catalog.data.sources	STATION PRODUZIERT
+catalog.data.consumers	STATION VERWENDET
+catalog.data.magnum	MAGNUM
+catalog.data.factions	FRAKTIONEN
+catalog.data.ammo	MUNITION
+catalog.data.disassembly	ZERLEGEN
+catalog.label.sort	SORTIEREN
+catalog.sort.name	NAME
+catalog.sort.tech	TECH
+catalog.sort.id	ID
+catalog.sort.recent	ZULETZT
+catalog.sort.asc	AUFSTEIGEND
+catalog.sort.desc	ABSTEIGEND
+catalog.sort.fixed	FESTE REIHENFOLGE
+catalog.reset	ZURÜCKSETZEN
+catalog.clear.history	VERLAUF LÖSCHEN
+catalog.full.all	ALLE GEGENSTÄNDE
+catalog.full.ammo	MUNITION
+catalog.full.armor	RÜSTUNG & AUSRÜSTUNG
+catalog.full.chips	CHIPS
+catalog.full.consumables	VERBRAUCHSGÜTER
+catalog.full.containers	BEHÄLTER
+catalog.full.implants	IMPLANTATE
+catalog.full.other	SONSTIGES
+catalog.full.weapons	WAFFEN
+chrome.close	[{KEY}] SCHLIESSEN
+label.magnum	MAGNUM
+note.improved_variant	Verbesserte Variante
+stats.ammo	MUNITION
+stats.weapons	WAFFEN
+stats.magnum	MAGNUM
+stats.recipes	REZEPTE
+stats.trade	HANDEL / WIRT.
+tab.ammo	5 MUNITION
+tab.factions	6 FRAKTIONEN
+tab.loot	7 BEUTE
+tab.magnum	2 MAGNUM
+tab.overview	1 ÜBERSICHT
+tab.recipes	3 REZEPTE
+tab.trade	4 HANDEL
+ui.1_7_section_q_e_tab_wheel_page_esc_close	[1-7] BEREICH   [Q/E] TAB   [RAD] SCROLLEN   [ESC] SCHLIESSEN
+ui.lmb_open_item	[LMT] GEGENSTAND ÖFFNEN
+ui.after_all_magnum	Nach allen Magnum-Projekten
+ui.after_all_research	Nach allen Forschungen
+ui.after_open_research	Nach offener Forschung
+ui.all_related_research_is_already_completed	Alle zugehörigen Forschungen sind bereits abgeschlossen.
+ui.alternative_recipes	Alternative Rezepte
+ui.ammo	Munition
+ui.ammo_links	Munitionsbeziehungen
+ui.ammunition	MUNITION
+ui.amputate	amputieren
+ui.amputation	Amputation
+ui.amputation_drops	AMPUTATIONSBEUTE
+ui.any	beliebig
+ui.armor	Rüstung
+ui.available	verfügbar
+ui.available_2	VERFÜGBAR
+ui.available_3	verfügbar
+ui.available_now	Jetzt verfügbar
+ui.available_now_2	JETZT VERFÜGBAR
+ui.back	ZURÜCK
+ui.barter_give	GEBEN
+ui.barter_option	OPTION
+ui.barter_receive	ERHALTEN
+ui.barter_receive_this_item	TAUSCH — DIESEN GEGENSTAND ERHALTEN
+ui.barter_recipes	Tauschrezepte
+ui.barter_give_this_item	TAUSCH — DIESEN GEGENSTAND GEBEN
+ui.bonus	Bonus
+ui.boots	Stiefel
+ui.buy_at_stations	AN STATIONEN VERKAUFT
+ui.item_id	GEGENSTANDS-ID
+ui.catalog	KATALOG
+ui.chance	CHANCE
+ui.base_share	GRUNDANTEIL
+ui.tech	TECH
+ui.civil_resistance	Ziviler Widerstand
+ui.click_a_station_to_open_its_location_on_the_star	Klicke eine Station an, um ihren Standort auf der Sternenkarte zu öffnen.
+ui.cloning	Klonen
+ui.compact_intelligence_on_normal_hover	Kompakte Gegenstandsinformationen beim normalen Darüberfahren anzeigen.
+ui.compatibility	KOMPATIBILITÄT
+ui.compatible_weapons	KOMPATIBLE WAFFEN
+ui.completed	abgeschlossen
+ui.completed_research	Abgeschlossene Forschung
+ui.connecting_to_market_data	Verbindung zu Marktdaten...
+ui.consumers	VERBRAUCHER
+ui.container	BEHÄLTER
+ui.container_2	Behälter
+ui.container_3	Behälter 
+ui.containers	BEHÄLTER MIT EIGENER BEUTE
+ui.context	ORTSTYP
+ui.conveyor	Förderband
+ui.corporate_stations	Unternehmensstationen
+ui.corpse	Leiche
+ui.corpse_bonus	Leichenbonus
+ui.craftable	herstellbar
+ui.crafted_by_recipes	Durch Rezepte hergestellt
+ui.crafted_from	Hergestellt aus
+ui.crafted_from_2	HERGESTELLT AUS
+ui.current_tech	AKTUELLE TECH
+ui.disassembly_index	Zerlegedaten werden geladen: 
+ui.disassembly_outputs	ZERLEGEERGEBNISSE
+ui.obtained_by_disassembling	DURCH ZERLEGEN ERHALTEN
+ui.done	FERTIG
+ui.enable_item_intelligence	Item Intelligence aktivieren
+ui.enemy	GEGNER
+ui.enemy_corpse_loot	BEUTE VON GEGNERN
+ui.english	Deutsch
+ui.extra_item	zusätzlicher Gegenstand
+ui.extra_weapon_ammo	Munition für Zusatzwaffe
+ui.f2_close	[{KEY}] SCHLIESSEN
+ui.f2_item_analysis	[{KEY}]  GEGENSTANDSANALYSE
+ui.faction	Fraktion
+ui.faction_2	FRAKTION
+ui.faction_index	Fraktionsdaten werden geladen: 
+ui.faction_rewards	FRAKTIONSBELOHNUNGEN
+ui.faction_technology	Fraktionstechnologie
+ui.floor	Boden
+ui.future	  zukünftig
+ui.future_2	Zukünftig
+ui.future_3	ZUKÜNFTIG
+ui.granted_augmentation	gewährte Augmentation
+ui.granted_implant	gewährtes Implantat
+ui.granted_item	gewährter Gegenstand
+ui.granted_weapon_ammo	Munition für gewährte Waffe
+ui.head_gear	Kopfbedeckung
+ui.here	HIER
+ui.in_locked_branches	In gesperrten Zweigen
+ui.include_locked_future_magnum_upgrades	Gesperrte zukünftige Magnum-Upgrades einbeziehen.
+ui.ingredient	Zutat
+ui.item_intelligence	ITEM INTELLIGENCE
+ui.key_intel	ÜBERSICHT
+ui.leggings	Beinschutz
+ui.location	Ort
+ui.locked	gesperrt
+ui.locked_2	gesperrt
+ui.loot_index	BEUTEDATEN  
+ui.low_rep	NIEDR. RUF
+ui.magnum	Magnum
+ui.magnum_required	Magnum: benötigt 
+ui.magnum_research	Magnum-Forschung
+ui.magnum_research_2	MAGNUM-FORSCHUNG
+ui.market_processed	Markt: verarbeitet 
+ui.master_switch_for_the_mod	Item Intelligence aktivieren oder deaktivieren.
+ui.mission_pools	MISSIONSPOOLS
+ui.mission_workbench	Missionswerkbank
+ui.more_relationships	Weitere Beziehungen
+ui.more_rows_format	+ {0} weitere ({1})
+ui.no_disassembly_relationships	Keine Zerlegebeziehungen.
+ui.no_explicit_loot_sources_found_check_trade_recip	Keine direkten Quellen gefunden. Prüfe Handel, Rezepte, Fraktionen und besondere Ereignisse.
+ui.no_recipe_or_disassembly_relationships	Keine Rezept- oder Zerlegebeziehungen.
+ui.no_recipe_relationships	Keine Rezeptbeziehungen.
+ui.no_related_magnum_research_was_found	Keine zugehörige Magnum-Forschung gefunden.
+ui.no_trade_relationships_found_yet	Noch keine Handelsbeziehungen gefunden.
+ui.no_weapon_ammo_relationships	Keine Waffen-/Munitionsbeziehungen.
+ui.none	keine
+ui.not_found	nicht gefunden
+ui.not_required	nicht erforderlich
+ui.note	Hinweis
+ui.now	  jetzt
+ui.other_compatible_item_intelligence_features_rema	Andere Bereiche sind nicht betroffen.
+ui.other_uses_also_exist	Es gibt weitere Verwendungen
+ui.owned	Im Besitz
+ui.page	SEITE 
+ui.pirates	Piraten
+ui.possible_outcomes	Mögliche Ergebnisse
+ui.price	PREIS
+ui.trade_repricing_note	Erste → letzte Einheit. Preis je Einheit neu; Bestand kann sich bis zur Ankunft ändern.
+ui.next	NÄCHSTE
+ui.batch	STAPEL
+ui.trade_previous_note	NÄCHSTE = 1 Einheit; STAPEL = nächste 5 oder Restbestand. Preis je Einheit neu.
+ui.trade_payout	AUSZAHLUNG
+ui.trade_stock_short	AUF LAGER
+ui.trade_all	ALLE
+ui.trade_pcs	STK.
+ui.trade_total	GESAMT
+ui.primary_ammo	Primärmunition
+ui.primary_weapon	Primärwaffe
+ui.production	PRODUKTION
+ui.profile	PROFIL
+ui.qty	MENGE
+ui.qty_rolls	MENGE/WÜRFE
+ui.quasimorph_sources	Quasimorph-Quellen
+ui.quick_intelligence	Schnellinfo
+ui.random_augmentation	zufällige Augmentation
+ui.random_implant	zufälliges Implantat
+ui.recipe	Rezept 
+ui.recognized_as_a_trade_item_but_current_game_tabl	Handelsgegenstand; keine Handelseinträge gefunden.
+ui.recyclable	recycelbar
+ui.remaining	 verbleibend
+ui.required_for_open_research	Für offene Forschung erforderlich
+ui.result	ERGEBNIS
+ui.reward	BELOHNUNG %
+ui.role	Rolle
+ui.roll	/Wurf
+ui.rolls	WÜRFE
+ui.rolls_2	 Würfe
+ui.rows	 ZEILEN
+ui.search_item	GEGENSTAND SUCHEN...
+ui.secondary_ammo	Sekundärmunition
+ui.secondary_weapon	Sekundärwaffe
+ui.sell_to_stations	VON STATIONEN ANGENOMMEN
+ui.show_ammo_relations	Munitionsbeziehungen anzeigen
+ui.show_barter_and_consumer_relationships	Stationskäufer und Rezept-Eingänge der Stationswirtschaft anzeigen.
+ui.show_future_magnum_uses	Zukünftige Magnum-Verwendungen anzeigen
+ui.show_magnum_surplus	Magnum-Überschuss anzeigen
+ui.show_magnum_uses	Magnum-Verwendungen anzeigen
+ui.show_production_and_barter_source_relationships	Beutequellen, Stationsverkäufer und Rezept-Ausgänge der Stationswirtschaft anzeigen.
+ui.show_recipes	Rezepte anzeigen
+ui.show_remaining_amount_relative_to_all_unfinished	Verbleibende Menge relativ zu allen unfertigen Magnum-Upgrades anzeigen.
+ui.show_sources	Beschaffungsquellen anzeigen
+ui.show_trade_information	Verkauf und Tauschverwendungen anzeigen
+ui.show_unfinished_magnum_upgrade_uses	Verwendungen in unfertigen Magnum-Upgrades anzeigen.
+ui.show_used_in_and_crafted_from_relationships	Beziehungen „Verwendet in“ und „Hergestellt aus“ anzeigen.
+ui.show_weapon_ammo_relationships	Waffen-/Munitionsbeziehungen anzeigen.
+ui.source	QUELLE
+ui.sources	QUELLEN
+ui.sources_producers	QUELLEN / PRODUZENTEN
+ui.sources_trade	QUELLEN & HANDEL
+ui.state_unknown	unbekannt
+ui.station	STATION
+ui.station_2	Station
+ui.station_list_is_unavailable_from_the_current_gam	Stationsdaten sind nicht verfügbar.
+ui.stations	Stationen
+ui.status	STATUS
+ui.status_2	STATUS
+ui.stock	BESTAND
+ui.tech_lock	TECH-SPERRE
+ui.this_item	DIESER GEGENSTAND
+ui.this_is_not_a_safe_to_sell_value_the_item_has_ot	Wird auch anderweitig verwendet.
+ui.this_item_was_not_found_in_faction_reward_pools	Dieser Gegenstand wurde in keinen Fraktionsbelohnungspools gefunden.
+ui.total_remaining	Insgesamt verbleibend
+ui.trade	Handel
+ui.trade_consumers	HANDEL / VERBRAUCHER
+ui.trade_links	Handelsbeziehungen
+ui.travel	REISE
+ui.type	TYP
+ui.unlock	FREISCHALTEN
+ui.used_by_recipes	Von Rezepten verwendet
+ui.used_in	Verwendet in
+ui.used_in_2	VERWENDET IN
+ui.used_in_barter	Beim Tausch verwendet
+ui.vanilla_exposes_the_remaining_total_but_the_rela	Forschungsdetails nicht verfügbar.
+ui.var	 Var.
+ui.variants	 Varianten
+ui.weapon	Waffe
+ui.wheel_pgup_pgdn	   •   RAD: SCROLLEN   BILD↑/BILD↓: SCHNELL
+ui.workbench	Werkbank: 
+ui.wound_slot	WUNDENPLATZ
+ui.wound_slot_2	Wundenplatz
+ammo.index_prefix	Waffendaten werden geladen: 
+loot.note.amputation	Basischance nach erfolgreicher Amputation, ohne Magnum-Upgrade für garantierte Augmentationen. Installierte Implantate sind separat.
+loot.note.augmentation_woundslot	Kann als Körperteilmodul eines Gegners erscheinen.
+loot.note.augmentations	Chance = Wahrscheinlichkeit, dass der Gegner dieses Modul besitzt. Würfe = Generierungsversuche.
+loot.note.container_chance	Die Chance eines manuellen Behälters hängt vom aktuellen Missionskontext ab.
+loot.note.corpse_transfer	Beim Tod wandern Inventar und Ausrüstung auf die Leiche, außer bloßen Händen. Ein volles Inventar kann den Gegenstand verwerfen.
+loot.note.enemy_chance	CHANCE = Gegenstandserzeugung bei diesem Gegner, nicht die Begegnungswahrscheinlichkeit. Der Bereich hängt von Tech und Fraktion ab.
+loot.note.implants	Chance = Installationsversuch. „Amputieren X %“ = Chance, ein installiertes Implantat zu bergen.
+loot.note.mission_pools	Der Gegenstand befindet sich im normalen Beutepool dieser Missionen und kann in einem Behälter oder auf dem Boden erscheinen.
+loot.note.placement_generic	Raumbeute kann in Behältern landen; Korridorbeute landet auf dem Boden.
+loot.note.placement_percent_prefix	Platzierung: Räume verwenden einen 
+loot.note.placement_percent_suffix	% Behälterversuch; sonst Boden. Korridore verwenden immer den Boden.
+loot.note.random_equipment	Zeigt die Generierungschance. Ein volles Gegnerinventar kann erzeugte Gegenstände verwerfen.
+loot.note.tech	TECH = minimale Quell-Tech, einschließlich Gegenstands-Tech und Gegnerausrüstungsbonus.
+overview.trade.consumers_separator	 / Verbraucher 
+overview.trade.sources_prefix	Quellen 
+tab.overview.short	ÜBERSICHT
+tab.magnum.short	MAGNUM
+tab.recipes.short	REZEPTE
+tab.trade.short	HANDEL
+tab.ammo.short	MUN.
+tab.factions.short	FRAKTIONEN
+tab.loot.short	BEUTE
+magnum.module.navigation	Navigation
+magnum.module.research	Forschung
+magnum.module.hangar	Hangar
+magnum.module.supply	Versorgung
+magnum.module.cloning	Klonen
+magnum.module.science	Wissenschaft
+magnum.module.medical	Medizin
+magnum.module.engineering	Technik
+magnum.module.industry	Industrie
+magnum.module.security	Sicherheit
+magnum.module.logistics	Logistik
+magnum.module.communications	Kommunikation
+magnum.module.storage	Lager
+magnum.module.command	Kommando
+magnum.module.crew	Besatzung
+magnum.module.armory	Waffenkammer
+magnum.module.workshop	Werkstatt
+magnum.module.training	Training
+magnum.module.habitation	Unterkünfte
+magnum.node.scanner	Scanner
+magnum.node.travel	Reise
+magnum.node.shuttle	Shuttle
+magnum.node.capsule	Kapsel
+magnum.node.trade	Handel
+source.station	Station
+source.stations	Stationen
+source.barter	Tausch
+mcm.header.general	Allgemein
+mcm.header.tooltip	Tooltip
+mcm.header.inspector	Browser
+mcm.header.information	Informationen
+mcm.header.language	Sprache
+mcm.language	Sprache von Item Intelligence
+mcm.language_tip	Automatisch folgt Quasimorph. Die Auswahl ändert nur die Oberfläche von Item Intelligence; Gegenstands- und Fraktionsnamen aus dem Spiel bleiben in der Spielsprache.
+mcm.show_f2_hint	Browser-Hotkey-Hinweis anzeigen
+mcm.show_f2_hint_tip	Browser-Hotkey beim Darüberfahren über Gegenstände anzeigen. Aktuelle Taste: {KEY}.
+mcm.enable_browser	Gegenstands-Browser aktivieren
+mcm.enable_browser_tip	Drücke {KEY}, während du über einen Gegenstand fährst. Alt-Gegenstandsdetails bleiben unverändert.
+mcm.inspector_hotkey	Browser-Hotkey
+mcm.inspector_hotkey_tip	Wähle die Browser-Taste. Die Suche akzeptiert normale Eingabe; Esc schließt das Fenster auch während der Eingabe.
+mcm.show_interface_icons	Minimale Interface-Symbole
+mcm.show_interface_icons_tip	Minimalistische Interface-Symbole anzeigen. Gegenstandssymbole und funktionale Statusmarker bleiben erhalten.
+ui.trade_layout_view	ANSICHT
+ui.trade_layout_cards_short	K
+ui.trade_layout_table_short	T
+mcm.mod_name	Item Intelligence - Gegenstandsdatenbank & Beutequellen
+compat.disabled_feature	Diese Funktion ist vorübergehend nicht verfügbar.
+mcm.save_failed	Item-Intelligence-Einstellungen konnten nicht gespeichert werden.
+station_group.corporate	Unternehmensstationen
+station_group.resistance	Ziviler Widerstand
+station_group.quasimorph	Quasimorph-Quellen
+station_group.pirates	Piraten
+station_group.stations	Stationen
+loot.container.common_box	Gewöhnliche Kiste
+loot.container.common_container	Gewöhnlicher Behälter
+loot.container.common_rack	Gewöhnliches Regal
+loot.container.common_locker	Gewöhnlicher Spind
+loot.container.cloth_locker	Kleiderspind
+loot.container.wooden_box	Holzkiste
+loot.container.industry	Industriebehälter
+loot.container.science	Wissenschaftsbehälter
+loot.container.medical	Medizinbehälter
+loot.container.medical_case	Medizinkoffer
+loot.container.medical_holder	Medizinregal
+loot.container.weapon_case_big	Großer Waffenkoffer
+loot.container.weapon_case_small	Kleiner Waffenkoffer
+loot.container.elite_weapon_case	Elite-Waffenkoffer
+loot.container.weapon_stand	Waffenständer
+loot.container.ammo_case	Munitionskiste
+loot.container.data	Datenbehälter
+loot.container.server	Serverbehälter
+loot.container.tool_case	Werkzeugkoffer
+loot.column.container_profile	TYP / PROFIL
+loot.column.save_estimate	GESCH. CHANCE
+loot.container.trash_can	Mülleimer
+loot.container.armor_locker	Rüstungsspind
+loot.container.food	Lebensmittelbehälter
+loot.container.plants	Pflanzenbehälter
+loot.container.aztec_chest	Aztekenkiste
+loot.container.matrix_box	Matrixkiste
+loot.container.gas_barrel	Treibstofffass
+loot.container.toxic_barrel	Giftfass
+loot.container.water_sink	Waschbecken
+loot.container.blood_sink	Blutbecken
+loot.container.toilet	Toilette
+loot.container.water_tank	Wassertank
+loot.container.corpse_pile	Leichenhaufen
+loot.container.station_stash	Stationsversteck
+loot.container.airdrop_capsule	Abwurfkapsel
+loot.container.autonomous_capsule	Autonome Kapsel
+loot.container.aztec_altar	Aztekenaltar
+loot.container.snowman	Schneemann
+loot.container.aed_case	Defibrillatorkoffer
+loot.container.extinguisher_holder	Feuerlöscherhalter
+loot.container.watermelon_growbox	Wassermelonen-Pflanzkasten
+loot.container.cabbage_growbox	Kohl-Pflanzkasten
+loot.container.silence_casket	Sarg der Stille
+loot.station_type.industrial	Industrie
+loot.station_type.lab	Labor
+loot.station_type.mine	Mine
+loot.station_type.military	Militär
+loot.station_type.prison	Gefängnis
+loot.station_type.colony_farm	Koloniefarm
+loot.station_type.civilian	Zivil
+loot.station_type.quasimorphic_temple	Quasimorphischer Tempel
+loot.station_type.space_station	Raumstation
+loot.station_type.bramfatura	Bramphatur
+ui.close_current_ship_screen_before_starmap	Schließe den aktuellen Schiffsbildschirm, bevor du die Sternenkarte öffnest.
+ui.starmap_unavailable_in_bramfatura	Die Sternenkarte ist im Bramphatur-Raum nicht verfügbar. Beende oder verlasse zuerst den Abstieg.
+ui.starmap_unavailable_during_raid_prep	Die Sternenkarte ist während der Raid-Vorbereitung nicht verfügbar. Schließe zuerst den Vorbereitungsbildschirm.
+ui.starmap_unavailable_during_travel	Die Sternenkarte ist während der Reise nicht verfügbar. Warte auf die Ankunft.
+ui.secret_data_rewards	GEHEIMDATEN — FRAKTIONSBELOHNUNGEN
+ui.secret_data_rewards_note	Festes Startpaket und Rufbelohnung.
+ui.secret_data_items	Gegenstände
+ui.secret_data_rep	Ruf
+ui.secret_data_view	ANZEIGEN
+ui.secret_data_back	← ZURÜCK ZU FRAKTIONEN
+ui.secret_data_reputation	RUF
+ui.secret_data_package	STARTPAKET
+ui.secret_data_story_effect	Diese Übergabe hat eine eigene Story-Behandlung und kann den Fraktionsfortschritt voranbringen.
+ui.secret_data_no_rewards	Belohnungen für Geheimdaten sind nicht verfügbar.
+ui.chip_unlocks	SCHALTET FREI
+ui.back_to	← ZURÜCK ZU
+compat.module	Modul
+compat.reason	Grund:
+ui.chip_unlock_chance_note	Die Chance gilt für einen Chip. Bereits freigeschaltete Gegenstände bleiben im Auswahlpool.
+ui.chip_summary_unlocked	freigeschaltet
+ui.chip_summary_locked	gesperrt
+ui.chip_summary_unknown	unbekannt
+ui.baron_guaranteed_one_pact	1 Pakt garantiert
+ui.baron_this_pact	Dieser Pakt:
+ui.baron_depends_on_mission_tech	hängt von Missions-Tech ab
+ui.overview_magnum_available_now	jetzt verfügbar
+ui.overview_magnum_not_available_now	jetzt nicht verfügbar
+ui.overview_magnum_all_completed	alles erforscht
+ui.loot_accordion_hint	▶ / ▼  Abschnitt anklicken, um ihn ein- oder auszuklappen
+ui.baron_habitat	Lebensraum
+ui.baron_guaranteed	Garantiert
+ui.baron_one_pact	1 Pakt
+ui.loot_quick_jump	SCHNELLAUSWAHL
+ui.jump	SPRINGEN
+ui.weapon_modes	MODI
+ui.mode_when_empty	Keine Munition
+ui.mode_single	Einzeln
+ui.mode_burst	Salve
+ui.mode_auto	Automatik
+ui.mode_launcher	Werfer
+ui.mode_throw	Werfen
+ui.mode_melee	Nahkampf
+ui.mode_buttstroke	Kolbenschlag
+ui.mode_single_shot	Einzelschuss
+ui.mode_shots	Schüsse
+ui.mode_accuracy	Genauigkeit
+ui.mode_damage	Schaden
+ui.mode_scatter	Streuung
+ui.mode_shot_delay	Verzögerung
+ui.mode_ammo	Munition
+ui.mode_full_ammo_required	Volle Munition erforderlich
+ui.unit_seconds_short	s
+ui.mode_stab	Stich
+ui.mode_slash	Hieb
+ui.mode_chop	Hackschlag
+ui.mode_smash	Schmettern
+ui.mode_punch	Faustschlag
+ui.mode_tooltip_fire	Feuermodus
+ui.mode_tooltip_attack	Angriffsmodus
+ui.mode_rate_of_fire	Feuerrate
+ui.mode_damage_modifier	Schadensmod.
+ui.mode_ammo_consumption	Munitionsverbrauch
+mcm.modder_mode	Modder-Modus
+mcm.modder_mode_tip	Technische Daten und das Gegenstands-Spawnfeld anzeigen. Erzeugte Gegenstände werden im aktuellen Spielstand gespeichert.
+ui.modder_section	MODDING
+ui.modder_record_type	Datensatztyp
+ui.modder_item_class	Gegenstandsklasse
+ui.modder_tech_level	Tech-Level
+ui.modder_relation_id	Beziehungs-ID
+ui.modder_firemode_ids	Feuermodus-IDs
+ui.modder_search_syntax	Erweiterte Suche: id:  name:  type:  rel:  tech:  cat:   Beispiel: cat:weapon tech:>=5
+ui.search_item_modder	SUCHEN...  id: / tech: / cat:
+ui.open_item_link	GEGENSTAND ÖFFNEN
+ui.modder_spawn_title	MODDER-AKTIONEN
+ui.modder_spawn_save_warning	Erzeugt einen echten Gegenstand in diesem Spielstand.
+ui.modder_spawn_clone	1 ZUM KLON HINZUFÜGEN
+ui.modder_spawn_cargo	1 ZUR FRACHT HINZUFÜGEN
+ui.modder_spawn_failed	Gegenstand wurde nicht hinzugefügt.
+ui.modder_spawn_invalid_item	Dieser Gegenstandsdatensatz kann nicht erzeugt werden.
+ui.modder_spawn_wait	Warte, bis die aktuelle Aktion abgeschlossen ist.
+ui.modder_spawn_clone_unavailable	Kloninventar ist nicht verfügbar.
+ui.modder_spawn_contract_unavailable	Gegenstandserzeugung ist in dieser Spielversion nicht verfügbar.
+ui.modder_spawn_clone_success	Zum Kloninventar hinzugefügt.
+ui.modder_spawn_inventory_full	Kloninventar ist voll.
+ui.modder_spawn_cargo_unavailable	Schiffsfracht ist nicht verfügbar.
+ui.modder_spawn_cargo_success	Zur Schiffsfracht hinzugefügt.
+ui.other_containers	ALLGEMEINE BEHÄLTERPLATZIERUNG
+ui.mission	MISSION
+ui.yes	JA
+ui.mission_generation	MECHANIK
+loot.note.general_spawn	✓ = Behälter kann den Gegenstand nach normaler Missionsbeute aufnehmen. Nur Platzierung, keine weitere Dropchance; er kann am Boden bleiben.
+ui.loot_modifiers_current	MODIFIKATOREN: AKTUELL
+ui.loot_modifiers_manual	MODIFIKATOREN: MANUELL
+ui.loot_marauder	Marodeur
+ui.loot_marika_organization	Marika — Organisation
+ui.loot_laksha_field_medic	Laksha — Feldsanitäter
+ui.loot_on	AN
+ui.loot_off	AUS
+ui.loot_pp	PP
+ui.bonus_corpse_loot	ZUSÄTZLICHE LEICHENBEUTE
+ui.bonus_rolls	BONUSWÜRFE
+loot.note.corpse_bonus_rolls	Marodeur/Organisation geben Leichenbeute-Würfe. Bereich = Würfe; (%) = Chance auf Maximum; GESAMT = mindestens einmal erhalten.
+ui.per_roll	PRO WURF
+ui.final_chance	GESAMT
+ui.mode_damage_per_ap_default	Schaden/AP (Standard)
+loot.note.unknown_container_rolls	? = Die Wurfzahl ist nicht exakt bekannt; die Gesamtchance wird nicht berechnet.
+ui.station_production_produced_from	STATIONSPRODUKTION — HERGESTELLT AUS
+ui.station_production_used_to_produce	STATIONSPRODUKTION — VERWENDET FÜR
+ui.station_production_note	Stationsproduktionsrezept. Nur auf Stationen aktiv, deren aktuelles Produktionsset es enthält.
+ui.station_production_output	AUSGABE
+ui.station_production_input	EINGABE
+ui.station_production_recipe	STATIONSREZEPT
+ui.no_active_faction_reward_in_current_save	Dieser Gegenstand ist nur in Belohnungspools von Fraktionen enthalten, die in diesem Spielstand nicht verfügbar sind.
+loot.note.enemy_bonus_separate	Marodeur und Organisation verändern die Chance auf Gegnerausrüstung nicht; sie fügen separate Leichenbeute-Würfe hinzu.
+ui.mode_critical_damage_per_ap_default	Krit.-Schaden/AP (Standard)
+ui.faction_technology_navigation_unavailable	Navigation zur Fraktionstechnologie ist im aktuellen Kontext nicht verfügbar.
+ui.scavenger_mission_rewards	PLÜNDERER — GEGENSTANDSCHANCE BEI MISSIONSERFOLG
+ui.rows_visible	ZEILEN
+ui.opponent	GEGNER
+ui.scavenger_current_missions	GEEIGNETE MISSIONEN: 
+ui.scavenger_best_chance	BESTE CHANCE: 
+ui.scavenger_time_left	RESTZEIT
+stats.tech	TECH
+stats.modes	MODI
+ui.overview_combat	KAMPF
+ui.overview_damage_ap_short	SCHAD./AP
+ui.overview_crit_short	KRIT.
+ui.overview_relationships	MIT DIESEM GEGENSTAND VERKNÜPFT
+ui.overview_magnum_research	Magnum-Forschung
+ui.overview_used_in_recipes	In Rezepten verwendet
+ui.overview_crafted_by_recipes	Durch Rezepte hergestellt
+ui.overview_obtainable_by_disassembly	Durch Zerlegen erhältlich
+ui.overview_disassembles_into	Zerlegt sich in
+ui.overview_compatible_ammo	Kompatible Munition
+ui.overview_compatible_weapons	Kompatible Waffen
+ui.overview_recipe_ingredients	Rezeptzutaten
+ui.overview_no_core_links	Keine grundlegenden Gegenstandsbeziehungen — prüfe Handel, Fraktionen oder Beute für Quellen in der Spielwelt.
+loot.baron.section	BARON-BEUTE
+loot.baron.column.baron	BARON
+loot.baron.column.qmorph	QUASIMORPHOSE
+loot.baron.column.item_chance	DIESER PAKT
+loot.baron.column.any_pact	PAKT
+loot.baron.column.death_restore	RÜCKGABE
+loot.note.baron_ultimate_death	Ein Baron lässt 1 Pakt fallen. Der Pakt hängt von Missions-Tech und verfügbarer Beute ab.
+loot.note.baron_dynamic_tech	Bereich = Der Pool hängt beim Erzeugen des Barons von Missions-/Fraktions-Tech ab.
+loot.note.baron_ksiomara_exception	Story: Das Basisspiel kann einen normalen Baron durch Ksiomara ersetzen. Diese Zeile gilt nicht für Ksiomara.
+loot.note.baron_consumption_bound	Wenn RÜCKGABE <100 %, enthält der Paktbereich die exakt sichere Verbrauchsgrenze vor dem Tod; das KI-Timing wird nicht geschätzt.
+loot.special.section	WEITERE QUELLEN
+loot.special.condition	BEDINGUNG
+loot.special.result	ERGEBNIS
+loot.special.deterministic	BEI AUSLÖSUNG GARANTIERT
+loot.special.outcome_dependent	ERGEBNISABHÄNGIG
+loot.special.story_reward	STORY-BELOHNUNG
+loot.special.starting_loadout	STARTAUSRÜSTUNG
+loot.special.ancom_exchange	GEHEIMDATEN-TAUSCH
+loot.special.expire_conversion	GEGENSTANDSUMWANDLUNG
+loot.special.skull_ritual	SCHÄDELRITUAL
+loot.special.story_script	STORY-EREIGNIS
+loot.special.complete_story_mission	Story-Mission abschließen
+loot.special.story_mission	Story-Mission
+loot.special.selected_start_preset	Gewähltes festes Startpreset + zufällige Startausrüstung aus
+loot.special.exchange_secret_data	AnCom-Geheimdaten tauschen
+loot.special.item_expires	Quellgegenstand läuft ab
+loot.special.ritual_failed	Fehlgeschlagenes Ritualergebnis
+loot.special.ritual_outcome	Passendes Ritualergebnis
+loot.special.story_trigger	Story-Ereignis / skriptgesteuerte Platzierung
+loot.special.use_byproduct	NUTZUNGS-NEBENPRODUKT
+loot.special.death_gift	TODESGESCHENK
+loot.special.mission_reward_pool	MISSIONSBELOHNUNGSPOOL
+loot.special.mission_orbit_reward_pool	MISSIONS- / ORBIT-BELOHNUNGSPOOL
+loot.special.random_starting_pool	ZUFÄLLIGER STARTPOOL
+loot.special.station_production_reward	STATIONSPRODUKTIONS-BELOHNUNG
+loot.special.death_gift_source	Todesgeschenk
+loot.special.random_start_source	Zufällige Startausrüstung
+loot.special.use_source_item	Quellgegenstand verwenden / verbrauchen
+loot.special.death_gift_condition	Todesgeschenk aktiv + Belohnung zulässig
+loot.special.faction_reward_condition	Fraktionsbelohnungspool / Tech-Anforderung
+loot.special.random_start_condition	Zufällige Startausrüstung aktiviert
+loot.special.station_production_condition	Aktuell in Stationsproduktion + genügend Belohnungspunkte
+loot.note.container_context_chance	≈ = mindestens 1 Exemplar. Würfe/Marodeur: AKTUELL/MANUELL; Tech: Mission/Fraktion. Ohne Budget, temporäre Tech und Ortsereignisse.
+loot.note.container_modifier_unavailable	* = nur Grundwürfe: aktueller Marodeur-Wert ist nicht verfügbar. Im Weltraum MANUELL wählen.
+loot.note.container_save_unavailable	— = keine exakte Schätzung: Spielstand-Tech, geeigneter Pool oder Grundwurfbereich ist nicht verfügbar.
+loot.special.other_section	BESONDERE BESCHAFFUNG
+loot.special.reward_section	FRAKTIONSBELOHNUNGEN
+loot.special.start_section	START EINES NEUEN SPIELS
+loot.special.result_pool	POOL
+loot.special.result_outcome	ERGEBNIS
+loot.special.result_guaranteed	GARANTIERT
+loot.special.result_conditional	BEDINGT
+loot.special.kind_story	STORY-MISSION
+loot.special.kind_start	START
+loot.special.kind_secret_data	GEHEIMDATEN
+loot.special.kind_expire	ABLAUF
+loot.special.kind_ritual	RITUAL
+loot.special.kind_story_script	STORY
+loot.special.story_source	Story-Zweig
+loot.special.kind_use	BEI NUTZUNG
+loot.special.kind_death	NACH DEM TOD
+loot.special.kind_mission_reward	MISSIONSBELOHNUNG
+loot.special.kind_reward	BELOHNUNG
+loot.special.kind_start_pool	STARTPOOL
+loot.special.kind_station_reward	PRODUKTION
+loot.special.cond_complete	Mission abschließen
+loot.special.cond_fixed_start	Festes Preset • Zufallsstart aus
+loot.special.cond_exchange	Tausch
+loot.special.cond_expire	Nach Ablauf
+loot.special.cond_ritual_failed	Fehlschlag
+loot.special.cond_ritual_upgrade	Upgrade
+loot.special.cond_ritual_sidegrade	Sidegrade
+loot.special.cond_ritual_downgrade	Downgrade
+loot.special.cond_ritual_outcome	Ritualergebnis
+loot.special.cond_story	Bei Story-Ereignis
+loot.special.cond_use	Nach Nutzung, wenn die Gegenstandsregel auslöst
+loot.special.cond_death	Beim Tod: Belohnung zulässig
+loot.special.cond_mission	Mission
+loot.special.cond_mission_orbit	Mission / Orbit
+loot.special.cond_random_start	Zufallsstart
+loot.special.cond_station_current	In Stationsproduktion; genügend Punkte
+loot.special.result_in_pool	IM POOL
+loot.special.header_method	METHODE
+loot.special.header_status	STATUS
+loot.special.header_faction	FRAKTION
+loot.special.header_where	WO
+loot.special.header_requirement	ANFORDERUNG
+loot.special.header_loadout	AUSRÜSTUNG
+loot.special.header_mode	MODUS
+loot.special.kind_fixed_start	FESTE AUSRÜSTUNG
+loot.special.kind_mission_only	MISSION
+loot.special.kind_mission_orbit	MISSION / ORBIT
+loot.special.kind_random_pool	ZUFALLSPOOL
+loot.special.cond_no_extra_requirement	KEINE ZUSATZANFORDERUNG
+loot.special.cond_random_start_enabled	Zufällige Ausrüstung an
+loot.special.cond_fixed_start_enabled	Zufällige Ausrüstung aus
+loot.note.faction_reward_sources	✓ = Gegenstand ist im Pool, nicht garantiert. „Mission/Orbit“ benötigt Tech. „Produktion“ = Station hat den Gegenstand und genügend Belohnungspunkte.
+loot.note.starting_sources	Nur neues Spiel: Ein festes Set gewährt den Gegenstand; ein Zufallspool kann ihn lediglich auswählen.
+loot.general_spawn.placement	PLATZIERUNG
+loot.column.container	BEHÄLTER
+loot.note.special_sources	Seltene Wege. Bei Ritualen: „Quelle“ = Ausgangsschädel; „Bedingung“ = erforderliches Ergebnis.
+loot.special.fixed_loadout_count	AUSRÜSTUNGEN
+loot.special.story_missions_count	Story-Missionen ×{0}
+ui.loot_storage_short	B
+ui.loot_corpse_short	L
+ui.loot_implant_short	I
+ui.loot_storage_corpse_short	B/L
+ui.unit_day_short	T
+ui.unit_hour_short	h
+ui.unit_minute_short	min
+
+# Current availability notes
+loot.column.base_chance	BASISCHANCE
+loot.note.container_modifier_basic	* = nur Grundwürfe: Der aktuelle Marodeur-Wert ist nicht verfügbar.
+loot.note.container_save_compatibility	— = Chancen für diesen Spielstand sind nach einem Spielupdate vorübergehend nicht verfügbar.
+loot.note.manual_unavailable	Die manuelle Berechnung ist vorübergehend nicht verfügbar.
+loot.note.manual_compatibility	Die manuelle Berechnung ist nach einem Spielupdate vorübergehend nicht verfügbar.
+loot.note.container_calculation_unavailable	— = Chancen für diesen Spielstand können vorübergehend nicht geschätzt werden.

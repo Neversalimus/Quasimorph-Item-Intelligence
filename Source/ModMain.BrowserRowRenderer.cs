@@ -16,7 +16,7 @@ namespace ItemIntelligence
         {
             HideBrowserWeaponModeTooltip();
             BeginBrowserRowRenderReusePass();
-            string renderLanguage = GetLanguageSignature();
+            string renderLanguage = GetLanguageSignature() + "|" + GetUiLanguageSignature();
             int total = BrowserLines.Count;
             int maxOffset = Math.Max(0, total - BrowserVisibleRows);
             BrowserNavigation.ScrollOffset = Mathf.Clamp(BrowserNavigation.ScrollOffset, 0, maxOffset);

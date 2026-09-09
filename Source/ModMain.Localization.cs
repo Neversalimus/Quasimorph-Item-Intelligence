@@ -237,6 +237,9 @@ namespace ItemIntelligence
             };
 
             bool foundLocalizedValue = false;
+            bool foundHangul = false;
+            bool foundKana = false;
+            bool foundHan = false;
 
             for (int i = 0; i < keys.Length; i++)
             {
@@ -247,10 +250,20 @@ namespace ItemIntelligence
 
                 if (ContainsCyrillic(value))
                     return "Russian";
+                foundHangul |= ContainsHangulScript(value);
+                foundKana |= ContainsKanaScript(value);
+                foundHan |= ContainsHanScript(value);
             }
 
-            // Item Intelligence currently ships RU/EN UI text. If vanilla localization
-            // returned a valid non-Cyrillic translation, use the English UI branch.
+            // Aggregate across several item names before classifying CJK. Japanese
+            // labels commonly mix Kanji with Kana, so Kana takes precedence over Han.
+            if (foundHangul) return "Korean";
+            if (foundKana) return "Japanese";
+            if (foundHan) return "ChineseSimplified";
+
+            // If exact selected-language metadata is unavailable and the probe is a
+            // Latin-script language we cannot identify safely from item names alone.
+            // Keep English as the fail-soft fallback rather than guessing German/Polish.
             if (foundLocalizedValue)
                 return "English";
 
@@ -316,11 +329,7 @@ namespace ItemIntelligence
                 if (!string.IsNullOrEmpty(language)) return language;
             }
 
-            object instance = FirstNonNull(
-                GetStaticMember(owner, "Instance"),
-                GetStaticMember(owner, "instance"),
-                GetStaticMember(owner, "Current"),
-                GetStaticMember(owner, "current"));
+            object instance = GetLocalizationOwnerInstance(owner);
 
             if (instance != null)
             {
@@ -524,7 +533,7 @@ namespace ItemIntelligence
 
         private static void EnsureExternalUiTranslations()
         {
-            string language = GetLanguageSignature();
+            string language = GetUiLanguageSignature();
             if (string.Equals(language, _externalUiTranslationLanguage, StringComparison.OrdinalIgnoreCase) &&
                 _externalUiEnglishLoaded) return;
 
@@ -562,7 +571,10 @@ namespace ItemIntelligence
                     if (string.Equals(fileName, "TranslationTemplate.lang", StringComparison.OrdinalIgnoreCase)) continue;
                     string declared = ReadUiLanguageDeclaration(files[i]);
                     bool builtIn = string.Equals(fileName, "en.lang", StringComparison.OrdinalIgnoreCase) ||
-                        string.Equals(fileName, "ru.lang", StringComparison.OrdinalIgnoreCase);
+                        string.Equals(fileName, "ru.lang", StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(fileName, "de.lang", StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(fileName, "pl.lang", StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(fileName, "zh-Hans.lang", StringComparison.OrdinalIgnoreCase);
                     if (builtIn)
                     {
                         if (ExternalLanguageMatches(language, declared)) builtInPath = files[i];
@@ -583,7 +595,7 @@ namespace ItemIntelligence
                 // metadata result (for example a build that reports every non-RU script
                 // as English), which is useful for CJK translation packs and testing.
                 if (!string.IsNullOrEmpty(exactCommunityPath)) activePath = exactCommunityPath;
-                else if (forcedCount == 1) activePath = forcedPath;
+                else if (forcedCount == 1 && UiLanguagePreference == "Auto (Game)") activePath = forcedPath;
                 else activePath = builtInPath;
 
                 if (!string.IsNullOrEmpty(activePath))
@@ -646,7 +658,7 @@ namespace ItemIntelligence
 
         private static bool IsEnglishLanguageToken(string language)
         {
-            return ExternalLanguageMatches(language, "English;en;Английский");
+            return ExternalLanguageMatches(language, "EnglishUS;English;en;Английский");
         }
 
         private static bool IsEnglishLanguage()

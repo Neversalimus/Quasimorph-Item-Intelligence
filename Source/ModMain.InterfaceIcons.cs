@@ -488,11 +488,13 @@ namespace ItemIntelligence
             }
         }
 
-        private static float GetBrowserInterfaceTabFontSize(bool russian)
+        private static float GetBrowserInterfaceTabFontSize()
         {
+            if (IsCjkLanguage()) return BrowserInterfaceIconLayoutEnabled ? 10.25f : 11.25f;
+            bool compactLatin = IsUiRussianLanguage() || IsGermanLanguage() || IsPolishLanguage();
             return BrowserInterfaceIconLayoutEnabled
-                ? (russian ? 10.5f : 11f)
-                : (russian ? 11.5f : 12.5f);
+                ? (compactLatin ? 10.5f : 11f)
+                : (compactLatin ? 11.5f : 12.5f);
         }
 
         private static void UpdateBrowserHeaderInterfaceIconStyle(bool favorite, bool canBack)

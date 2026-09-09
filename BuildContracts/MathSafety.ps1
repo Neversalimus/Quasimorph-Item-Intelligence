@@ -44,7 +44,7 @@ foreach ($token in @(
 # Container save estimates must be visually unambiguous: a range separator is
 # typographic, never a minus-sign-like ASCII hyphen, and RU decimal output uses commas.
 foreach ($token in @('"≈ " + maxText + percentSuffix','"≈ " + minText + "–" + maxText + percentSuffix',
-    'string percentSuffix = ru ? " %" : "%";','return russian ? text.Replace(''.'', '','') : text;')) {
+    'string percentSuffix = GetUiPercentSuffix();','CultureInfo culture = GetUiNumberCulture();')) {
     if ($containerMathText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) {
         throw "Container estimate presentation contract missing: $token"
     }

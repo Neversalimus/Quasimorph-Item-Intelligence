@@ -634,7 +634,7 @@ foreach ($token in @(
 }
 foreach ($token in @(
     '!source.RollRangeResolved || source.MaxRolls > 0',
-    'return "? +" + FormatExpectedNumber(storageExpected, IsRussian());',
+    'return "? +" + FormatExpectedNumber(storageExpected);',
     'return "?";')) {
     if ($lootModifiersText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "current unknown-roll presentation token missing: $token" }
 }
@@ -719,7 +719,7 @@ foreach ($token in @(
     'float.IsNaN(view.RewardPercent)',
     'float.IsInfinity(view.RewardPercent)',
     'float value = Mathf.Clamp(view.RewardPercent, 0f, 100f);',
-    'return value.ToString("0.###", CultureInfo.InvariantCulture) + "%";',
+    'return value.ToString("0.###", GetUiNumberCulture()) + GetUiPercentSuffix();',
     '// 2 = unresolved. Keep it distinct from a proven neutral relation (0).')) {
     if ($factionsText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "current faction truthfulness token missing: $token" }
 }

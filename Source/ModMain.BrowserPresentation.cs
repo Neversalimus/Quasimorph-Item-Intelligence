@@ -1000,6 +1000,7 @@ namespace ItemIntelligence
             if (_inspectorRoot == null || string.IsNullOrEmpty(itemId)) return;
 
             EnsureLocalizationCacheLanguage();
+            RefreshBrowserLanguageFonts();
             if (_inspectorTitle != null)
                 SetBrowserTextIfChanged(_inspectorTitle, NormalizeGameText(LocalizeItem(itemId)));
             if (_inspectorItemIdText != null)
@@ -1098,8 +1099,7 @@ namespace ItemIntelligence
 
         private static void UpdateBrowserTabs()
         {
-            bool ru = IsRussian();
-            float tabFontSize = GetBrowserInterfaceTabFontSize(ru);
+            float tabFontSize = GetBrowserInterfaceTabFontSize();
 
             for (int i = 0; i < BrowserTabCount; i++)
             {
@@ -1507,7 +1507,7 @@ namespace ItemIntelligence
         private static void ConfigureInspectorText(TMP_Text text, float size, Color color, FontStyles style)
         {
             if (text == null) return;
-            if (_inspectorFont != null) text.font = _inspectorFont;
+            ApplyUiFont(text);
             text.fontSize = size;
             text.color = color;
             text.fontStyle = style;

@@ -1,0 +1,42 @@
+{
+  "version": "1.7.42.5-test1",
+  "runtime_marker": "LanguagesMcmTest01",
+  "base_release": "v1.7.42.4",
+  "base_commit": "05fba90596241f30d09fa47b1ddb0d8ad210bba7",
+  "publisher_fix_commit": "2314b29931be5b7dd80a426edba970a2f315f8b3",
+  "recovered_package": "Quasimorph_ItemIntelligence_V1_7_42_2_Languages_MCM_Test2_Full_BuildFix2.zip",
+  "languages": [
+    "English",
+    "Russian",
+    "German",
+    "Polish",
+    "Simplified Chinese"
+  ],
+  "keys_per_file": 651,
+  "localization_files": 6,
+  "production_source_files": 105,
+  "target_workshop": "3781927679",
+  "stage": "C:\\QM_Workshop\\ItemIntelligence_DEV",
+  "validation": {
+    "static_contracts": "PASS",
+    "existing_behavior_assertions": 660,
+    "release_behavior_assertions": 32,
+    "localization_behavior_assertions": 3321,
+    "csharp_language_version": "5",
+    "game_dependencies": 118,
+    "compile_errors": 0,
+    "compile_warnings": 0
+  },
+  "game_assembly_sha256": "BE78036434737521BB43DABBD934B579A08DC3E8370B834AEE36E40932F56FE0",
+  "runtime_game_test": "PENDING",
+  "native_speaker_review": "PENDING",
+  "scope": "Source compile and production method behavior with game/TMP/MCM fixtures. Final Windows installer build and in-game visual acceptance remain pending.",
+  "localization_sha256": {
+    "TranslationTemplate.lang": "520CE82C2999887A48EBE4A3419BC957A3E1E6C32D73CBFBC7CC855DF72BF969",
+    "de.lang": "B398D2183B81F9EC8DB15FDB5F67B42C3B21157FB675A6DAD436CE70A7B9E470",
+    "en.lang": "95186D74B339754A6C58EBABD42D21A32DA8830C1FE219B35D78D0978978781D",
+    "pl.lang": "3F736A074B0576F20CB74FE3318BDA7722936004A84E290C835AD5A1B8544290",
+    "ru.lang": "96627A4A7A36CB9640E0117D0D3379300927A5A675D9FE88BF4EC46F9D01FB19",
+    "zh-Hans.lang": "C6160BBA111867EB908CA0EF7EBD92DC39366CDED7D6B65A1755FCA69CFDC00B"
+  }
+}

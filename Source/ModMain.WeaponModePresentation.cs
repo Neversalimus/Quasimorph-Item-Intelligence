@@ -142,21 +142,20 @@ namespace ItemIntelligence
         private static string FormatWeaponModeMultiplierPercent(float value)
         {
             float percent = value * 100f;
-            return FormatWeaponModeLocalizedNumber(percent, 1) + "%";
+            return FormatWeaponModeLocalizedNumber(percent, 1) + GetUiPercentSuffix();
         }
 
         private static string FormatSignedModePercent(float value)
         {
             float percent = value * 100f;
             string formatted = FormatWeaponModeLocalizedNumber(percent, 1);
-            return percent > 0.0001f ? "+" + formatted + "%" : formatted + "%";
+            return (percent > 0.0001f ? "+" : string.Empty) + formatted + GetUiPercentSuffix();
         }
 
         private static string FormatWeaponModeLocalizedNumber(float value, int maxDecimals)
         {
             string format = maxDecimals <= 0 ? "0" : "0." + new string('#', maxDecimals);
-            CultureInfo culture = IsRussian() ? CultureInfo.GetCultureInfo("ru-RU") : CultureInfo.InvariantCulture;
-            return value.ToString(format, culture);
+            return value.ToString(format, GetUiNumberCulture());
         }
 
         private static void EnsureBrowserWeaponModeTooltip()
@@ -217,7 +216,7 @@ namespace ItemIntelligence
             rt.anchoredPosition = position;
             rt.sizeDelta = size;
             TextMeshProUGUI text = go.AddComponent<TextMeshProUGUI>();
-            if (_inspectorFont != null) text.font = _inspectorFont;
+            ApplyUiFont(text);
             text.fontSize = fontSize;
             text.color = color;
             text.alignment = alignment;
