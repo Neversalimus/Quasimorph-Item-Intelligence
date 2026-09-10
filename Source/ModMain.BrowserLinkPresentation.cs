@@ -42,7 +42,7 @@ namespace ItemIntelligence
                 SetBrowserGraphicColorIfChanged(icon, new Color(0.94f, 0.86f, 0.53f, 1f));
                 SetBrowserImageEnabledIfChanged(icon, icon.sprite != null);
                 if (ctx.RightRt != null)
-                    SetBrowserRectSizeIfChanged(ctx.RightRt, 166f, ctx.RightRt.sizeDelta.y);
+                    SetBrowserRowTextSize(ctx.RightRt, 166f, ctx.RightRt.sizeDelta.y);
             }
             return true;
         }

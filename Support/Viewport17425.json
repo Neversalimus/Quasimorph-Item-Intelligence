@@ -1,6 +1,6 @@
 {
-  "version": "1.7.42.5-test3",
-  "runtime_marker": "LargeUiLanguagesTest03",
+  "version": "1.7.42.5-test4",
+  "runtime_marker": "LargeUiLanguagesTest04",
   "date": "2026-09-10",
   "base_implant_commit": "8011d6f30a313fe2c8b88358a5fdaea19fbcbb15",
   "dev_workshop": "3781927679",
@@ -31,10 +31,12 @@
     "errors": 0
   },
   "game_assembly_sha256": "BE78036434737521BB43DABBD934B579A08DC3E8370B834AEE36E40932F56FE0",
-  "game_test": "PENDING",
+  "game_test": "PARTIAL: Test3 observed at 2560x1440 (EN/ZH); Test4 link-alignment change awaits in-game confirmation.",
   "source_sha256": {
     "ModMain.BrowserViewport.cs": "DCE228301B05184DF834D3F538335AEE4F96BCB671F13C06B28ED7AD09EAC5C0",
     "ModMain.BrowserViewportChrome.cs": "8D914ADA9FA220CA1DCDF595808CF3B24FCE8F96623B3D98E45B42C0969D6339",
-    "ModMain.BrowserViewportMath.cs": "76858EFBBABB5074511CE11A4B1B917C5DD7CC7C4EA0B5A283AA4DA78DCBB090"
-  }
+    "ModMain.BrowserViewportMath.cs": "76858EFBBABB5074511CE11A4B1B917C5DD7CC7C4EA0B5A283AA4DA78DCBB090",
+    "ModMain.BrowserLinkPresentation.cs": "2FBF8854E1ABADF10B27BE791C32A567D5DCB4902F910EB4DB600AF4F5BF5102"
+  },
+  "runtime_evidence": "Support/RuntimeAcceptance17425Test3.json"
 }

@@ -1,5 +1,11 @@
 ﻿# Changelog
 
+## v1.7.42.5-test4 — 2026-09-10
+
+- Scale the open-item label rectangle with the browser columns so its label stays next to the action icon in large view.
+- Record partial Test3 game acceptance from 13 screenshots and the supplied log at 2560×1440, with scoped performance and external UI findings.
+- Carry forward the large window/zoom, body-aware implant sources and five-language DEV candidate.
+
 ## v1.7.42.4 — 2026-09-08
 
 - Promote the accepted Test3 gameplay code to stable; runtime marker `1.7.42.4 (StableRelease17424)`.

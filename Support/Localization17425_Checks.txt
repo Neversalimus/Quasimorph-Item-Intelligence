@@ -1,4 +1,4 @@
-DEV v1.7.42.5-test3. Local verification; Unity visual acceptance pending.
+DEV v1.7.42.5-test4. Local verification; Test3 partial Unity acceptance is recorded separately; Test4 link alignment awaits game confirmation.
 
 Production C# behavior: PASS (660 assertions).
 Production enemy body/implant behavior: PASS (4923 assertions).

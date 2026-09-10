@@ -1,6 +1,6 @@
 {
-  "version": "1.7.42.5-test3",
-  "runtime_marker": "LargeUiLanguagesTest03",
+  "version": "1.7.42.5-test4",
+  "runtime_marker": "LargeUiLanguagesTest04",
   "base_release": "v1.7.42.4",
   "base_commit": "05fba90596241f30d09fa47b1ddb0d8ad210bba7",
   "publisher_fix_commit": "2314b29931be5b7dd80a426edba970a2f315f8b3",
@@ -30,9 +30,9 @@
     "viewport_geometry_assertions": 54917
   },
   "game_assembly_sha256": "BE78036434737521BB43DABBD934B579A08DC3E8370B834AEE36E40932F56FE0",
-  "runtime_game_test": "PENDING",
+  "runtime_game_test": "PARTIAL: Test3 observed at 2560x1440 (EN/ZH); Test4 link-alignment change awaits in-game confirmation.",
   "native_speaker_review": "PENDING",
-  "scope": "Full DEV candidate with large browser/zoom, prior body/implant corrections and five languages. Production code compiles against supplied game DLLs; behavior uses game/TMP/RectTransform fixtures. Unity visual acceptance and Windows installation pending.",
+  "scope": "Full DEV candidate. Test3 installed and ran in Unity at 2560x1440; EN/ZH display and runtime index completion observed. Test4 changes one item-link text-width call. Smaller resolutions, DE/PL rendering, restart persistence and selected-implant evidence remain pending.",
   "localization_sha256": {
     "TranslationTemplate.lang": "E35622A92187EAEA9B14FBD359566B7ACC3F6592B4A5833AF6146516E2459AD2",
     "de.lang": "85CFF14480B65D9987C4D865DC13B7FACE8217CE8E59EF63ECE492E5ECE203C4",
@@ -41,5 +41,6 @@
     "ru.lang": "1759E92567ADCAB7F6F19CBA8DE448345D0C9B5B1F2A31EFC1C4CDC2DBD85EE9",
     "zh-Hans.lang": "46DE13E6B2343B2791567FD026507D036DACF7DEA21C3B36E60AC49E640C9DA9"
   },
-  "base_localization_commit": "8749cf9d1eb3cffb7438522de8cc5afb5deb8c01"
+  "base_localization_commit": "8749cf9d1eb3cffb7438522de8cc5afb5deb8c01",
+  "runtime_evidence": "Support/RuntimeAcceptance17425Test3.json"
 }

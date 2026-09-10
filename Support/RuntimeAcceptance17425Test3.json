@@ -1,0 +1,405 @@
+{
+  "version": "1.7.42.5-test3",
+  "runtime_marker": "LargeUiLanguagesTest03",
+  "source_commit": "e2ddb8789de55f387d869c196740bac677155c58",
+  "review_date": "2026-09-10",
+  "game_version": "1.0.4.581s.2952480",
+  "game_assembly_sha256": "BE78036434737521BB43DABBD934B579A08DC3E8370B834AEE36E40932F56FE0",
+  "input_log": "Player(20260910-110345).log",
+  "input_log_sha256": "1474F61D7ABC01C666F37CC9EF5123D84D609EF50FEF26F74A8DA5A2E73F87A3",
+  "verdict": "PARTIAL ACCEPTANCE: observed 2560x1440 layouts and EN/ZH font switching work, with a minor item-link alignment defect. No QII exception stack is present; MCM exception and one UI rebuild warning remain separately recorded. Sustained FPS performance is not established.",
+  "source_fix": {
+    "next_version": "1.7.42.5-test4",
+    "file": "Source/ModMain.BrowserLinkPresentation.cs",
+    "change": "Use viewport-aware text width for the open-item label, preserving base layout and aligning it with its separately positioned action icon.",
+    "game_test": "PENDING for this one-line correction"
+  },
+  "issues": [
+    {
+      "severity": "minor",
+      "area": "QII layout",
+      "finding": "Fixed 166-unit open-item text width bypasses the responsive column helper; source defect matches the visible gap in large view.",
+      "state": "Corrected in Test4 source."
+    },
+    {
+      "severity": "exception",
+      "area": "MCM initialization",
+      "line": 2084,
+      "finding": "NullReferenceException in MGSC.SliderWrapper.Awake during ModConfigMenu.ConfigureRangeButtonPrefab. No QII stack frames. MCM continues to load and save the language setting.",
+      "state": "No QII cause established; no external mod patched."
+    },
+    {
+      "severity": "warning",
+      "area": "Unity UI rebuild",
+      "line": 2972,
+      "finding": "Trying to remove ItemImage from the rebuild list during a rebuild loop. No stack is included.",
+      "state": "Owner/cause unresolved; not silently suppressed."
+    },
+    {
+      "severity": "performance",
+      "area": "First QII open",
+      "line": 2030,
+      "finding": "Cold open 60.1 ms against a 50 ms budget; render 14.1 ms against 20 ms. One QII budget warning in the log.",
+      "state": "Small cold-open overrun. Earlier supplied sessions logged 47.3 and 51.2 ms on other observations; these are not a controlled benchmark."
+    },
+    {
+      "severity": "performance",
+      "area": "Screenshot FPS",
+      "finding": "Counters of 38, 34 and 43 FPS occur in three shots, with other shots near 117.",
+      "state": "Still images cannot establish duration or whether QII caused the dips; needs a short in-game observation."
+    }
+  ],
+  "implant_scope": "Index completed with installedChanceLinks=1031, conditionalImplantLinks=6262 and excludedImplantBodyCandidates=89400. These count calculated links/candidates, not observed drops. No selected-implant EnemyImplantEvidence export or actual Ksio drop is supplied.",
+  "scope_limits": [
+    "All viewport log entries use 2560x1440. Provided screenshots are downscaled to 2048x1152; physical 15-inch readability and 1920x1080/1366x768 layouts remain visually untested.",
+    "German and Polish rendering and native-speaker translation review remain untested.",
+    "Chinese is shown at normal 100%; enlarged Chinese has not been shown.",
+    "Open catalog/search results and weapon hover cards are not shown.",
+    "Separate view preferences survive switching during the session; a full process restart is not demonstrated.",
+    "No direct check of exact implant installation/drop outcomes or the selected-implant diagnostic export.",
+    "No global VERIFIED promotion or public release is authorized by this evidence."
+  ],
+  "screenshots": [
+    {
+      "file": "db7b24f4-515e-47dd-9422-3a628731570f.png",
+      "sha256": "6991E55EC635D9169C1FAC7A88B74E647625B9A7359E1F5D0B958158E42D4AA3",
+      "dimensions": [
+        2048,
+        1152
+      ],
+      "ui_and_game_languages": "EN / EN",
+      "view": "Normal 100%, Overview",
+      "observation": "Header, links and footer fit."
+    },
+    {
+      "file": "e7f85a33-539c-4dfc-b907-951afc056c34.png",
+      "sha256": "2A32D8296A2F77E5D08DB6045E689040FCD770E2DE6B52A398813E104881E212",
+      "dimensions": [
+        2048,
+        1152
+      ],
+      "ui_and_game_languages": "EN / EN",
+      "view": "Large 150%, Overview",
+      "observation": "Open-item label remains too far from its action icon. Fixed-width text rectangle confirmed in source."
+    },
+    {
+      "file": "978f4102-dd14-4319-b5fe-d9d47a935992.png",
+      "sha256": "9E354FA1C3ED34A831FE7C9B5C47B00E4F2AA7A7C66279BE6F03865BC98AB711",
+      "dimensions": [
+        2048,
+        1152
+      ],
+      "ui_and_game_languages": "EN / EN",
+      "view": "Large 150%, Loot",
+      "observation": "Expanded container columns and notes fit."
+    },
+    {
+      "file": "d4be812c-69f8-4a11-88b0-ceca1aa8d123.png",
+      "sha256": "A4A40286618373D2A3E92CF85253B54F2A28CBE528DA76E1EEBAD519AE85611E",
+      "dimensions": [
+        2048,
+        1152
+      ],
+      "ui_and_game_languages": "EN / EN",
+      "view": "Large 200%, Loot",
+      "observation": "Four visible rows; footer remains reachable. Lower row count is expected at this zoom."
+    },
+    {
+      "file": "0ab113a9-36a1-4ebb-b5f4-8dda37a1e392.png",
+      "sha256": "D386B51290F8E26E98C17463FBB7B277DB471948AC487E59EE5D25CF83069FE1",
+      "dimensions": [
+        2048,
+        1152
+      ],
+      "ui_and_game_languages": "EN / EN",
+      "view": "Large 150%, Trade cards",
+      "observation": "Text fits. Screenshot FPS counter reads 38; duration and cause unknown."
+    },
+    {
+      "file": "222b61e4-34c8-444a-bed6-7d77333c89df.png",
+      "sha256": "F3D15731D3C9F035E34D2E4DE1BDBEF719F816086DA68BFEA752C89FB329278A",
+      "dimensions": [
+        2048,
+        1152
+      ],
+      "ui_and_game_languages": "EN / EN",
+      "view": "Large 150%, Trade table",
+      "observation": "Columns and station names fit; screenshot FPS counter reads 117."
+    },
+    {
+      "file": "80354cfa-d2c1-4f37-8441-98a670a85d39.png",
+      "sha256": "1C5AF62C8F76DDBE94564C38578EBFF54C3BA0A7C6773D3437E18E592367BB16",
+      "dimensions": [
+        2048,
+        1152
+      ],
+      "ui_and_game_languages": "ZH / EN",
+      "view": "Normal 100%, Overview",
+      "observation": "Chinese UI and English game names render together without missing glyphs."
+    },
+    {
+      "file": "6033304c-0bd6-4ccf-86cc-a99efc0b6a38.png",
+      "sha256": "5DC4B95DF4EBFE02A8CC92051DC5B44D3BF10A98FC795ABB3BBCCBC1F0A0C0B4",
+      "dimensions": [
+        2048,
+        1152
+      ],
+      "ui_and_game_languages": "ZH / EN",
+      "view": "Normal 100%, Magnum",
+      "observation": "Chinese UI and English research names fit."
+    },
+    {
+      "file": "7b3ffcf6-4de6-4881-a284-77700184723c.png",
+      "sha256": "F64E76277EE5B167DAE26150B2DEE5CDD9682B05C60479066ECB760440EB71A3",
+      "dimensions": [
+        2048,
+        1152
+      ],
+      "ui_and_game_languages": "ZH / EN",
+      "view": "Normal 100%, Recipes",
+      "observation": "Scrolled to rows 10-23/23; notes and names fit."
+    },
+    {
+      "file": "3621571d-8e60-4069-9490-8f2688c9bcda.png",
+      "sha256": "C8BAE9348477BFBED1CC1291AED9832A4B1C141FCB28B4ACDED88E939B74686E",
+      "dimensions": [
+        2048,
+        1152
+      ],
+      "ui_and_game_languages": "ZH / EN",
+      "view": "Normal 100%, Trade table",
+      "observation": "Long station names use ellipsis in the narrow view. Screenshot FPS counter reads 34; duration and cause unknown."
+    },
+    {
+      "file": "b8f20427-58a6-4d71-be87-a9ff4f996a77.png",
+      "sha256": "FE227C3CBA4FAB3BDA1C5F0A2D50CAB8ECE8AC071839D21856B4119DD2405651",
+      "dimensions": [
+        2048,
+        1152
+      ],
+      "ui_and_game_languages": "ZH / EN",
+      "view": "Normal 100%, Factions",
+      "observation": "Reward and mission columns fit."
+    },
+    {
+      "file": "244249d8-646f-4f0c-9df0-fba86788cfb0.png",
+      "sha256": "C8FB56F51D54939FB665F3325C539F72D6EFC8BDB1BC594C9E4F5C8007E0937F",
+      "dimensions": [
+        2048,
+        1152
+      ],
+      "ui_and_game_languages": "ZH / EN",
+      "view": "Normal 100%, Loot",
+      "observation": "Enemy columns fit; warmup progress is still visible. Screenshot FPS counter reads 43; duration and cause unknown."
+    },
+    {
+      "file": "93fa935f-22d1-4675-850d-542743b7cbb8.png",
+      "sha256": "3C0B5AC15396EDC95C683921416CC699F655303BF77B2333EF575C7DBE0992F2",
+      "dimensions": [
+        2048,
+        1152
+      ],
+      "ui_and_game_languages": "ZH / ZH",
+      "view": "Normal 100%, Recipes",
+      "observation": "Chinese game names and UI render without missing glyphs."
+    }
+  ],
+  "log_evidence": [
+    {
+      "line": 29,
+      "text": "[FactionDifficulty] ACTIVE VERSION 1.1.0; balance=FULL_CORE; storage=PER_SAVE."
+    },
+    {
+      "line": 526,
+      "text": "[ItemIntelligence] ACTIVE VERSION 1.7.42.5-test3 (LargeUiLanguagesTest03)."
+    },
+    {
+      "line": 536,
+      "text": "[LoadoutPresets] ACTIVE VERSION 1.0.0-r18 (CyberSafetyAndScroll)."
+    },
+    {
+      "line": 1175,
+      "text": "[ItemIntelligence] UI localization: language=EnglishUS, file=en.lang, entries=657, english=657."
+    },
+    {
+      "line": 1678,
+      "text": "[MissionSideInfo] ACTIVE VERSION 1.1.1 (ResponsiveNoOverlapPositioningRelease111)"
+    },
+    {
+      "line": 2015,
+      "text": "[ItemIntelligence] Core indexes ready in 56 ms: KnownItems=1869, BarterItems=0, MagnumItems=51, UsedIn=80, CraftedFrom=630, StationProdInputs=22, StationProdOutputs=62, AmmoWarmup=pending, DisassemblyWarmup=pending, FactionTech=pending, Loot=deferred, partialFailures=0."
+    },
+    {
+      "line": 2026,
+      "text": "[ItemIntelligence] UI font: EnglishUS|EnglishUS; asset=NotoSans-Regular SDF."
+    },
+    {
+      "line": 2030,
+      "text": "[ItemIntelligence][BrowserViewport] screen=2560x1440, expanded=False, requestedZoom=100, effectiveZoom=100, rows=14, catalogRows=8."
+    },
+    {
+      "line": 2032,
+      "text": "[ItemIntelligence] Game language resolved from vanilla localization: EnglishUS; browser=English."
+    },
+    {
+      "line": 2033,
+      "text": "[ItemIntelligence][PerfBudget] item=construction_equipment, mode=cold, total=60.1ms/50ms, render=14.1ms/20ms, violations=1."
+    },
+    {
+      "line": 2034,
+      "text": "[ItemIntelligence][FirstOpenPerf] targetResolve=0.5ms, coreBuild=0.0ms, runtimeReady=0.2ms, panel=26.0ms, render=14.1ms, misc=19.3ms, total=60.1ms, searchIndex=deferred, searchDropdown=deferred, catalog=deferred, factionColumns=deferred, recipeContext=deferred, lootProgress=deferred."
+    },
+    {
+      "line": 2036,
+      "text": "[ItemIntelligence][BrowserViewport] screen=2560x1440, expanded=True, requestedZoom=150, effectiveZoom=150, rows=9, catalogRows=8."
+    },
+    {
+      "line": 2037,
+      "text": "[ItemIntelligence][BrowserViewport] screen=2560x1440, expanded=False, requestedZoom=100, effectiveZoom=100, rows=14, catalogRows=8."
+    },
+    {
+      "line": 2038,
+      "text": "[ItemIntelligence][BrowserViewport] screen=2560x1440, expanded=False, requestedZoom=125, effectiveZoom=125, rows=12, catalogRows=8."
+    },
+    {
+      "line": 2039,
+      "text": "[ItemIntelligence][BrowserViewport] screen=2560x1440, expanded=False, requestedZoom=150, effectiveZoom=150, rows=9, catalogRows=8."
+    },
+    {
+      "line": 2040,
+      "text": "[ItemIntelligence][BrowserViewport] screen=2560x1440, expanded=False, requestedZoom=175, effectiveZoom=175, rows=6, catalogRows=6."
+    },
+    {
+      "line": 2041,
+      "text": "[ItemIntelligence][BrowserViewport] screen=2560x1440, expanded=False, requestedZoom=200, effectiveZoom=200, rows=4, catalogRows=4."
+    },
+    {
+      "line": 2042,
+      "text": "[ItemIntelligence][BrowserViewport] screen=2560x1440, expanded=True, requestedZoom=150, effectiveZoom=150, rows=9, catalogRows=8."
+    },
+    {
+      "line": 2043,
+      "text": "[ItemIntelligence][BrowserViewport] screen=2560x1440, expanded=False, requestedZoom=200, effectiveZoom=200, rows=4, catalogRows=4."
+    },
+    {
+      "line": 2044,
+      "text": "[ItemIntelligence][BrowserViewport] screen=2560x1440, expanded=False, requestedZoom=175, effectiveZoom=175, rows=6, catalogRows=6."
+    },
+    {
+      "line": 2045,
+      "text": "[ItemIntelligence][BrowserViewport] screen=2560x1440, expanded=False, requestedZoom=150, effectiveZoom=150, rows=9, catalogRows=8."
+    },
+    {
+      "line": 2046,
+      "text": "[ItemIntelligence][BrowserViewport] screen=2560x1440, expanded=False, requestedZoom=125, effectiveZoom=125, rows=12, catalogRows=8."
+    },
+    {
+      "line": 2047,
+      "text": "[ItemIntelligence][BrowserViewport] screen=2560x1440, expanded=False, requestedZoom=100, effectiveZoom=100, rows=14, catalogRows=8."
+    },
+    {
+      "line": 2048,
+      "text": "[ItemIntelligence][BrowserViewport] screen=2560x1440, expanded=True, requestedZoom=150, effectiveZoom=150, rows=9, catalogRows=8."
+    },
+    {
+      "line": 2049,
+      "text": "[ItemIntelligence][BrowserViewport] screen=2560x1440, expanded=False, requestedZoom=100, effectiveZoom=100, rows=14, catalogRows=8."
+    },
+    {
+      "line": 2050,
+      "text": "[ItemIntelligence][BrowserViewport] screen=2560x1440, expanded=True, requestedZoom=150, effectiveZoom=150, rows=9, catalogRows=8."
+    },
+    {
+      "line": 2062,
+      "text": "[ItemIntelligence][EnemyBodySources] installedChanceLinks=1031, conditionalImplantLinks=6262, excludedImplantBodyCandidates=89400; random augmentation paths remain conditional; gameplay RNG untouched."
+    },
+    {
+      "line": 2063,
+      "text": "[ItemIntelligence] Loot Sources warmup complete: metadata=1869, items(container/enemy/amputation/bramfatura/station/faction)=403/1339/120/61/726/1404, enemyLinks=101583, containerProfilesIndexed=28/28, emptyContainerProfiles=0, containerItemLinks=4239, generalSpawnItems=1581, generalSpawnPairs=11274."
+    },
+    {
+      "line": 2068,
+      "text": "[ItemIntelligence][BrowserViewport] screen=2560x1440, expanded=True, requestedZoom=175, effectiveZoom=175, rows=6, catalogRows=6."
+    },
+    {
+      "line": 2069,
+      "text": "[ItemIntelligence][BrowserViewport] screen=2560x1440, expanded=True, requestedZoom=200, effectiveZoom=200, rows=4, catalogRows=4."
+    },
+    {
+      "line": 2070,
+      "text": "[ItemIntelligence][BrowserViewport] screen=2560x1440, expanded=True, requestedZoom=175, effectiveZoom=175, rows=6, catalogRows=6."
+    },
+    {
+      "line": 2071,
+      "text": "[ItemIntelligence][BrowserViewport] screen=2560x1440, expanded=True, requestedZoom=150, effectiveZoom=150, rows=9, catalogRows=8."
+    },
+    {
+      "line": 2072,
+      "text": "[ItemIntelligence][BrowserViewport] screen=2560x1440, expanded=False, requestedZoom=100, effectiveZoom=100, rows=14, catalogRows=8."
+    },
+    {
+      "line": 2077,
+      "text": "[ItemIntelligence][TradeLayout] layout=Card, PreviousTradeLayout=False, Exact103Pricing=True, BuildStatus=UNVERIFIED BUILD, AssemblySHA256=BE78036434737521BB43DABBD934B579A08DC3E8370B834AEE36E40932F56FE0."
+    },
+    {
+      "line": 2079,
+      "text": "[ItemIntelligence][BrowserViewport] screen=2560x1440, expanded=True, requestedZoom=150, effectiveZoom=150, rows=9, catalogRows=8."
+    },
+    {
+      "line": 2081,
+      "text": "[ItemIntelligence][TradeLayout] layout=PreviousTable, PreviousTradeLayout=True, Exact103Pricing=True, BuildStatus=UNVERIFIED BUILD, AssemblySHA256=BE78036434737521BB43DABBD934B579A08DC3E8370B834AEE36E40932F56FE0."
+    },
+    {
+      "line": 2082,
+      "text": "[ItemIntelligence][BrowserViewport] screen=2560x1440, expanded=False, requestedZoom=100, effectiveZoom=100, rows=14, catalogRows=8."
+    },
+    {
+      "line": 2083,
+      "text": "Game saved. Save process took 0,4840651 seconds."
+    },
+    {
+      "line": 2087,
+      "text": "NullReferenceException: Object reference not set to an instance of an object"
+    },
+    {
+      "line": 2110,
+      "text": "[ItemIntelligence] UI localization: language=ChineseSimplified, file=zh-Hans.lang, entries=657, english=657."
+    },
+    {
+      "line": 2613,
+      "text": "[MissionSideInfo] ACTIVE VERSION 1.1.1 (ResponsiveNoOverlapPositioningRelease111)"
+    },
+    {
+      "line": 2950,
+      "text": "[ItemIntelligence] Core indexes ready in 28 ms: KnownItems=1869, BarterItems=0, MagnumItems=51, UsedIn=80, CraftedFrom=630, StationProdInputs=22, StationProdOutputs=62, AmmoWarmup=pending, DisassemblyWarmup=pending, FactionTech=pending, Loot=deferred, partialFailures=0."
+    },
+    {
+      "line": 2959,
+      "text": "[ItemIntelligence] UI font: ChineseSimplified|EnglishUS; asset=QII_NotoSansSC-Regular SDF_NotoSans-Regular SDF."
+    },
+    {
+      "line": 2975,
+      "text": "Trying to remove ItemImage (UnityEngine.UI.Image) from rebuild list while we are already inside a rebuild loop. This is not supported."
+    },
+    {
+      "line": 2976,
+      "text": "[ItemIntelligence] UI font: ChineseSimplified|ChineseSimp; asset=NotoSansSC-Regular SDF."
+    },
+    {
+      "line": 2979,
+      "text": "[ItemIntelligence] Game language resolved from vanilla localization: ChineseSimp; browser=简体中文."
+    },
+    {
+      "line": 2981,
+      "text": "Game saved. Save process took 0,4519178 seconds."
+    }
+  ],
+  "runtime_resolution": [
+    2560,
+    1440
+  ],
+  "provided_screenshot_resolution": [
+    2048,
+    1152
+  ]
+}
