@@ -114,7 +114,7 @@ namespace ItemIntelligence
         private static readonly Image[] BrowserInterfaceTabIcons = new Image[BrowserTabCount];
         private static readonly Image[] BrowserInterfaceCatalogScopeIcons = new Image[BrowserCatalogScopeCount];
         private static readonly Image[] BrowserInterfaceCatalogCategoryIcons = new Image[BrowserCatalogCategoryCount];
-        private static readonly Image[] BrowserInterfaceCatalogRowFavoriteIcons = new Image[BrowserCatalogVisibleRows];
+        private static readonly Image[] BrowserInterfaceCatalogRowFavoriteIcons = new Image[BrowserCatalogRowCapacity];
 
         private static bool _browserInterfaceIconGenerationFailed;
         private static bool _browserInterfaceIconFailureLogged;
@@ -190,6 +190,7 @@ namespace ItemIntelligence
             _browserInterfaceIconLayoutKnown = true;
             _browserInterfaceIconLayoutValue = enabled;
             _browserInterfaceIconLayoutBindingCount = BrowserInterfaceIconBindings.Count;
+            LayoutBrowserViewportChrome();
         }
 
         private static void ApplyBrowserInterfaceIconBinding(

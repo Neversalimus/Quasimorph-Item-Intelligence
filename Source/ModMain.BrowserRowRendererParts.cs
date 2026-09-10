@@ -284,18 +284,18 @@ namespace ItemIntelligence
             
             if (showRecipeContext)
             {
-                SetBrowserRectPositionIfChanged(statusRt, 5f, 0f);
-                SetBrowserRectPositionIfChanged(chipRt, 23f, 0f);
-                SetBrowserRectPositionIfChanged(itemRt, 51f, 0f);
+                SetBrowserRowRectPosition(statusRt, 5f, 0f);
+                SetBrowserRowRectPosition(chipRt, 23f, 0f);
+                SetBrowserRowRectPosition(itemRt, 51f, 0f);
             }
             else if (showChipUnlockStatus)
             {
-                SetBrowserRectPositionIfChanged(statusRt, 6f, 0f);
-                SetBrowserRectPositionIfChanged(itemRt, 28f, 0f);
+                SetBrowserRowRectPosition(statusRt, 6f, 0f);
+                SetBrowserRowRectPosition(itemRt, 28f, 0f);
             }
             else if (itemRt != null)
             {
-                SetBrowserRectPositionIfChanged(itemRt, 8f, 0f);
+                SetBrowserRowRectPosition(itemRt, 8f, 0f);
             }
             
             bool needsRightColumn = actionable || !string.IsNullOrEmpty(line.Right);
@@ -422,39 +422,39 @@ namespace ItemIntelligence
             if (leftRt != null)
             {
                 bool factionHasIcon = line.RowKind == BrowserRowKind.FactionReward && showIcon;
-                SetBrowserRectPositionIfChanged(leftRt, factionHasIcon ? 36f : 10f, 0f);
-                SetBrowserRectSizeIfChanged(leftRt, factionHasIcon ? 268f : 294f, leftRt.sizeDelta.y);
+                SetBrowserRowRectPosition(leftRt, factionHasIcon ? 36f : 10f, 0f);
+                SetBrowserRowTextSize(leftRt, factionHasIcon ? 268f : 294f, leftRt.sizeDelta.y);
             }
             
             if (factionReward != null)
             {
                 RectTransform rt = factionReward.rectTransform;
-                SetBrowserRectPositionIfChanged(rt, 304f, 0f);
-                SetBrowserRectSizeIfChanged(rt, 82f, rt.sizeDelta.y);
+                SetBrowserRowRectPosition(rt, 304f, 0f);
+                SetBrowserRowTextSize(rt, 82f, rt.sizeDelta.y);
                 SetBrowserActiveIfChanged(factionReward.gameObject, true);
                 SetBrowserTextIfChanged(factionReward, NormalizeModUiText(line.ColumnReward));
             }
             if (factionUnlock != null)
             {
                 RectTransform rt = factionUnlock.rectTransform;
-                SetBrowserRectPositionIfChanged(rt, 386f, 0f);
-                SetBrowserRectSizeIfChanged(rt, 78f, rt.sizeDelta.y);
+                SetBrowserRowRectPosition(rt, 386f, 0f);
+                SetBrowserRowTextSize(rt, 78f, rt.sizeDelta.y);
                 SetBrowserActiveIfChanged(factionUnlock.gameObject, true);
                 SetBrowserTextIfChanged(factionUnlock, NormalizeModUiText(line.ColumnUnlock));
             }
             if (factionCurrent != null)
             {
                 RectTransform rt = factionCurrent.rectTransform;
-                SetBrowserRectPositionIfChanged(rt, 464f, 0f);
-                SetBrowserRectSizeIfChanged(rt, 104f, rt.sizeDelta.y);
+                SetBrowserRowRectPosition(rt, 464f, 0f);
+                SetBrowserRowTextSize(rt, 104f, rt.sizeDelta.y);
                 SetBrowserActiveIfChanged(factionCurrent.gameObject, true);
                 SetBrowserTextIfChanged(factionCurrent, NormalizeModUiText(line.ColumnCurrent));
             }
             if (factionState != null)
             {
                 RectTransform rt = factionState.rectTransform;
-                SetBrowserRectPositionIfChanged(rt, 568f, 0f);
-                SetBrowserRectSizeIfChanged(rt, 94f, rt.sizeDelta.y);
+                SetBrowserRowRectPosition(rt, 568f, 0f);
+                SetBrowserRowTextSize(rt, 94f, rt.sizeDelta.y);
                 SetBrowserActiveIfChanged(factionState.gameObject, true);
                 SetBrowserTextIfChanged(factionState, NormalizeModUiText(line.ColumnState));
             }
@@ -512,8 +512,8 @@ namespace ItemIntelligence
 
             if (leftRt != null)
             {
-                SetBrowserRectPositionIfChanged(leftRt, 10f, 0f);
-                SetBrowserRectSizeIfChanged(leftRt, rewardPool ? 184f : 206f, leftRt.sizeDelta.y);
+                SetBrowserRowRectPosition(leftRt, 10f, 0f);
+                SetBrowserRowTextSize(leftRt, rewardPool ? 184f : 206f, leftRt.sizeDelta.y);
             }
             if (rewardPool)
             {
@@ -533,7 +533,7 @@ namespace ItemIntelligence
             {
                 if (statusRt != null)
                 {
-                    SetBrowserRectPositionIfChanged(statusRt, 645f, 0f);
+                    SetBrowserRowRectPosition(statusRt, 645f, 0f);
                     SetBrowserRectSizeIfChanged(statusRt, 16f, 16f);
                 }
                 bool eligible = string.Equals(
@@ -601,14 +601,14 @@ namespace ItemIntelligence
             {
                 // Container rows now follow the same icon-before-name grammar as
                 // item/faction rows throughout QII.
-                SetBrowserRectPositionIfChanged(leftRt, showContainerIcon ? 36f : 10f, 0f);
-                SetBrowserRectSizeIfChanged(leftRt,
+                SetBrowserRowRectPosition(leftRt, showContainerIcon ? 36f : 10f, 0f);
+                SetBrowserRowTextSize(leftRt,
                     showContainerIcon ? 260f : (hasFourthColumn ? 286f : 304f),
                     leftRt.sizeDelta.y);
             }
             if (showContainerIcon && itemRt != null)
             {
-                SetBrowserRectPositionIfChanged(itemRt, 8f, 0f);
+                SetBrowserRowRectPosition(itemRt, 8f, 0f);
                 SetBrowserRectSizeIfChanged(itemRt, 22f, 22f);
             }
             
@@ -616,7 +616,7 @@ namespace ItemIntelligence
             {
                 if (scavengerTimingRow)
                 {
-                    if (leftRt != null) SetBrowserRectSizeIfChanged(leftRt, 264f, leftRt.sizeDelta.y);
+                    if (leftRt != null) SetBrowserRowTextSize(leftRt, 264f, leftRt.sizeDelta.y);
                     ConfigureLootColumn(factionReward, 274f, 140f, line.ColumnReward, 12.5f);
                     ConfigureLootColumn(factionUnlock, 414f, 74f, line.ColumnUnlock, 12f);
                     ConfigureLootColumn(factionCurrent, 488f, 88f, line.ColumnCurrent, 12.5f);
@@ -635,7 +635,7 @@ namespace ItemIntelligence
                     ConfigureLootColumn(factionState, 620f, 70f, string.Empty, 12f);
                     if (statusRt != null)
                     {
-                        SetBrowserRectPositionIfChanged(statusRt, 646f, 0f);
+                        SetBrowserRowRectPosition(statusRt, 646f, 0f);
                         SetBrowserRectSizeIfChanged(statusRt, 16f, 16f);
                     }
                     bool eligible = string.Equals(line.ColumnState, "eligible", StringComparison.OrdinalIgnoreCase);
@@ -661,7 +661,7 @@ namespace ItemIntelligence
                     ConfigureLootColumn(factionCurrent, 590f, 96f, string.Empty, 12.5f);
                     if (statusRt != null)
                     {
-                        SetBrowserRectPositionIfChanged(statusRt, 630f, 0f);
+                        SetBrowserRowRectPosition(statusRt, 630f, 0f);
                         SetBrowserRectSizeIfChanged(statusRt, 16f, 16f);
                     }
                     bool eligible = string.Equals(line.ColumnCurrent, "eligible", StringComparison.OrdinalIgnoreCase);
@@ -723,15 +723,15 @@ namespace ItemIntelligence
             }
             if (itemRt != null)
             {
-                SetBrowserRectPositionIfChanged(itemRt, 8f, 0f);
+                SetBrowserRowRectPosition(itemRt, 8f, 0f);
                 SetBrowserRectSizeIfChanged(itemRt, 20f, 20f);
             }
             if (leftRt != null)
             {
                 // Dedicated faction-icon cell: 8..30 px. Enemy text always starts
                 // after that cell, so faction emblems can never overlap the name.
-                SetBrowserRectPositionIfChanged(leftRt, 38f, 0f);
-                SetBrowserRectSizeIfChanged(leftRt, 172f, leftRt.sizeDelta.y);
+                SetBrowserRowRectPosition(leftRt, 38f, 0f);
+                SetBrowserRowTextSize(leftRt, 172f, leftRt.sizeDelta.y);
             }
             
             // Give probability ranges substantially more room. Values such as
@@ -781,8 +781,8 @@ namespace ItemIntelligence
             if (right != null) SetBrowserActiveIfChanged(right.gameObject, false);
             if (leftRt != null)
             {
-                SetBrowserRectPositionIfChanged(leftRt, 10f, 0f);
-                SetBrowserRectSizeIfChanged(leftRt, 478f, leftRt.sizeDelta.y);
+                SetBrowserRowRectPosition(leftRt, 10f, 0f);
+                SetBrowserRowTextSize(leftRt, 478f, leftRt.sizeDelta.y);
             }
             ConfigureLootColumn(factionReward, 488f, 54f, line.ColumnReward, 14f);
             ConfigureLootColumn(factionUnlock, 542f, 146f, line.ColumnUnlock, 13.5f);

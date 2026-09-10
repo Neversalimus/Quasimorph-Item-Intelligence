@@ -662,3 +662,9 @@ ui.unit_hour_short	ч
 ui.unit_minute_short	м
 ui.body_dependent	Условно
 loot.note.body_dependent	«Условно»: возможный источник без подтверждённого процента. Доступность зависит от генерации тела и ограничений установки.
+
+# Browser window and zoom
+ui.view_expand	Большое окно
+ui.view_window	Обычное окно
+ui.view_zoom	Масштаб
+ui.view_save_failed	Не удалось сохранить настройки окна.

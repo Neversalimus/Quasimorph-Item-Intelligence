@@ -249,7 +249,7 @@ namespace ItemIntelligence
             // Fixed row pool. No ContentSizeFitter, VerticalLayoutGroup, Destroy or Instantiate on F2.
             float rowTop = 221f;
             float rowHeight = 39f;
-            for (int i = 0; i < BrowserVisibleRows; i++)
+            for (int i = 0; i < BrowserRowCapacity; i++)
             {
                 GameObject row = new GameObject("BrowserRow_" + i.ToString(CultureInfo.InvariantCulture));
                 row.transform.SetParent(_inspectorRoot.transform, false);
@@ -359,6 +359,8 @@ namespace ItemIntelligence
                 TextAlignmentOptions.MidlineRight);
             _browserHelpText = helpGo.GetComponent<TMP_Text>();
 
+            CreateBrowserViewportControls();
+            _browserViewportScreenWidth = 0;
             FinalizeBrowserInterfaceIconPresentation();
             RefreshModderSpawnPanel();
             UpdateBrowserChromeLocalization();
@@ -781,7 +783,7 @@ namespace ItemIntelligence
 
         private static void CreateBrowserRule(Transform parent, float y)
         {
-            GameObject line = new GameObject("Rule");
+            GameObject line = new GameObject("Rule_" + ((int)y).ToString(CultureInfo.InvariantCulture));
             line.transform.SetParent(parent, false);
             RectTransform rt = line.AddComponent<RectTransform>();
             rt.anchorMin = new Vector2(0f, 1f);
@@ -990,7 +992,20 @@ namespace ItemIntelligence
                 _inspectorRect.anchoredPosition = new Vector2(-26f, 0f);
             }
 
-            _inspectorRect.localScale = Vector3.one;
+            ApplyBrowserViewport();
+            if (BrowserExpanded)
+            {
+                _inspectorRect.anchorMin = new Vector2(0.5f, 0.5f);
+                _inspectorRect.anchorMax = new Vector2(0.5f, 0.5f);
+                _inspectorRect.pivot = new Vector2(0.5f, 0.5f);
+                _inspectorRect.anchoredPosition = new Vector2(
+                    ModderMode ? BrowserDrawerWidth * _browserViewport.Scale * 0.5f : 0f, 0f);
+            }
+            else
+            {
+                float margin = _browserViewport.CanvasWidth * (1f - BrowserScreenFraction) * 0.5f;
+                _inspectorRect.anchoredPosition = new Vector2(_inspectorPinnedTooltipOnRight ? margin : -margin, 0f);
+            }
             UpdateModderSpawnPanelPosition();
             _inspectorRoot.transform.SetAsLastSibling();
         }
@@ -999,6 +1014,7 @@ namespace ItemIntelligence
         {
             if (_inspectorRoot == null || string.IsNullOrEmpty(itemId)) return;
 
+            ApplyBrowserViewport();
             EnsureLocalizationCacheLanguage();
             RefreshBrowserLanguageFonts();
             if (_inspectorTitle != null)
@@ -1075,6 +1091,8 @@ namespace ItemIntelligence
             if (_browserHelpText != null)
                 SetBrowserTextIfChanged(_browserHelpText, NormalizeModUiText(Ui("ui.1_7_section_q_e_tab_wheel_page_esc_close")));
 
+            UpdateBrowserViewportControls();
+            LayoutBrowserViewportChrome();
             UpdateBrowserSearchStatus();
             UpdateBrowserCatalogButtonStyle();
             UpdateBrowserHeaderActions();

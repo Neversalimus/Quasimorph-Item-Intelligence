@@ -1,4 +1,4 @@
-﻿# ============================================================================
+# ============================================================================
 # INTERNATIONAL LOCALIZATION
 # Shipped-language parity, format integrity and language-aware presentation.
 # ============================================================================
@@ -48,8 +48,8 @@ foreach ($spec in $internationalLanguageSpecs) {
 }
 
 $internationalEnglish = $internationalMaps['EN']
-if ($internationalEnglish.Count -ne 653) {
-    throw "international localization key count drifted: $($internationalEnglish.Count), expected 653"
+if ($internationalEnglish.Count -ne 657) {
+    throw "international localization key count drifted: $($internationalEnglish.Count), expected 657"
 }
 foreach ($name in @('RU','DE','PL','ZH','TPL')) {
     $map = $internationalMaps[$name]

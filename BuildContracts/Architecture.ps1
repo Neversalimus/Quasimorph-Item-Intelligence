@@ -575,7 +575,7 @@ if ($interfaceIconsText.IndexOf('Resources.FindObjectsOfTypeAll',[StringComparis
 $browserStateText = Get-Content -LiteralPath (Join-Path $sourceDir 'ModMain.BrowserState.cs') -Raw
 foreach ($catalogStateToken in @(
     'BrowserRecentItemLimit = 32','BrowserNavigationHistoryLimit = 64',
-    'BrowserCatalogVisibleRows = 8','BrowserFavoriteItemIds','BrowserRecentItemIds')) {
+    'BrowserCatalogRowCapacity = 8','BrowserFavoriteItemIds','BrowserRecentItemIds')) {
     if ($browserStateText.IndexOf($catalogStateToken,[StringComparison]::Ordinal) -lt 0) {
         throw "Catalog bounded-state contract missing: $catalogStateToken"
     }
@@ -891,7 +891,7 @@ foreach ($releaseCandidateToken in @(
     'FullSection = 13',
     'BrowserLine.FullSection(Ui("ui.secret_data_rewards"))',
     'AddWrappedBrowserNote("ui.secret_data_story_effect", 72, 86)',
-    'private const int BrowserCatalogVisibleRows = 8;',
+    'private const int BrowserCatalogRowCapacity = 8;',
     'new Vector2(categoryX[i], i < 5 ? -40f : -75f)',
     'GetBrowserCatalogScopeLabel(scope, false)',
     'GetBrowserCatalogCategoryLabel(i, false)',

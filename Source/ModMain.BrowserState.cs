@@ -47,11 +47,13 @@ namespace ItemIntelligence
         // declaration-only move; pooled UI, navigation and search behavior are unchanged.
         // v1.2 browser UI: fixed-size object pool. F2 never creates/destroys a list
         // proportional to the number of recipes, sources or weapons.
-        private const int BrowserVisibleRows = 14;
+        private const int BrowserRowCapacity = 32;
+        private static int BrowserVisibleRows = 14;
 
         private const int BrowserTabCount = (int)BrowserTabId.Count;
         private const int BrowserSearchVisibleRows = 8;
-        private const int BrowserCatalogVisibleRows = 8;
+        private const int BrowserCatalogRowCapacity = 8;
+        private static int BrowserCatalogVisibleRows = 8;
         private const int BrowserCatalogCategoryCount = 9;
         private const int BrowserCatalogScopeCount = (int)BrowserCatalogScope.Count;
         private const int BrowserRecentItemLimit = 32;
@@ -121,14 +123,14 @@ namespace ItemIntelligence
         private static readonly TMP_Text[] BrowserCatalogScopeTexts = new TMP_Text[BrowserCatalogScopeCount];
         private static readonly Button[] BrowserCatalogCategoryButtons = new Button[BrowserCatalogCategoryCount];
         private static readonly TMP_Text[] BrowserCatalogCategoryTexts = new TMP_Text[BrowserCatalogCategoryCount];
-        private static readonly GameObject[] BrowserCatalogRowRoots = new GameObject[BrowserCatalogVisibleRows];
-        private static readonly TMP_Text[] BrowserCatalogRowNames = new TMP_Text[BrowserCatalogVisibleRows];
-        private static readonly TMP_Text[] BrowserCatalogRowIds = new TMP_Text[BrowserCatalogVisibleRows];
-        private static readonly Image[] BrowserCatalogRowIcons = new Image[BrowserCatalogVisibleRows];
-        private static readonly Button[] BrowserCatalogRowFavoriteButtons = new Button[BrowserCatalogVisibleRows];
-        private static readonly Image[] BrowserCatalogRowFavoriteBackgrounds = new Image[BrowserCatalogVisibleRows];
-        private static readonly TMP_Text[] BrowserCatalogRowFavoriteTexts = new TMP_Text[BrowserCatalogVisibleRows];
-        private static readonly string[] BrowserCatalogRowItemIds = new string[BrowserCatalogVisibleRows];
+        private static readonly GameObject[] BrowserCatalogRowRoots = new GameObject[BrowserCatalogRowCapacity];
+        private static readonly TMP_Text[] BrowserCatalogRowNames = new TMP_Text[BrowserCatalogRowCapacity];
+        private static readonly TMP_Text[] BrowserCatalogRowIds = new TMP_Text[BrowserCatalogRowCapacity];
+        private static readonly Image[] BrowserCatalogRowIcons = new Image[BrowserCatalogRowCapacity];
+        private static readonly Button[] BrowserCatalogRowFavoriteButtons = new Button[BrowserCatalogRowCapacity];
+        private static readonly Image[] BrowserCatalogRowFavoriteBackgrounds = new Image[BrowserCatalogRowCapacity];
+        private static readonly TMP_Text[] BrowserCatalogRowFavoriteTexts = new TMP_Text[BrowserCatalogRowCapacity];
+        private static readonly string[] BrowserCatalogRowItemIds = new string[BrowserCatalogRowCapacity];
         private static readonly List<string> BrowserCatalogFilteredItemIds = new List<string>();
         private static readonly Dictionary<string, int> BrowserCatalogCategoryByItem =
             new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
@@ -175,20 +177,20 @@ namespace ItemIntelligence
 
         private static TMP_Text _browserHelpText;
         private static TMP_Text _browserCloseText;
-        private static readonly GameObject[] BrowserRowRoots = new GameObject[BrowserVisibleRows];
-        private static readonly TMP_Text[] BrowserRowLeft = new TMP_Text[BrowserVisibleRows];
-        private static readonly TMP_Text[] BrowserRowRight = new TMP_Text[BrowserVisibleRows];
-        private static readonly TMP_Text[] BrowserRowFactionReward = new TMP_Text[BrowserVisibleRows];
-        private static readonly TMP_Text[] BrowserRowFactionUnlock = new TMP_Text[BrowserVisibleRows];
-        private static readonly TMP_Text[] BrowserRowFactionCurrent = new TMP_Text[BrowserVisibleRows];
-        private static readonly TMP_Text[] BrowserRowFactionState = new TMP_Text[BrowserVisibleRows];
-        private static readonly Image[] BrowserRowBackground = new Image[BrowserVisibleRows];
-        private static readonly Outline[] BrowserRowOutlines = new Outline[BrowserVisibleRows];
-        private static readonly Image[] BrowserRowIcons = new Image[BrowserVisibleRows];
-        private static readonly Image[] BrowserRowActionIcons = new Image[BrowserVisibleRows];
-        private static readonly Image[] BrowserRowChipIcons = new Image[BrowserVisibleRows];
-        private static readonly Image[] BrowserRowChipStatusIcons = new Image[BrowserVisibleRows];
-        private static readonly Button[] BrowserRowButtons = new Button[BrowserVisibleRows];
+        private static readonly GameObject[] BrowserRowRoots = new GameObject[BrowserRowCapacity];
+        private static readonly TMP_Text[] BrowserRowLeft = new TMP_Text[BrowserRowCapacity];
+        private static readonly TMP_Text[] BrowserRowRight = new TMP_Text[BrowserRowCapacity];
+        private static readonly TMP_Text[] BrowserRowFactionReward = new TMP_Text[BrowserRowCapacity];
+        private static readonly TMP_Text[] BrowserRowFactionUnlock = new TMP_Text[BrowserRowCapacity];
+        private static readonly TMP_Text[] BrowserRowFactionCurrent = new TMP_Text[BrowserRowCapacity];
+        private static readonly TMP_Text[] BrowserRowFactionState = new TMP_Text[BrowserRowCapacity];
+        private static readonly Image[] BrowserRowBackground = new Image[BrowserRowCapacity];
+        private static readonly Outline[] BrowserRowOutlines = new Outline[BrowserRowCapacity];
+        private static readonly Image[] BrowserRowIcons = new Image[BrowserRowCapacity];
+        private static readonly Image[] BrowserRowActionIcons = new Image[BrowserRowCapacity];
+        private static readonly Image[] BrowserRowChipIcons = new Image[BrowserRowCapacity];
+        private static readonly Image[] BrowserRowChipStatusIcons = new Image[BrowserRowCapacity];
+        private static readonly Button[] BrowserRowButtons = new Button[BrowserRowCapacity];
         private static readonly TMP_Text[] BrowserTabTexts = new TMP_Text[BrowserTabCount];
         private static readonly Image[] BrowserTabBackgrounds = new Image[BrowserTabCount];
         private static readonly List<BrowserLine> BrowserLines = new List<BrowserLine>();

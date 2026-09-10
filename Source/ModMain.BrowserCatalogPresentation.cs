@@ -246,7 +246,7 @@ namespace ItemIntelligence
             _browserCatalogHeaderText.enableWordWrapping = false;
             _browserCatalogHeaderText.overflowMode = TextOverflowModes.Truncate;
 
-            for (int i = 0; i < BrowserCatalogVisibleRows; i++)
+            for (int i = 0; i < BrowserCatalogRowCapacity; i++)
             {
                 int capturedRow = i;
                 GameObject row = new GameObject("CatalogRow_" + i.ToString(CultureInfo.InvariantCulture));
@@ -358,12 +358,12 @@ namespace ItemIntelligence
             }
 
             int start = _browserCatalogScrollOffset;
-            for (int i = 0; i < BrowserCatalogVisibleRows; i++)
+            for (int i = 0; i < BrowserCatalogRowCapacity; i++)
             {
                 GameObject row = BrowserCatalogRowRoots[i];
                 int index = start + i;
                 if (row == null) continue;
-                if (index >= total)
+                if (i >= BrowserCatalogVisibleRows || index >= total)
                 {
                     BrowserCatalogRowItemIds[i] = string.Empty;
                     if (BrowserCatalogRowIcons[i] != null)

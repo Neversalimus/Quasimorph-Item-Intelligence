@@ -24,6 +24,7 @@ namespace ItemIntelligence
             if (_browserCatalogPanel != null || _inspectorRoot == null) return;
             float started = Time.realtimeSinceStartup;
             CreateBrowserCatalogUi();
+            LayoutBrowserCatalogViewport();
             ApplyBrowserInterfaceIconVisibility(true);
             UpdateBrowserCatalogControls();
             Debug.Log("[ItemIntelligence][LazyUi] catalog=" +
@@ -35,7 +36,7 @@ namespace ItemIntelligence
             if (_inspectorRoot == null || BrowserRowFactionReward[0] != null) return;
             float started = Time.realtimeSinceStartup;
             const float rowHeight = 39f;
-            for (int i = 0; i < BrowserVisibleRows; i++)
+            for (int i = 0; i < BrowserRowCapacity; i++)
             {
                 GameObject row = BrowserRowRoots[i];
                 if (row == null) continue;
@@ -75,7 +76,7 @@ namespace ItemIntelligence
             if (_inspectorRoot == null || BrowserRowChipIcons[0] != null) return;
             float started = Time.realtimeSinceStartup;
             EnsureQiiMarkerSprites();
-            for (int i = 0; i < BrowserVisibleRows; i++)
+            for (int i = 0; i < BrowserRowCapacity; i++)
             {
                 GameObject row = BrowserRowRoots[i];
                 if (row == null) continue;
@@ -140,6 +141,7 @@ namespace ItemIntelligence
             if (_lootProgressRoot != null || _inspectorRoot == null) return;
             float started = Time.realtimeSinceStartup;
             CreateLootProgressUi();
+            LayoutBrowserViewportChrome();
             Debug.Log("[ItemIntelligence][LazyUi] lootProgress=" +
                 ((Time.realtimeSinceStartup - started) * 1000f).ToString("0.0", CultureInfo.InvariantCulture) + "ms.");
         }

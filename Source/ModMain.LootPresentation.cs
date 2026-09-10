@@ -104,8 +104,8 @@ namespace ItemIntelligence
         {
             if (column == null) return;
             RectTransform rt = column.rectTransform;
-            SetBrowserRectPositionIfChanged(rt, x, 0f);
-            SetBrowserRectSizeIfChanged(rt, width, rt.sizeDelta.y);
+            SetBrowserRowRectPosition(rt, x, 0f);
+            SetBrowserRowTextSize(rt, width, rt.sizeDelta.y);
             bool visible = width > 0f && !string.IsNullOrEmpty(value);
             SetBrowserActiveIfChanged(column.gameObject, visible);
             SetBrowserTextIfChanged(column, visible ? NormalizeModUiText(value) : string.Empty);

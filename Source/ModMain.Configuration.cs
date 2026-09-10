@@ -122,6 +122,7 @@ namespace ItemIntelligence
             else if (string.Equals(key, "InspectorEnabled", StringComparison.OrdinalIgnoreCase)) InspectorEnabled = value;
             else if (string.Equals(key, "ShowInspectorHint", StringComparison.OrdinalIgnoreCase)) SetShowInspectorHint(value);
             else if (string.Equals(key, "ShowInterfaceIcons", StringComparison.OrdinalIgnoreCase)) ShowInterfaceIcons = value;
+            else if (string.Equals(key, "BrowserExpanded", StringComparison.OrdinalIgnoreCase)) BrowserExpanded = value;
             else if (string.Equals(key, "ModderMode", StringComparison.OrdinalIgnoreCase)) ModderMode = value;
             else if (string.Equals(key, "ShowMagnumUses", StringComparison.OrdinalIgnoreCase)) ShowMagnumUses = value;
             else if (string.Equals(key, "ShowFutureMagnumUses", StringComparison.OrdinalIgnoreCase)) ShowFutureMagnumUses = value;
@@ -139,6 +140,15 @@ namespace ItemIntelligence
                 SetInspectorKey(value, "config.ini");
             else if (string.Equals(key, "UiLanguage", StringComparison.OrdinalIgnoreCase))
                 SetUiLanguagePreference(value, "config.ini");
+            else
+            {
+                int zoom;
+                if (!int.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out zoom)) return;
+                if (string.Equals(key, "BrowserWindowZoom", StringComparison.OrdinalIgnoreCase))
+                    BrowserWindowZoom = NormalizeBrowserZoom(zoom);
+                else if (string.Equals(key, "BrowserExpandedZoom", StringComparison.OrdinalIgnoreCase))
+                    BrowserExpandedZoom = NormalizeBrowserZoom(zoom);
+            }
         }
 
 
@@ -185,7 +195,10 @@ namespace ItemIntelligence
                     "InspectorEnabled=" + InspectorEnabled + "\r\n" +
                     "InspectorKey=" + InspectorKeyName + "\r\n" +
                     "ShowInterfaceIcons=" + ShowInterfaceIcons + "\r\n" +
-                    "ModderMode=" + ModderMode + "\r\n\r\n" +
+                    "ModderMode=" + ModderMode + "\r\n" +
+                    "BrowserExpanded=" + BrowserExpanded + "\r\n" +
+                    "BrowserWindowZoom=" + BrowserWindowZoom.ToString(CultureInfo.InvariantCulture) + "\r\n" +
+                    "BrowserExpandedZoom=" + BrowserExpandedZoom.ToString(CultureInfo.InvariantCulture) + "\r\n\r\n" +
                     "[Information]\r\n" +
                     "ShowMagnumUses=" + ShowMagnumUses + "\r\n" +
                     "ShowFutureMagnumUses=" + ShowFutureMagnumUses + "\r\n" +

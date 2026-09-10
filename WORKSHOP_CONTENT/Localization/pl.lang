@@ -654,3 +654,9 @@ loot.note.manual_compatibility	Ręczne obliczenia są tymczasowo niedostępne po
 loot.note.container_calculation_unavailable	— = szacowanie szans dla tego zapisu jest tymczasowo niedostępne.
 ui.body_dependent	Warunkowo
 loot.note.body_dependent	„Warunkowo” oznacza możliwe źródło bez potwierdzonej wartości procentowej. Dostępność zależy od generowania ciała i ograniczeń instalacji.
+
+# Browser window and zoom
+ui.view_expand	Duże okno
+ui.view_window	Zwykłe okno
+ui.view_zoom	Skala
+ui.view_save_failed	Nie udało się zapisać ustawień okna.

@@ -106,7 +106,7 @@ if ($browserTextLayoutText.IndexOf('GetPreferredValues(candidate, 4096f, 0f).x >
     $browserTextLayoutText.IndexOf('measure.enableWordWrapping = false;',[StringComparison]::Ordinal) -lt 0 -or
     $browserTextLayoutText.IndexOf('List<string> sentences = SplitBrowserNoteSentences(value);',[StringComparison]::Ordinal) -lt 0 -or
     $browserTextLayoutText.IndexOf('string sentenceCandidate = line.Length == 0',[StringComparison]::Ordinal) -lt 0 -or
-    $browserTextLayoutText.IndexOf('float fullWidthWrapLimit = BrowserFullNoteWidth - 4f;',[StringComparison]::Ordinal) -lt 0) {
+    $browserTextLayoutText.IndexOf('float fullWidthWrapLimit = BrowserColumnCoordinate(BrowserFullNoteWidth, _browserViewport.Width) - 4f;',[StringComparison]::Ordinal) -lt 0) {
     throw 'current full-width text wrapping contract missing.'
 }
 if ($overviewDashboardText.IndexOf('FormatChipUnlockStatusSummary',[StringComparison]::Ordinal) -lt 0 -or

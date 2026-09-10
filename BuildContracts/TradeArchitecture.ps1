@@ -79,8 +79,8 @@ foreach ($token in @('bool sixColumns = !string.IsNullOrEmpty(line.Right);', 'Co
 # This keeps every station grouped while preserving the existing row action/hit target.
 foreach ($geometryToken in @(
     'line.RowKind == BrowserRowKind.TradeStationCard',
-    'SetBrowserRectPositionIfChanged(leftRt, showIcon ? 36f : 10f, 0f);',
-    'SetBrowserRectSizeIfChanged(leftRt, showIcon ? 390f : 416f, leftRt.sizeDelta.y);',
+    'SetBrowserRowRectPosition(leftRt, showIcon ? 36f : 10f, 0f);',
+    'SetBrowserRowTextSize(leftRt, showIcon ? 390f : 416f, leftRt.sizeDelta.y);',
     'ConfigureLootColumn(middle, 426f, 112f, line.ColumnReward, 11.75f);',
     'ConfigureLootColumn(right, 538f, 150f, line.Right, 11.5f);',
     'SetBrowserAutoSizingIfChanged(left, true);',

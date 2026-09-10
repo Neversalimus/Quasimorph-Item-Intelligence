@@ -662,3 +662,9 @@ ui.unit_hour_short	h
 ui.unit_minute_short	m
 ui.body_dependent	Conditional
 loot.note.body_dependent	“Conditional” marks a possible source whose chance is not confirmed. Availability depends on body generation and installation limits.
+
+# Browser window and zoom
+ui.view_expand	Large window
+ui.view_window	Normal window
+ui.view_zoom	Zoom
+ui.view_save_failed	Could not save window settings.

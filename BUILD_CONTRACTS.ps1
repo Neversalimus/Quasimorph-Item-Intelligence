@@ -23,6 +23,7 @@ $buildContractBudgets = @{
     'InstallSafety.ps1' = 80
     'LocalizationInternational.ps1' = 230
     'TextSafety.ps1' = 120
+    'BrowserViewport.ps1' = 150
     'Performance.ps1' = 160
 }
 $buildContractModules = @(
@@ -39,13 +40,12 @@ $buildContractModules = @(
     'InstallSafety.ps1',
     'LocalizationInternational.ps1',
     'TextSafety.ps1',
+    'BrowserViewport.ps1',
     'Performance.ps1'
 )
-
 $runtimeContractText = Get-Content -LiteralPath (Join-Path $sourceDir 'ModMain.Runtime.cs') -Raw
 $currentVersionToken = [regex]::Match($runtimeContractText, 'public const string Version = "([^"]+)";').Groups[1].Value
 $currentMarkerToken = [regex]::Match($runtimeContractText, 'ACTIVE VERSION.*?\(([^)"]+)\)\.').Groups[1].Value
-
 foreach ($moduleName in $buildContractModules) {
     $modulePath = Join-Path $buildContractRoot $moduleName
     if (-not (Test-Path -LiteralPath $modulePath -PathType Leaf)) {

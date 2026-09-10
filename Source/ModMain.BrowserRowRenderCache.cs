@@ -57,7 +57,7 @@ namespace ItemIntelligence
         }
 
         private static readonly BrowserRowRenderStamp[] BrowserRowRenderStamps =
-            new BrowserRowRenderStamp[BrowserVisibleRows];
+            new BrowserRowRenderStamp[BrowserRowCapacity];
         private static int _browserRowReuseHitsThisPass;
         private static int _browserRowReuseLogCount;
 

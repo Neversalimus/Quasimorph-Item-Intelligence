@@ -42,21 +42,21 @@ namespace ItemIntelligence
         {
             if (rightRt != null)
             {
-                SetBrowserRectPositionIfChanged(rightRt, BrowserRightColumnX, 0f);
-                SetBrowserRectSizeIfChanged(rightRt, needsRightColumn ? BrowserRightColumnWidth : 0f, rightRt.sizeDelta.y);
+                SetBrowserRowRectPosition(rightRt, BrowserRightColumnX, 0f);
+                SetBrowserRowTextSize(rightRt, needsRightColumn ? BrowserRightColumnWidth : 0f, rightRt.sizeDelta.y);
             }
 
             if (showRecipeContext)
             {
                 if (rightRt != null)
                 {
-                    SetBrowserRectPositionIfChanged(rightRt, 436f, 0f);
-                    SetBrowserRectSizeIfChanged(rightRt, needsRightColumn ? 252f : 0f, rightRt.sizeDelta.y);
+                    SetBrowserRowRectPosition(rightRt, 436f, 0f);
+                    SetBrowserRowTextSize(rightRt, needsRightColumn ? 252f : 0f, rightRt.sizeDelta.y);
                 }
                 if (leftRt != null)
                 {
-                    SetBrowserRectPositionIfChanged(leftRt, 79f, 0f);
-                    SetBrowserRectSizeIfChanged(leftRt, needsRightColumn ? 351f : 609f, leftRt.sizeDelta.y);
+                    SetBrowserRowRectPosition(leftRt, 79f, 0f);
+                    SetBrowserRowTextSize(leftRt, needsRightColumn ? 351f : 609f, leftRt.sizeDelta.y);
                 }
                 return;
             }
@@ -64,8 +64,8 @@ namespace ItemIntelligence
             {
                 if (leftRt != null)
                 {
-                    SetBrowserRectPositionIfChanged(leftRt, 56f, 0f);
-                    SetBrowserRectSizeIfChanged(leftRt, needsRightColumn ? 368f : 632f, leftRt.sizeDelta.y);
+                    SetBrowserRowRectPosition(leftRt, 56f, 0f);
+                    SetBrowserRowTextSize(leftRt, needsRightColumn ? 368f : 632f, leftRt.sizeDelta.y);
                 }
                 return;
             }
@@ -74,8 +74,8 @@ namespace ItemIntelligence
             {
                 float x = showIcon ? 36f : BrowserContentLeft;
                 float rightEdge = needsRightColumn ? BrowserRightColumnX - 6f : BrowserContentLeft + BrowserContentWidth;
-                SetBrowserRectPositionIfChanged(leftRt, x, 0f);
-                SetBrowserRectSizeIfChanged(leftRt, Mathf.Max(80f, rightEdge - x), leftRt.sizeDelta.y);
+                SetBrowserRowRectPosition(leftRt, x, 0f);
+                SetBrowserRowTextSize(leftRt, Mathf.Max(80f, rightEdge - x), leftRt.sizeDelta.y);
             }
         }
 
@@ -86,8 +86,8 @@ namespace ItemIntelligence
             if (right != null) SetBrowserActiveIfChanged(right.gameObject, false);
             if (leftRt != null)
             {
-                SetBrowserRectPositionIfChanged(leftRt, BrowserContentLeft, 0f);
-                SetBrowserRectSizeIfChanged(leftRt, BrowserFullNoteWidth, leftRt.sizeDelta.y);
+                SetBrowserRowRectPosition(leftRt, BrowserContentLeft, 0f);
+                SetBrowserRowTextSize(leftRt, BrowserFullNoteWidth, leftRt.sizeDelta.y);
             }
             if (left != null)
             {
@@ -108,8 +108,8 @@ namespace ItemIntelligence
             if (right != null) SetBrowserActiveIfChanged(right.gameObject, false);
             if (leftRt != null)
             {
-                SetBrowserRectPositionIfChanged(leftRt, !header && icon ? 36f : 10f, 0f);
-                SetBrowserRectSizeIfChanged(leftRt, 450f, leftRt.sizeDelta.y);
+                SetBrowserRowRectPosition(leftRt, !header && icon ? 36f : 10f, 0f);
+                SetBrowserRowTextSize(leftRt, 450f, leftRt.sizeDelta.y);
             }
             ConfigureLootColumn(normal, 460f, 112f, normalValue, header ? 12.5f : 14.5f);
             ConfigureLootColumn(crit, 572f, 116f, critValue, header ? 12.5f : 14.5f);
@@ -123,8 +123,8 @@ namespace ItemIntelligence
             if (right != null) SetBrowserActiveIfChanged(right.gameObject, false);
             if (leftRt != null)
             {
-                SetBrowserRectPositionIfChanged(leftRt, 10f, 0f);
-                SetBrowserRectSizeIfChanged(leftRt, 420f, leftRt.sizeDelta.y);
+                SetBrowserRowRectPosition(leftRt, 10f, 0f);
+                SetBrowserRowTextSize(leftRt, 420f, leftRt.sizeDelta.y);
             }
             ConfigureLootColumn(itemChance, 430f, 140f, itemChanceValue, header ? 12.5f : 14.5f);
             ConfigureLootColumn(pactChance, 570f, 118f, pactChanceValue, header ? 12.5f : 14.5f);

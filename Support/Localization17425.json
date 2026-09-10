@@ -1,6 +1,6 @@
 {
-  "version": "1.7.42.5-test2",
-  "runtime_marker": "ImplantBodyLanguagesTest02",
+  "version": "1.7.42.5-test3",
+  "runtime_marker": "LargeUiLanguagesTest03",
   "base_release": "v1.7.42.4",
   "base_commit": "05fba90596241f30d09fa47b1ddb0d8ad210bba7",
   "publisher_fix_commit": "2314b29931be5b7dd80a426edba970a2f315f8b3",
@@ -12,33 +12,34 @@
     "Polish",
     "Simplified Chinese"
   ],
-  "keys_per_file": 653,
+  "keys_per_file": 657,
   "localization_files": 6,
-  "production_source_files": 108,
+  "production_source_files": 111,
   "target_workshop": "3781927679",
   "stage": "C:\\QM_Workshop\\ItemIntelligence_DEV",
   "validation": {
     "static_contracts": "PASS",
     "existing_behavior_assertions": 660,
     "release_behavior_assertions": 32,
-    "localization_behavior_assertions": 3331,
+    "localization_behavior_assertions": 3351,
     "csharp_language_version": "5",
     "game_dependencies": 118,
     "compile_errors": 0,
     "compile_warnings": 0,
-    "enemy_body_behavior_assertions": 4923
+    "enemy_body_behavior_assertions": 4923,
+    "viewport_geometry_assertions": 54917
   },
   "game_assembly_sha256": "BE78036434737521BB43DABBD934B579A08DC3E8370B834AEE36E40932F56FE0",
   "runtime_game_test": "PENDING",
   "native_speaker_review": "PENDING",
-  "scope": "Production source compilation and behavior with game/TMP/MCM fixtures. Test2 additionally corrects enemy body and implant sources; see ImplantBody17425.json. Windows installation and runtime acceptance pending.",
+  "scope": "Full DEV candidate with large browser/zoom, prior body/implant corrections and five languages. Production code compiles against supplied game DLLs; behavior uses game/TMP/RectTransform fixtures. Unity visual acceptance and Windows installation pending.",
   "localization_sha256": {
-    "TranslationTemplate.lang": "C94E72C96A58B0EE4C6961E6E859BD09F7A15E7AB01EC0196245F78238FA2525",
-    "de.lang": "E5E8CB3A80D4A81E522ADE9BCAA968C7FB466C2F15F6FE638561B186ABD1392F",
-    "en.lang": "9FFCAD70357C40ABADCFD9D4B81F0FD6F6EAC06A0706DC3B46A742B9E062B67A",
-    "pl.lang": "32DDCFCF71D0EFF45F85BB4FB11B0D1FAC5053E048A9A115F38C35A7EB8B4614",
-    "ru.lang": "D4D2EF3871C8B0C80F0CC24D0387842F2D1B453CDE1A620A8164CF92BE078CCF",
-    "zh-Hans.lang": "1D343F1B22DF77A1BA1F80534724EA76874C6D372532636678C23B52CD825BB6"
+    "TranslationTemplate.lang": "E35622A92187EAEA9B14FBD359566B7ACC3F6592B4A5833AF6146516E2459AD2",
+    "de.lang": "85CFF14480B65D9987C4D865DC13B7FACE8217CE8E59EF63ECE492E5ECE203C4",
+    "en.lang": "4681439E76E52FB497D329538988EAA879BE5DAE072B2E66CCEF900953D97E79",
+    "pl.lang": "8DED3E1B333C893CB0954AFCA514EE1055ECAAB711D3B32DE13C640FBA05C29D",
+    "ru.lang": "1759E92567ADCAB7F6F19CBA8DE448345D0C9B5B1F2A31EFC1C4CDC2DBD85EE9",
+    "zh-Hans.lang": "46DE13E6B2343B2791567FD026507D036DACF7DEA21C3B36E60AC49E640C9DA9"
   },
   "base_localization_commit": "8749cf9d1eb3cffb7438522de8cc5afb5deb8c01"
 }

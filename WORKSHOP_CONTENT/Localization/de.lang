@@ -654,3 +654,9 @@ loot.note.manual_compatibility	Die manuelle Berechnung ist nach einem Spielupdat
 loot.note.container_calculation_unavailable	— = Chancen für diesen Spielstand können vorübergehend nicht geschätzt werden.
 ui.body_dependent	Bedingt
 loot.note.body_dependent	„Bedingt“ kennzeichnet eine mögliche Quelle ohne bestätigte Prozentangabe. Die Verfügbarkeit hängt vom erzeugten Körper und den Einbaubeschränkungen ab.
+
+# Browser window and zoom
+ui.view_expand	Großes Fenster
+ui.view_window	Normales Fenster
+ui.view_zoom	Skalierung
+ui.view_save_failed	Fenstereinstellungen konnten nicht gespeichert werden.

@@ -654,3 +654,9 @@ loot.note.manual_compatibility	游戏更新后，手动计算暂时不可用。
 loot.note.container_calculation_unavailable	— = 暂时无法估算当前存档的获取概率。
 ui.body_dependent	有条件
 loot.note.body_dependent	“有条件”表示可能的来源，尚无确定的概率。能否获得取决于身体生成结果和安装限制。
+
+# Browser window and zoom
+ui.view_expand	大窗口
+ui.view_window	普通窗口
+ui.view_zoom	缩放
+ui.view_save_failed	无法保存窗口设置。

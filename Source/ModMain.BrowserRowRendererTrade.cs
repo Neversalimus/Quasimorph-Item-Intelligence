@@ -22,8 +22,8 @@ namespace ItemIntelligence
             bool sixColumns = !string.IsNullOrEmpty(line.Right);
             if (leftRt != null)
             {
-                SetBrowserRectPositionIfChanged(leftRt, showIcon ? 36f : 10f, 0f);
-                SetBrowserRectSizeIfChanged(leftRt, sixColumns ? (showIcon ? 250f : 276f) : (showIcon ? 324f : 350f), leftRt.sizeDelta.y);
+                SetBrowserRowRectPosition(leftRt, showIcon ? 36f : 10f, 0f);
+                SetBrowserRowTextSize(leftRt, sixColumns ? (showIcon ? 250f : 276f) : (showIcon ? 324f : 350f), leftRt.sizeDelta.y);
             }
             if (sixColumns)
             {
@@ -72,8 +72,8 @@ namespace ItemIntelligence
         {
             if (leftRt != null)
             {
-                SetBrowserRectPositionIfChanged(leftRt, showIcon ? 36f : 10f, 0f);
-                SetBrowserRectSizeIfChanged(leftRt, showIcon ? 390f : 416f, leftRt.sizeDelta.y);
+                SetBrowserRowRectPosition(leftRt, showIcon ? 36f : 10f, 0f);
+                SetBrowserRowTextSize(leftRt, showIcon ? 390f : 416f, leftRt.sizeDelta.y);
             }
             if (unlock != null) SetBrowserActiveIfChanged(unlock.gameObject, false);
             if (current != null) SetBrowserActiveIfChanged(current.gameObject, false);

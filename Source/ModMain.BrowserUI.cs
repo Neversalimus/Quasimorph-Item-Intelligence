@@ -548,6 +548,7 @@ namespace ItemIntelligence
 
                 if (!_inspectorOpen) return;
 
+                TickBrowserViewport();
                 TickBrowserSearchIndexWarmup();
 
                 if (Input.GetKeyDown(KeyCode.Escape))

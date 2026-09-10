@@ -2,9 +2,17 @@
 
 **Item Intelligence** is an in-game item browser and reference tool for **Quasimorph**.
 
-DEV candidate: **v1.7.42.5-test2 — ImplantBodyLanguagesTest02**.
+DEV candidate: **v1.7.42.5-test3 — LargeUiLanguagesTest03**.
 Gameplay base: released **v1.7.42.4**, commit `05fba90596241f30d09fa47b1ddb0d8ad210bba7`.
 The branch also retains the frozen GitHub release recovery correction from `2314b29931be5b7dd80a426edba970a2f315f8b3`.
+
+## Large window and zoom
+
+The footer now offers **Large window / Normal window** and **− / +** zoom controls. Large view fills 94% of the screen width and height (including the Modder drawer when enabled). Normal view starts at 100%; large view starts at 150%. Each view remembers its own 100–200% preference in 25-point steps, as well as the last selected view, across restarts.
+
+Fonts, icons and hit targets scale uniformly. Columns use the available width; full notes rewrap, row counts and scrolling adapt. Search and catalog remain reachable, and weapon-mode hover cards stay on screen. On unusually narrow/short screens, uniform zoom is limited to keep controls visible; the displayed percentage is the effective value. The requested preference is retained for returning to a larger screen.
+
+These controls own their settings directly, so saving unrelated MCM options cannot restore an older view preference. At 1920×1080, the large default displays nine rows and makes the UI 50% larger; 200% displays four rows. Game UI outside Item Intelligence is unaffected.
 
 ## Implant source correction
 
@@ -16,7 +24,7 @@ The index runs in slices and reads game records without creating creatures/items
 
 ## Localization candidate
 
-German, Polish and Simplified Chinese were recovered from the older `Languages_MCM_Test2_Full_BuildFix2` source package and selectively ported. All five languages and the community template contain 653 keys. Current availability and amputation explanations are preserved and translated.
+German, Polish and Simplified Chinese were recovered from the older `Languages_MCM_Test2_Full_BuildFix2` source package and selectively ported. All five languages and the community template contain 657 keys. Current availability and amputation explanations are preserved and translated.
 
 MCM offers Auto (Game), English, Русский, Deutsch, Polski and 简体中文 / Chinese. Auto reads the selected Quasimorph language, including inherited singleton metadata and the current EnglishUS / ChineseSimp identifiers. Manual selection changes QII UI and numeric formatting; game-provided entity names and search continue to use the game's language. Changes refresh the browser without restarting. MCM's own registered captions refresh on the next game launch.
 
@@ -26,10 +34,11 @@ The candidate is for DEV item **3781927679** and stages into `C:\QM_Workshop\Ite
 
 ## Verification
 
-- All 108 production C# files compile as C# 5 against the 118 supplied game dependencies, with zero warnings.
+- All 111 production C# files compile as C# 5 against the 118 supplied game dependencies, with zero warnings.
 - 660 existing production behavior assertions and 32 release workflow assertions pass.
 - 4923 body/implant assertions include an independent exhaustive draw-sequence oracle, socket-range averaging, runtime record-adapter fixtures, missing data and conditional UI formatting.
-- 3331 localization assertions cover real language-file selection and key resolution, metadata precedence, cache replacement, manual/Auto behavior, damaged files, fallback text, formatting, CJK wrapping and private font fallback ownership. Game/TMP/MCM services are fixtures; these are not Unity visual tests.
+- 3351 localization assertions cover real language-file selection and key resolution, metadata precedence, cache replacement, manual/Auto behavior, damaged files, fallback text, formatting, CJK wrapping and private font fallback ownership. Game/TMP/MCM services are fixtures; these are not Unity visual tests.
+- 54917 viewport geometry assertions cover 12 resolutions, both views, five zoom levels, Modder drawer, icon variants, footer/column bounds and hover-card placement. These execute production geometry and chrome writes with RectTransform fixtures, not Unity rendering.
 - Runtime body-source indexing, the manual record export, language switching, MCM captions/options, font appearance and narrow-column fit still require the new candidate to be tested in-game. Earlier stable logs do not certify this candidate.
 
 Run `pwsh -NoProfile -File ./BUILD_AND_STAGE.ps1 -Mode TEST -ContractsOnly` for the contracts and behavior suites. No game files are needed for that command. The installer performs the actual Windows build against the local game.

@@ -24,7 +24,7 @@ namespace ItemIntelligence
                 BrowserNavigation.ScrollOffsets[BrowserNavigation.Tab] = BrowserNavigation.ScrollOffset;
 
             int startIndex = BrowserNavigation.ScrollOffset;
-            for (int i = 0; i < BrowserVisibleRows; i++)
+            for (int i = 0; i < BrowserRowCapacity; i++)
             {
                 GameObject root = BrowserRowRoots[i];
                 TMP_Text left = BrowserRowLeft[i];
@@ -32,7 +32,7 @@ namespace ItemIntelligence
                 if (root == null || left == null || right == null) continue;
 
                 int lineIndex = startIndex + i;
-                if (lineIndex >= total)
+                if (i >= BrowserVisibleRows || lineIndex >= total)
                 {
                     SetBrowserInteractableIfChanged(BrowserRowButtons[i], false);
                     SetBrowserRaycastTargetIfChanged(left, false);

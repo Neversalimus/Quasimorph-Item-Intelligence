@@ -99,7 +99,7 @@ if ($browserCatalogPresentationText.IndexOf('string[] labels = new string[]',[St
 foreach ($token in @('SetBrowserTextIfChanged(_browserStatsText','string.Join("   •   ", parts)')) {
     if ($overviewDashboardText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "current Overview stats redraw gate missing: $token" }
 }
-foreach ($token in @('SetBrowserGraphicColorIfChanged','SetBrowserRectPositionIfChanged','SetBrowserImageSpriteIfChanged','SetBrowserFontSizeIfChanged','SetBrowserInteractableIfChanged')) {
+foreach ($token in @('SetBrowserGraphicColorIfChanged','SetBrowserRowRectPosition','SetBrowserImageSpriteIfChanged','SetBrowserFontSizeIfChanged','SetBrowserInteractableIfChanged')) {
     if ($browserRowRenderCombinedText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "current pooled-row no-op gate missing: $token" }
 }
 foreach ($forbidden in @('.fontSize =','.fontStyle =','.anchoredPosition =','.sizeDelta =','.sprite =','.alignment =','.raycastTarget =','.interactable =')) {

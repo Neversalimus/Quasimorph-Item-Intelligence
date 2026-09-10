@@ -80,9 +80,10 @@ namespace ItemIntelligence
             float height = 76f + visibleRows * 32f + 12f;
             _browserWeaponModeTooltipRect.sizeDelta = new Vector2(390f, height);
             float desiredY = sourceRow == null ? -180f : sourceRow.anchoredPosition.y + 18f;
-            float minY = -Mathf.Max(120f, 830f - height);
-            float y = Mathf.Clamp(desiredY, minY, -92f);
-            _browserWeaponModeTooltipRect.anchoredPosition = new Vector2(-398f, y);
+            float x, y;
+            CalculateBrowserWeaponTooltipPosition(_browserViewport, BrowserExpanded,
+                _inspectorPinnedTooltipOnRight, ModderMode, desiredY, height, out x, out y);
+            _browserWeaponModeTooltipRect.anchoredPosition = new Vector2(x, y);
             _browserWeaponModeTooltipRoot.transform.SetAsLastSibling();
             _browserWeaponModeTooltipRoot.SetActive(true);
         }

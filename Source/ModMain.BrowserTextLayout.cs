@@ -57,7 +57,7 @@ namespace ItemIntelligence
 
             try
             {
-                float fullWidthWrapLimit = BrowserFullNoteWidth - 4f;
+                float fullWidthWrapLimit = BrowserColumnCoordinate(BrowserFullNoteWidth, _browserViewport.Width) - 4f;
                 if (ContainsHanScript(value) || ContainsKanaScript(value) || ContainsHangulScript(value))
                     return WrapUnspacedBrowserText(value, delegate(string candidate)
                     { return IsBrowserFullWidthTextTooWide(measure, candidate, fullWidthWrapLimit, fallbackMaxChars); });
