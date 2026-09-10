@@ -55,6 +55,9 @@ namespace ItemIntelligence
                 new Color(0.48f, 0.74f, 0.62f, 1f), FontStyles.Bold,
                 TextAlignmentOptions.Center);
             text = textGo.GetComponent<TMP_Text>();
+            text.enableAutoSizing = true;
+            text.fontSizeMin = Math.Min(10f, fontSize);
+            text.fontSizeMax = fontSize;
             return button;
         }
 
@@ -443,7 +446,7 @@ namespace ItemIntelligence
             {
                 SetBrowserCatalogToggleStyle(
                     BrowserCatalogCategoryButtons[i], BrowserCatalogCategoryTexts[i],
-                    i == _browserCatalogCategory, GetBrowserCatalogCategoryLabel(i, false));
+                    i == _browserCatalogCategory, GetBrowserCatalogCategoryLabel(i, i == 0));
                 UpdateBrowserCatalogCategoryInterfaceIconStyle(i, i == _browserCatalogCategory);
             }
 

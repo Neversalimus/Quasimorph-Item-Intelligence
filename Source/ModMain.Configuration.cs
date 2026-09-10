@@ -297,7 +297,9 @@ namespace ItemIntelligence
                 if (register == null)
                     throw new MissingMethodException("Modern MCM RegisterModConfig overload not found.");
 
-                register.Invoke(null, new object[] { Ui("mcm.mod_name"), list, callback });
+                string registeredName = Ui("mcm.mod_name");
+                register.Invoke(null, new object[] { registeredName, list, callback });
+                InstallMcmFontSupport(registeredName);
                 _mcmRegistered = true;
                 _mcmAttempted = true;
                 Debug.Log("[ItemIntelligence] MCM registered.");

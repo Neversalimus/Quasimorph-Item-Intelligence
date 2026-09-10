@@ -2,11 +2,11 @@
 
 **Item Intelligence** is an in-game item browser and reference tool for **Quasimorph**.
 
-DEV candidate: **v1.7.42.5-test4 — LargeUiLanguagesTest04**.
+DEV candidate: **v1.7.42.5-test5 — McmFontLanguagesTest05**.
 Gameplay base: released **v1.7.42.4**, commit `05fba90596241f30d09fa47b1ddb0d8ad210bba7`.
 The branch also retains the frozen GitHub release recovery correction from `2314b29931be5b7dd80a426edba970a2f315f8b3`.
 
-Test4 corrects the open-item label width in large view. The supplied Test3 game log and 13 screenshots confirm the observed EN/ZH layouts at 2560×1440; see [the scoped game-test report](Support/GameAudit17425.md).
+Test5 fixes missing Chinese captions in MCM after restarting with a Chinese QII preference and a Russian game language. It also lets long header buttons fit their labels and uses the compact All category caption. Test4 evidence confirms the earlier open-item alignment correction and the observed PL/DE layouts at 1920×1080; see [the scoped game-test report](Support/GameAudit17425.md) and [MCM diagnosis](Support/McmFonts17425.md).
 
 ## Large window and zoom
 
@@ -32,16 +32,19 @@ MCM offers Auto (Game), English, Русский, Deutsch, Polski and 简体中�
 
 QII reads Quasimorph's font presets for the chosen language. For mixed scripts it creates a private font asset with a separate fallback list; vanilla fonts and global TMP settings are untouched. CJK notes wrap at text-element boundaries. Windows-installed Chinese fonts are not required by this implementation.
 
+MCM uses the game's font even when QII supplies captions in another language. Test5 supplies private Chinese and Latin fallbacks to QII's settings, sidebar entry, dropdown options and shared tooltip while QII owns it. Reopening MCM reapplies the font after MCM's own font updates. Hovering another mod's setting restores the shared tooltip's original font. This optional integration was checked against MCM source commit `2e500a5f5cf02ffc6c9739e1933b738949bae265`; a warning is logged if its hooks are unavailable.
+
 The candidate is for DEV item **3781927679** and stages into `C:\QM_Workshop\ItemIntelligence_DEV`. Run `Install.ps1` in PowerShell 7, then use the developer-console command it prints. No Workshop or GitHub upload runs automatically. The stable-source gate blocks public release of this test version.
 
 ## Verification
 
-- All 111 production C# files compile as C# 5 against the 118 supplied game dependencies, with zero warnings.
+- All 112 production C# files compile as C# 5 against the 118 supplied game dependencies, with zero warnings.
 - 660 existing production behavior assertions and 32 release workflow assertions pass.
 - 4923 body/implant assertions include an independent exhaustive draw-sequence oracle, socket-range averaging, runtime record-adapter fixtures, missing data and conditional UI formatting.
 - 3351 localization assertions cover real language-file selection and key resolution, metadata precedence, cache replacement, manual/Auto behavior, damaged files, fallback text, formatting, CJK wrapping and private font fallback ownership. Game/TMP/MCM services are fixtures; these are not Unity visual tests.
 - 54917 viewport geometry assertions cover 12 resolutions, both views, five zoom levels, Modder drawer, icon variants, footer/column bounds and hover-card placement. These execute production geometry and chrome writes with RectTransform fixtures, not Unity rendering.
-- Test3 runtime evidence confirms index completion, EN/ZH switching and the observed layouts at 2560×1440. It records one MCM slider exception, one unassigned Unity UI rebuild warning and a 60.1 ms cold open. Lower resolutions, DE/PL, enlarged Chinese, catalog/hover-card visuals, restart persistence, the manual implant export and the Test4 label correction still require in-game checks. This is partial acceptance, not global game compatibility certification.
+- 38 MCM font assertions exercise the complete production callbacks and ownership lifecycle, detached dropdown options, repeated activation, late font availability and restoration for another mod's tooltip. Unity/TMP/MCM objects are fixtures; actual rendering and a Chinese restart in Test5 remain pending.
+- Test3 runtime evidence confirms index completion and observed EN/ZH layouts at 2560×1440. Test4 adds PL/DE layouts and catalog at 1920×1080, the corrected item-link alignment and a Polish preference surviving restart. Both new logs retain the separate MCM slider exception; the F2 session records a 61.5 ms cold open. Enlarged Chinese, expanded PL/DE Loot and Trade, lower resolutions, view/zoom restart persistence and selected-implant export remain pending. This is partial acceptance, not global game compatibility certification.
 
 Run `pwsh -NoProfile -File ./BUILD_AND_STAGE.ps1 -Mode TEST -ContractsOnly` for the contracts and behavior suites. No game files are needed for that command. The installer performs the actual Windows build against the local game.
 

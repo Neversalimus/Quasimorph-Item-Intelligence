@@ -192,6 +192,9 @@ namespace ItemIntelligence
                 14f, new Color(0.43f, 0.68f, 0.59f, 0.96f), FontStyles.Normal,
                 TextAlignmentOptions.MidlineLeft);
             _browserCloseText = closeTextGo.GetComponent<TMP_Text>();
+            _browserCloseText.enableAutoSizing = true;
+            _browserCloseText.fontSizeMin = 10f;
+            _browserCloseText.fontSizeMax = 14f;
             _browserCloseText.text = GetBrowserCloseButtonLabel();
             CreateBrowserCloseInterfaceIcon(closeButtonGo.transform);
 

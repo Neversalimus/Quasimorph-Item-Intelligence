@@ -1,11 +1,12 @@
-DEV v1.7.42.5-test4. Local verification; Test3 partial Unity acceptance is recorded separately; Test4 link alignment awaits game confirmation.
+DEV v1.7.42.5-test5 / McmFontLanguagesTest05. Local verification; Test3/Test4 partial Unity acceptance is recorded separately. Test5 MCM Chinese restart and header rendering await game confirmation.
 
 Production C# behavior: PASS (660 assertions).
 Production enemy body/implant behavior: PASS (4923 assertions).
 Release behavior: PASS (32 assertions; native transports mocked).
 Production localization behavior: PASS (3351 assertions).
+Production MCM font ownership/lifecycle: PASS (38 assertions; Unity/MCM fixtures).
 Production browser viewport geometry: PASS (54917 assertions).
 Static build contracts: PASS
-C# 5 compile against supplied game dependencies: PASS (111 source files).
+C# 5 compile against supplied game dependencies: PASS (112 source files).
 Game Assembly SHA256: BE78036434737521BB43DABBD934B579A08DC3E8370B834AEE36E40932F56FE0
 Compiler warnings: 0

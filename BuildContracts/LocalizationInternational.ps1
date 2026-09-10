@@ -162,3 +162,4 @@ foreach ($token in @(
 }
 
 & (Join-Path $root 'Tests/Run-LocalizationTests.ps1') -SourceRoot $root
+& (Join-Path $root 'Tests/Run-McmFontTests.ps1') -SourceRoot $root

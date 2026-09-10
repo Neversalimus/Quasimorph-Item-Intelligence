@@ -894,7 +894,7 @@ foreach ($releaseCandidateToken in @(
     'private const int BrowserCatalogRowCapacity = 8;',
     'new Vector2(categoryX[i], i < 5 ? -40f : -75f)',
     'GetBrowserCatalogScopeLabel(scope, false)',
-    'GetBrowserCatalogCategoryLabel(i, false)',
+    'GetBrowserCatalogCategoryLabel(i, i == 0)',
     'buttonWidth - 28f',
     'WrapBrowserFullWidthText(placementText, placementLimit)',
     'ScanRuntimeMagnumNodeSafe',

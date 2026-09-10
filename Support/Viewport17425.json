@@ -1,6 +1,6 @@
 {
-  "version": "1.7.42.5-test4",
-  "runtime_marker": "LargeUiLanguagesTest04",
+  "version": "1.7.42.5-test5",
+  "runtime_marker": "McmFontLanguagesTest05",
   "date": "2026-09-10",
   "base_implant_commit": "8011d6f30a313fe2c8b88358a5fdaea19fbcbb15",
   "dev_workshop": "3781927679",
@@ -21,22 +21,31 @@
     "behavior": 660,
     "enemy_body": 4923,
     "release": 32,
-    "localization": 3351
+    "localization": 3351,
+    "mcm_fonts": 38
   },
   "compile": {
     "language": "C# 5",
-    "sources": 111,
+    "sources": 112,
     "game_dependencies": 118,
     "warnings": 0,
     "errors": 0
   },
   "game_assembly_sha256": "BE78036434737521BB43DABBD934B579A08DC3E8370B834AEE36E40932F56FE0",
-  "game_test": "PARTIAL: Test3 observed at 2560x1440 (EN/ZH); Test4 link-alignment change awaits in-game confirmation.",
+  "game_test": "PARTIAL: Test3 EN/ZH at 2560x1440; Test4 PL/DE and catalog at 1920x1080, item-link correction and Polish restart confirmed. Test5 Chinese MCM and header fixes await Unity confirmation.",
   "source_sha256": {
     "ModMain.BrowserViewport.cs": "DCE228301B05184DF834D3F538335AEE4F96BCB671F13C06B28ED7AD09EAC5C0",
     "ModMain.BrowserViewportChrome.cs": "8D914ADA9FA220CA1DCDF595808CF3B24FCE8F96623B3D98E45B42C0969D6339",
     "ModMain.BrowserViewportMath.cs": "76858EFBBABB5074511CE11A4B1B917C5DD7CC7C4EA0B5A283AA4DA78DCBB090",
-    "ModMain.BrowserLinkPresentation.cs": "2FBF8854E1ABADF10B27BE791C32A567D5DCB4902F910EB4DB600AF4F5BF5102"
+    "ModMain.BrowserLinkPresentation.cs": "2FBF8854E1ABADF10B27BE791C32A567D5DCB4902F910EB4DB600AF4F5BF5102",
+    "ModMain.BrowserCatalogPresentation.cs": "2D936CCD7717CFB2E799CD30A959DAF421DAA07D6697967207C683F2E75638D5",
+    "ModMain.BrowserPresentation.cs": "9E6BC15D87835FDB388C9B505F195D3002D04612CD2F743AC6CB55BF3520E174",
+    "ModMain.McmFonts.cs": "E471ED60EABCABA4106EEBCA5A2939CDDC0F0662328D97E93A60D708D59782F6",
+    "ModMain.Configuration.cs": "55C3E133F84E203C45DE78C53D7907067D580AE2676E9CBF02F780F8849BB3A4"
   },
-  "runtime_evidence": "Support/RuntimeAcceptance17425Test3.json"
+  "runtime_evidence": [
+    "Support/RuntimeAcceptance17425Test3.json",
+    "Support/RuntimeAcceptance17425Test4.json"
+  ],
+  "mcm_font_audit": "Support/McmFonts17425.md"
 }
