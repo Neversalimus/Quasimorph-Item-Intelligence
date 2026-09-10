@@ -1,5 +1,16 @@
 ﻿# Changelog
 
+## v1.7.42.5 — 2026-09-10
+
+- Add German, Polish and Simplified Chinese UI and a separate MCM language selector; keep game-provided names and search in the game's language.
+- Add a large browser view covering 94% of the screen, 100–200% zoom and independent saved preferences for normal and large views.
+- Adapt columns, row counts, catalog, notes, links and hover-card placement to the available screen space.
+- Correct enemy implant candidate selection for body slots, tissue compatibility, preset implants and socket competition. Mark random-body outcomes Conditional and keep amputation recovery chances separate.
+- Fix missing Chinese MCM captions after restart, including mixed-language dropdown options, using private fallback fonts scoped to QII.
+- Fit long header buttons and use the compact All category caption.
+- Retain the corrected GitHub draft discovery and resumable frozen-release workflow.
+- Promote Test5 production code with only the runtime version/marker changed. Record scoped game acceptance from Test3–Test5; preserve feature-specific compatibility guards and probability limits.
+
 ## v1.7.42.5-test4 — 2026-09-10
 
 - Scale the open-item label rectangle with the browser columns so its label stays next to the action icon in large view.

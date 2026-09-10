@@ -1,6 +1,6 @@
 {
-  "version": "1.7.42.5-test5",
-  "runtime_marker": "McmFontLanguagesTest05",
+  "version": "1.7.42.5",
+  "runtime_marker": "StableRelease17425",
   "date": "2026-09-10",
   "base_implant_commit": "8011d6f30a313fe2c8b88358a5fdaea19fbcbb15",
   "dev_workshop": "3781927679",
@@ -32,7 +32,7 @@
     "errors": 0
   },
   "game_assembly_sha256": "BE78036434737521BB43DABBD934B579A08DC3E8370B834AEE36E40932F56FE0",
-  "game_test": "PARTIAL: Test3 EN/ZH at 2560x1440; Test4 PL/DE and catalog at 1920x1080, item-link correction and Polish restart confirmed. Test5 Chinese MCM and header fixes await Unity confirmation.",
+  "game_test": "ACCEPTED SCOPED: Test3 EN/ZH at 2560x1440; Test4 PL/DE/catalog at 1920x1080 and link alignment; Test5 Chinese MCM preference survives restart and captions/dropdown render. Unshown cases remain documented.",
   "source_sha256": {
     "ModMain.BrowserViewport.cs": "DCE228301B05184DF834D3F538335AEE4F96BCB671F13C06B28ED7AD09EAC5C0",
     "ModMain.BrowserViewportChrome.cs": "8D914ADA9FA220CA1DCDF595808CF3B24FCE8F96623B3D98E45B42C0969D6339",
@@ -45,7 +45,10 @@
   },
   "runtime_evidence": [
     "Support/RuntimeAcceptance17425Test3.json",
-    "Support/RuntimeAcceptance17425Test4.json"
+    "Support/RuntimeAcceptance17425Test4.json",
+    "Support/RuntimeAcceptance17425Test5.json"
   ],
-  "mcm_font_audit": "Support/McmFonts17425.md"
+  "mcm_font_audit": "Support/McmFonts17425.md",
+  "release_acceptance": "Support/ReleaseAcceptance17425.md",
+  "public_workshop": "3780078201"
 }

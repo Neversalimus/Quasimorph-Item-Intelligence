@@ -1,0 +1,42 @@
+{
+  "version": "1.7.42.5",
+  "marker": "StableRelease17425",
+  "date": "2026-09-10",
+  "status": "PREPARED_SOURCE_NOT_PUBLISHED",
+  "accepted_test_commit": "1a5f7128b196dc4aebf3b7b620e326ebbe18f044",
+  "base_published_commit": "05fba90596241f30d09fa47b1ddb0d8ad210bba7",
+  "production_source_files": 112,
+  "production_files_changed": [
+    "Source/ModMain.Runtime.cs"
+  ],
+  "production_change_scope": "Only version string and runtime marker; exact byte comparison to accepted Test5 passed for all Source files.",
+  "public_workshop": "3780078201",
+  "dev_workshop_retained": "3781927679",
+  "git_tag": "v1.7.42.5",
+  "game_assembly_sha256": "BE78036434737521BB43DABBD934B579A08DC3E8370B834AEE36E40932F56FE0",
+  "runtime_evidence": [
+    "Support/RuntimeAcceptance17425Test3.json",
+    "Support/RuntimeAcceptance17425Test4.json",
+    "Support/RuntimeAcceptance17425Test5.json"
+  ],
+  "acceptance_report": "Support/ReleaseAcceptance17425.md",
+  "global_compatibility": "UNVERIFIED-COMPATIBLE; no promotion of unreviewed exact feature families",
+  "windows_release_payload": "Pending preparation on user machine; final hashes go into the frozen receipt.",
+  "release_transport": "Existing corrected draft discovery and frozen retry workflow retained.",
+  "local_validation": {
+    "release_contracts": "PASS",
+    "csharp_language": "5",
+    "source_files": 112,
+    "game_dependencies": 118,
+    "compile_warnings": 0,
+    "compile_errors": 0,
+    "assertions": {
+      "behavior": 660,
+      "enemy_body_implant": 4923,
+      "release": 32,
+      "localization": 3351,
+      "mcm_fonts": 38,
+      "viewport_geometry": 54917
+    }
+  }
+}

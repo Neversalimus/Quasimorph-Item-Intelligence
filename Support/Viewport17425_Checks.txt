@@ -1,4 +1,4 @@
-DEV v1.7.42.5-test5 / McmFontLanguagesTest05. Local verification; Test3/Test4 partial Unity acceptance is recorded separately. Test5 MCM Chinese restart and header rendering await game confirmation.
+Stable source v1.7.42.5 / StableRelease17425. Local RELEASE verification. Test3-Test5 scoped game acceptance is recorded separately; final Windows payload hashes are pending preparation.
 
 Production C# behavior: PASS (660 assertions).
 Production enemy body/implant behavior: PASS (4923 assertions).
