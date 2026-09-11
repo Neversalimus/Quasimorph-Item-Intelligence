@@ -10,6 +10,7 @@ $sourceFamilyFeatureGateText = [IO.File]::ReadAllText(
 foreach ($token in @(
     'AuditedSourceFamilyAssemblySha103Hotfix',
     'AuditedSourceFamilyAssemblySha104',
+    'AuditedSourceFamilyAssemblySha104582',
     'IsCurrentSourceFamilyAssembly()',
     'IsAuditedSourceFamilyContractVerified()',
     'A38C4D993C9BF60D0DDE0EDD348F201C97574F907808417A33C8A20F4772E9C1')) {
@@ -24,8 +25,9 @@ $sourceFamilyGateBody = [regex]::Match(
     [Text.RegularExpressions.RegexOptions]::Singleline).Value
 if ([string]::IsNullOrEmpty($sourceFamilyGateBody) -or
     $sourceFamilyGateBody.IndexOf('AuditedSourceFamilyAssemblySha103Hotfix',[StringComparison]::Ordinal) -lt 0 -or
-    $sourceFamilyGateBody.IndexOf('AuditedSourceFamilyAssemblySha104',[StringComparison]::Ordinal) -lt 0) {
-    throw 'current source-family helper must own both independently audited fingerprints.'
+    $sourceFamilyGateBody.IndexOf('AuditedSourceFamilyAssemblySha104',[StringComparison]::Ordinal) -lt 0 -or
+    $sourceFamilyGateBody.IndexOf('AuditedSourceFamilyAssemblySha104582',[StringComparison]::Ordinal) -lt 0) {
+    throw 'current source-family helper must own the independently audited fingerprints.'
 }
 
 $auditedFeatureBody = [regex]::Match(
@@ -52,10 +54,13 @@ $sourceFamilyPolicyText = [IO.File]::ReadAllText((Join-Path $sourceDir 'ModMain.
 foreach ($pool in @('RandomStart_rewardEquipment','RandomStart_rewardConsumables','General_rewardEquipment','General_rewardConsumables')) {
     if (-not $sourceFamilyPolicyText.Contains($pool)) { throw "random-start pool policy missing: $pool" }
 }
-foreach ($alias in @('CargoSpawn','LootModifiers','ContainerSaveEstimate','Scavenger','SourceFamily')) {
+foreach ($alias in @('Trade','CargoSpawn','LootModifiers','ContainerSaveEstimate','Scavenger','SourceFamily')) {
     if ($auditedFeatureBody.Contains(('Audited' + $alias + 'AssemblySha104'))) {
         throw 'feature-specific 1.0.4 audits must not promote the broad compatibility gate.'
     }
+}
+if ($auditedFeatureBody.Contains('9D0C784A764D75EC6616BD3B5744C0E581BB1CE148FD175BD8CABA8195854006')) {
+    throw 'the current patch fingerprint must not enter the broad compatibility gate.'
 }
 if ($auditedFeatureBody.Contains('BE78036434737521BB43DABBD934B579A08DC3E8370B834AEE36E40932F56FE0')) {
     throw 'the 1.0.4 fingerprint must not enter the broad compatibility gate.'

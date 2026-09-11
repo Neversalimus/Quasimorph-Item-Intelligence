@@ -1,21 +1,21 @@
-# Item Intelligence 1.7.42.6-test1 — ES / PT-BR / FR
+# Item Intelligence 1.7.42.6-test2 — совместимость с 1.0.4.582
 
-База — исходники стабильной 1.7.42.5. Добавлены испанский, бразильский португальский и французский: по 657 строк интерфейса. Это DEV-кандидат для проверки новых переводов в игре.
+Исправлены проверки совместимости с Quasimorph 1.0.4.582s.c4335c5 и обновлена формула разброса оружия. Сохранены все восемь языков, большое окно, масштаб и исправление китайских шрифтов MCM. Это DEV-кандидат для игровой проверки; он не опубликован в публичном Workshop.
 
 ## Установка
 
-Закрой Quasimorph и скачай `Quasimorph_ItemIntelligence_v1.7.42.6_ES_PTBR_FR_Test1_Full.zip` в Downloads. В PowerShell 7 выполни:
+Закрой Quasimorph и скачай `Quasimorph_ItemIntelligence_v1.7.42.6_Compat104582_Test2_Full.zip` в Downloads. В PowerShell 7 выполни:
 
 ```powershell
-$qiiLangZip = Get-ChildItem "$env:USERPROFILE\Downloads" -Filter "Quasimorph_ItemIntelligence_v1.7.42.6_ES_PTBR_FR_Test1_Full*.zip" -File | Sort-Object LastWriteTime -Descending | Select-Object -First 1
-if (-not $qiiLangZip) { throw "Архив локализации не найден в Downloads" }
-$qiiLangDir = Join-Path $env:TEMP ("QII_17426_LANG_" + [guid]::NewGuid().ToString("N"))
-Expand-Archive -LiteralPath $qiiLangZip.FullName -DestinationPath $qiiLangDir
-pwsh -NoProfile -ExecutionPolicy Bypass -File (Join-Path $qiiLangDir "ItemIntelligence\Install.ps1")
+$qiiPatchZip = Get-ChildItem "$env:USERPROFILE\Downloads" -Filter "Quasimorph_ItemIntelligence_v1.7.42.6_Compat104582_Test2_Full*.zip" -File | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+if (-not $qiiPatchZip) { throw "Архив исправления не найден в Downloads" }
+$qiiPatchDir = Join-Path $env:TEMP ("QII_17426_PATCH_" + [guid]::NewGuid().ToString("N"))
+Expand-Archive -LiteralPath $qiiPatchZip.FullName -DestinationPath $qiiPatchDir
+pwsh -NoProfile -ExecutionPolicy Bypass -File (Join-Path $qiiPatchDir "ItemIntelligence\Install.ps1") -GameRoot "C:\Program Files (x86)\Steam\steamapps\common\Quasimorph"
 if ($LASTEXITCODE -ne 0) { throw "Сборка DEV завершилась ошибкой; см. сообщение выше" }
 ```
 
-Если игру не удалось найти автоматически, повтори последний запуск с `-GameRoot "C:\Program Files (x86)\Steam\steamapps\common\Quasimorph"`.
+Путь игры указан явно по присланному архиву. Это также обходит ложное распознавание двух одинаковых папок с разным регистром букв.
 
 Установщик выполнит проверки, соберёт DLL против установленной игры и подготовит `C:\QM_Workshop\ItemIntelligence_DEV`. После успешной сборки открой игру и выполни в её консоли:
 
@@ -26,8 +26,17 @@ mod_updateworkshopitem 3781927679 C:\QM_Workshop\ItemIntelligence_DEV FALSE
 Включи DEV, отключи публичную копию QII и полностью перезапусти игру. Ожидаемый маркер в Player.log:
 
 ```text
-[ItemIntelligence] ACTIVE VERSION 1.7.42.6-test1 (LatinLanguagesTest01).
+[ItemIntelligence] ACTIVE VERSION 1.7.42.6-test2 (Compat104582Test02).
 ```
+
+## Проверка совместимости
+
+1. Открой F2 на **Ржавом Металле** и перейди в Торговлю. Проверь цены вместо `?` в обоих видах таблицы/карточек. Сверь цену одного предмета и итог нескольких единиц с обычным окном торговли на той же станции.
+2. Открой Добычу и калькулятор модификаторов в космосе. Проверь контейнеры, переключение Мародёра / Организации / Полевого медика и источники имплантов. Проценты не должны появляться у условных или неполных данных.
+3. На миссии с аугментацией, влияющей на разброс, сравни подсказку одного и того же режима текущего оружия в QII и в обычном интерфейсе игры. Сравнивай именно подсказки режима огня: игровой расчёт выстрела дополнительно учитывает укрытие и прочие эффекты.
+4. Проверь MCM, F2, большое окно и выбранный язык после полного перезапуска. Новые ES / PT-BR / FR ещё требуют отдельной проверки ниже.
+
+Приложи свежий Player.log и скриншоты торговли/разброса. В логе ожидаются маркер выше и `Exact103Pricing=True` для SHA `9D0C784A764D...`. Общий статус `UNVERIFIED BUILD` пока сохраняется: этот кандидат подтверждает отдельные проверенные функции, а не полную игровую регрессию. Включать Modder Mode ради проверки цен не требуется.
 
 ## Проверка трёх языков
 

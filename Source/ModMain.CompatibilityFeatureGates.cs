@@ -53,6 +53,21 @@ namespace ItemIntelligence
         private const string AuditedSourceFamilyAssemblySha104 =
             "BE78036434737521BB43DABBD934B579A08DC3E8370B834AEE36E40932F56FE0";
 
+        // Independent 1.0.4.582s.c4335c5 reviews: Support/Compatibility104582.json.
+        // These gates preserve runtime data validation and do not certify other builds.
+        private const string AuditedTradeAssemblySha104582 =
+            "9D0C784A764D75EC6616BD3B5744C0E581BB1CE148FD175BD8CABA8195854006";
+        private const string AuditedCargoSpawnAssemblySha104582 =
+            "9D0C784A764D75EC6616BD3B5744C0E581BB1CE148FD175BD8CABA8195854006";
+        private const string AuditedLootModifiersAssemblySha104582 =
+            "9D0C784A764D75EC6616BD3B5744C0E581BB1CE148FD175BD8CABA8195854006";
+        private const string AuditedContainerSaveEstimateAssemblySha104582 =
+            "9D0C784A764D75EC6616BD3B5744C0E581BB1CE148FD175BD8CABA8195854006";
+        private const string AuditedScavengerAssemblySha104582 =
+            "9D0C784A764D75EC6616BD3B5744C0E581BB1CE148FD175BD8CABA8195854006";
+        private const string AuditedSourceFamilyAssemblySha104582 =
+            "9D0C784A764D75EC6616BD3B5744C0E581BB1CE148FD175BD8CABA8195854006";
+
         private static int _lootManualProjectionContractState;
         private static int _containerSaveEstimateContractState;
         private static int _scavengerChanceContractState;
@@ -70,7 +85,8 @@ namespace ItemIntelligence
             if (!_compatStaticChecked) RunCompatibilityShieldStatic();
             return string.Equals(_compatAssemblySha256, AuditedFeatureAssemblySha103, StringComparison.OrdinalIgnoreCase) ||
                    string.Equals(_compatAssemblySha256, AuditedCargoSpawnAssemblySha103Hotfix, StringComparison.OrdinalIgnoreCase) ||
-                   string.Equals(_compatAssemblySha256, AuditedCargoSpawnAssemblySha104, StringComparison.OrdinalIgnoreCase);
+                   string.Equals(_compatAssemblySha256, AuditedCargoSpawnAssemblySha104, StringComparison.OrdinalIgnoreCase) ||
+                   string.Equals(_compatAssemblySha256, AuditedCargoSpawnAssemblySha104582, StringComparison.OrdinalIgnoreCase);
         }
 
         private static bool IsCurrent103TradeAssembly()
@@ -78,7 +94,8 @@ namespace ItemIntelligence
             if (!_compatStaticChecked) RunCompatibilityShieldStatic();
             return string.Equals(_compatAssemblySha256, AuditedFeatureAssemblySha103, StringComparison.OrdinalIgnoreCase) ||
                    string.Equals(_compatAssemblySha256, AuditedTradeAssemblySha103Hotfix, StringComparison.OrdinalIgnoreCase) ||
-                   string.Equals(_compatAssemblySha256, AuditedTradeAssemblySha104, StringComparison.OrdinalIgnoreCase);
+                   string.Equals(_compatAssemblySha256, AuditedTradeAssemblySha104, StringComparison.OrdinalIgnoreCase) ||
+                   string.Equals(_compatAssemblySha256, AuditedTradeAssemblySha104582, StringComparison.OrdinalIgnoreCase);
         }
 
         private static bool IsLegacy102FeatureAssembly()
@@ -92,7 +109,8 @@ namespace ItemIntelligence
             if (!_compatStaticChecked) RunCompatibilityShieldStatic();
             return IsAuditedFeatureAssembly() ||
                    string.Equals(_compatAssemblySha256, AuditedLootModifiersAssemblySha103Hotfix, StringComparison.OrdinalIgnoreCase) ||
-                   string.Equals(_compatAssemblySha256, AuditedLootModifiersAssemblySha104, StringComparison.OrdinalIgnoreCase);
+                   string.Equals(_compatAssemblySha256, AuditedLootModifiersAssemblySha104, StringComparison.OrdinalIgnoreCase) ||
+                   string.Equals(_compatAssemblySha256, AuditedLootModifiersAssemblySha104582, StringComparison.OrdinalIgnoreCase);
         }
 
         private static bool IsCurrentContainerSaveEstimateAssembly()
@@ -100,7 +118,8 @@ namespace ItemIntelligence
             if (!_compatStaticChecked) RunCompatibilityShieldStatic();
             return IsAuditedFeatureAssembly() ||
                    string.Equals(_compatAssemblySha256, AuditedContainerSaveEstimateAssemblySha103Hotfix, StringComparison.OrdinalIgnoreCase) ||
-                   string.Equals(_compatAssemblySha256, AuditedContainerSaveEstimateAssemblySha104, StringComparison.OrdinalIgnoreCase);
+                   string.Equals(_compatAssemblySha256, AuditedContainerSaveEstimateAssemblySha104, StringComparison.OrdinalIgnoreCase) ||
+                   string.Equals(_compatAssemblySha256, AuditedContainerSaveEstimateAssemblySha104582, StringComparison.OrdinalIgnoreCase);
         }
 
         private static bool IsCurrentScavengerAssembly()
@@ -108,7 +127,8 @@ namespace ItemIntelligence
             if (!_compatStaticChecked) RunCompatibilityShieldStatic();
             return IsAuditedFeatureAssembly() ||
                    string.Equals(_compatAssemblySha256, AuditedScavengerAssemblySha103Hotfix, StringComparison.OrdinalIgnoreCase) ||
-                   string.Equals(_compatAssemblySha256, AuditedScavengerAssemblySha104, StringComparison.OrdinalIgnoreCase);
+                   string.Equals(_compatAssemblySha256, AuditedScavengerAssemblySha104, StringComparison.OrdinalIgnoreCase) ||
+                   string.Equals(_compatAssemblySha256, AuditedScavengerAssemblySha104582, StringComparison.OrdinalIgnoreCase);
         }
 
         private static bool IsCurrentSourceFamilyAssembly()
@@ -116,13 +136,15 @@ namespace ItemIntelligence
             if (!_compatStaticChecked) RunCompatibilityShieldStatic();
             return IsAuditedFeatureAssembly() ||
                    string.Equals(_compatAssemblySha256, AuditedSourceFamilyAssemblySha103Hotfix, StringComparison.OrdinalIgnoreCase) ||
-                   string.Equals(_compatAssemblySha256, AuditedSourceFamilyAssemblySha104, StringComparison.OrdinalIgnoreCase);
+                   string.Equals(_compatAssemblySha256, AuditedSourceFamilyAssemblySha104, StringComparison.OrdinalIgnoreCase) ||
+                   string.Equals(_compatAssemblySha256, AuditedSourceFamilyAssemblySha104582, StringComparison.OrdinalIgnoreCase);
         }
 
         private static bool IsCurrent104SourceFamilyAssembly()
         {
             if (!_compatStaticChecked) RunCompatibilityShieldStatic();
-            return string.Equals(_compatAssemblySha256, AuditedSourceFamilyAssemblySha104, StringComparison.OrdinalIgnoreCase);
+            return string.Equals(_compatAssemblySha256, AuditedSourceFamilyAssemblySha104, StringComparison.OrdinalIgnoreCase) ||
+                   string.Equals(_compatAssemblySha256, AuditedSourceFamilyAssemblySha104582, StringComparison.OrdinalIgnoreCase);
         }
 
         private static bool IsLootManualProjectionContractVerified()

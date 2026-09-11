@@ -9,14 +9,16 @@ namespace ItemIntelligence
 
         private static void RunCompatibilityCases()
         {
+            string sha582 = "9D0C784A764D75EC6616BD3B5744C0E581BB1CE148FD175BD8CABA8195854006";
             string sha104 = "BE78036434737521BB43DABBD934B579A08DC3E8370B834AEE36E40932F56FE0";
             string shaHotfix = "A38C4D993C9BF60D0DDE0EDD348F201C97574F907808417A33C8A20F4772E9C1";
             string sha103 = "FE68E4355D4ED9CBAB7F8B1BA7717DBC1CC3FD749D0D11A644A9A3DB5EAB478F";
             string sha102 = "EFF608C5118735359CD07FEAD8A8219E1CFB557E3A5A57517DB4428F04834B8B";
-            foreach (string sha in new string[] { sha104, sha104.ToLowerInvariant(), shaHotfix, sha103, sha102, "unknown", "", null })
+            foreach (string sha in new string[] { sha582, sha582.ToLowerInvariant(), sha582.Substring(0, 63) + "7", sha104, sha104.ToLowerInvariant(), shaHotfix, sha103, sha102, "unknown", "", null })
             {
                 _compatAssemblySha256 = sha;
-                bool is104 = string.Equals(sha, sha104, StringComparison.OrdinalIgnoreCase);
+                bool is104 = string.Equals(sha, sha104, StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(sha, sha582, StringComparison.OrdinalIgnoreCase);
                 bool known = is104 || sha == shaHotfix || sha == sha103 || sha == sha102;
                 Check(IsCurrentLootModifiersAssembly() == known, "Loot modifier fingerprint scope");
                 Check(IsCurrentContainerSaveEstimateAssembly() == known, "container fingerprint scope");

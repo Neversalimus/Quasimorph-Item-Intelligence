@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Reflection;
 using MGSC;
 using UnityEngine;
 
@@ -8,15 +9,17 @@ namespace ItemIntelligence
 {
     public static partial class ModMain
     {
-        // Vanilla TooltipFactory.BuildFiremodeTooltip uses the exact HUD formula:
-        // (FireModeRecord.ScatterAngle + WeaponRecord.BonusScatterAngle)
-        //     * Mercenary.CreatureData.GetScatterAngleMult(WeaponRecord)
+        // 1.0.4.582 adds GetAugmentScatterAngleMult to the perk multiplier and
+        // clamps the HUD result to zero. Older builds retain their original formula.
+        // The optional API is resolved once; no direct reference breaks older DLLs.
         //
         // Resolve only the hovered weapon on demand. No catalog scan, no graph walk,
-        // no per-frame reflection and no gameplay mutation.
+        // no repeated API lookup and no gameplay mutation.
         private static readonly Dictionary<string, WeaponRecord> WeaponModeWeaponRecordsByItem =
             new Dictionary<string, WeaponRecord>(StringComparer.OrdinalIgnoreCase);
         private static bool _weaponModeScatterFormulaLogged;
+        private static bool _weaponModeAugmentScatterChecked;
+        private static MethodInfo _weaponModeAugmentScatterMethod;
         private static object _weaponModeCreatures;
         private static readonly HashSet<string> WeaponModeScatterLoggedKeys =
             new HashSet<string>(StringComparer.Ordinal);
@@ -53,7 +56,19 @@ namespace ItemIntelligence
             {
                 if (record.IsMelee) return false;
 
+                if (!_weaponModeAugmentScatterChecked)
+                {
+                    _weaponModeAugmentScatterMethod = typeof(CreatureData).GetMethod(
+                        "GetAugmentScatterAngleMult", BindingFlags.Public | BindingFlags.Instance,
+                        null, Type.EmptyTypes, null);
+                    _weaponModeAugmentScatterChecked = true;
+                }
+                bool augmentFormula = _weaponModeAugmentScatterMethod != null;
+                if (augmentFormula && _weaponModeAugmentScatterMethod.ReturnType != typeof(float))
+                    return false;
+
                 float multiplier = 1f;
+                float augmentMultiplier = 0f;
                 Player player = ResolveWeaponModePlayer();
                 bool liveMultiplier = false;
                 if (player != null)
@@ -63,6 +78,10 @@ namespace ItemIntelligence
                     if (mercenary != null && mercenary.CreatureData != null)
                     {
                         multiplier = mercenary.CreatureData.GetScatterAngleMult(record);
+                        if (augmentFormula)
+                            augmentMultiplier = (float)_weaponModeAugmentScatterMethod.Invoke(
+                                mercenary.CreatureData, null);
+                        multiplier += augmentMultiplier;
                         liveMultiplier = true;
                     }
                 }
@@ -74,12 +93,16 @@ namespace ItemIntelligence
                     return false;
                 scatter = (stats.ScatterAngle.Value + weaponBonus) * multiplier;
                 if (float.IsNaN(scatter) || float.IsInfinity(scatter)) return false;
+                if (augmentFormula) scatter = Mathf.Max(scatter, 0f);
                 if (ModderMode)
                 {
                     if (!_weaponModeScatterFormulaLogged)
                     {
                         _weaponModeScatterFormulaLogged = true;
-                        Debug.Log("[ItemIntelligence][WeaponModeScatter] formula=(FireMode.ScatterAngle+WeaponRecord.BonusScatterAngle)*CreatureData.GetScatterAngleMult, resolver=GetSimpleRecord<WeaponRecord>, multiplier=" +
+                        Debug.Log("[ItemIntelligence][WeaponModeScatter] formula=" +
+                            (augmentFormula ? "Max(0,(FireMode.ScatterAngle+WeaponRecord.BonusScatterAngle)*(GetScatterAngleMult+GetAugmentScatterAngleMult))" :
+                                "(FireMode.ScatterAngle+WeaponRecord.BonusScatterAngle)*CreatureData.GetScatterAngleMult") +
+                            ", resolver=GetSimpleRecord<WeaponRecord>, multiplier=" +
                             (liveMultiplier ? "LIVE_MERCENARY" : "NEUTRAL_1") + ".");
                     }
                     if (WeaponModeScatterLoggedKeys.Count < 8 && WeaponModeScatterLoggedKeys.Add(modeKey))
@@ -92,6 +115,7 @@ namespace ItemIntelligence
                             ", mode=" + (rawId ?? string.Empty) +
                             ", fireMode=" + stats.ScatterAngle.Value.ToString("0.###", CultureInfo.InvariantCulture) +
                             ", weaponBonus=" + weaponBonus.ToString("0.###", CultureInfo.InvariantCulture) +
+                            ", augmentMultiplier=" + augmentMultiplier.ToString("0.###", CultureInfo.InvariantCulture) +
                             ", multiplier=" + multiplier.ToString("0.###", CultureInfo.InvariantCulture) +
                             ", final=" + scatter.ToString("0.###", CultureInfo.InvariantCulture) +
                             ", source=" + (liveMultiplier ? "LIVE_MERCENARY" : "NEUTRAL_1") + ".");

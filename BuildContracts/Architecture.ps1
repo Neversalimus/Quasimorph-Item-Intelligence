@@ -145,7 +145,8 @@ if ($disassemblyLines -gt 460) { throw "Disassembly ownership regressed: ModMain
 if ($weaponModesLines -gt 160) { throw "Weapon-mode data ownership regressed: ModMain.WeaponModes.cs has $weaponModesLines lines; current requires <= 160." }
 if ($weaponModePresentationLines -gt 300) { throw "Weapon-mode presentation ownership regressed: ModMain.WeaponModePresentation.cs has $weaponModePresentationLines lines; current requires <= 300." }
 if ($weaponModeLocalizationLines -gt 180) { throw "Weapon-mode localization ownership regressed: ModMain.WeaponModeLocalization.cs has $weaponModeLocalizationLines lines; current requires <= 180." }
-if ($weaponModeScatterLines -gt 190) { throw "Weapon-mode scatter ownership regressed: ModMain.WeaponModeScatter.cs has $weaponModeScatterLines lines; current requires <= 190." }
+# Includes the bounded optional augmentation API adapter introduced by the current game patch.
+if ($weaponModeScatterLines -gt 225) { throw "Weapon-mode scatter ownership regressed: ModMain.WeaponModeScatter.cs has $weaponModeScatterLines lines; current requires <= 225." }
 if ($weaponModeDamagePerApLines -gt 260) { throw "Weapon-mode Damage/AP ownership regressed: ModMain.WeaponModeDamagePerAP.cs has $weaponModeDamagePerApLines lines; current requires <= 260." }
 if ($weaponModeCriticalDamagePerApLines -gt 220) { throw "Weapon-mode critical Damage/AP ownership regressed: ModMain.WeaponModeCriticalDamagePerAP.cs has $weaponModeCriticalDamagePerApLines lines; current requires <= 220." }
 if ($numericProjectionSafetyLines -gt 60) { throw "Numeric projection safety ownership regressed: $numericProjectionSafetyLines/60 lines." }
@@ -174,7 +175,7 @@ $stateOwnershipContracts = @{
     'ModMain.Magnum.cs' = @('_magnumProgression','_magnumLightLookupAttempted','_runtimeMagnumIndexBuilt','MagnumUses')
     'ModMain.RuntimeServices.cs' = @('_customResources','_runtimeResolveOwnerTypes','_runtimeFallbackResolveActive','_stateServicesResolved')
     'ModMain.Ammo.cs' = @('WeaponsByItem','WeaponModeRecordsById','AmmoWarmupItems','WeaponModeItemIdByKey')
-    'ModMain.WeaponModeScatter.cs' = @('WeaponModeWeaponRecordsByItem','_weaponModeScatterFormulaLogged','_weaponModeCreatures','WeaponModeScatterLoggedKeys')
+    'ModMain.WeaponModeScatter.cs' = @('WeaponModeWeaponRecordsByItem','_weaponModeScatterFormulaLogged','_weaponModeCreatures','WeaponModeScatterLoggedKeys','_weaponModeAugmentScatterChecked','_weaponModeAugmentScatterMethod')
     'ModMain.WeaponModes.cs' = @('WeaponModeStatsByRawId','WeaponModeStatsByKey')
     'ModMain.Disassembly.cs' = @('DisassemblyOutputsByItem','DisassemblySourcesByOutputItem','DisassemblyWarmupItems')
     'ModMain.LootIndexes.cs' = @('LootContainerSourcesByItem','_lootEnemyContextIndexReady','_lootWarmupActive','_lootContainerDropCollection')

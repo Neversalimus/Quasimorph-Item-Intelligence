@@ -1,5 +1,12 @@
 ﻿# Changelog
 
+## v1.7.42.6-test2 — 2026-09-11
+
+- Restored feature-owned compatibility with Quasimorph 1.0.4.582s.c4335c5: exact Trade prices/batches, supported loot modifiers and container estimates, Scavenger rewards, source families, cargo creation and ordinary enemy implant/body calculations.
+- Updated fire-mode scatter to include the game's augmentation multiplier and zero clamp; older game DLLs retain their original formula through a cached optional API adapter.
+- Kept unknown-build and incomplete-data safeguards, all eight UI languages, large-window/zoom controls and Chinese MCM font isolation.
+- Added regressions for the new fingerprint and scatter behavior. Full C# 5 compilation and all suites pass; new-patch Unity acceptance is pending.
+
 ## v1.7.42.6-test1 — 2026-09-11
 
 - Add Spanish, Brazilian Portuguese and French: 657 translated keys per language, 1971 new values.

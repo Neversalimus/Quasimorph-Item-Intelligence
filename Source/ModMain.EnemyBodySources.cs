@@ -45,12 +45,16 @@ namespace ItemIntelligence
             _enemyBodyExcludedImplantCandidates = 0;
         }
 
+        // Ordinary body generation and installation are unchanged in 1.0.4.582;
+        // reviewed independently in Support/Compatibility104582.json.
         private static bool IsAuditedEnemyBodyAssembly()
         {
             if (!_compatStaticChecked) RunCompatibilityShieldStatic();
             return string.Equals(_compatAssemblySha256,
                 "BE78036434737521BB43DABBD934B579A08DC3E8370B834AEE36E40932F56FE0",
-                StringComparison.OrdinalIgnoreCase);
+                StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(_compatAssemblySha256,
+                    "9D0C784A764D75EC6616BD3B5744C0E581BB1CE148FD175BD8CABA8195854006", StringComparison.OrdinalIgnoreCase);
         }
 
         private static EnemyBodySlot ReadEnemyBodySlot(string id, bool augmentation)

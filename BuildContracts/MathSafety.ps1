@@ -80,4 +80,5 @@ foreach ($owner in $rngNeutralOwners) {
 # Execute actual production C#; duplicated PowerShell formulas cannot validate it.
 & (Join-Path $root 'Tests/Run-BehaviorTests.ps1') -SourceRoot $root
 & (Join-Path $root 'Tests/Run-EnemyBodyTests.ps1') -SourceRoot $root
+& (Join-Path $root 'Tests/Run-WeaponScatterTests.ps1') -SourceRoot $root
 & (Join-Path $root 'Tests/Run-ReleaseTests.ps1')

@@ -2,11 +2,11 @@
 
 **Item Intelligence** is an in-game item browser and reference tool for **Quasimorph**.
 
-Current candidate: **v1.7.42.6-test1 — LatinLanguagesTest01** (DEV).
+Current candidate: **v1.7.42.6-test2 — Compat104582Test02** (DEV).
 Steam Workshop: [Item Intelligence](https://steamcommunity.com/sharedfiles/filedetails/?id=3780078201).
-Source base: **v1.7.42.5**, commit `13fa5e012ec8a87d7e372c96af28a2f852012380`.
+Source base: localization candidate `23df60564fafb32c6502e591f97cbd24053219d0`, based on stable **v1.7.42.5**.
 
-This candidate adds complete Spanish, Brazilian Portuguese and French UI dictionaries and integrates their MCM selection, game-language detection and numeric presentation. It retains the accepted 1.7.42.5 large-window, implant-source and Chinese MCM fixes. New-language game acceptance and native-speaker review are pending. See [localization scope](Support/Localization17426.md) and [DEV setup](INSTRUCTIONS_RU.md).
+This candidate restores the independently audited Trade, loot, cargo and ordinary body/implant paths on Quasimorph **1.0.4.582s.c4335c5**. The game patch also changed fire-mode scatter: QII now includes the vanilla augmentation multiplier and zero clamp, retaining the old formula when the new API is absent. All eight languages, large-window controls and the Chinese MCM fix are retained. New-patch runtime acceptance and ES/PT-BR/FR game/native-speaker review are pending. See [compatibility audit](Support/Compatibility104582.md), [localization scope](Support/Localization17426.md) and [DEV setup](INSTRUCTIONS_RU.md).
 
 ## Large window and zoom
 
@@ -40,9 +40,10 @@ MCM uses the game's font even when QII supplies captions in another language. QI
 
 ## Verification
 
-- All 112 production C# files compile as C# 5 against the 118 supplied game dependencies, with zero warnings.
-- 660 existing production behavior assertions and 32 release workflow assertions pass.
-- 4923 body/implant assertions include an independent exhaustive draw-sequence oracle, socket-range averaging, runtime record-adapter fixtures, missing data and conditional UI formatting.
+- All 112 production C# files compile as C# 5 against both supplied 118-dependency sets (game 1.0.4.581 and 1.0.4.582), with zero warnings.
+- 693 production behavior assertions and 32 release workflow assertions pass.
+- 4939 body/implant assertions include an independent exhaustive draw-sequence oracle, socket-range averaging, runtime record-adapter fixtures, missing data and conditional UI formatting.
+- 48 scatter assertions execute the complete production scatter owner against modern, legacy and incompatible API fixtures, including additive effects, live changes, zero clamping and invalid values.
 - 5385 localization assertions cover real language-file selection and key resolution, metadata precedence, cache replacement, manual/Auto behavior, damaged files, fallback text, formatting, CJK wrapping and private font fallback ownership. Game/TMP/MCM services are fixtures; these are not Unity visual tests.
 - 54917 viewport geometry assertions cover 12 resolutions, both views, five zoom levels, Modder drawer, icon variants, footer/column bounds and hover-card placement. These execute production geometry and chrome writes with RectTransform fixtures, not Unity rendering.
 - 38 MCM font assertions exercise the complete production callbacks and ownership lifecycle, detached dropdown options, repeated activation, late font availability and restoration for another mod's tooltip. Unity/TMP/MCM objects are fixtures. Separate Test5 game evidence confirms Chinese captions and dropdown rendering after persistence across a full restart; shared-tooltip restoration was not shown in screenshots.

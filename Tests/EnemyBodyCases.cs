@@ -47,6 +47,21 @@ namespace ItemIntelligence
         }
         public static int RunEnemyBodyCases()
         {
+            string previousSha = _compatAssemblySha256;
+            string sha582 = "9D0C784A764D75EC6616BD3B5744C0E581BB1CE148FD175BD8CABA8195854006";
+            foreach (string fingerprint in new[] { previousSha, previousSha.ToLowerInvariant(), sha582,
+                sha582.ToLowerInvariant(), sha582.Substring(0, 63) + "7", "unknown", "", null })
+            {
+                _compatAssemblySha256 = fingerprint;
+                bool known = string.Equals(fingerprint, previousSha, StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(fingerprint, sha582, StringComparison.OrdinalIgnoreCase);
+                BodyAssert(IsAuditedEnemyBodyAssembly() == known, "body assembly scope excludes unknown builds");
+                Data.BodyTypes.Values.Clear();
+                Data.BodyTypes.Values.Add(new BodyTypeRecord { Id = "gate_body", WoundSlots = new List<string>() });
+                var gateModels = ReadEnemyBodyModels(new MobClassRecord { BodyTypes = new List<string> { "gate_body" } });
+                BodyAssert(gateModels.Count == 1 && gateModels[0].Unknown == !known, "body model follows independent audit");
+            }
+            _compatAssemblySha256 = previousSha;
             EnemyImplantRule a = TestImplant("a", "head", "flesh");
             EnemyImplantRule b = TestImplant("b", "head", "flesh");
             EnemyImplantRule missing = TestImplant("tail", "tail", "flesh");
