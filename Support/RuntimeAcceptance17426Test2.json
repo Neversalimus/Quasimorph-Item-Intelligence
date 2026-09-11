@@ -1,0 +1,192 @@
+{
+  "version": "1.7.42.6-test2",
+  "marker": "Compat104582Test02",
+  "source_commit": "b6604f579360522b7173242801d743e345facaf0",
+  "date": "2026-09-11",
+  "decision": "ACCEPTED_WITH_DOCUMENTED_LIMITS_FOR_STABLE_PROMOTION",
+  "game": "1.0.4.582s.c4335c5",
+  "game_assembly_sha256": "9D0C784A764D75EC6616BD3B5744C0E581BB1CE148FD175BD8CABA8195854006",
+  "log": {
+    "file": "Player(20260911-222051).log",
+    "sha256": "7F14442F76677527696DB2F313BE00E0B40B6F815A702FAAF4BB04B397270EEF",
+    "bytes": 352534
+  },
+  "screenshots": [
+    {
+      "file": "bc2cbf1f-6715-492f-a5c4-fae8a9c28e84.png",
+      "sha256": "3260A5BD6F63B3208615E2DA1737C6E91DF2BDCE18C359285CCE7E780BE6339F",
+      "bytes": 1209078,
+      "language": "RU",
+      "view": "normal 100%",
+      "observation": "Trade next-unit and batch prices restored; both buy/sell sections."
+    },
+    {
+      "file": "d9134435-2c84-423c-992e-0471a14b9176.png",
+      "sha256": "79CD11150EE8A22C724A33AC5B3E26664D81AD72144286CFB78A7F05583C2BB5",
+      "bytes": 1104146,
+      "language": "RU",
+      "view": "normal 100%",
+      "observation": "Manual Marauder I, Organization and Field Medic controls and loot sources."
+    },
+    {
+      "file": "af00532f-8268-4674-8168-55f024fc243b.png",
+      "sha256": "E0D1CE78D13AB957898B7C331E42CB8F88EAAB3BB7EC2F1932D320DC31C25A35",
+      "bytes": 1215897,
+      "language": "ES",
+      "view": "normal 100%",
+      "observation": "Catalog and browser labels; accents render; game names remain Russian."
+    },
+    {
+      "file": "76260269-11c9-4654-8d71-f3f10b5cf0cd.png",
+      "sha256": "1BDBC9EEC254D93B59A833DEB058EED34D842B8977E98A8403B23D279ED2A2F6",
+      "bytes": 542032,
+      "language": "ES",
+      "view": "expanded 150%",
+      "observation": "Scavenger missions, 71 eligible rows, best chance 29.39%, 4 rolls."
+    },
+    {
+      "file": "6a8ee0f1-d609-4b34-8def-5e2f624348b1.png",
+      "sha256": "3CFD0054BF3D2F635F73BF4F535ACCD618169CD9983667BF1C25F0E613093119",
+      "bytes": 504482,
+      "language": "ES",
+      "view": "expanded 150%",
+      "observation": "Loot acquisition conditions and notes; unknown current modifiers retain question marks."
+    },
+    {
+      "file": "7832ea49-ec5a-4452-9270-52e2f8094537.png",
+      "sha256": "88261EA0D64BE4F47CF9C743F285A46410495495B455A46557D05F505BB9AE77",
+      "bytes": 541391,
+      "language": "PT-BR",
+      "view": "expanded 150%",
+      "observation": "Recipes/disassembly and station production; accents render."
+    },
+    {
+      "file": "a4df35d6-03f2-44d7-89ea-ab04e8543ae1.png",
+      "sha256": "2E35E0364B51D8B952CDAB9A73EEC76459119E01CDC14C3DCB9BB789BA7A9698",
+      "bytes": 1088135,
+      "language": "PT-BR",
+      "view": "normal 125%",
+      "observation": "Trade prices and exact batch totals render; single HUD FPS value cannot establish cause."
+    },
+    {
+      "file": "13216581-a48d-40b3-bedd-29bf07f9cdc6.png",
+      "sha256": "1ADF6CFB008AF9EC3EA3EE3E1FC78E1D46FF4E850C63829723CFDE103611EA82",
+      "bytes": 1069519,
+      "language": "PT-BR",
+      "view": "normal 125%",
+      "observation": "Catalog; long armor/equipment caption clipped with icon."
+    },
+    {
+      "file": "b9ba2887-7854-483d-906d-687b8911a12b.png",
+      "sha256": "3517371DCECA4F6A0B5F991A90BC7AC59590D4B781BB83B121616C4BC66DDED0",
+      "bytes": 1124416,
+      "language": "PT-BR",
+      "view": "normal 125%",
+      "observation": "Expanded enemy loot notes, ranges and Tech conditions."
+    },
+    {
+      "file": "9250313d-a66b-4243-9ccf-fe054f90bc67.png",
+      "sha256": "29D2F659288D8E902414F50DD278EBC0F722906262ECEF4FD8AA6968B3025956",
+      "bytes": 1073979,
+      "language": "FR",
+      "view": "normal 125%",
+      "observation": "Magnum research/status; accents render; Catalog launcher clips final E."
+    },
+    {
+      "file": "6105ce67-3023-4de8-bddc-ed8b3bf5bf89.png",
+      "sha256": "C1BFDDEF4BE008C7A856312359CADDF39442015A4F4025F94C74762ABBB800E9",
+      "bytes": 1081497,
+      "language": "FR",
+      "view": "normal 125%",
+      "observation": "Catalog; long armor/equipment caption clipped."
+    },
+    {
+      "file": "01e5fe24-b942-4378-92dc-6aea5cef167c.png",
+      "sha256": "122BC8B8B29AE98541DD365AAB514C69388A9EC99B7DAED273DC22082095C65F",
+      "bytes": 962630,
+      "language": "FR",
+      "view": "normal 125%",
+      "observation": "Overview; intentional summary ellipsis; launcher clipping."
+    },
+    {
+      "file": "1f19c0c0-fd05-4e6b-932a-218a376764ca.png",
+      "sha256": "33A278F9D05FAA075ED624A92A226065B6DCBD2AE2112A7E26E4B6AF1D1DEAA2",
+      "bytes": 539773,
+      "language": "FR",
+      "view": "expanded 150%",
+      "observation": "Loot manual controls and container estimates with readable notes."
+    },
+    {
+      "file": "3272e8a1-03aa-418b-bc7c-c933600fa493.png",
+      "sha256": "33A278F9D05FAA075ED624A92A226065B6DCBD2AE2112A7E26E4B6AF1D1DEAA2",
+      "bytes": 539773,
+      "language": "FR",
+      "view": "expanded 150%",
+      "observation": "Near-duplicate of preceding loot view; not an independent scenario."
+    },
+    {
+      "file": "ca4ddaac-0159-485f-92d5-7fbd098a38fb.png",
+      "sha256": "F7DCBEBE9B934D5220560F331440D248544817C509DDD3E21F23DEC4C2252665",
+      "bytes": 610430,
+      "language": "FR",
+      "view": "expanded 150%",
+      "observation": "Expanded enemy loot notes and chance ranges; diacritics render."
+    }
+  ],
+  "screenshot_dimensions": [
+    2048,
+    1152
+  ],
+  "logged_screen_dimensions": [
+    1920,
+    1080
+  ],
+  "observed": {
+    "exact_trade_pricing": true,
+    "verified_manual_loot_perks": [
+      "Marauder",
+      "Organization",
+      "FieldMedic"
+    ],
+    "core_items": 1869,
+    "core_partial_failures": 0,
+    "container_profiles": 28,
+    "empty_container_profiles": 0,
+    "body_installed_chance_links": 1031,
+    "body_conditional_implant_links": 6262,
+    "excluded_implant_body_candidates": 89400,
+    "disassembly_items": 1347,
+    "disassembly_outputs": 4667,
+    "disassembly_symmetry": "OK",
+    "scavenger_alcohol_eligible": 71,
+    "language_switches": [
+      "Russian",
+      "Spanish",
+      "BrazilianPortugal",
+      "French",
+      "Russian"
+    ],
+    "keys_per_language": 657,
+    "mcm_font_hooks": "3/3",
+    "mcm_private_fallbacks": [
+      "NotoSansSC-Regular SDF",
+      "NotoSans-Regular SDF"
+    ],
+    "cargo_spawn": "One plastic item added through audited cargo API; explicit Modder Mode action."
+  },
+  "known_observations": [
+    "One NullReferenceException in MGSC.SliderWrapper.Awake during ModConfigMenu.ConfigureRangeButtonPrefab. No QII frame in the shown stack; MCM language saving subsequently works. Same known stack as prior acceptance, not attributed to QII by this evidence.",
+    "Two PerfBudget records: cold total 61.2 ms / 50 ms; warm total 31.7 ms / 20 ms, render 22.0 ms / 20 ms.",
+    "Minor launcher/category label clipping in FR/PT-BR; stable promotion adds bounded TMP autosizing to catalog controls.",
+    "Existing unmapped AztecAltar and strict-icon misses remain diagnostic limitations, not new crashes."
+  ],
+  "not_demonstrated": [
+    "Full-process restart persistence of each new language and its MCM captions; switches in this log are in one process.",
+    "Auto detection with the game itself set to ES/PT-BR/FR.",
+    "In-game augmented scatter comparison; covered by assembly audit and production API fixtures, not these screenshots.",
+    "Vanilla transaction comparison for displayed totals on this build.",
+    "Unity rendering after the final catalog-only autosizing change.",
+    "Visual testing below 1920x1080 or 200% zoom in this evidence; native-speaker certification."
+  ],
+  "global_compatibility": "UNVERIFIED-COMPATIBLE; independently audited feature gates only."
+}

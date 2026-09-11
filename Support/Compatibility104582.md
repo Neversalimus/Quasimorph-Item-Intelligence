@@ -1,3 +1,5 @@
+> Historical pre-test2 assembly audit. Fresh game evidence and the stable release decision are recorded in [ReleaseAcceptance17426.md](ReleaseAcceptance17426.md). The algorithm comparison below remains applicable.
+
 # Quasimorph 1.0.4.582 — compatibility review
 
 Reviewed 2026-09-11 for **1.7.42.6-test2 / Compat104582Test02**. Source base: `23df60564fafb32c6502e591f97cbd24053219d0` (eight-language DEV candidate). The runtime log supplied with this patch instead runs stable 1.7.42.5.

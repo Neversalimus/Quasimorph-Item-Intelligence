@@ -141,6 +141,10 @@ namespace ItemIntelligence
                 new Color(0.48f, 0.74f, 0.62f, 1f), FontStyles.Bold,
                 TextAlignmentOptions.Center);
             text = textGo.GetComponent<TMP_Text>();
+            // Localized category and filter names must also fit beside their icons.
+            text.enableAutoSizing = true;
+            text.fontSizeMin = 8f;
+            text.fontSizeMax = fontSize;
             return button;
         }
 
@@ -168,6 +172,9 @@ namespace ItemIntelligence
                 new Color(0.92f, 0.94f, 0.78f, 1f), FontStyles.Bold,
                 TextAlignmentOptions.Center);
             _browserCatalogButtonText = textGo.GetComponent<TMP_Text>();
+            _browserCatalogButtonText.enableAutoSizing = true;
+            _browserCatalogButtonText.fontSizeMin = 8f;
+            _browserCatalogButtonText.fontSizeMax = 10f;
             CreateBrowserCatalogLauncherInterfaceIcon();
         }
 

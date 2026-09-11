@@ -1,5 +1,14 @@
 ﻿# Changelog
 
+## v1.7.42.6 — 2026-09-11
+
+- Restore independently audited compatibility with Quasimorph 1.0.4.582s.c4335c5, including exact Trade prices/batches, loot calculations, source families, cargo and ordinary enemy body/implant paths.
+- Include the updated fire-mode scatter formula with augmentation effects, zero clamping and old-API fallback.
+- Add Spanish, Brazilian Portuguese and French (657 values each); all eight UI languages include MCM selection, numeric formatting and mixed-script support.
+- Fit long catalog launcher/category/filter labels within their existing buttons.
+- Accept test2 game evidence and record a complete ES/PT-BR/FR text review, preserving the known MCM/performance observations and untested scenarios.
+- Promote stable source for the existing public Workshop item and retain the frozen, resumable GitHub release workflow.
+
 ## v1.7.42.6-test2 — 2026-09-11
 
 - Restored feature-owned compatibility with Quasimorph 1.0.4.582s.c4335c5: exact Trade prices/batches, supported loot modifiers and container estimates, Scavenger rewards, source families, cargo creation and ordinary enemy implant/body calculations.

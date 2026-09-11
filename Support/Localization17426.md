@@ -1,3 +1,5 @@
+> Historical test1 snapshot. For the completed test2 text/game review and stable decision, see [LocalizationReview17426.md](LocalizationReview17426.md) and [ReleaseAcceptance17426.md](ReleaseAcceptance17426.md).
+
 # Spanish, Brazilian Portuguese and French — 1.7.42.6-test1
 
 Date: 2026-09-11. Runtime marker: `LatinLanguagesTest01`.

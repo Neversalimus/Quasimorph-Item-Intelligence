@@ -1,17 +1,17 @@
 # Frozen release workflow
 
-Current checkout: **1.7.42.6-test2 (DEV)**. Use `Install.ps1` and `INSTRUCTIONS_RU.md` for DEV staging. The stable workflow below intentionally rejects this candidate; the v1.7.42.5 examples are historical stable-release instructions.
+Current checkout: **1.7.42.6 / StableRelease17426**, promoted from accepted test2. See [release acceptance](../Support/ReleaseAcceptance17426.md) and [Russian setup](../INSTRUCTIONS_RU.md).
 
 These reusable scripts prepare and publish the accepted stable source. They reject DEV source. The default destination remains public Workshop item 3780078201 and GitHub repository Neversalimus/Quasimorph-Item-Intelligence.
 
-The v1.7.42.5 source kit includes thin version-specific launchers: preparation restores the accepted source commit from a hash-checked Git bundle into a separate checkout, then calls this workflow. Publication calls the frozen checkout's publisher. The launchers do not apply code patches or implement a second publishing mechanism. See the original v1.7.42.5 release kit for its complete Windows sequence.
+The v1.7.42.6 source kit includes thin version-specific launchers: preparation restores the accepted source commit from a hash-checked Git bundle into a separate checkout, then calls this workflow. Publication calls the frozen checkout's publisher. The launchers do not apply code patches or implement a second publishing mechanism. The source kit START_HERE_RU.md provides the complete Windows sequence.
 
 After DEV game acceptance, prepare and review a stable source commit in a Git checkout. Promotion requires a stable Runtime version and marker, the matching GameplayExactness contract, the release installer and updated release notes. The build gates intentionally reject a mixed DEV/stable source tree. Do not use the older per-version publisher alongside this workflow.
 
 From that reviewed stable checkout:
 
 ```powershell
-pwsh -NoProfile -File .\Release\Prepare-Release.ps1 -GameRoot "X:\SteamLibrary\steamapps\common\Quasimorph" -OutputDirectory "C:\QM_Workshop\Frozen\ItemIntelligence-v1.7.42.5"
+pwsh -NoProfile -File .\Release\Prepare-Release.ps1 -GameRoot "X:\SteamLibrary\steamapps\common\Quasimorph" -OutputDirectory "C:\QM_Workshop\Frozen\ItemIntelligence-v1.7.42.6"
 ```
 
 Preparation checks origin, a clean source commit and ancestry from remote main, compiles the mod, and retains:
@@ -25,7 +25,7 @@ The freeze directory must be new and outside the checkout. Preparation never del
 Publish the frozen payload to the existing Steam item and complete the normal Steam acceptance gate. Then:
 
 ```powershell
-pwsh -NoProfile -File .\Release\Publish-Release.ps1 -ReceiptPath "C:\QM_Workshop\Frozen\ItemIntelligence-v1.7.42.5\release-receipt.json" -WorkshopPublished
+pwsh -NoProfile -File .\Release\Publish-Release.ps1 -ReceiptPath "C:\QM_Workshop\Frozen\ItemIntelligence-v1.7.42.6\release-receipt.json" -WorkshopPublished
 ```
 
 `-WorkshopPublished` is the operator's acknowledgement of the Steam gate; the GitHub publisher does not itself check Steam. It rechecks the source and every frozen file, updates main/tag atomically with explicit leases, uploads assets into a draft release, downloads them for SHA256 verification and only then promotes the draft. It refuses different existing assets and conflicting refs. Git servers without atomic push support stop without a sequential fallback.

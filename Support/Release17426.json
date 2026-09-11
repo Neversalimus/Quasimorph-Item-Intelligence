@@ -1,0 +1,43 @@
+{
+  "version": "1.7.42.6",
+  "marker": "StableRelease17426",
+  "date": "2026-09-11",
+  "status": "PREPARED_SOURCE_NOT_PUBLISHED",
+  "accepted_test_commit": "b6604f579360522b7173242801d743e345facaf0",
+  "base_published_commit": "13fa5e012ec8a87d7e372c96af28a2f852012380",
+  "production_source_files": 112,
+  "production_files_changed": [
+    "Source/ModMain.Runtime.cs",
+    "Source/ModMain.BrowserCatalogPresentation.cs"
+  ],
+  "production_change_scope": "Version/marker plus bounded catalog control autosizing. No gameplay, MCM, geometry or dictionary changes from accepted test2.",
+  "public_workshop": "3780078201",
+  "dev_workshop_retained": "3781927679",
+  "git_tag": "v1.7.42.6",
+  "game_assembly_sha256": "9D0C784A764D75EC6616BD3B5744C0E581BB1CE148FD175BD8CABA8195854006",
+  "runtime_evidence": [
+    "Support/RuntimeAcceptance17426Test2.json"
+  ],
+  "acceptance_report": "Support/ReleaseAcceptance17426.md",
+  "localization_review": "Support/LocalizationReview17426.md",
+  "global_compatibility": "UNVERIFIED-COMPATIBLE; narrow feature gates retained",
+  "windows_release_payload": "Pending real Windows preparation; final hashes captured in the receipt.",
+  "local_validation": {
+    "release_contracts": "PASS",
+    "csharp_language": "5",
+    "source_files": 112,
+    "game_dependencies": 118,
+    "compile_warnings": 0,
+    "compile_errors": 0,
+    "assertions": {
+      "behavior": 693,
+      "enemy_body_implant": 4939,
+      "weapon_scatter": 48,
+      "release": 32,
+      "localization": 5385,
+      "mcm_fonts": 38,
+      "viewport_geometry": 54917
+    },
+    "total_assertions": 66052
+  }
+}

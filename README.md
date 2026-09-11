@@ -2,11 +2,11 @@
 
 **Item Intelligence** is an in-game item browser and reference tool for **Quasimorph**.
 
-Current candidate: **v1.7.42.6-test2 — Compat104582Test02** (DEV).
+Current stable source: **v1.7.42.6 — StableRelease17426**. Publication is performed through the frozen release workflow.
 Steam Workshop: [Item Intelligence](https://steamcommunity.com/sharedfiles/filedetails/?id=3780078201).
-Source base: localization candidate `23df60564fafb32c6502e591f97cbd24053219d0`, based on stable **v1.7.42.5**.
+Accepted candidate: `b6604f579360522b7173242801d743e345facaf0`, based on stable **v1.7.42.5**.
 
-This candidate restores the independently audited Trade, loot, cargo and ordinary body/implant paths on Quasimorph **1.0.4.582s.c4335c5**. The game patch also changed fire-mode scatter: QII now includes the vanilla augmentation multiplier and zero clamp, retaining the old formula when the new API is absent. All eight languages, large-window controls and the Chinese MCM fix are retained. New-patch runtime acceptance and ES/PT-BR/FR game/native-speaker review are pending. See [compatibility audit](Support/Compatibility104582.md), [localization scope](Support/Localization17426.md) and [DEV setup](INSTRUCTIONS_RU.md).
+This release restores the independently audited Trade, loot, cargo and ordinary body/implant paths on Quasimorph **1.0.4.582s.c4335c5**. The game patch also changed fire-mode scatter: QII now includes the vanilla augmentation multiplier and zero clamp, retaining the old formula when the new API is absent. All eight languages, large-window controls and the Chinese MCM fix are retained. The supplied test2 run confirms restored prices and ES/PT-BR/FR browser rendering. All 1971 new translations have been reviewed against English; native-speaker refinements remain welcome. See [release acceptance](Support/ReleaseAcceptance17426.md), [compatibility audit](Support/Compatibility104582.md), [localization review](Support/LocalizationReview17426.md) and [release setup](INSTRUCTIONS_RU.md).
 
 ## Large window and zoom
 
@@ -36,20 +36,22 @@ QII reads Quasimorph's font presets for the chosen language. For mixed scripts i
 
 MCM uses the game's font even when QII supplies captions in another language. QII supplies private Chinese and Latin fallbacks to its settings, sidebar entry, dropdown options and shared tooltip while QII owns it. Reopening MCM reapplies the font after MCM's own font updates. Hovering another mod's setting restores the shared tooltip's original font. This optional integration was checked against MCM source commit `2e500a5f5cf02ffc6c9739e1933b738949bae265`; a warning is logged if its hooks are unavailable. Test5 logs confirm all three hooks, both font assets and the saved Chinese preference on the next process; screenshots show the dropdown and Chinese captions rendering correctly.
 
-`Install.ps1` prepares only **DEV item 3781927679** at `C:\QM_Workshop\ItemIntelligence_DEV`. It builds against the installed game in PowerShell 7 and prints the DEV upload command. No automatic upload is performed. The stable public item remains **3780078201**; this candidate needs game acceptance before release. Workshop description drafts for the three new languages are in `Workshop/`.
+`Install.ps1` builds and stages the **public item 3780078201** at `C:\QM_Workshop\ItemIntelligence`. Publication uses the hash-pinned source bundle and [frozen release workflow](Release/README.md), so Steam and GitHub receive the same validated payload. No automatic Steam upload is performed. DEV 3781927679 remains available for future tests. New ES/PT-BR/FR Workshop descriptions are included in `Workshop/`.
 
 ## Verification
 
-- All 112 production C# files compile as C# 5 against both supplied 118-dependency sets (game 1.0.4.581 and 1.0.4.582), with zero warnings.
+Current release contracts pass **66052 assertions**. The release source compiles against the supplied 1.0.4.582 DLLs without warnings. [Acceptance report](Support/ReleaseAcceptance17426.md) distinguishes the fresh test2 evidence from historical runs. The only runtime change after test2 is catalog-label autosizing plus version/marker.
+
+- Stable source: all 112 production C# files compile as C# 5 against the supplied 118-dependency 1.0.4.582 set, with zero warnings. The accepted candidate additionally compiled against 1.0.4.581.
 - 693 production behavior assertions and 32 release workflow assertions pass.
 - 4939 body/implant assertions include an independent exhaustive draw-sequence oracle, socket-range averaging, runtime record-adapter fixtures, missing data and conditional UI formatting.
 - 48 scatter assertions execute the complete production scatter owner against modern, legacy and incompatible API fixtures, including additive effects, live changes, zero clamping and invalid values.
 - 5385 localization assertions cover real language-file selection and key resolution, metadata precedence, cache replacement, manual/Auto behavior, damaged files, fallback text, formatting, CJK wrapping and private font fallback ownership. Game/TMP/MCM services are fixtures; these are not Unity visual tests.
 - 54917 viewport geometry assertions cover 12 resolutions, both views, five zoom levels, Modder drawer, icon variants, footer/column bounds and hover-card placement. These execute production geometry and chrome writes with RectTransform fixtures, not Unity rendering.
 - 38 MCM font assertions exercise the complete production callbacks and ownership lifecycle, detached dropdown options, repeated activation, late font availability and restoration for another mod's tooltip. Unity/TMP/MCM objects are fixtures. Separate Test5 game evidence confirms Chinese captions and dropdown rendering after persistence across a full restart; shared-tooltip restoration was not shown in screenshots.
-- Test3 runtime evidence confirms index completion and observed EN/ZH layouts at 2560×1440. Test4 adds PL/DE layouts and catalog at 1920×1080, the corrected item-link alignment and a Polish preference surviving restart. Both new logs retain the separate MCM slider exception; the F2 session records a 61.5 ms cold open. Enlarged Chinese, expanded PL/DE Loot and Trade, lower resolutions, view/zoom restart persistence and selected-implant export remain pending. This is partial acceptance, not global game compatibility certification.
+- Historical 1.7.42.5 evidence: Test3 confirms index completion and observed EN/ZH layouts at 2560×1440. Test4 adds PL/DE layouts and catalog at 1920×1080, the corrected item-link alignment and a Polish preference surviving restart. Both historical logs retain the separate MCM slider exception; the F2 session records a 61.5 ms cold open. Enlarged Chinese, expanded PL/DE Loot and Trade, lower resolutions, view/zoom restart persistence and selected-implant export remain pending. This is partial acceptance, not global game compatibility certification.
 
-Run `pwsh -NoProfile -File ./BUILD_AND_STAGE.ps1 -Mode TEST -ContractsOnly` for the contracts and behavior suites. No game files are needed for that command. The installer performs the actual Windows build against the local game.
+Run `pwsh -NoProfile -File ./BUILD_AND_STAGE.ps1 -Mode RELEASE -ContractsOnly` for the contracts and behavior suites. No game files are needed for that command. The installer performs the actual Windows build against the local game.
 
 Russian setup and game test: [INSTRUCTIONS_RU.md](INSTRUCTIONS_RU.md).
 Changes and limits: [FIX_REPORT_RU.md](FIX_REPORT_RU.md).
@@ -128,13 +130,13 @@ The recommended installation method is the Steam Workshop item linked above.
 
 ### Manual / source build
 
-For this DEV candidate, build the source on Windows with Quasimorph installed:
+For a local stable build on Windows with Quasimorph installed:
 
 ```powershell
 pwsh -NoProfile -ExecutionPolicy Bypass -File .\Install.ps1
 ```
 
-The full DEV archive contains source and a Git bundle. The installer compiles the DLL locally; game dependencies and compiled binaries are not bundled.
+The release source kit contains source, a Git bundle and version-specific preparation/publication launchers. The installer compiles the DLL locally; game dependencies and compiled binaries are not bundled. Use the preparation launcher for public releases so the source, payload, ZIP and receipt remain frozen together.
 
 ## Compatibility and safety
 

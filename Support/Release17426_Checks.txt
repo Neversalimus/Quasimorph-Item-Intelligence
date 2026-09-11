@@ -1,0 +1,14 @@
+Production C# behavior: PASS (693 assertions).
+Production enemy body/implant behavior: PASS (4939 assertions).
+Production weapon scatter: PASS (48 assertions; modern, legacy and incompatible API fixtures).
+Release behavior: PASS (32 assertions; native transports mocked).
+Production localization behavior: PASS (5385 assertions).
+Production MCM font ownership/lifecycle: PASS (38 assertions; Unity/MCM fixtures).
+Production browser viewport geometry: PASS (54917 assertions).
+Static build contracts: PASS
+CONTRACTS_RETURNED=0
+
+Independent Roslyn C# 5 compilation against supplied 1.0.4.582 dependencies: PASS
+112 production files; 118 game dependencies; 0 errors; 0 warnings.
+Game SHA256: 9D0C784A764D75EC6616BD3B5744C0E581BB1CE148FD175BD8CABA8195854006
+No Unity execution or Windows csc execution in this local compilation check.
