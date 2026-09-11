@@ -1,5 +1,13 @@
 ﻿# Changelog
 
+## v1.7.42.6-test1 — 2026-09-11
+
+- Add Spanish, Brazilian Portuguese and French: 657 translated keys per language, 1971 new values.
+- Add Español, Português (Brasil) and Français to MCM after the existing options; support Auto using the real Spanish / BrazilianPortugal / French game identifiers.
+- Localize decimal, percent and compact time formatting; retain game-language item names and private mixed-script font ownership.
+- Extend localization regression coverage to 5385 assertions, including every shipped key, aliases, switching, force/fallback behavior and Chinese game names with Latin UI.
+- Prepare a DEV-only source package and Workshop description drafts. In-game acceptance and native-speaker review of the new languages remain pending.
+
 ## v1.7.42.5 — 2026-09-10
 
 - Add German, Polish and Simplified Chinese UI and a separate MCM language selector; keep game-provided names and search in the game's language.

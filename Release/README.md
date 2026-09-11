@@ -1,8 +1,10 @@
 # Frozen release workflow
 
+Current checkout: **1.7.42.6-test1 (DEV)**. Use `Install.ps1` and `INSTRUCTIONS_RU.md` for DEV staging. The stable workflow below intentionally rejects this candidate; the v1.7.42.5 examples are historical stable-release instructions.
+
 These reusable scripts prepare and publish the accepted stable source. They reject DEV source. The default destination remains public Workshop item 3780078201 and GitHub repository Neversalimus/Quasimorph-Item-Intelligence.
 
-The v1.7.42.5 source kit includes thin version-specific launchers: preparation restores the accepted source commit from a hash-checked Git bundle into a separate checkout, then calls this workflow. Publication calls the frozen checkout's publisher. The launchers do not apply code patches or implement a second publishing mechanism. See INSTRUCTIONS_RU.md for the complete Windows sequence.
+The v1.7.42.5 source kit includes thin version-specific launchers: preparation restores the accepted source commit from a hash-checked Git bundle into a separate checkout, then calls this workflow. Publication calls the frozen checkout's publisher. The launchers do not apply code patches or implement a second publishing mechanism. See the original v1.7.42.5 release kit for its complete Windows sequence.
 
 After DEV game acceptance, prepare and review a stable source commit in a Git checkout. Promotion requires a stable Runtime version and marker, the matching GameplayExactness contract, the release installer and updated release notes. The build gates intentionally reject a mixed DEV/stable source tree. Do not use the older per-version publisher alongside this workflow.
 

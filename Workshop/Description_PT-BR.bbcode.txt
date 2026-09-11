@@ -1,0 +1,31 @@
+[h1]Item Intelligence — itens, receitas e fontes de saque[/h1]
+Vale a pena guardar, vender ou desmontar um item? Item Intelligence reúne as informações de que você precisa dentro de Quasimorph. Passe o cursor sobre um item e pressione [b]F2[/b] para consultar seus usos, receitas, munição compatível e fontes de obtenção.
+
+[h2]O que o mod oferece[/h2]
+[list]
+[*][b]Catálogo de itens[/b] com busca, categorias, filtros, favoritos e histórico.
+[*][b]Visão geral do item[/b] com suas principais relações e os dados de combate disponíveis.
+[*][b]Magnum[/b]: pesquisas relacionadas, materiais necessários e quantidades pendentes.
+[*][b]Receitas e desmontagem[/b]: o que você pode fabricar com o item, como fabricá-lo e o que recebe ao desmontá-lo. Inclui relações de produção das estações.
+[*][b]Comércio[/b]: estações que vendem ou aceitam o item, estoque, preços e totais por lote quando os dados estão disponíveis. Acesso à estação no mapa estelar.
+[*][b]Armas e munição[/b]: compatibilidade e detalhes dos modos de ataque ou disparo.
+[*][b]Fontes de saque[/b]: recipientes, inimigos, missões, recompensas de facções e formas especiais de obtenção, com suas condições.
+[/list]
+
+[h2]Uma interface mais confortável[/h2]
+Ative [b]Janela grande[/b] para usar até 94% da largura e da altura da tela. Ajuste o zoom de 100% a 200%; as visualizações normal e grande salvam suas preferências separadamente. Em telas pequenas, o tamanho efetivo se adapta para manter os controles acessíveis.
+
+[h2]Idiomas[/h2]
+Interface disponível em português do Brasil, espanhol, francês, inglês, russo, alemão, polonês e chinês simplificado.
+
+No [b]MCM[/b], escolha [b]Português (Brasil)[/b] ou [b]Auto (Game)[/b] para seguir o idioma de Quasimorph. Ao salvar, o navegador muda de idioma; os textos do MCM são atualizados ao reiniciar o jogo. Os nomes de itens, inimigos e facções, assim como a busca por esses nomes, seguem o idioma do jogo.
+
+[h2]Como interpretar as chances[/h2]
+A chance de um item em um inimigo se refere à sua geração, não à possibilidade de encontrar esse inimigo. A instalação de um implante e sua recuperação por amputação aparecem separadamente. [b]Condicional[/b] indica uma fonte possível cuja chance não foi confirmada. Os cálculos numéricos dependem dos dados e da compatibilidade da versão do jogo.
+
+[h2]Como usar[/h2]
+Inscreva-se no mod, ative-o e reinicie Quasimorph. A tecla padrão é [b]F2[/b] e pode ser alterada no MCM. Passe o cursor sobre um item para abrir sua ficha; você também pode explorar o catálogo pela janela do mod.
+
+O [b]Modo criador de mods[/b] opcional adiciona informações técnicas, filtros avançados e ações para criar itens reais na partida atual. Essas ações só são executadas quando você as utiliza explicitamente.
+
+Se encontrar uma tradução estranha ou um texto cortado, informe a tela, o idioma, a resolução e o zoom; uma captura de tela e o Player.log ajudam a reproduzir o problema.

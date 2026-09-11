@@ -1,0 +1,658 @@
+﻿@language=BrazilianPortugal;BrazilianPortuguese;PortugueseBrazil;Português (Brasil);Portugues (Brasil);pt-BR
+catalog.compact.all	TODOS
+catalog.compact.ammo	MUNIÇÃO
+catalog.compact.armor	ARMAD.
+catalog.compact.chips	CHIPS
+catalog.compact.consumables	CONSUM.
+catalog.compact.containers	CAIXAS
+catalog.compact.implants	IMPL.
+catalog.compact.other	OUTROS
+catalog.compact.weapons	ARMAS
+catalog.scope.all.compact	TODOS
+catalog.scope.favorites.compact	FAV.
+catalog.scope.recent.compact	RECENTES
+catalog.scope.all	TODOS OS ITENS
+catalog.scope.favorites	FAVORITOS
+catalog.scope.recent	HISTÓRICO
+catalog.favorite.short	FAV.
+catalog.label.data	DADOS
+catalog.data.any	QUALQUER
+catalog.data.recipes	RECEITAS
+catalog.data.sources	PRODUÇÃO NAS ESTAÇÕES
+catalog.data.consumers	USOS NAS ESTAÇÕES
+catalog.data.magnum	MAGNUM
+catalog.data.factions	FACÇÕES
+catalog.data.ammo	MUNIÇÃO
+catalog.data.disassembly	DESMONTAGEM
+catalog.label.sort	ORDEM
+catalog.sort.name	NOME
+catalog.sort.tech	TECN.
+catalog.sort.id	ID
+catalog.sort.recent	RECENTES
+catalog.sort.asc	CRESCENTE
+catalog.sort.desc	DECRESCENTE
+catalog.sort.fixed	ORDEM FIXA
+catalog.reset	REDEFINIR
+catalog.clear.history	LIMPAR HISTÓRICO
+catalog.full.all	TODOS OS ITENS
+catalog.full.ammo	MUNIÇÃO
+catalog.full.armor	ARMADURA E EQUIPAMENTO
+catalog.full.chips	CHIPS
+catalog.full.consumables	CONSUMÍVEIS
+catalog.full.containers	RECIPIENTES
+catalog.full.implants	IMPLANTES
+catalog.full.other	OUTROS
+catalog.full.weapons	ARMAS
+chrome.close	[{KEY}] FECHAR
+label.magnum	MAGNUM
+note.improved_variant	Variante aprimorada
+stats.ammo	MUNIÇÃO
+stats.weapons	ARMAS
+stats.magnum	MAGNUM
+stats.recipes	RECEITAS
+stats.trade	COMÉRCIO / ECON.
+tab.ammo	5 MUNIÇÃO
+tab.factions	6 FACÇÕES
+tab.loot	7 SAQUE
+tab.magnum	2 MAGNUM
+tab.overview	1 VISÃO GERAL
+tab.recipes	3 RECEITAS
+tab.trade	4 COMÉRCIO
+ui.1_7_section_q_e_tab_wheel_page_esc_close	[1-7] SEÇÃO   [Q/E] ABA   [RODA] ROLAR   [ESC] FECHAR
+ui.lmb_open_item	[CLIQUE ESQ.] ABRIR ITEM
+ui.after_all_magnum	Após todas as melhorias da Magnum
+ui.after_all_research	Após todas as pesquisas
+ui.after_open_research	Após as pesquisas desbloqueadas
+ui.all_related_research_is_already_completed	Todas as pesquisas relacionadas já foram concluídas.
+ui.alternative_recipes	Receitas alternativas
+ui.ammo	munição
+ui.ammo_links	Relações de munição
+ui.ammunition	MUNIÇÃO
+ui.amputate	amputar
+ui.amputation	amputação
+ui.amputation_drops	SAQUE POR AMPUTAÇÃO
+ui.any	qualquer
+ui.armor	armadura
+ui.available	disponível
+ui.available_2	DISPONÍVEL
+ui.available_3	disponível
+ui.available_now	Disponível agora
+ui.available_now_2	DISPONÍVEL AGORA
+ui.back	VOLTAR
+ui.barter_give	ENTREGAR
+ui.barter_option	OPÇÃO
+ui.barter_receive	RECEBER
+ui.barter_receive_this_item	TROCA — RECEBER ESTE ITEM
+ui.barter_recipes	Receitas de troca
+ui.barter_give_this_item	TROCA — ENTREGAR ESTE ITEM
+ui.bonus	bônus
+ui.boots	botas
+ui.buy_at_stations	VENDIDO NAS ESTAÇÕES
+ui.item_id	ID DO ITEM
+ui.catalog	CATÁLOGO
+ui.chance	CHANCE
+ui.base_share	PARCELA BASE
+ui.tech	TECN.
+ui.civil_resistance	Resistência civil
+ui.click_a_station_to_open_its_location_on_the_star	Clique em uma estação para vê-la no mapa estelar.
+ui.cloning	Clonagem
+ui.compact_intelligence_on_normal_hover	Mostrar informações compactas do item ao passar o cursor.
+ui.compatibility	COMPATIBILIDADE
+ui.compatible_weapons	ARMAS COMPATÍVEIS
+ui.completed	concluído
+ui.completed_research	Pesquisas concluídas
+ui.connecting_to_market_data	Conectando aos dados do mercado...
+ui.consumers	CONSUMIDORES
+ui.container	RECIPIENTE
+ui.container_2	Recipiente
+ui.container_3	Recipiente 
+ui.containers	RECIPIENTES COM SAQUE PRÓPRIO
+ui.context	TIPO DE LOCAL
+ui.conveyor	Esteira transportadora
+ui.corporate_stations	Estações corporativas
+ui.corpse	cadáver
+ui.corpse_bonus	bônus de cadáver
+ui.craftable	fabricável
+ui.crafted_by_recipes	Fabricado com receitas
+ui.crafted_from	Fabricado a partir de
+ui.crafted_from_2	FABRICADO A PARTIR DE
+ui.current_tech	TECN. ATUAL
+ui.disassembly_index	Carregando dados de desmontagem: 
+ui.disassembly_outputs	RESULTADOS DA DESMONTAGEM
+ui.obtained_by_disassembling	OBTIDO AO DESMONTAR
+ui.done	PRONTO
+ui.enable_item_intelligence	Ativar Item Intelligence
+ui.enemy	INIMIGO
+ui.enemy_corpse_loot	SAQUE DE INIMIGOS
+ui.english	Inglês
+ui.extra_item	item adicional
+ui.extra_weapon_ammo	munição da arma adicional
+ui.f2_close	[{KEY}] FECHAR
+ui.f2_item_analysis	[{KEY}]  ANÁLISE DO ITEM
+ui.faction	facção
+ui.faction_2	FACÇÃO
+ui.faction_index	Carregando dados das facções: 
+ui.faction_rewards	RECOMPENSAS DE FACÇÕES
+ui.faction_technology	Tecnologia da facção
+ui.floor	chão
+ui.future	  futuro
+ui.future_2	Futuro
+ui.future_3	FUTURO
+ui.granted_augmentation	aprimoramento predefinido
+ui.granted_implant	implante predefinido
+ui.granted_item	item concedido
+ui.granted_weapon_ammo	munição da arma concedida
+ui.head_gear	equipamento de cabeça
+ui.here	AQUI
+ui.in_locked_branches	Em ramificações bloqueadas
+ui.include_locked_future_magnum_upgrades	Incluir futuras melhorias bloqueadas da Magnum.
+ui.ingredient	ingrediente
+ui.item_intelligence	ITEM INTELLIGENCE
+ui.key_intel	RESUMO
+ui.leggings	proteção de pernas
+ui.location	local
+ui.locked	bloqueado
+ui.locked_2	bloqueado
+ui.loot_index	DADOS DE SAQUE  
+ui.low_rep	REP. BAIXA
+ui.magnum	Magnum
+ui.magnum_required	Magnum: necessário 
+ui.magnum_research	Pesquisa da Magnum
+ui.magnum_research_2	PESQUISA DA MAGNUM
+ui.market_processed	Mercado: processado 
+ui.master_switch_for_the_mod	Ativar ou desativar Item Intelligence.
+ui.mission_pools	CONJUNTOS DE MISSÃO
+ui.mission_workbench	Bancada de trabalho da missão
+ui.more_relationships	Mais relações
+ui.more_rows_format	+ {0} mais ({1})
+ui.no_disassembly_relationships	Nenhuma relação de desmontagem.
+ui.no_explicit_loot_sources_found_check_trade_recip	Nenhuma fonte explícita encontrada. Consulte Comércio, Receitas, Facções e eventos especiais.
+ui.no_recipe_or_disassembly_relationships	Nenhuma relação de receita ou desmontagem.
+ui.no_recipe_relationships	Nenhuma relação de receita.
+ui.no_related_magnum_research_was_found	Nenhuma pesquisa relacionada da Magnum foi encontrada.
+ui.no_trade_relationships_found_yet	Nenhuma relação comercial encontrada até agora.
+ui.no_weapon_ammo_relationships	Nenhuma relação entre armas e munição.
+ui.none	nenhum
+ui.not_found	não encontrado
+ui.not_required	não necessário
+ui.note	Nota
+ui.now	  agora
+ui.other_compatible_item_intelligence_features_rema	As outras seções não são afetadas.
+ui.other_uses_also_exist	Também possui outros usos
+ui.owned	Em posse
+ui.page	PÁGINA 
+ui.pirates	Piratas
+ui.possible_outcomes	Resultados possíveis
+ui.price	PREÇO
+ui.trade_repricing_note	Primeira → última unidade do lote. O preço é recalculado por unidade; o estoque pode mudar antes da chegada.
+ui.next	PRÓXIMA
+ui.batch	LOTE
+ui.trade_previous_note	PRÓXIMA = próxima unidade; LOTE = total das próximas 5 ou do estoque restante. Preço recalculado por unidade.
+ui.trade_payout	PAGAMENTO
+ui.trade_stock_short	EM ESTOQUE
+ui.trade_all	TUDO
+ui.trade_pcs	UN.
+ui.trade_total	TOTAL
+ui.primary_ammo	munição principal
+ui.primary_weapon	arma principal
+ui.production	PRODUÇÃO
+ui.profile	PERFIL
+ui.qty	QTD.
+ui.qty_rolls	QTD./SORTEIOS
+ui.quasimorph_sources	Fontes de quasimorfos
+ui.quick_intelligence	Informações rápidas
+ui.random_augmentation	aprimoramento aleatório
+ui.random_implant	implante aleatório
+ui.recipe	Receita 
+ui.recognized_as_a_trade_item_but_current_game_tabl	Item comercial; nenhuma entrada de comércio encontrada.
+ui.recyclable	reciclável
+ui.remaining	 restante
+ui.required_for_open_research	Necessário para pesquisas desbloqueadas
+ui.result	RESULTADO
+ui.reward	RECOMPENSA %
+ui.role	Função
+ui.roll	/sorteio
+ui.rolls	SORTEIOS
+ui.rolls_2	 sorteios
+ui.rows	 LINHAS
+ui.search_item	BUSCAR ITEM...
+ui.secondary_ammo	munição secundária
+ui.secondary_weapon	arma secundária
+ui.sell_to_stations	ACEITO PELAS ESTAÇÕES
+ui.show_ammo_relations	Mostrar relações de munição
+ui.show_barter_and_consumer_relationships	Mostrar estações compradoras e insumos das receitas da economia das estações.
+ui.show_future_magnum_uses	Mostrar usos futuros na Magnum
+ui.show_magnum_surplus	Mostrar excedente da Magnum
+ui.show_magnum_uses	Mostrar usos na Magnum
+ui.show_production_and_barter_source_relationships	Mostrar fontes de saque, estações vendedoras e produtos das receitas da economia das estações.
+ui.show_recipes	Mostrar receitas
+ui.show_remaining_amount_relative_to_all_unfinished	Mostrar a quantidade restante para todas as melhorias pendentes da Magnum.
+ui.show_sources	Mostrar fontes de obtenção
+ui.show_trade_information	Mostrar usos de venda e troca
+ui.show_unfinished_magnum_upgrade_uses	Mostrar usos nas melhorias pendentes da Magnum.
+ui.show_used_in_and_crafted_from_relationships	Mostrar relações de «Usado em» e «Fabricado a partir de».
+ui.show_weapon_ammo_relationships	Mostrar relações entre armas e munição.
+ui.source	FONTE
+ui.sources	FONTES
+ui.sources_producers	FONTES / PRODUTORES
+ui.sources_trade	FONTES E COMÉRCIO
+ui.state_unknown	desconhecido
+ui.station	ESTAÇÃO
+ui.station_2	estação
+ui.station_list_is_unavailable_from_the_current_gam	Os dados das estações estão indisponíveis.
+ui.stations	Estações
+ui.status	ESTADO
+ui.status_2	ESTADO
+ui.stock	ESTOQUE
+ui.tech_lock	BLOQUEIO TECN.
+ui.this_item	ESTE ITEM
+ui.this_is_not_a_safe_to_sell_value_the_item_has_ot	Também é usado em outros lugares.
+ui.this_item_was_not_found_in_faction_reward_pools	Este item não foi encontrado nos conjuntos de recompensas das facções.
+ui.total_remaining	Total restante
+ui.trade	comércio
+ui.trade_consumers	COMÉRCIO / CONSUMIDORES
+ui.trade_links	Relações comerciais
+ui.travel	VIAGEM
+ui.type	TIPO
+ui.unlock	DESBLOQUEIO
+ui.used_by_recipes	Usado em receitas
+ui.used_in	Usado em
+ui.used_in_2	USADO EM
+ui.used_in_barter	Usado em trocas
+ui.vanilla_exposes_the_remaining_total_but_the_rela	Detalhes da pesquisa indisponíveis.
+ui.var	 var.
+ui.variants	 variantes
+ui.weapon	arma
+ui.wheel_pgup_pgdn	   •   RODA: ROLAR   PGUP/PGDN: RÁPIDO
+ui.workbench	Bancada de trabalho: 
+ui.wound_slot	ESPAÇO DE FERIDA
+ui.wound_slot_2	espaço de ferida
+ammo.index_prefix	Carregando dados das armas: 
+loot.note.amputation	Chance base após uma amputação bem-sucedida, sem a melhoria da Magnum que garante aprimoramentos. Implantes instalados são mostrados separadamente.
+loot.note.augmentation_woundslot	Pode aparecer como módulo de uma parte do corpo do inimigo.
+loot.note.augmentations	Chance = aprimoramento instalado. Sorteios = tentativas de geração; as chances de aprimoramentos aleatórios são condicionais.
+loot.note.container_chance	A chance dos recipientes posicionados manualmente depende do contexto da missão ativa.
+loot.note.corpse_transfer	Ao morrer, o inventário e o equipamento passam para o cadáver, exceto as mãos nuas. Um inventário cheio pode causar o descarte do item.
+loot.note.enemy_chance	CHANCE = geração do item neste inimigo, não a chance de encontrar o inimigo. O intervalo depende da tecnologia e da facção.
+loot.note.implants	Chance = implante instalado na geração do inimigo. «Amputar X%» = chance de recuperá-lo.
+loot.note.mission_pools	O item faz parte do conjunto normal de saque destas missões e pode aparecer em um recipiente ou no chão.
+loot.note.placement_generic	O saque das salas pode ir para recipientes; o dos corredores fica no chão.
+loot.note.placement_percent_prefix	Posicionamento: nas salas, a tentativa de colocar em um recipiente tem chance de 
+loot.note.placement_percent_suffix	% ; caso contrário, no chão. Nos corredores, fica sempre no chão.
+loot.note.random_equipment	Mostra a chance de geração. Um inventário inimigo cheio pode causar o descarte dos itens gerados.
+loot.note.tech	TECN. = tecnologia mínima da fonte, incluindo a tecnologia do item e o bônus de equipamento inimigo.
+overview.trade.consumers_separator	 / consumidores 
+overview.trade.sources_prefix	fontes 
+tab.overview.short	VISÃO GERAL
+tab.magnum.short	MAGNUM
+tab.recipes.short	RECEITAS
+tab.trade.short	COMÉRCIO
+tab.ammo.short	MUNIÇÃO
+tab.factions.short	FACÇÕES
+tab.loot.short	SAQUE
+magnum.module.navigation	Navegação
+magnum.module.research	Pesquisa
+magnum.module.hangar	Hangar
+magnum.module.supply	Suprimentos
+magnum.module.cloning	Clonagem
+magnum.module.science	Ciência
+magnum.module.medical	Medicina
+magnum.module.engineering	Engenharia
+magnum.module.industry	Indústria
+magnum.module.security	Segurança
+magnum.module.logistics	Logística
+magnum.module.communications	Comunicações
+magnum.module.storage	Armazenamento
+magnum.module.command	Comando
+magnum.module.crew	Tripulação
+magnum.module.armory	Arsenal
+magnum.module.workshop	Oficina
+magnum.module.training	Treinamento
+magnum.module.habitation	Habitação
+magnum.node.scanner	Scanner
+magnum.node.travel	Viagem
+magnum.node.shuttle	Nave de transporte
+magnum.node.capsule	Cápsula
+magnum.node.trade	Comércio
+source.station	estação
+source.stations	estações
+source.barter	troca
+mcm.header.general	Geral
+mcm.header.tooltip	Dica
+mcm.header.inspector	Navegador
+mcm.header.information	Informações
+mcm.show_f2_hint	Mostrar dica da tecla do navegador
+mcm.show_f2_hint_tip	Mostrar a dica da tecla do navegador ao passar o cursor sobre itens. Tecla atual: {KEY}.
+mcm.enable_browser	Ativar navegador de itens
+mcm.enable_browser_tip	Pressione {KEY} ao passar o cursor sobre um item. Os detalhes exibidos com Alt não mudam.
+mcm.inspector_hotkey	Tecla para abrir o navegador
+mcm.inspector_hotkey_tip	Escolha a tecla do navegador. A busca aceita digitação normal; Esc fecha a janela durante a digitação.
+mcm.show_interface_icons	Ícones de interface mínimos
+mcm.show_interface_icons_tip	Mostrar ícones de interface minimalistas. Os ícones dos itens e os indicadores funcionais de estado são mantidos.
+ui.trade_layout_view	VISUAL
+ui.trade_layout_cards_short	F
+ui.trade_layout_table_short	T
+mcm.mod_name	Item Intelligence - Banco de itens e fontes de saque
+compat.disabled_feature	Este recurso está temporariamente indisponível.
+mcm.save_failed	Não foi possível salvar as configurações do Item Intelligence.
+station_group.corporate	Estações corporativas
+station_group.resistance	Resistência civil
+station_group.quasimorph	Fontes de quasimorfos
+station_group.pirates	Piratas
+station_group.stations	Estações
+loot.container.common_box	Caixa comum
+loot.container.common_container	Recipiente comum
+loot.container.common_rack	Estante comum
+loot.container.common_locker	Armário comum
+loot.container.cloth_locker	Armário de roupas
+loot.container.wooden_box	Caixa de madeira
+loot.container.industry	Recipiente industrial
+loot.container.science	Recipiente científico
+loot.container.medical	Recipiente médico
+loot.container.medical_case	Maleta médica
+loot.container.medical_holder	Prateleira médica
+loot.container.weapon_case_big	Maleta grande de armas
+loot.container.weapon_case_small	Maleta pequena de armas
+loot.container.elite_weapon_case	Maleta de armas de elite
+loot.container.weapon_stand	Suporte de armas
+loot.container.ammo_case	Caixa de munição
+loot.container.data	Recipiente de dados
+loot.container.server	Recipiente de servidor
+loot.container.tool_case	Caixa de ferramentas
+loot.column.container_profile	TIPO / PERFIL
+loot.column.save_estimate	CHANCE EST.
+loot.column.base_chance	CHANCE BASE
+loot.container.trash_can	Lixeira
+loot.container.armor_locker	Armário de armaduras
+loot.container.food	Recipiente de alimentos
+loot.container.plants	Recipiente de plantas
+loot.container.aztec_chest	Baú asteca
+loot.container.matrix_box	Caixa de matriz
+loot.container.gas_barrel	Barril de combustível
+loot.container.toxic_barrel	Barril tóxico
+loot.container.water_sink	Pia
+loot.container.blood_sink	Pia com sangue
+loot.container.toilet	Vaso sanitário
+loot.container.water_tank	Tanque de água
+loot.container.corpse_pile	Pilha de cadáveres
+loot.container.station_stash	Esconderijo da estação
+loot.container.airdrop_capsule	Cápsula de entrega aérea
+loot.container.autonomous_capsule	Cápsula autônoma
+loot.container.aztec_altar	Altar asteca
+loot.container.snowman	Boneco de neve
+loot.container.aed_case	Caixa de desfibrilador
+loot.container.extinguisher_holder	Suporte de extintor
+loot.container.watermelon_growbox	Caixa de cultivo de melancias
+loot.container.cabbage_growbox	Caixa de cultivo de repolhos
+loot.container.silence_casket	Caixão do silêncio
+loot.station_type.industrial	Industrial
+loot.station_type.lab	Laboratório
+loot.station_type.mine	Mina
+loot.station_type.military	Militar
+loot.station_type.prison	Prisão
+loot.station_type.colony_farm	Colônia agrícola
+loot.station_type.civilian	Civil
+loot.station_type.quasimorphic_temple	Templo quasimórfico
+loot.station_type.space_station	Estação espacial
+loot.station_type.bramfatura	Bramfatura
+ui.close_current_ship_screen_before_starmap	Feche a tela atual da nave antes de abrir o mapa estelar.
+ui.starmap_unavailable_in_bramfatura	O mapa estelar está indisponível no espaço de Bramfatura. Conclua ou abandone a descida primeiro.
+ui.starmap_unavailable_during_raid_prep	O mapa estelar está indisponível durante a preparação da incursão. Feche a tela de preparação primeiro.
+ui.starmap_unavailable_during_travel	O mapa estelar está indisponível durante a viagem. Aguarde a chegada.
+ui.secret_data_rewards	DADOS SECRETOS — RECOMPENSAS DE FACÇÕES
+ui.secret_data_rewards_note	Pacote inicial fixo e recompensa de reputação.
+ui.secret_data_items	itens
+ui.secret_data_rep	rep.
+ui.secret_data_view	VER
+ui.secret_data_back	← VOLTAR ÀS FACÇÕES
+ui.secret_data_reputation	REPUTAÇÃO
+ui.secret_data_package	PACOTE INICIAL
+ui.secret_data_story_effect	Esta entrega possui tratamento narrativo próprio e pode avançar a história da facção.
+ui.secret_data_no_rewards	As recompensas de Dados secretos estão indisponíveis.
+ui.chip_unlocks	DESBLOQUEIA
+ui.back_to	← VOLTAR A
+compat.module	Módulo
+compat.reason	Motivo:
+ui.chip_unlock_chance_note	A chance se refere a um chip. Itens já desbloqueados permanecem no conjunto de seleção.
+ui.chip_summary_unlocked	desbloqueado
+ui.chip_summary_locked	bloqueado
+ui.chip_summary_unknown	desconhecido
+ui.baron_guaranteed_one_pact	1 pacto garantido
+ui.baron_this_pact	Este pacto:
+ui.baron_depends_on_mission_tech	depende da tecnologia da missão
+ui.overview_magnum_available_now	disponível agora
+ui.overview_magnum_not_available_now	indisponível agora
+ui.overview_magnum_all_completed	tudo pesquisado
+ui.loot_accordion_hint	▶ / ▼  Clique em uma seção para expandir ou recolher
+ui.baron_habitat	Habitat
+ui.baron_guaranteed	Garantido
+ui.baron_one_pact	1 pacto
+ui.loot_quick_jump	ACESSO RÁPIDO
+ui.jump	IR
+ui.weapon_modes	MODOS
+ui.mode_when_empty	Sem munição
+ui.mode_single	Único
+ui.mode_burst	Rajada
+ui.mode_auto	Automático
+ui.mode_launcher	Lançador
+ui.mode_throw	Arremesso
+ui.mode_melee	Corpo a corpo
+ui.mode_buttstroke	Coronhada
+ui.mode_single_shot	Tiro único
+ui.mode_shots	Disparos
+ui.mode_accuracy	Precisão
+ui.mode_damage	Dano
+ui.mode_scatter	Dispersão
+ui.mode_shot_delay	Intervalo
+ui.mode_ammo	Munição
+ui.mode_full_ammo_required	Exige toda a munição
+ui.unit_seconds_short	s
+ui.mode_stab	Estocada
+ui.mode_slash	Corte
+ui.mode_chop	Golpe de machado
+ui.mode_smash	Pancada
+ui.mode_punch	Soco
+ui.mode_tooltip_fire	Modo de disparo
+ui.mode_tooltip_attack	Modo de ataque
+ui.mode_rate_of_fire	Cadência de tiro
+ui.mode_damage_modifier	Mod. de dano
+ui.mode_ammo_consumption	Consumo de munição
+mcm.modder_mode	Modo criador de mods
+mcm.modder_mode_tip	Mostrar dados técnicos e o painel de criação de itens. Os itens criados são salvos na partida atual.
+ui.modder_section	MODIFICAÇÃO
+ui.modder_record_type	Tipo de registro
+ui.modder_item_class	Classe do item
+ui.modder_tech_level	Nível tecnológico
+ui.modder_relation_id	ID da relação
+ui.modder_firemode_ids	IDs dos modos de disparo
+ui.modder_search_syntax	Busca avançada: id:  name:  type:  rel:  tech:  cat:   Exemplo: cat:weapon tech:>=5
+ui.search_item_modder	BUSCAR...  id: / tech: / cat:
+ui.open_item_link	ABRIR ITEM
+ui.modder_spawn_title	AÇÕES DE MODIFICAÇÃO
+ui.modder_spawn_save_warning	Cria um item real nesta partida salva.
+ui.modder_spawn_clone	ADICIONAR 1 AO CLONE
+ui.modder_spawn_cargo	ADICIONAR 1 À CARGA
+ui.modder_spawn_failed	O item não foi adicionado.
+ui.modder_spawn_invalid_item	Não é possível criar este registro de item.
+ui.modder_spawn_wait	Aguarde a conclusão da ação atual.
+ui.modder_spawn_clone_unavailable	O inventário do clone está indisponível.
+ui.modder_spawn_contract_unavailable	A criação de itens está indisponível nesta versão do jogo.
+ui.modder_spawn_clone_success	Adicionado ao inventário do clone.
+ui.modder_spawn_inventory_full	O inventário do clone está cheio.
+ui.modder_spawn_cargo_unavailable	A carga da nave está indisponível.
+ui.modder_spawn_cargo_success	Adicionado à carga da nave.
+ui.other_containers	POSICIONAMENTO EM RECIPIENTES GERAIS
+ui.mission	MISSÃO
+ui.yes	SIM
+ui.mission_generation	MECÂNICA
+loot.note.general_spawn	✓ = o recipiente pode receber o item após a geração normal de saque da missão. Indica posicionamento, não outra chance de saque; o item pode ficar no chão.
+ui.loot_modifiers_current	MODIFICADORES: ATUAIS
+ui.loot_modifiers_manual	MODIFICADORES: MANUAIS
+ui.loot_marauder	Saqueador
+ui.loot_marika_organization	Marika — Organização
+ui.loot_laksha_field_medic	Laksha — Médico de campo
+ui.loot_on	LIGADO
+ui.loot_off	DESLIGADO
+ui.loot_pp	pp
+ui.bonus_corpse_loot	SAQUE ADICIONAL DE CADÁVERES
+ui.bonus_rolls	SORTEIOS ADICIONAIS
+loot.note.corpse_bonus_rolls	Saqueador e Organização adicionam sorteios de saque de cadáveres. Intervalo = número de sorteios; % entre parênteses = chance do máximo de sorteios; FINAL = chance de obter o item ao menos uma vez.
+ui.per_roll	POR SORTEIO
+ui.final_chance	FINAL
+ui.mode_damage_per_ap_default	Dano/PA (padrão)
+loot.note.unknown_container_rolls	? = o número exato de sorteios é desconhecido; a chance total não é calculada.
+ui.station_production_produced_from	PRODUÇÃO DA ESTAÇÃO — PRODUZIDO A PARTIR DE
+ui.station_production_used_to_produce	PRODUÇÃO DA ESTAÇÃO — USADO PARA PRODUZIR
+ui.station_production_note	Receita de produção de estação. Ativa apenas nas estações cujo conjunto de produção atual a inclui.
+ui.station_production_output	PRODUTO
+ui.station_production_input	INSUMO
+ui.station_production_recipe	RECEITA DE ESTAÇÃO
+ui.no_active_faction_reward_in_current_save	Este item está apenas nos conjuntos de recompensas de facções indisponíveis nesta partida.
+loot.note.enemy_bonus_separate	Saqueador e Organização não alteram a chance de equipamento inimigo; adicionam sorteios separados de saque de cadáveres.
+ui.mode_critical_damage_per_ap_default	Dano crítico/PA (padrão)
+ui.faction_technology_navigation_unavailable	A navegação até a tecnologia da facção está indisponível no contexto atual.
+ui.scavenger_mission_rewards	CATADORES — CHANCE DO ITEM EM MISSÃO BEM-SUCEDIDA
+ui.rows_visible	LINHAS
+ui.opponent	OPONENTE
+ui.scavenger_current_missions	MISSÕES ELEGÍVEIS: 
+ui.scavenger_best_chance	MELHOR CHANCE: 
+ui.scavenger_time_left	TEMPO RESTANTE
+stats.tech	TECN.
+stats.modes	MODOS
+ui.overview_combat	COMBATE
+ui.overview_damage_ap_short	DANO/PA
+ui.overview_crit_short	CRÍT.
+ui.overview_relationships	RELAÇÕES DESTE ITEM
+ui.overview_magnum_research	Pesquisa da Magnum
+ui.overview_used_in_recipes	Usado em receitas
+ui.overview_crafted_by_recipes	Fabricado com receitas
+ui.overview_obtainable_by_disassembly	Obtido por desmontagem
+ui.overview_disassembles_into	Desmonta em
+ui.overview_compatible_ammo	Munição compatível
+ui.overview_compatible_weapons	Armas compatíveis
+ui.overview_recipe_ingredients	Ingredientes da receita
+ui.overview_no_core_links	Nenhuma relação básica aqui; consulte Comércio, Facções ou Saque para ver fontes no mundo.
+loot.baron.section	SAQUE DO BARÃO
+loot.baron.column.baron	BARÃO
+loot.baron.column.qmorph	QUASIMORFOSE
+loot.baron.column.item_chance	ESTE PACTO
+loot.baron.column.any_pact	PACTO
+loot.baron.column.death_restore	RESTAURAR
+loot.note.baron_ultimate_death	Um barão deixa 1 pacto. O pacto depende da tecnologia da missão e do saque disponível.
+loot.note.baron_dynamic_tech	Intervalo = o conjunto depende da tecnologia da missão ou facção quando o barão é gerado.
+loot.note.baron_ksiomara_exception	História: o jogo base pode substituir um barão normal por Ksiomara. Esta linha não se aplica a Ksiomara.
+loot.note.baron_consumption_bound	Se RESTAURAR <100%, o intervalo do pacto inclui o limite seguro exato de consumo antes da morte; não se presume quando a IA agirá.
+loot.special.section	OUTRAS FONTES
+loot.special.condition	CONDIÇÃO
+loot.special.result	RESULTADO
+loot.special.deterministic	GARANTIDO AO ATIVAR
+loot.special.outcome_dependent	DEPENDE DO RESULTADO
+loot.special.story_reward	RECOMPENSA DE HISTÓRIA
+loot.special.starting_loadout	EQUIPAMENTO INICIAL
+loot.special.ancom_exchange	TROCA DE DADOS SECRETOS
+loot.special.expire_conversion	CONVERSÃO DE ITEM
+loot.special.skull_ritual	RITUAL DE CRÂNIO
+loot.special.story_script	ROTEIRO DE HISTÓRIA
+loot.special.complete_story_mission	Concluir a missão de história
+loot.special.story_mission	Missão de história
+loot.special.selected_start_preset	Conjunto inicial fixo selecionado + equipamento inicial aleatório desativado
+loot.special.exchange_secret_data	Trocar dados secretos da AnCom
+loot.special.item_expires	O item de origem expira
+loot.special.ritual_failed	Resultado de ritual fracassado
+loot.special.ritual_outcome	Resultado de ritual correspondente
+loot.special.story_trigger	Evento de história / posicionamento por roteiro
+loot.special.use_byproduct	SUBPRODUTO DE USO
+loot.special.death_gift	PRESENTE DA MORTE
+loot.special.mission_reward_pool	CONJUNTO DE RECOMPENSAS DE MISSÃO
+loot.special.mission_orbit_reward_pool	CONJUNTO DE RECOMPENSAS DE MISSÃO / ÓRBITA
+loot.special.random_starting_pool	CONJUNTO INICIAL ALEATÓRIO
+loot.special.station_production_reward	RECOMPENSA DE PRODUÇÃO DA ESTAÇÃO
+loot.special.death_gift_source	Presente da morte
+loot.special.random_start_source	Equipamento inicial aleatório
+loot.special.use_source_item	Usar / consumir o item de origem
+loot.special.death_gift_condition	Presente da morte ativado + elegibilidade para recompensa
+loot.special.faction_reward_condition	Conjunto de recompensas da facção / requisito tecnológico
+loot.special.random_start_condition	Equipamento inicial aleatório ativado
+loot.special.station_production_condition	Na produção atual da estação + pontos de recompensa suficientes
+loot.note.container_context_chance	≈ = chance de obter o item ao menos uma vez. Sorteios e Saqueador ATUAIS/MANUAIS; tecnologia de missão/facção. Exclui orçamento, tecnologia temporária e eventos do local.
+loot.note.container_modifier_unavailable	* = apenas sorteios base: o valor atual de Saqueador está indisponível. No espaço, escolha MANUAIS.
+loot.note.container_save_unavailable	— = sem estimativa exata: a tecnologia da partida, o conjunto elegível ou o intervalo de sorteios base está indisponível.
+loot.special.other_section	OBTENÇÃO ESPECIAL
+loot.special.reward_section	RECOMPENSAS DE FACÇÕES
+loot.special.start_section	INÍCIO DE NOVA PARTIDA
+loot.special.result_pool	CONJUNTO
+loot.special.result_outcome	RESULTADO
+loot.special.result_guaranteed	GARANTIDO
+loot.special.result_conditional	CONDICIONAL
+loot.special.kind_story	MISSÃO DE HISTÓRIA
+loot.special.kind_start	INÍCIO
+loot.special.kind_secret_data	DADOS SECRETOS
+loot.special.kind_expire	EXPIRAÇÃO
+loot.special.kind_ritual	RITUAL
+loot.special.kind_story_script	HISTÓRIA
+loot.special.story_source	Ramificação da história
+loot.special.kind_use	AO USAR
+loot.special.kind_death	APÓS A MORTE
+loot.special.kind_mission_reward	RECOMPENSA DE MISSÃO
+loot.special.kind_reward	RECOMPENSA
+loot.special.kind_start_pool	CONJUNTO INICIAL
+loot.special.kind_station_reward	PRODUÇÃO
+loot.special.cond_complete	Concluir missão
+loot.special.cond_fixed_start	Conjunto fixo • início aleatório desativado
+loot.special.cond_exchange	Trocar
+loot.special.cond_expire	Após expirar
+loot.special.cond_ritual_failed	Fracasso
+loot.special.cond_ritual_upgrade	Melhoria
+loot.special.cond_ritual_sidegrade	Troca equivalente
+loot.special.cond_ritual_downgrade	Rebaixamento
+loot.special.cond_ritual_outcome	Resultado do ritual
+loot.special.cond_story	Ao ocorrer o evento de história
+loot.special.cond_use	Após o uso, quando a regra do item é ativada
+loot.special.cond_death	Ao morrer: recompensa permitida
+loot.special.cond_mission	Missão
+loot.special.cond_mission_orbit	Missão / órbita
+loot.special.cond_random_start	Início aleatório
+loot.special.cond_station_current	Na produção da estação; pontos suficientes
+loot.special.result_in_pool	NO CONJUNTO
+loot.special.header_method	MÉTODO
+loot.special.header_status	ESTADO
+loot.special.header_faction	FACÇÃO
+loot.special.header_where	ONDE
+loot.special.header_requirement	REQUISITO
+loot.special.header_loadout	EQUIPAMENTO
+loot.special.header_mode	MODO
+loot.special.kind_fixed_start	EQUIPAMENTO FIXO
+loot.special.kind_mission_only	MISSÃO
+loot.special.kind_mission_orbit	MISSÃO / ÓRBITA
+loot.special.kind_random_pool	CONJUNTO ALEATÓRIO
+loot.special.cond_no_extra_requirement	SEM REQUISITOS ADICIONAIS
+loot.special.cond_random_start_enabled	Equipamento aleatório ativado
+loot.special.cond_fixed_start_enabled	Equipamento aleatório desativado
+loot.note.faction_reward_sources	✓ = o item está no conjunto, não é garantido. «Missão/órbita» exige tecnologia. «Produção» = a estação tem o item e pontos de recompensa suficientes.
+loot.note.starting_sources	Apenas em uma nova partida: um conjunto fixo concede o item; um conjunto aleatório apenas pode selecioná-lo.
+loot.general_spawn.placement	POSICIONAMENTO
+loot.column.container	RECIPIENTE
+loot.note.special_sources	Caminhos raros. Para rituais: «Fonte» = crânio inicial; «Condição» = resultado necessário.
+loot.special.fixed_loadout_count	CONJUNTOS DE EQUIPAMENTO
+loot.special.story_missions_count	Missões de história ×{0}
+loot.note.container_modifier_basic	* = apenas sorteios base: o valor atual de Saqueador está indisponível.
+loot.note.container_save_compatibility	— = as estimativas de chance desta partida estão temporariamente indisponíveis após uma atualização do jogo.
+loot.note.manual_unavailable	O cálculo manual está temporariamente indisponível.
+loot.note.manual_compatibility	O cálculo manual está temporariamente indisponível após uma atualização do jogo.
+loot.note.container_calculation_unavailable	— = as estimativas de chance desta partida estão temporariamente indisponíveis.
+mcm.header.language	Idioma
+mcm.language	Idioma do Item Intelligence
+mcm.language_tip	Auto segue o idioma de Quasimorph. A seleção manual altera apenas a interface do Item Intelligence; nomes de itens e facções fornecidos pelo jogo permanecem no idioma do jogo.
+ui.loot_storage_short	R
+ui.loot_corpse_short	C
+ui.loot_implant_short	I
+ui.loot_storage_corpse_short	R/C
+ui.unit_day_short	d
+ui.unit_hour_short	h
+ui.unit_minute_short	m
+ui.body_dependent	Condicional
+loot.note.body_dependent	«Condicional» indica uma fonte possível cuja chance não foi confirmada. A disponibilidade depende da geração do corpo e dos limites de instalação.
+ui.view_expand	Janela grande
+ui.view_window	Janela normal
+ui.view_zoom	Zoom
+ui.view_save_failed	Não foi possível salvar as configurações da janela.

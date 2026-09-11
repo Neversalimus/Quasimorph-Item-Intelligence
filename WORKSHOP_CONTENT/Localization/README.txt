@@ -2,7 +2,10 @@
 ================================
 
 Built in: English (en.lang), Russian (ru.lang), German (de.lang), Polish (pl.lang),
-Simplified Chinese (zh-Hans.lang). Each file and TranslationTemplate.lang has 651 keys.
+Simplified Chinese (zh-Hans.lang), Spanish (es.lang), Brazilian Portuguese
+(pt-BR.lang), and French (fr.lang). Each of the eight languages and
+TranslationTemplate.lang has 657 keys. Brazilian Portuguese uses the actual game
+identifier BrazilianPortugal; it does not claim European Portuguese (pt-PT).
 
 MCM language selection
 ----------------------

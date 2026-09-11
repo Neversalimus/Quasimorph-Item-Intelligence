@@ -1,0 +1,31 @@
+[h1]Item Intelligence — objetos, recetas y fuentes de botín[/h1]
+¿Conviene guardar un objeto, venderlo o desmontarlo? Item Intelligence reúne la información que necesitas dentro de Quasimorph. Pasa el cursor sobre un objeto y pulsa [b]F2[/b] para consultar sus usos, recetas, munición compatible y fuentes de obtención.
+
+[h2]Qué ofrece[/h2]
+[list]
+[*][b]Catálogo de objetos[/b] con búsqueda, categorías, filtros, favoritos e historial.
+[*][b]Resumen del objeto[/b] con sus principales relaciones y datos de combate disponibles.
+[*][b]Magnum[/b]: investigaciones relacionadas, materiales necesarios y cantidades pendientes.
+[*][b]Recetas y desmontaje[/b]: qué puedes fabricar con el objeto, cómo fabricarlo y qué se obtiene al desmontarlo. Incluye relaciones de producción de estaciones.
+[*][b]Comercio[/b]: estaciones que venden o aceptan el objeto, existencias, precios y totales por lote cuando los datos están disponibles. Acceso a la estación en el mapa estelar.
+[*][b]Armas y munición[/b]: compatibilidad y detalles de los modos de ataque o disparo.
+[*][b]Fuentes de botín[/b]: contenedores, enemigos, misiones, recompensas de facciones y formas especiales de obtención, con sus condiciones.
+[/list]
+
+[h2]Una interfaz más cómoda[/h2]
+Activa [b]Ventana grande[/b] para usar hasta el 94 % del ancho y alto de la pantalla. Ajusta el zoom entre el 100 % y el 200 %; la vista normal y la grande guardan sus preferencias por separado. En pantallas pequeñas, el tamaño efectivo se adapta para mantener accesibles los controles.
+
+[h2]Idiomas[/h2]
+Interfaz disponible en español, portugués de Brasil, francés, inglés, ruso, alemán, polaco y chino simplificado.
+
+En [b]MCM[/b], elige [b]Español[/b] o [b]Auto (Game)[/b] para seguir el idioma de Quasimorph. Al guardar, el explorador cambia de idioma; las etiquetas de MCM se actualizan al reiniciar el juego. Los nombres de objetos, enemigos y facciones, así como la búsqueda por esos nombres, siguen el idioma del juego.
+
+[h2]Cómo interpretar las probabilidades[/h2]
+La probabilidad de un objeto en un enemigo se refiere a su generación, no a la posibilidad de encontrar a ese enemigo. La instalación de un implante y su recuperación por amputación se muestran por separado. [b]Condicional[/b] indica una fuente posible cuya probabilidad no está confirmada. Los cálculos numéricos dependen de los datos y de la compatibilidad de la versión del juego.
+
+[h2]Uso[/h2]
+Suscríbete al mod, actívalo y reinicia Quasimorph. La tecla predeterminada es [b]F2[/b] y puede cambiarse en MCM. Pasa el cursor sobre un objeto para abrir su ficha; también puedes explorar el catálogo desde la ventana del mod.
+
+El [b]Modo creador de mods[/b] opcional añade información técnica, filtros avanzados y acciones para crear objetos reales en la partida actual. Estas acciones se ejecutan únicamente al usarlas expresamente.
+
+Si encuentras una traducción extraña o una etiqueta recortada, indica la pantalla, el idioma, la resolución y el zoom; una captura y Player.log ayudan a reproducir el problema.

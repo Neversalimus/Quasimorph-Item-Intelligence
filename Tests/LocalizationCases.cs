@@ -70,7 +70,8 @@ namespace ItemIntelligence
         {
             string dir = Path.Combine(root, "Localization");
             string[,] languages = { { "EnglishUS", "en.lang", "English" }, { "Russian", "ru.lang", "Русский" },
-                { "German", "de.lang", "Deutsch" }, { "Polish", "pl.lang", "Polski" }, { "ChineseSimp", "zh-Hans.lang", "简体中文" } };
+                { "German", "de.lang", "Deutsch" }, { "Polish", "pl.lang", "Polski" }, { "ChineseSimp", "zh-Hans.lang", "简体中文" },
+                { "Spanish", "es.lang", "Español" }, { "BrazilianPortugal", "pt-BR.lang", "Português (Brasil)" }, { "French", "fr.lang", "Français" } };
             // A plain reflection call cannot see inherited static Instance. The
             // production owner traversal must recover it, never guess from the OS.
             Verify(GetStaticMember(typeof(MGSC.Localization), "Instance") == null, "fixture reproduces inherited static member boundary");
@@ -104,6 +105,30 @@ namespace ItemIntelligence
             Verify(FormatUiDaysAndHours(2.5) == "2g", "banker's rounding follows vanilla");
             Verify(FormatUiDaysAndHours(3.5) == "4g", "odd half rounds up");
             Verify(FormatExpectedNumber(1.25) == "1,25", "Polish decimals");
+            string[,] latinLanguages = {
+                { "es-ES", "Spanish", "BOTÍN", "es-ES", " %", "1d 3h" },
+                { "pt-BR", "BrazilianPortugal", "SAQUE", "pt-BR", "%", "1d 3h" },
+                { "fr-FR", "French", "BUTIN", "fr-FR", " %", "1j 3h" } };
+            for (int i = 0; i < latinLanguages.GetLength(0); i++)
+            {
+                SetUiLanguagePreference(latinLanguages[i, 0], "MCM");
+                Verify(GetUiLanguageSignature() == latinLanguages[i, 1] && GetLanguageSignature() == "Russian", "Latin UI keeps game language");
+                Verify(Ui("tab.loot.short") == latinLanguages[i, 2], "Latin switch clears previous text cache");
+                Verify(GetUiNumberCulture().Name == latinLanguages[i, 3] && FormatExpectedNumber(1.25) == "1,25", "Latin culture and decimals");
+                Verify(GetUiPercentSuffix() == latinLanguages[i, 4] && FormatContainerEstimateNumber(0.005) == "<0,01", "Latin percentages and tiny chances");
+                Verify(FormatUiDaysAndHours(27) == latinLanguages[i, 5] && FormatCompactUiDurationFallback(0.25) == "15m", "Latin time units");
+                Verify(GetLanguageAwareWrapFallback(60, 90) == 60, "long Latin notes use conservative wrapping");
+            }
+            string[,] latinAliases = {
+                { "Spanish", "Español" }, { "Español", "Español" }, { "Espanol", "Español" }, { "es", "Español" },
+                { "BrazilianPortugal", "Português (Brasil)" }, { "BrazilianPortuguese", "Português (Brasil)" },
+                { "Portuguese (Brazil)", "Português (Brasil)" }, { "Português (Brasil)", "Português (Brasil)" },
+                { "Portugues (Brasil)", "Português (Brasil)" }, { "pt_BR", "Português (Brasil)" },
+                { "French", "Français" }, { "Français", "Français" }, { "Francais", "Français" }, { "fr", "Français" } };
+            for (int i = 0; i < latinAliases.GetLength(0); i++)
+                Verify(NormalizeUiLanguagePreference(latinAliases[i, 0]) == latinAliases[i, 1], "Latin saved preference alias " + latinAliases[i, 0]);
+            Verify(NormalizeUiLanguagePreference("pt-PT") == "Auto (Game)", "European Portuguese is not Brazilian Portuguese");
+            Verify(!ExternalLanguageMatches("pt-PT", ReadUiLanguageDeclaration(Path.Combine(dir, "pt-BR.lang"))), "Brazilian file does not claim European Portuguese");
             SetUiLanguagePreference("ChineseSimp", "test");
             Verify(Ui("tab.loot.short") == "战利品" && GetUiNumberCulture().Name == "zh-CN", "Chinese alias and culture");
             Verify(FormatCompactUiDurationFallback(0.25) == "15分", "Chinese fallback minutes");
@@ -124,8 +149,15 @@ namespace ItemIntelligence
             Verify(Ui("tab.loot.short") == "Custom", "exact community override");
             Verify(Ui("tab.trade.short") == "TRADE", "missing community key falls back to English");
             Verify(MissingUiTranslationKeys.Contains("tab.trade.short"), "fallback diagnosed");
+            for (int i = 0; i < latinLanguages.GetLength(0); i++)
+            {
+                SetUiLanguagePreference(latinLanguages[i, 0], "test");
+                Verify(Ui("tab.loot.short") == latinLanguages[i, 2], "forced German cannot hijack manual Latin language");
+                SetUiLanguagePreference("Auto (Game)", "test"); GameLanguage(latinLanguages[i, 1]);
+                Verify(Ui("tab.loot.short") == "Custom", "single force can override new built-in language in Auto");
+            }
             SetUiLanguagePreference("Auto (Game)", "test");
-            GameLanguage("French");
+            GameLanguage("Turkish");
             Verify(Ui("tab.loot.short") == "Custom", "single forced community language in Auto");
             File.Delete(custom); ReloadUi();
             Verify(Ui("tab.loot.short") == "LOOT", "unsupported language safely uses English");
@@ -156,7 +188,7 @@ namespace ItemIntelligence
             TMP_FontAsset han = new TMP_FontAsset { name = "Chinese" };
             _inspectorFont = latin;
             MGSC.LocalizationFontKeeper.Instance.FontPresets.Add(new MGSC.FontPreset {
-                FontAsset = latin, AvaialableLangs = new List<string> { "EnglishUS", "Russian", "German", "Polish" } });
+                FontAsset = latin, AvaialableLangs = new List<string> { "EnglishUS", "Russian", "German", "Polish", "Spanish", "BrazilianPortugal", "French" } });
             MGSC.LocalizationFontKeeper.Instance.FontPresets.Add(new MGSC.FontPreset {
                 FontAsset = han, AvaialableLangs = new List<string> { "ChineseSimp" } });
             GameLanguage("Russian"); SetUiLanguagePreference("简体中文", "test");
@@ -165,17 +197,31 @@ namespace ItemIntelligence
             Verify(han.fallbackFontAssetTable.Count == 0 && latin.fallbackFontAssetTable.Count == 0, "no vanilla font mutation");
             SetUiLanguagePreference("English", "test"); Verify(ResolveUiFont() == latin, "Latin restored");
             SetUiLanguagePreference("简体中文", "test"); Verify(ResolveUiFont() == mixed && UiMixedFonts.Count == 1, "mixed font reused");
+            GameLanguage("ChineseSimp");
+            TMP_FontAsset mixedLatin = null;
+            for (int i = 0; i < latinLanguages.GetLength(0); i++)
+            {
+                SetUiLanguagePreference(latinLanguages[i, 0], "test");
+                Verify(FindGameLanguageFont(GetUiLanguageSignature()) == latin, "Latin UI resolves exact game preset");
+                TMP_FontAsset currentFont = ResolveUiFont();
+                Verify(currentFont != latin && currentFont != han && currentFont.fallbackFontAssetTable.Contains(han), "Latin UI keeps Chinese game names readable");
+                if (mixedLatin == null) mixedLatin = currentFont;
+                Verify(currentFont == mixedLatin && UiMixedFonts.Count == 2, "Latin languages reuse one private mixed font");
+            }
+            Verify(han.fallbackFontAssetTable.Count == 0 && latin.fallbackFontAssetTable.Count == 0, "Latin switches preserve shared font lists");
 
             string mcmValue;
             Verify(TryReadMcmString(new Dictionary<string, object> { { "UiLanguage", new McmValue { Value = "Polski" } } }, "UiLanguage", out mcmValue)
                 && mcmValue == "Polski", "MCM wrapped string");
             List<object> configs = new List<object>();
+            Verify(GetUiLanguageOptions()[5] == "简体中文 / Chinese" && GetUiLanguageOptions()[6] == "Español" &&
+                GetUiLanguageOptions()[7] == "Português (Brasil)" && GetUiLanguageOptions()[8] == "Français", "new options preserve existing language order");
             AddMcmStringDropdown(typeof(List<object>).GetMethod("Add"), configs, typeof(ModernDropdown), typeof(LegacyDropdown),
                 "UiLanguage", "Auto (Game)", "Language", "Auto (Game)", "Tip", "Label", GetUiLanguageOptions());
-            Verify(((ModernDropdown)configs[0]).Options.Count == 6, "modern dropdown constructor");
+            Verify(((ModernDropdown)configs[0]).Options.Count == 9, "modern dropdown constructor");
             AddMcmStringDropdown(typeof(List<object>).GetMethod("Add"), configs, null, typeof(LegacyDropdown),
                 "UiLanguage", "Auto (Game)", "Language", "Auto (Game)", "Tip", "Label", GetUiLanguageOptions());
-            Verify(((LegacyDropdown)configs[1]).Options.Count == 6, "legacy dropdown constructor");
+            Verify(((LegacyDropdown)configs[1]).Options.Count == 9, "legacy dropdown constructor");
             return localizationChecks;
         }
         private class McmValue { public string Value { get; set; } }

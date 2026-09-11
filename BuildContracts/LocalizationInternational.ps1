@@ -10,6 +10,9 @@ $internationalLanguageSpecs = @(
     @{ Name='DE'; File='de.lang'; Declaration='German;german;Deutsch;de;de-DE' },
     @{ Name='PL'; File='pl.lang'; Declaration='Polish;polish;Polski;pl;pl-PL' },
     @{ Name='ZH'; File='zh-Hans.lang'; Declaration='ChineseSimp;ChineseSimplified;SimplifiedChinese;schinese;zhcn;zh-CN;zh-Hans;简体中文;Chinese (Simplified);Simplified Chinese' },
+    @{ Name='ES'; File='es.lang'; Declaration='Spanish;Español;Espanol;es;es-ES' },
+    @{ Name='PTBR'; File='pt-BR.lang'; Declaration='BrazilianPortugal;BrazilianPortuguese;PortugueseBrazil;Português (Brasil);Portugues (Brasil);pt-BR' },
+    @{ Name='FR'; File='fr.lang'; Declaration='French;Français;Francais;fr;fr-FR' },
     @{ Name='TPL'; File='TranslationTemplate.lang'; Declaration='CHANGE_ME' }
 )
 
@@ -51,7 +54,7 @@ $internationalEnglish = $internationalMaps['EN']
 if ($internationalEnglish.Count -ne 657) {
     throw "international localization key count drifted: $($internationalEnglish.Count), expected 657"
 }
-foreach ($name in @('RU','DE','PL','ZH','TPL')) {
+foreach ($name in @('RU','DE','PL','ZH','ES','PTBR','FR','TPL')) {
     $map = $internationalMaps[$name]
     if ($map.Count -ne $internationalEnglish.Count) {
         throw "international localization count mismatch: ${name}=$($map.Count), EN=$($internationalEnglish.Count)"
@@ -85,7 +88,7 @@ $zhText = (($internationalMaps['ZH'].Values) -join "`n")
 if ([regex]::Matches($deText,'[ÄÖÜäöüß]').Count -lt 100) { throw 'German translation script-density sanity failed.' }
 if ([regex]::Matches($plText,'[ĄĆĘŁŃÓŚŹŻąćęłńóśźż]').Count -lt 150) { throw 'Polish translation script-density sanity failed.' }
 if ([regex]::Matches($zhText,'[\u3400-\u4DBF\u4E00-\u9FFF]').Count -lt 900) { throw 'Simplified Chinese translation script-density sanity failed.' }
-foreach ($name in @('DE','PL','ZH')) {
+foreach ($name in @('DE','PL','ZH','ES','PTBR','FR')) {
     $joined = (($internationalMaps[$name].Values) -join "`n")
     if ($joined -match '[А-Яа-яЁё]') { throw "unexpected Cyrillic residue in shipped $name translation." }
 }
@@ -106,7 +109,7 @@ foreach ($key in $internationalMaps['ZH'].Keys) {
 foreach ($key in @(
     'ui.loot_storage_short','ui.loot_corpse_short','ui.loot_implant_short','ui.loot_storage_corpse_short',
     'ui.unit_day_short','ui.unit_hour_short','ui.unit_minute_short')) {
-    foreach ($name in @('EN','RU','DE','PL','ZH','TPL')) {
+    foreach ($name in @('EN','RU','DE','PL','ZH','ES','PTBR','FR','TPL')) {
         if (-not $internationalMaps[$name].ContainsKey($key)) {
             throw "international compact UI key missing: $name / $key"
         }
@@ -142,7 +145,7 @@ foreach ($forbidden in @('IsRussian() ? "Т" : "B"','IsRussian() ? "К/Т" : "C/
 
 
 foreach ($selectorKey in @('mcm.header.language','mcm.language','mcm.language_tip')) {
-    foreach ($name in @('EN','RU','DE','PL','ZH','TPL')) {
+    foreach ($name in @('EN','RU','DE','PL','ZH','ES','PTBR','FR','TPL')) {
         if (-not $internationalMaps[$name].ContainsKey($selectorKey)) {
             throw "language-selector localization key missing: $name / $selectorKey"
         }

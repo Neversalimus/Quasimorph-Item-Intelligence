@@ -1,0 +1,63 @@
+{
+  "version": "1.7.42.6-test1",
+  "runtime_marker": "LatinLanguagesTest01",
+  "base_version": "1.7.42.5",
+  "base_commit": "13fa5e012ec8a87d7e372c96af28a2f852012380",
+  "date_utc": "2026-09-11",
+  "languages": [
+    "English",
+    "Russian",
+    "German",
+    "Polish",
+    "Simplified Chinese",
+    "Spanish",
+    "Brazilian Portuguese",
+    "French"
+  ],
+  "added_languages": [
+    "Spanish",
+    "Brazilian Portuguese",
+    "French"
+  ],
+  "game_language_identifiers": {
+    "es.lang": "Spanish",
+    "pt-BR.lang": "BrazilianPortugal",
+    "fr.lang": "French"
+  },
+  "keys_per_file": 657,
+  "localization_files": 9,
+  "new_translated_values": 1971,
+  "production_source_files": 112,
+  "target_workshop": "3781927679",
+  "stage": "C:\\QM_Workshop\\ItemIntelligence_DEV",
+  "validation": {
+    "static_contracts": "PASS",
+    "existing_behavior_assertions": 660,
+    "release_behavior_assertions": 32,
+    "enemy_body_behavior_assertions": 4923,
+    "localization_behavior_assertions": 5385,
+    "mcm_font_assertions": 38,
+    "viewport_geometry_assertions": 54917,
+    "csharp_language_version": "5",
+    "game_dependencies": 118,
+    "compile_errors": 0,
+    "compile_warnings": 0
+  },
+  "game_build": "1.0.4.581s.2952480",
+  "game_assembly_sha256": "BE78036434737521BB43DABBD934B579A08DC3E8370B834AEE36E40932F56FE0",
+  "runtime_game_test": "PENDING for ES / PT-BR / FR and this candidate",
+  "native_speaker_review": "PENDING",
+  "scope": "New UI translations, selection aliases, number/time presentation and conservative wrapping. Prior accepted gameplay and MCM font logic retained. No new game compatibility fingerprints. Existing 1.7.42.5 game acceptance does not constitute new-language visual acceptance.",
+  "localization_sha256": {
+    "TranslationTemplate.lang": "E35622A92187EAEA9B14FBD359566B7ACC3F6592B4A5833AF6146516E2459AD2",
+    "de.lang": "85CFF14480B65D9987C4D865DC13B7FACE8217CE8E59EF63ECE492E5ECE203C4",
+    "en.lang": "4681439E76E52FB497D329538988EAA879BE5DAE072B2E66CCEF900953D97E79",
+    "es.lang": "82C0B705521933B18A7B79FF54604E0D9E86404BAECF7B8A8B69940550DD846C",
+    "fr.lang": "D8B7267E352B06960319132A89C502B80D8AAF0E81EFD2C579204CCF83036D48",
+    "pl.lang": "6F9A5CEBC159CBCEB5208BA7C7B331ED50EFCD3021D7C0719704AAE043121C78",
+    "pt-BR.lang": "1B047FDDCFF1F02F4EB77223AB7430FE13B47DF877D07915CCBACA5C8BCF4F59",
+    "ru.lang": "1759E92567ADCAB7F6F19CBA8DE448345D0C9B5B1F2A31EFC1C4CDC2DBD85EE9",
+    "zh-Hans.lang": "46DE13E6B2343B2791567FD026507D036DACF7DEA21C3B36E60AC49E640C9DA9"
+  },
+  "published": false
+}

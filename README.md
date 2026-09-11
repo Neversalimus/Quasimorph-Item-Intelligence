@@ -2,12 +2,11 @@
 
 **Item Intelligence** is an in-game item browser and reference tool for **Quasimorph**.
 
-Current version: **v1.7.42.5 — StableRelease17425**.
+Current candidate: **v1.7.42.6-test1 — LatinLanguagesTest01** (DEV).
 Steam Workshop: [Item Intelligence](https://steamcommunity.com/sharedfiles/filedetails/?id=3780078201).
-Gameplay base: released **v1.7.42.4**, commit `05fba90596241f30d09fa47b1ddb0d8ad210bba7`.
-The branch also retains the frozen GitHub release recovery correction from `2314b29931be5b7dd80a426edba970a2f315f8b3`.
+Source base: **v1.7.42.5**, commit `13fa5e012ec8a87d7e372c96af28a2f852012380`.
 
-This release adds German, Polish and Simplified Chinese, a large browser window with zoom, and corrected body-aware implant sources. It includes the MCM Chinese font correction confirmed after a full game restart in Test5. The accepted production code is retained; only the runtime version and marker change for release. See [release acceptance](Support/ReleaseAcceptance17425.md), [the scoped game-test report](Support/GameAudit17425.md) and [MCM diagnosis](Support/McmFonts17425.md).
+This candidate adds complete Spanish, Brazilian Portuguese and French UI dictionaries and integrates their MCM selection, game-language detection and numeric presentation. It retains the accepted 1.7.42.5 large-window, implant-source and Chinese MCM fixes. New-language game acceptance and native-speaker review are pending. See [localization scope](Support/Localization17426.md) and [DEV setup](INSTRUCTIONS_RU.md).
 
 ## Large window and zoom
 
@@ -27,27 +26,29 @@ The index runs in slices and reads game records without creating creatures/items
 
 ## Localization
 
-German, Polish and Simplified Chinese were recovered from the older `Languages_MCM_Test2_Full_BuildFix2` source package and selectively ported. All five languages and the community template contain 657 keys. Current availability and amputation explanations are preserved and translated.
+All eight languages and the community template contain 657 keys. Spanish, Brazilian Portuguese and French cover the catalog, item relationships, loot conditions, MCM, window controls and Modder Mode. Placeholders, query syntax and compositional spaces are preserved.
 
-MCM offers Auto (Game), English, Русский, Deutsch, Polski and 简体中文 / Chinese. Auto reads the selected Quasimorph language, including inherited singleton metadata and the current EnglishUS / ChineseSimp identifiers. Manual selection changes QII UI and numeric formatting; game-provided entity names and search continue to use the game's language. Changes refresh the browser without restarting. MCM's own registered captions refresh on the next game launch.
+MCM offers Auto (Game), English, Русский, Deutsch, Polski, 简体中文 / Chinese, Español, Português (Brasil) and Français. Existing option order is retained. Auto reads the selected Quasimorph language, including the exact game identifiers Spanish, BrazilianPortugal and French. Portuguese support is specifically Brazilian; pt-PT is not mapped to it. Manual selection changes QII UI and numeric formatting; game-provided names and search follow the game language. The browser refreshes after saving settings; MCM captions refresh on the next launch.
+
+The new languages use decimal commas. Spanish and French percentages include a space; Brazilian Portuguese percentages do not. Time units are localized, including French day abbreviation `j`. Long notes use the conservative Latin-language wrap fallback.
 
 QII reads Quasimorph's font presets for the chosen language. For mixed scripts it creates a private font asset with a separate fallback list; vanilla fonts and global TMP settings are untouched. CJK notes wrap at text-element boundaries. Windows-installed Chinese fonts are not required by this implementation.
 
 MCM uses the game's font even when QII supplies captions in another language. QII supplies private Chinese and Latin fallbacks to its settings, sidebar entry, dropdown options and shared tooltip while QII owns it. Reopening MCM reapplies the font after MCM's own font updates. Hovering another mod's setting restores the shared tooltip's original font. This optional integration was checked against MCM source commit `2e500a5f5cf02ffc6c9739e1933b738949bae265`; a warning is logged if its hooks are unavailable. Test5 logs confirm all three hooks, both font assets and the saved Chinese preference on the next process; screenshots show the dropdown and Chinese captions rendering correctly.
 
-The public item is **3780078201**. `Install.ps1` builds the stable source in PowerShell 7 and prepares `C:\QM_Workshop\ItemIntelligence`; it does not upload or overwrite the subscribed copy. Authors should use the frozen [release workflow](Release/README.md) for matching Workshop and GitHub payloads. DEV item **3781927679** remains available for future tests.
+`Install.ps1` prepares only **DEV item 3781927679** at `C:\QM_Workshop\ItemIntelligence_DEV`. It builds against the installed game in PowerShell 7 and prints the DEV upload command. No automatic upload is performed. The stable public item remains **3780078201**; this candidate needs game acceptance before release. Workshop description drafts for the three new languages are in `Workshop/`.
 
 ## Verification
 
 - All 112 production C# files compile as C# 5 against the 118 supplied game dependencies, with zero warnings.
 - 660 existing production behavior assertions and 32 release workflow assertions pass.
 - 4923 body/implant assertions include an independent exhaustive draw-sequence oracle, socket-range averaging, runtime record-adapter fixtures, missing data and conditional UI formatting.
-- 3351 localization assertions cover real language-file selection and key resolution, metadata precedence, cache replacement, manual/Auto behavior, damaged files, fallback text, formatting, CJK wrapping and private font fallback ownership. Game/TMP/MCM services are fixtures; these are not Unity visual tests.
+- 5385 localization assertions cover real language-file selection and key resolution, metadata precedence, cache replacement, manual/Auto behavior, damaged files, fallback text, formatting, CJK wrapping and private font fallback ownership. Game/TMP/MCM services are fixtures; these are not Unity visual tests.
 - 54917 viewport geometry assertions cover 12 resolutions, both views, five zoom levels, Modder drawer, icon variants, footer/column bounds and hover-card placement. These execute production geometry and chrome writes with RectTransform fixtures, not Unity rendering.
 - 38 MCM font assertions exercise the complete production callbacks and ownership lifecycle, detached dropdown options, repeated activation, late font availability and restoration for another mod's tooltip. Unity/TMP/MCM objects are fixtures. Separate Test5 game evidence confirms Chinese captions and dropdown rendering after persistence across a full restart; shared-tooltip restoration was not shown in screenshots.
 - Test3 runtime evidence confirms index completion and observed EN/ZH layouts at 2560×1440. Test4 adds PL/DE layouts and catalog at 1920×1080, the corrected item-link alignment and a Polish preference surviving restart. Both new logs retain the separate MCM slider exception; the F2 session records a 61.5 ms cold open. Enlarged Chinese, expanded PL/DE Loot and Trade, lower resolutions, view/zoom restart persistence and selected-implant export remain pending. This is partial acceptance, not global game compatibility certification.
 
-Run `pwsh -NoProfile -File ./BUILD_AND_STAGE.ps1 -Mode RELEASE -ContractsOnly` for the contracts and behavior suites. No game files are needed for that command. The installer performs the actual Windows build against the local game.
+Run `pwsh -NoProfile -File ./BUILD_AND_STAGE.ps1 -Mode TEST -ContractsOnly` for the contracts and behavior suites. No game files are needed for that command. The installer performs the actual Windows build against the local game.
 
 Russian setup and game test: [INSTRUCTIONS_RU.md](INSTRUCTIONS_RU.md).
 Changes and limits: [FIX_REPORT_RU.md](FIX_REPORT_RU.md).
@@ -68,7 +69,7 @@ Previous stable audit: [Support/Audit17424.md](Support/Audit17424.md).
 - Manual loot-modifier calculator for Marauder / Organization / Field Medic contexts.
 - Faction technology information.
 - Weapon/ammo relationships and detailed fire-mode tooltips, including Damage/AP and Critical Damage/AP where provable.
-- English, Russian, German, Polish and Simplified Chinese UI with a separate MCM language selector.
+- English, Russian, German, Polish, Simplified Chinese, Spanish, Brazilian Portuguese and French UI with a separate MCM language selector.
 - Optional **Modder Mode** with audited item creation for ship cargo and mission clone inventory.
 
 ## v1.7.42.2
@@ -126,13 +127,13 @@ The recommended installation method is the Steam Workshop item linked above.
 
 ### Manual / source build
 
-Download the stable ZIP from **GitHub Releases**, or build the source on Windows with Quasimorph installed:
+For this DEV candidate, build the source on Windows with Quasimorph installed:
 
 ```powershell
 pwsh -NoProfile -ExecutionPolicy Bypass -File .\Install.ps1
 ```
 
-Compiled binaries are intentionally kept out of Git history and are distributed through Steam Workshop / GitHub Releases.
+The full DEV archive contains source and a Git bundle. The installer compiles the DLL locally; game dependencies and compiled binaries are not bundled.
 
 ## Compatibility and safety
 

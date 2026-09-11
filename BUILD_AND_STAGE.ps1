@@ -11,7 +11,7 @@ Set-StrictMode -Version 2.0
 
 $DevWorkshopId = '3781927679'
 $PublicWorkshopId = '3780078201'
-$ExpectedReleaseVersion = '1.7.42.5'
+$ExpectedReleaseVersion = '1.7.42.6'
 
 function Resolve-GameRoot {
     param([string]$ExplicitRoot)
@@ -266,7 +266,7 @@ if ($stageHash -ne $hash) { throw 'Stage validation failed: DLL hash mismatch.' 
     ('ModderSpawnRuntimeLines=' + $modderSpawnRuntimeLines),
     ('ModderSpawnPanelLines=' + $modderSpawnPanelLines),
     ('BrowserLinkPresentationLines=' + $browserLinkPresentationLines),
-    ('LocalizationParity=' + $langCount + ' keys x 6 files (EN/RU/DE/PL/ZH/template)'),
+    ('LocalizationParity=' + $langCount + ' keys x 9 files (EN/RU/DE/PL/ZH/ES/PT-BR/FR/template)'),
     ('OrdinaryReadOnlyArchitecture=OK'),
     ('ModderModeSingleItemSpawnException=OK'),
     ('ProductionCSharpBehavior=PASS;ReleaseBehavior=PASS'),

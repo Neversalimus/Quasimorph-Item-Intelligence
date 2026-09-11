@@ -16,7 +16,10 @@ namespace ItemIntelligence
                 "Русский",
                 "Deutsch",
                 "Polski",
-                "简体中文 / Chinese" // Latin suffix remains readable in an MCM font without Han glyphs.
+                "简体中文 / Chinese", // Latin suffix remains readable in an MCM font without Han glyphs.
+                "Español",
+                "Português (Brasil)",
+                "Français"
             };
         }
 
@@ -33,6 +36,10 @@ namespace ItemIntelligence
                 return "Deutsch";
             if (token == "polish" || token == "polski" || token == "pl" || token == "plpl")
                 return "Polski";
+            if (token == "spanish" || token == "español" || token == "espanol" || token == "es" || token == "eses") return "Español";
+            if (token == "brazilianportugal" || token == "brazilianportuguese" || token == "portuguesebrazil" ||
+                token == "portuguêsbrasil" || token == "portuguesbrasil" || token == "ptbr") return "Português (Brasil)";
+            if (token == "french" || token == "français" || token == "francais" || token == "fr" || token == "frfr") return "Français";
             if (token == "chinesesimp" || token == "chinesesimplified" || token == "simplifiedchinese" ||
                 token == "schinese" || token == "zhcn" || token == "zhhans" ||
                 token == "简体中文" || token == "简体中文chinese")
@@ -64,6 +71,9 @@ namespace ItemIntelligence
             if (string.Equals(preference, "Русский", StringComparison.Ordinal)) return "Russian";
             if (string.Equals(preference, "Deutsch", StringComparison.Ordinal)) return "German";
             if (string.Equals(preference, "Polski", StringComparison.Ordinal)) return "Polish";
+            if (string.Equals(preference, "Español", StringComparison.Ordinal)) return "Spanish";
+            if (string.Equals(preference, "Português (Brasil)", StringComparison.Ordinal)) return "BrazilianPortugal";
+            if (string.Equals(preference, "Français", StringComparison.Ordinal)) return "French";
             if (string.Equals(preference, "简体中文 / Chinese", StringComparison.Ordinal)) return "ChineseSimplified";
             return GetLanguageSignature();
         }
@@ -90,16 +100,12 @@ namespace ItemIntelligence
 
         private static bool IsGermanLanguage()
         {
-            return ExternalLanguageMatches(
-                GetUiLanguageSignature(),
-                "German;german;Deutsch;de;de-DE");
+            return ExternalLanguageMatches(GetUiLanguageSignature(), "German;german;Deutsch;de;de-DE");
         }
 
         private static bool IsPolishLanguage()
         {
-            return ExternalLanguageMatches(
-                GetUiLanguageSignature(),
-                "Polish;polish;Polski;pl;pl-PL");
+            return ExternalLanguageMatches(GetUiLanguageSignature(), "Polish;polish;Polski;pl;pl-PL");
         }
 
         private static bool IsSimplifiedChineseLanguage()
@@ -125,9 +131,13 @@ namespace ItemIntelligence
             string language = GetUiLanguageSignature();
             if (_uiNumberLanguage == language) return _uiNumberCulture;
             _uiNumberLanguage = language;
+            string preference = NormalizeUiLanguagePreference(language);
             _uiNumberCulture = IsUiRussianLanguage() ? CultureInfo.GetCultureInfo("ru-RU") :
                 IsGermanLanguage() ? CultureInfo.GetCultureInfo("de-DE") :
                 IsPolishLanguage() ? CultureInfo.GetCultureInfo("pl-PL") :
+                preference == "Español" ? CultureInfo.GetCultureInfo("es-ES") :
+                preference == "Português (Brasil)" ? CultureInfo.GetCultureInfo("pt-BR") :
+                preference == "Français" ? CultureInfo.GetCultureInfo("fr-FR") :
                 IsSimplifiedChineseLanguage() ? CultureInfo.GetCultureInfo("zh-CN") : CultureInfo.InvariantCulture;
             return _uiNumberCulture;
         }
@@ -135,7 +145,7 @@ namespace ItemIntelligence
         private static string GetUiPercentSuffix()
         {
             string culture = GetUiNumberCulture().Name;
-            return culture == "ru-RU" || culture == "de-DE" || culture == "pl-PL" ? " %" : "%";
+            return culture == "ru-RU" || culture == "de-DE" || culture == "pl-PL" || culture == "es-ES" || culture == "fr-FR" ? " %" : "%";
         }
 
         private static int GetLanguageAwareWrapFallback(
@@ -145,7 +155,8 @@ namespace ItemIntelligence
             if (IsCjkLanguage())
                 return Math.Max(36, (int)Math.Floor(englishFallbackChars * 0.62));
 
-            if (IsUiRussianLanguage() || IsGermanLanguage() || IsPolishLanguage())
+            string culture = GetUiNumberCulture().Name;
+            if (IsUiRussianLanguage() || IsGermanLanguage() || IsPolishLanguage() || culture == "es-ES" || culture == "pt-BR" || culture == "fr-FR")
                 return Math.Min(russianFallbackChars, englishFallbackChars);
 
             return englishFallbackChars;
