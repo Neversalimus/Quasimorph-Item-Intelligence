@@ -7,6 +7,4 @@ Item Intelligence 1.7.42.5 adds more languages, a larger browser view and correc
 - Fixed missing Chinese settings in MCM after restarting the game, including Chinese text in the language selector.
 - Improved fitting of long German buttons and the All category label.
 
-Test5's production code is retained with only the release version and runtime marker changed. Game evidence includes EN/ZH layouts at 2560×1440, PL/DE layouts at 1920×1080 and Chinese MCM persistence after a full restart. Review scope and remaining limits are documented in `Support/ReleaseAcceptance17425.md`.
-
 Reviewed game: Quasimorph 1.0.4.581s.2952480. Numerical compatibility remains checked separately for each feature; unsupported calculations retain their existing safeguards.

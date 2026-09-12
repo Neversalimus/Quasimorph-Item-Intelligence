@@ -39,7 +39,7 @@ namespace ItemIntelligence
         // paths were re-audited independently. This alias owns ONLY those source families.
         private const string AuditedSourceFamilyAssemblySha103Hotfix =
             "A38C4D993C9BF60D0DDE0EDD348F201C97574F907808417A33C8A20F4772E9C1";
-        // Independent 1.0.4.581s.2952480 reviews: Support/Compatibility104.json.
+        // Feature-specific compatibility reviews for 1.0.4.581s.2952480.
         // Source families require the version-specific RandomStart_* pool policy.
         // Runtime data checks remain mandatory; none of these aliases certifies global exactness.
         private const string AuditedCargoSpawnAssemblySha104 =
@@ -53,7 +53,7 @@ namespace ItemIntelligence
         private const string AuditedSourceFamilyAssemblySha104 =
             "BE78036434737521BB43DABBD934B579A08DC3E8370B834AEE36E40932F56FE0";
 
-        // Independent 1.0.4.582s.c4335c5 reviews: Support/Compatibility104582.json.
+        // Feature-specific compatibility reviews for 1.0.4.582s.c4335c5.
         // These gates preserve runtime data validation and do not certify other builds.
         private const string AuditedTradeAssemblySha104582 =
             "9D0C784A764D75EC6616BD3B5744C0E581BB1CE148FD175BD8CABA8195854006";

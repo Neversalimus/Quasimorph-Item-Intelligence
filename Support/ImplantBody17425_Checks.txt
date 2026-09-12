@@ -1,9 +1,0 @@
-DEV v1.7.42.5-test2. Final local verification; runtime acceptance pending.
-Production C# behavior: PASS (660 assertions).
-Production enemy body/implant behavior: PASS (4923 assertions).
-Release behavior: PASS (32 assertions; native transports mocked).
-Production localization behavior: PASS (3331 assertions).
-Static build contracts: PASS
-C# 5 compile against supplied game dependencies: PASS (108 source files).
-Game Assembly SHA256: BE78036434737521BB43DABBD934B579A08DC3E8370B834AEE36E40932F56FE0
-Compiler warnings: 0

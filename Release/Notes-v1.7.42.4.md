@@ -6,6 +6,4 @@ Item Intelligence 1.7.42.4 restores item-source information for Quasimorph 1.0.4
 - Updated random starting equipment sources to the game's new tables.
 - Improved unavailable-calculation explanations and clarified the limits of container estimates.
 
-The accepted Test3 code was promoted with only the runtime version and release marker changed. Its game log confirms Space and Dungeon operation, RU/EN switching and an amputation index containing 120 items. Automated coverage exercises 660 production behavior assertions and 26 release assertions.
-
-Reviewed game: Quasimorph 1.0.4.581s.2952480. Compatibility remains checked separately for each feature; unknown builds and unsupported runtime data do not inherit these approvals. See the repository's FIX_REPORT_RU.md and Support/RuntimeAcceptanceTest3.json for validation scope.
+Reviewed game: Quasimorph 1.0.4.581s.2952480. Compatibility remains checked separately for each feature; unknown builds and unsupported runtime data do not inherit these approvals.

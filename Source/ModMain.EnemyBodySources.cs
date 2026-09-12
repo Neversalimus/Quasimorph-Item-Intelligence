@@ -46,7 +46,7 @@ namespace ItemIntelligence
         }
 
         // Ordinary body generation and installation are unchanged in 1.0.4.582;
-        // reviewed independently in Support/Compatibility104582.json.
+        // reviewed independently for the body/implant feature.
         private static bool IsAuditedEnemyBodyAssembly()
         {
             if (!_compatStaticChecked) RunCompatibilityShieldStatic();

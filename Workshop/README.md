@@ -1,5 +1,9 @@
-# Workshop description drafts
+# Localized Workshop descriptions
 
-Spanish, Brazilian Portuguese and French BBCode descriptions for the eight-language update. Copy the matching file into the localized Workshop description when the accepted 1.7.42.6 language update is published. No Workshop page was changed while preparing these files.
+BBCode descriptions for the Item Intelligence Workshop page:
 
-These texts describe the mod's existing features and the new UI languages. They do not claim native-speaker review or universal exact-math compatibility. Game-provided names remain in the game language.
+- [Spanish](Description_ES.bbcode.txt)
+- [Brazilian Portuguese](Description_PT-BR.bbcode.txt)
+- [French](Description_FR.bbcode.txt)
+
+Copy each file into the corresponding language field on the Workshop page. These descriptions cover the eight interface languages; game-provided item and location names continue to follow the game's language.
