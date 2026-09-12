@@ -4,7 +4,9 @@
 
 [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3780078201) · [Downloads](https://github.com/Neversalimus/Quasimorph-Item-Intelligence/releases) · [Changelog](CHANGELOG.md)
 
-Current version: **1.7.42.6**, with compatibility updates for **Quasimorph 1.0.4.582s.c4335c5**.
+This branch contains **1.7.42.7-test1**, a browser readability candidate based on stable **1.7.42.6**, for **Quasimorph 1.0.4.582s.c4335c5**.
+
+The candidate enlarges item IDs, search text and keyboard hints, fixes double tinting of item IDs, and arranges keyboard hints on two lines in all eight interface languages. Use the existing DEV Workshop item **3781927679** to test it.
 
 ## Features
 
@@ -51,12 +53,12 @@ A Windows build requires **PowerShell 7** and a local Quasimorph installation. F
 pwsh -NoProfile -ExecutionPolicy Bypass -File .\Install.ps1 -GameRoot "C:\Program Files (x86)\Steam\steamapps\common\Quasimorph"
 ```
 
-Use your actual game path. This compiles the mod against the installed game and stages the files in `C:\QM_Workshop\ItemIntelligence`. It does not install over a subscribed copy or upload to Steam. Game assemblies and compiled binaries are not stored in this repository.
+Use your actual game path. This compiles the candidate against the installed game and stages the files in `C:\QM_Workshop\ItemIntelligence_DEV`. The installer prints the command for updating the existing DEV Workshop item. It does not install over a subscribed copy or upload to Steam. Game assemblies and compiled binaries are not stored in this repository.
 
 Run the source contracts and behavior tests without game files:
 
 ```powershell
-pwsh -NoProfile -File .\BUILD_AND_STAGE.ps1 -Mode RELEASE -ContractsOnly
+pwsh -NoProfile -File .\BUILD_AND_STAGE.ps1 -Mode TEST -ContractsOnly
 ```
 
 Maintainers can use the [release workflow](Release/README.md) to prepare and publish a new version.

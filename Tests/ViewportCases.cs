@@ -120,6 +120,11 @@ namespace ItemIntelligence
             CheckHorizontalGap("SearchStatus", "CatalogButton");
             CheckHorizontalGap("Stats", "TradeLayoutControls");
             CheckHorizontalGap("ScrollStatus", "Help");
+            CheckVerticalGap("Title", "ItemId");
+            CheckVerticalGap("ItemId", "Rule_64");
+            CheckVerticalGap("Rule_775", "Help");
+            CheckVerticalGap("Help", "ZoomLabel");
+            CheckVerticalGap("ScrollStatus", "ViewModeButton");
             CheckHorizontalGap("ViewModeButton", "ZoomLabel");
             CheckHorizontalGap("ZoomLabel", "ZoomMinusButton");
             CheckHorizontalGap("ZoomMinusButton", "ZoomValue");
@@ -153,6 +158,14 @@ namespace ItemIntelligence
             RectTransform b = _inspectorRoot.transform.Children[second].Rect;
             CheckViewport(a.anchoredPosition.x + a.sizeDelta.x <= b.anchoredPosition.x + 0.001f,
                 first + " separated from " + second);
+        }
+
+        private static void CheckVerticalGap(string first, string second)
+        {
+            RectTransform a = _inspectorRoot.transform.Children[first].Rect;
+            RectTransform b = _inspectorRoot.transform.Children[second].Rect;
+            CheckViewport(-a.anchoredPosition.y + a.sizeDelta.y <= -b.anchoredPosition.y + 0.001f,
+                first + " stays above " + second);
         }
 
         private struct Vector2 { public float x, y; public Vector2(float a, float b) { x = a; y = b; } }

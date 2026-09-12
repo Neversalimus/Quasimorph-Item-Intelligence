@@ -1252,7 +1252,7 @@ namespace ItemIntelligence
         private static void RestoreBrowserNavigationHelp()
         {
             if (_browserHelpText != null)
-                _browserHelpText.text = NormalizeModUiText(Ui("ui.1_7_section_q_e_tab_wheel_page_esc_close"));
+                _browserHelpText.text = GetBrowserNavigationHelp();
         }
 
         private static void HandleBrowserItemIconClick(int visibleRow, bool chipIcon)

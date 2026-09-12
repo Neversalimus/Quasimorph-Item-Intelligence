@@ -58,7 +58,8 @@ tab.magnum	2 MAGNUM
 tab.overview	1 PRZEGLĄD
 tab.recipes	3 RECEPTURY
 tab.trade	4 HANDEL
-ui.1_7_section_q_e_tab_wheel_page_esc_close	[1-7] SEKCJA   [Q/E] KARTA   [KÓŁKO] PRZEWIJAJ   [ESC] ZAMKNIJ
+ui.navigation_keys	[1-7] SEKCJA   [Q/E] KARTA
+ui.scroll_close_keys	[KÓŁKO] PRZEWIJAJ   [ESC] ZAMKNIJ
 ui.lmb_open_item	[LPM] OTWÓRZ PRZEDMIOT
 ui.after_all_magnum	Po wszystkich projektach Magnum
 ui.after_all_research	Po wszystkich badaniach

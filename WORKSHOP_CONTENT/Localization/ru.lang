@@ -58,7 +58,8 @@ tab.magnum	2 MAGNUM
 tab.overview	1 ОБЗОР
 tab.recipes	3 РЕЦЕПТЫ
 tab.trade	4 ТОРГОВЛЯ
-ui.1_7_section_q_e_tab_wheel_page_esc_close	[1-7] РАЗДЕЛ   [Q/E] ВКЛАДКА   [КОЛЕСО] ПРОКРУТКА   [ESC] ЗАКРЫТЬ
+ui.navigation_keys	[1-7] РАЗДЕЛ   [Q/E] ВКЛАДКА
+ui.scroll_close_keys	[КОЛЕСО] ПРОКРУТКА   [ESC] ЗАКРЫТЬ
 ui.lmb_open_item	[ЛКМ] ОТКРЫТЬ ПРЕДМЕТ
 ui.after_all_magnum	После всех Magnum
 ui.after_all_research	После всех исследований

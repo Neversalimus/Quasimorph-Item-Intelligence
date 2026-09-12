@@ -58,7 +58,8 @@ tab.magnum	2 MAGNUM
 tab.overview	1 概览
 tab.recipes	3 配方
 tab.trade	4 交易
-ui.1_7_section_q_e_tab_wheel_page_esc_close	[1-7] 区域   [Q/E] 标签页   [滚轮] 滚动   [ESC] 关闭
+ui.navigation_keys	[1-7] 区域   [Q/E] 标签页
+ui.scroll_close_keys	[滚轮] 滚动   [ESC] 关闭
 ui.lmb_open_item	[左键] 打开物品
 ui.after_all_magnum	完成全部 Magnum 项目后
 ui.after_all_research	完成全部研究后

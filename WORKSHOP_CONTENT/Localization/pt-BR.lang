@@ -58,7 +58,8 @@ tab.magnum	2 MAGNUM
 tab.overview	1 VISÃO GERAL
 tab.recipes	3 RECEITAS
 tab.trade	4 COMÉRCIO
-ui.1_7_section_q_e_tab_wheel_page_esc_close	[1-7] SEÇÃO   [Q/E] ABA   [RODA] ROLAR   [ESC] FECHAR
+ui.navigation_keys	[1-7] SEÇÃO   [Q/E] ABA
+ui.scroll_close_keys	[RODA] ROLAR   [ESC] FECHAR
 ui.lmb_open_item	[CLIQUE ESQ.] ABRIR ITEM
 ui.after_all_magnum	Após todas as melhorias da Magnum
 ui.after_all_research	Após todas as pesquisas

@@ -58,7 +58,8 @@ tab.magnum	2 MAGNUM
 tab.overview	1 OVERVIEW
 tab.recipes	3 RECIPES
 tab.trade	4 TRADE
-ui.1_7_section_q_e_tab_wheel_page_esc_close	[1-7] SECTION   [Q/E] TAB   [WHEEL] SCROLL   [ESC] CLOSE
+ui.navigation_keys	[1-7] SECTION   [Q/E] TAB
+ui.scroll_close_keys	[WHEEL] SCROLL   [ESC] CLOSE
 ui.lmb_open_item	[LMB] OPEN ITEM
 ui.after_all_magnum	After all Magnum
 ui.after_all_research	After all research

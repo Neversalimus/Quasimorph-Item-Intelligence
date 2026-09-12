@@ -58,7 +58,8 @@ tab.magnum	2 MAGNUM
 tab.overview	1 RESUMEN
 tab.recipes	3 RECETAS
 tab.trade	4 COMERCIO
-ui.1_7_section_q_e_tab_wheel_page_esc_close	[1-7] SECCIÓN   [Q/E] PESTAÑA   [RUEDA] DESPLAZAR   [ESC] CERRAR
+ui.navigation_keys	[1-7] SECCIÓN   [Q/E] PESTAÑA
+ui.scroll_close_keys	[RUEDA] DESPLAZAR   [ESC] CERRAR
 ui.lmb_open_item	[CLIC IZQ.] ABRIR OBJETO
 ui.after_all_magnum	Tras todas las mejoras de Magnum
 ui.after_all_research	Tras todas las investigaciones

@@ -80,7 +80,7 @@ foreach ($itemIdToken in @('_inspectorItemIdText','_inspectorItemIdText.raycastT
         throw "Item-ID header contract token missing: $itemIdToken"
     }
 }
-foreach ($titleHotfixToken in @('_inspectorTitle.enableAutoSizing = true','_inspectorTitle.fontSizeMin = 18f','_inspectorTitle.fontSizeMax = 27f','new Vector2(78f, -5f), new Vector2(326f, 36f)','new Vector2(78f, -42f), new Vector2(326f, 16f)')) {
+foreach ($titleHotfixToken in @('_inspectorTitle.enableAutoSizing = true','_inspectorTitle.fontSizeMin = 18f','_inspectorTitle.fontSizeMax = 27f','new Vector2(78f, -5f), new Vector2(326f, 36f)','new Vector2(78f, -42f), new Vector2(326f, 20f)')) {
     if ($browserPresentationText.IndexOf($titleHotfixToken,[StringComparison]::Ordinal) -lt 0) {
         throw "Item-name header hotfix contract token missing: $titleHotfixToken"
     }

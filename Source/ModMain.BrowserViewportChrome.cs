@@ -21,7 +21,7 @@ namespace ItemIntelligence
             Transform root = _inspectorRoot.transform;
             float w = _browserViewport.Width, h = _browserViewport.Height, extra = w - BrowserBaseWidth;
             SetBrowserViewportRect(root, "Title", 78f, 5f, 326f + extra, 36f);
-            SetBrowserViewportRect(root, "ItemId", 78f, 42f, 326f + extra, 16f);
+            SetBrowserViewportRect(root, "ItemId", 78f, 42f, 326f + extra, 20f);
             SetBrowserViewportRect(root, "FavoriteButton", 412f + extra, 14f, 54f, 34f);
             SetBrowserViewportRect(root, "BackButton", 474f + extra, 14f, 94f, 34f);
             SetBrowserViewportRect(root, "CloseButton", 576f + extra, 14f, 126f, 34f);
@@ -54,8 +54,8 @@ namespace ItemIntelligence
             SetBrowserViewportRect(root, "Rule_775", 12f, h - BrowserFooterHeight, w - 24f, 1f);
             SetBrowserViewportRect(root, "BrowserPageScrollbar", w - 12f, BrowserRowTop,
                 10f, BrowserVisibleRows * BrowserRowPitch - 2f);
-            SetBrowserViewportRect(root, "ScrollStatus", 18f, h - 90f, 210f, 36f);
-            SetBrowserViewportRect(root, "Help", 235f, h - 90f, w - 253f, 36f);
+            SetBrowserViewportRect(root, "ScrollStatus", 18f, h - 98f, 210f, 52f);
+            SetBrowserViewportRect(root, "Help", 235f, h - 98f, w - 253f, 52f);
             SetBrowserViewportRect(root, "ViewModeButton", 18f, h - 42f, 216f, 34f);
             SetBrowserViewportRect(root, "ZoomLabel", 242f, h - 42f, w - 498f, 34f);
             SetBrowserViewportRect(root, "ZoomMinusButton", w - 238f, h - 42f, 42f, 34f);

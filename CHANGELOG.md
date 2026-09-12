@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.7.42.7-test1 — 2026-09-12 (DEV)
+
+- Enlarged item IDs and corrected their double tinting, including hover and pressed colors.
+- Enlarged search hints and entered text, removed italic search hints and improved their contrast.
+- Enlarged and brightened keyboard hints, using two lines in all eight interface languages.
+- Adjusted label rectangles to fit the text while retaining the existing content-row capacity and zoom controls.
+
 ## v1.7.42.6 — 2026-09-11
 
 - Restored compatibility with Quasimorph 1.0.4.582s.c4335c5 for exact Trade prices and batches, loot calculations, item sources, cargo creation and ordinary enemy body/implant calculations.

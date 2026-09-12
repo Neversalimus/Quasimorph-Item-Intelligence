@@ -58,7 +58,8 @@ tab.magnum	2 MAGNUM
 tab.overview	1 APERÇU
 tab.recipes	3 RECETTES
 tab.trade	4 COMMERCE
-ui.1_7_section_q_e_tab_wheel_page_esc_close	[1-7] SECTION   [Q/E] ONGLET   [MOLETTE] DÉFILER   [ÉCHAP] FERMER
+ui.navigation_keys	[1-7] SECTION   [Q/E] ONGLET
+ui.scroll_close_keys	[MOLETTE] DÉFILER   [ÉCHAP] FERMER
 ui.lmb_open_item	[CLIC GAUCHE] OUVRIR L’OBJET
 ui.after_all_magnum	Après toutes les améliorations du Magnum
 ui.after_all_research	Après toutes les recherches

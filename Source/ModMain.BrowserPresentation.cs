@@ -20,6 +20,12 @@ namespace ItemIntelligence
     {
         private static TMP_Text _inspectorItemIdText;
 
+        private static string GetBrowserNavigationHelp()
+        {
+            return NormalizeModUiText(Ui("ui.navigation_keys")) + "\n" +
+                NormalizeModUiText(Ui("ui.scroll_close_keys"));
+        }
+
         // Test13 general presentation owner: browser shell, stable geometry, chrome and
         // tab rows. Catalog-specific presentation lives in BrowserCatalogPresentation.
 
@@ -351,16 +357,19 @@ namespace ItemIntelligence
             CreateBrowserRule(_inspectorRoot.transform, 775f);
 
             GameObject scrollGo = CreateBrowserText("ScrollStatus", _inspectorRoot.transform,
-                new Vector2(18f, -788f), new Vector2(210f, 42f),
+                new Vector2(18f, -772f), new Vector2(210f, 52f),
                 15f, new Color(0.70f, 0.82f, 0.60f, 1f), FontStyles.Bold,
                 TextAlignmentOptions.MidlineLeft);
             _browserScrollText = scrollGo.GetComponent<TMP_Text>();
 
             GameObject helpGo = CreateBrowserText("Help", _inspectorRoot.transform,
-                new Vector2(223f, -788f), new Vector2(495f, 42f),
-                13f, new Color(0.34f, 0.58f, 0.52f, 1f), FontStyles.Normal,
+                new Vector2(235f, -772f), new Vector2(483f, 52f),
+                16f, new Color(0.62f, 0.78f, 0.68f, 1f), FontStyles.Normal,
                 TextAlignmentOptions.MidlineRight);
             _browserHelpText = helpGo.GetComponent<TMP_Text>();
+            // Two authored lines keep every shortcut readable at the minimum width.
+            _browserHelpText.enableAutoSizing = false;
+            _browserHelpText.enableWordWrapping = true;
 
             CreateBrowserViewportControls();
             _browserViewportScreenWidth = 0;
@@ -421,7 +430,7 @@ namespace ItemIntelligence
             placeholderRt.offsetMax = Vector2.zero;
 
             TextMeshProUGUI placeholder = placeholderGo.AddComponent<TextMeshProUGUI>();
-            ConfigureInspectorText(placeholder, 15f, new Color(0.32f, 0.56f, 0.49f, 0.86f), FontStyles.Italic);
+            ConfigureInspectorText(placeholder, 18f, new Color(0.60f, 0.77f, 0.65f, 1f), FontStyles.Normal);
             placeholder.alignment = TextAlignmentOptions.MidlineLeft;
             placeholder.enableWordWrapping = false;
             placeholder.raycastTarget = false;
@@ -436,7 +445,7 @@ namespace ItemIntelligence
             textRt.offsetMax = Vector2.zero;
 
             TextMeshProUGUI inputText = textGo.AddComponent<TextMeshProUGUI>();
-            ConfigureInspectorText(inputText, 16f, new Color(0.72f, 0.88f, 0.68f, 1f), FontStyles.Normal);
+            ConfigureInspectorText(inputText, 18f, new Color(0.72f, 0.88f, 0.68f, 1f), FontStyles.Normal);
             inputText.alignment = TextAlignmentOptions.MidlineLeft;
             inputText.enableWordWrapping = false;
             inputText.raycastTarget = false;
@@ -456,7 +465,7 @@ namespace ItemIntelligence
 
             GameObject statusGo = CreateBrowserText("SearchStatus", _inspectorRoot.transform,
                 new Vector2(562f, -72f), new Vector2(74f, 34f),
-                11f, new Color(0.37f, 0.63f, 0.54f, 1f), FontStyles.Normal,
+                11f, new Color(0.52f, 0.72f, 0.60f, 1f), FontStyles.Normal,
                 TextAlignmentOptions.MidlineRight);
             _browserSearchStatusText = statusGo.GetComponent<TMP_Text>();
 
@@ -466,8 +475,8 @@ namespace ItemIntelligence
         private static void CreateBrowserItemIdLine()
         {
             GameObject itemIdGo = CreateBrowserText("ItemId", _inspectorRoot.transform,
-                new Vector2(78f, -42f), new Vector2(326f, 16f),
-                10f, new Color(0.36f, 0.59f, 0.50f, 0.96f), FontStyles.Normal,
+                new Vector2(78f, -42f), new Vector2(326f, 20f),
+                13f, Color.white, FontStyles.Normal,
                 TextAlignmentOptions.MidlineLeft);
             _inspectorItemIdText = itemIdGo.GetComponent<TMP_Text>();
             _inspectorItemIdText.enableWordWrapping = false;
@@ -478,11 +487,12 @@ namespace ItemIntelligence
             copyButton.targetGraphic = _inspectorItemIdText;
             copyButton.transition = Selectable.Transition.ColorTint;
             ColorBlock colors = copyButton.colors;
-            colors.normalColor = new Color(0.36f, 0.59f, 0.50f, 0.96f);
-            colors.highlightedColor = new Color(0.58f, 0.84f, 0.67f, 1f);
+            // The button owns the palette. White text vertices avoid a second tint.
+            colors.normalColor = new Color(0.52f, 0.72f, 0.60f, 1f);
+            colors.highlightedColor = new Color(0.70f, 0.90f, 0.72f, 1f);
             colors.pressedColor = new Color(0.94f, 0.86f, 0.52f, 1f);
             colors.selectedColor = colors.highlightedColor;
-            colors.disabledColor = new Color(0.28f, 0.38f, 0.33f, 0.72f);
+            colors.disabledColor = new Color(0.42f, 0.54f, 0.48f, 1f);
             colors.colorMultiplier = 1f;
             colors.fadeDuration = 0.05f;
             copyButton.colors = colors;
@@ -1092,7 +1102,7 @@ namespace ItemIntelligence
                 SetBrowserTextIfChanged(_browserCloseText, GetBrowserCloseButtonLabel());
 
             if (_browserHelpText != null)
-                SetBrowserTextIfChanged(_browserHelpText, NormalizeModUiText(Ui("ui.1_7_section_q_e_tab_wheel_page_esc_close")));
+                SetBrowserTextIfChanged(_browserHelpText, GetBrowserNavigationHelp());
 
             UpdateBrowserViewportControls();
             LayoutBrowserViewportChrome();
