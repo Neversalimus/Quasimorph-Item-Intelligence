@@ -107,3 +107,4 @@ foreach ($token in @('AuditedTradeAssemblySha103Hotfix','A38C4D993C9BF60D0DDE0ED
 $modderSpawnRuntimeText = [IO.File]::ReadAllText((Join-Path $sourceDir 'ModMain.ModderSpawnRuntime.cs'))
 if ($modderSpawnRuntimeText.IndexOf('IsCurrent103TradeAssembly()',[StringComparison]::Ordinal) -ge 0) { throw 'Trade-only hotfix gate leaked into Modder Mode cargo spawning.' }
 
+& (Join-Path $PSScriptRoot '../Tests/Run-TradeRuntimeTests.ps1') -SourceRoot (Split-Path -Parent $PSScriptRoot)

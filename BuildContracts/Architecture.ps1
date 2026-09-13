@@ -844,7 +844,7 @@ if ($ammoText.IndexOf('if (!ShowAmmoRelations) return;',[StringComparison]::Ordi
     $lootPresentationText.IndexOf('if (!ShowSources) return;',[StringComparison]::Ordinal) -lt 0) {
     throw 'MCM Information non-Trade detail-renderer hard gate is incomplete.'
 }
-if ($tradeText.IndexOf('if (!IsStarmapExperimentSpaceContext(out spaceContextReason)) return "—";',[StringComparison]::Ordinal) -lt 0) {
+if ($tradeText.IndexOf('if (!IsTradeTravelSpaceContext()) return "—";',[StringComparison]::Ordinal) -lt 0) {
     throw 'Trade travel regression: Dungeon must fail closed before the vanilla space-only calculation.'
 }
 if ($sourceText.IndexOf('ItemSlot hover had no resolvable item id',[StringComparison]::Ordinal) -ge 0 -or

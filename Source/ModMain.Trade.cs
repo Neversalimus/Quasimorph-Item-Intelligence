@@ -154,6 +154,7 @@ namespace ItemIntelligence
             _marketEntriesAtLastRender = 0;
             _marketTravelRefreshIndex = -1;
             _marketTravelRenderThrottle = 0;
+            ResetTradePerformanceWindow();
             RefreshTradeTravelOriginSnapshotSafe(false);
 
             if (_stationsState == null) _marketResolveAttempted = false;
@@ -186,9 +187,11 @@ namespace ItemIntelligence
 
             // Travel refresh owns its own failure boundary. It must never trip the
             // existing Trade compatibility breaker.
+            long refreshStarted = TradePerfTimestamp();
             TickTradeTravelTimeRefreshSafe();
             TickTradeMissionCountdownUiRefresh();
             TickStateServiceResolver();
+            RecordTradePerformance(TradePerfStage.Refresh, refreshStarted);
             if (_marketEmptyRetryCooldown > 0) _marketEmptyRetryCooldown--;
             if (_marketScanComplete && MarketStations.Count == 0 && (_stationsState != null || _stationSystem != null) && _marketEmptyRetryCooldown <= 0)
             {
@@ -263,6 +266,7 @@ namespace ItemIntelligence
             _tradeTravelInBramfatura = false;
             _marketTravelRefreshIndex = -1;
             _marketTravelRenderThrottle = 0;
+            ResetTradePerformanceWindow();
         }
 
         private static bool TryResolveTradeTravelContract()
@@ -384,14 +388,14 @@ namespace ItemIntelligence
         private static string GetTradeTravelTimeSafe(string destinationSpaceObjectId, out double? travelHours)
         {
             travelHours = null;
+            long travelStarted = TradePerfTimestamp();
             try
             {
                 // TravelSystem.GetTravelHoursBetweenPoints dereferences live space-mode
                 // state. Test13's long mission log proved that invoking it from Dungeon
                 // can throw inside vanilla even though cached TravelMetadata still exists.
                 // The column is informational, so fail closed before the vanilla call.
-                string spaceContextReason;
-                if (!IsStarmapExperimentSpaceContext(out spaceContextReason)) return "—";
+                if (!IsTradeTravelSpaceContext()) return "—";
                 if (!RefreshTradeTravelOriginSnapshotSafe(false)) return "—";
                 if (_tradeTravelInBramfatura) return "—";
                 if (string.IsNullOrEmpty(_tradeTravelOriginSpaceObjectId) ||
@@ -430,6 +434,7 @@ namespace ItemIntelligence
                 LogTradeTravelWarningOnce("calculation", ex);
                 return "—";
             }
+            finally { RecordTradePerformance(TradePerfStage.Travel, travelStarted); }
         }
 
         private static void PrepareTradePresentationEntries()
@@ -597,6 +602,7 @@ namespace ItemIntelligence
         private static LiveMarketEntry BuildLiveMarketEntry(object station, string itemId)
         {
             if (station == null || string.IsNullOrEmpty(itemId)) return null;
+            long stationStarted = TradePerfTimestamp();
             try
             {
                 // Vanilla StationCargoTradePage.InitTradePanels reads InternalStorage.
@@ -632,6 +638,7 @@ namespace ItemIntelligence
                 int? stationSellLastBatchPrice = null;
                 int stationBuyBatchQuantity = 0;
                 int stationSellBatchQuantity = 0;
+                long pricesStarted = TradePerfTimestamp();
                 if (buys && TryGetExactStationPrice(station, itemId, true, out price)) stationBuyPrice = price;
                 if (sells && TryGetExactStationPrice(station, itemId, false, out price)) stationSellPrice = price;
                 if (IsCurrent103TradeAssembly())
@@ -652,6 +659,7 @@ namespace ItemIntelligence
                         stationSellLastBatchPrice = lastUnitPrice;
                     }
                 }
+                RecordTradePerformance(TradePerfStage.Prices, pricesStarted);
 
                 // OwnerFactionId is the CURRENT runtime/save owner. Quasimorph stations
                 // can be captured, so the initial owner must never drive this display.
@@ -676,6 +684,7 @@ namespace ItemIntelligence
                 return result;
             }
             catch { return null; }
+            finally { RecordTradePerformance(TradePerfStage.Station, stationStarted); }
         }
 
         private static int GetMarketFactionRelation(string factionId, object faction)

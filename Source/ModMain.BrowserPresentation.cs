@@ -1026,6 +1026,8 @@ namespace ItemIntelligence
         private static void RenderBrowser(string itemId)
         {
             if (_inspectorRoot == null || string.IsNullOrEmpty(itemId)) return;
+            bool measureTrade = BrowserNavigation.Tab == (int)BrowserTabId.Trade;
+            long renderStarted = measureTrade ? TradePerfTimestamp() : 0;
 
             ApplyBrowserViewport();
             EnsureLocalizationCacheLanguage();
@@ -1091,6 +1093,7 @@ namespace ItemIntelligence
             RenderBrowserRowsOnly();
             UpdateLootProgressUi();
             PositionInspectorPanel();
+            if (measureTrade) RecordTradePerformance(TradePerfStage.Render, renderStarted);
         }
 
 

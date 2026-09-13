@@ -1189,7 +1189,10 @@ namespace ItemIntelligence
         private static void TickMarketScanCompatibilitySafe()
         {
             if (!_compatTrade) return;
+            if (!_inspectorOpen || BrowserNavigation.Tab != (int)BrowserTabId.Trade) return;
 
+            long tickStarted = TradePerfTimestamp();
+            bool scanWasActive = _marketScanActive;
             try { TickMarketScan(); }
             catch (Exception ex)
             {
@@ -1197,6 +1200,7 @@ namespace ItemIntelligence
                     "Trade",
                     ex);
             }
+            finally { FinishTradePerformanceTick(tickStarted, scanWasActive && _marketScanComplete); }
         }
     }
 }

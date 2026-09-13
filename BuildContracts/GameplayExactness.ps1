@@ -233,8 +233,8 @@ if ($ruLocalizationText.IndexOf('ШАНС ≥1',[StringComparison]::Ordinal) -ge
     $enLocalizationText.IndexOf('≥1 CHANCE',[StringComparison]::Ordinal) -ge 0) {
     throw 'current font-safety regression: unsupported Scavengers heading glyph returned.'
 }
-if ($runtimeText.IndexOf('public const string Version = "1.7.42.7-test3";',[StringComparison]::Ordinal) -lt 0 -or
-    $runtimeText.IndexOf('Readability17427Test03',[StringComparison]::Ordinal) -lt 0) {
+if ($runtimeText.IndexOf('public const string Version = "1.7.42.7-test4";',[StringComparison]::Ordinal) -lt 0 -or
+    $runtimeText.IndexOf('Readability17427Test04',[StringComparison]::Ordinal) -lt 0) {
     throw 'current runtime version/marker contract missing.'
 }
 
