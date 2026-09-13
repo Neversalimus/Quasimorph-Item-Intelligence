@@ -336,6 +336,8 @@ mcm.inspector_hotkey	Open Browser Hotkey
 mcm.inspector_hotkey_tip	Choose the browser key. Search accepts normal typing; Esc closes the window while typing.
 mcm.show_interface_icons	Minimal Interface Icons
 mcm.show_interface_icons_tip	Show minimalist interface icons. Item icons and functional status markers remain.
+mcm.enhanced_readability	Enhanced Readability
+mcm.enhanced_readability_tip	Larger tabs and notes, with brighter supporting text in the item browser. Window size and zoom stay as set.
 ui.trade_layout_view	VIEW
 ui.trade_layout_cards_short	C
 ui.trade_layout_table_short	T

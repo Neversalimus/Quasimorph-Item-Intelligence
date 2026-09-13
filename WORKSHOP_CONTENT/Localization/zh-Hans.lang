@@ -333,6 +333,8 @@ mcm.inspector_hotkey	打开浏览器快捷键
 mcm.inspector_hotkey_tip	选择浏览器按键。搜索框可正常输入文字；输入时按 Esc 也会关闭窗口。
 mcm.show_interface_icons	简洁界面图标
 mcm.show_interface_icons_tip	显示简洁的界面图标。物品图标和功能状态标记仍会保留。
+mcm.enhanced_readability	增强可读性
+mcm.enhanced_readability_tip	放大物品浏览器中的标签和说明，并提高辅助文字的亮度。保持当前窗口大小和缩放比例。
 ui.trade_layout_view	视图
 ui.trade_layout_cards_short	卡
 ui.trade_layout_table_short	表

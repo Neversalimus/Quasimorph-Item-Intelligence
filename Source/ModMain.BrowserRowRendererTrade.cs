@@ -49,9 +49,9 @@ namespace ItemIntelligence
             {
                 Color headerColor = new Color(0.35f, 0.58f, 0.52f, 1f);
                 SetBrowserGraphicColorIfChanged(left, headerColor); SetBrowserFontStyleIfChanged(left, FontStyles.Italic);
-                SetLootColumnHeaderStyle(reward, headerColor); SetLootColumnHeaderStyle(unlock, headerColor);
-                SetLootColumnHeaderStyle(current, headerColor); SetLootColumnHeaderStyle(state, headerColor);
-                if (sixColumns) SetLootColumnHeaderStyle(right, headerColor);
+                SetLootColumnHeaderStyle(reward); SetLootColumnHeaderStyle(unlock);
+                SetLootColumnHeaderStyle(current); SetLootColumnHeaderStyle(state);
+                if (sixColumns) SetLootColumnHeaderStyle(right);
                 if (bg != null) SetBrowserGraphicColorIfChanged(bg, new Color(0.010f, 0.030f, 0.027f, 0.30f));
             }
             else

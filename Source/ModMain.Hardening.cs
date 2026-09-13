@@ -246,6 +246,7 @@ namespace ItemIntelligence
                 lines.Add("InspectorOpen=" + _inspectorOpen);
                 lines.Add("InspectorHotkey=" + InspectorKeyName);
                 lines.Add("InterfaceIconsEnabled=" + ShowInterfaceIcons);
+                lines.Add("EnhancedReadability=" + EnhancedReadability);
                 lines.Add("InterfaceIconLayoutActive=" + BrowserInterfaceIconLayoutEnabled);
                 lines.Add("InterfaceIconBindings=" + BrowserInterfaceIconBindings.Count.ToString(CultureInfo.InvariantCulture));
                 lines.Add("InterfaceIconSprites=" + BrowserInterfaceIconSprites.Count.ToString(CultureInfo.InvariantCulture));

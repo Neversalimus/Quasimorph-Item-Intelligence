@@ -330,6 +330,8 @@ mcm.inspector_hotkey	Tecla para abrir el explorador
 mcm.inspector_hotkey_tip	Elige la tecla del explorador. La búsqueda permite escribir normalmente; Esc cierra la ventana mientras escribes.
 mcm.show_interface_icons	Iconos de interfaz mínimos
 mcm.show_interface_icons_tip	Mostrar iconos de interfaz minimalistas. Se conservan los iconos de objetos y los indicadores de estado funcionales.
+mcm.enhanced_readability	Legibilidad mejorada
+mcm.enhanced_readability_tip	Amplía las pestañas y las notas y aclara el texto auxiliar del explorador de objetos. Mantiene el tamaño de la ventana y la escala.
 ui.trade_layout_view	VISTA
 ui.trade_layout_cards_short	F
 ui.trade_layout_table_short	T

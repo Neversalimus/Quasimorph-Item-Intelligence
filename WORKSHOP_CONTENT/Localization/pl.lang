@@ -333,6 +333,8 @@ mcm.inspector_hotkey	Skrót otwierania przeglądarki
 mcm.inspector_hotkey_tip	Wybierz klawisz przeglądarki. Wyszukiwanie przyjmuje normalne wpisywanie; Esc zamyka okno także podczas pisania.
 mcm.show_interface_icons	Minimalistyczne ikony interfejsu
 mcm.show_interface_icons_tip	Pokazuj minimalistyczne ikony interfejsu. Ikony przedmiotów i znaczniki stanu funkcji pozostają.
+mcm.enhanced_readability	Lepsza czytelność
+mcm.enhanced_readability_tip	Powiększa zakładki i objaśnienia oraz rozjaśnia tekst pomocniczy w przeglądarce przedmiotów. Rozmiar okna i skala pozostają bez zmian.
 ui.trade_layout_view	WIDOK
 ui.trade_layout_cards_short	K
 ui.trade_layout_table_short	T

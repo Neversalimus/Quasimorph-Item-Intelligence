@@ -13,6 +13,7 @@ namespace ItemIntelligence
         private sealed class BrowserRowRenderStamp
         {
             public string Language;
+            public bool Readability;
             public int Tab;
             public string Left;
             public string Right;
@@ -37,6 +38,7 @@ namespace ItemIntelligence
                 return line != null &&
                     string.Equals(Language, language ?? string.Empty, StringComparison.OrdinalIgnoreCase) &&
                     Tab == BrowserNavigation.Tab &&
+                    Readability == EnhancedReadability &&
                     string.Equals(Left, line.Left, StringComparison.Ordinal) &&
                     string.Equals(Right, line.Right, StringComparison.Ordinal) &&
                     Style == line.Style && LeftContentKind == line.LeftContentKind &&
@@ -107,6 +109,7 @@ namespace ItemIntelligence
             if (visibleRow < 0 || visibleRow >= BrowserRowRenderStamps.Length || line == null) return;
             BrowserRowRenderStamp stamp = BrowserRowRenderStamps[visibleRow] ?? new BrowserRowRenderStamp();
             stamp.Language = language ?? string.Empty;
+            stamp.Readability = EnhancedReadability;
             stamp.Tab = BrowserNavigation.Tab;
             stamp.Left = line.Left;
             stamp.Right = line.Right;

@@ -364,7 +364,7 @@ namespace ItemIntelligence
 
             GameObject helpGo = CreateBrowserText("Help", _inspectorRoot.transform,
                 new Vector2(235f, -772f), new Vector2(483f, 52f),
-                16f, new Color(0.62f, 0.78f, 0.68f, 1f), FontStyles.Normal,
+                BrowserHelpFontSize, BrowserHelpColor, FontStyles.Normal,
                 TextAlignmentOptions.MidlineRight);
             _browserHelpText = helpGo.GetComponent<TMP_Text>();
             // Two authored lines keep every shortcut readable at the minimum width.
@@ -1081,6 +1081,7 @@ namespace ItemIntelligence
                     break;
             }
 
+            WrapBrowserNoteRows();
             if (BrowserLinesNeedRecipeContextUi()) EnsureBrowserRecipeContextUi();
 
             int maxOffset = Math.Max(0, BrowserLines.Count - BrowserVisibleRows);
@@ -1097,6 +1098,7 @@ namespace ItemIntelligence
         private static void UpdateBrowserChromeLocalization()
         {
             bool ru = IsRussian();
+            ApplyBrowserHelpReadability();
 
             if (_browserCloseText != null)
                 SetBrowserTextIfChanged(_browserCloseText, GetBrowserCloseButtonLabel());
@@ -1141,11 +1143,17 @@ namespace ItemIntelligence
                 {
                     SetBrowserTextIfChanged(tabText, NormalizeModUiText(GetBrowserInterfaceTabLabel(i, GetBrowserTabLabel(i))));
                     SetBrowserFontSizeIfChanged(tabText, tabFontSize);
+                    // Only long labels may shrink, within a bounded range. Do not
+                    // pre-shrink every label just because its language is CJK/Latin.
+                    SetBrowserAutoSizingIfChanged(tabText, true);
+                    SetBrowserFontSizeMinIfChanged(tabText, EnhancedReadability ? 13f : 12f);
+                    SetBrowserFontSizeMaxIfChanged(tabText, tabFontSize);
+                    SetBrowserWordWrappingIfChanged(tabText, false);
                     SetBrowserGraphicColorIfChanged(tabText, !available
                         ? new Color(0.38f, 0.38f, 0.38f, 1f)
                         : (selected
                             ? new Color(0.88f, 0.90f, 0.62f, 1f)
-                            : new Color(0.42f, 0.68f, 0.58f, 1f)));
+                            : BrowserAvailableTabColor));
                     UpdateBrowserTabInterfaceIconStyle(i, available, selected);
                 }
                 SetBrowserGraphicColorIfChanged(BrowserTabBackgrounds[i], selected

@@ -28,6 +28,7 @@ namespace ItemIntelligence
         private static bool InspectorEnabled = true;
         private static bool ShowInspectorHint = true;
         private static bool ShowInterfaceIcons = true;
+        private static bool EnhancedReadability = false;
         private static bool ModderMode = false;
         private static bool ShowMagnumUses = true;
         private static bool ShowFutureMagnumUses = true;
@@ -122,6 +123,7 @@ namespace ItemIntelligence
             else if (string.Equals(key, "InspectorEnabled", StringComparison.OrdinalIgnoreCase)) InspectorEnabled = value;
             else if (string.Equals(key, "ShowInspectorHint", StringComparison.OrdinalIgnoreCase)) SetShowInspectorHint(value);
             else if (string.Equals(key, "ShowInterfaceIcons", StringComparison.OrdinalIgnoreCase)) ShowInterfaceIcons = value;
+            else if (string.Equals(key, "EnhancedReadability", StringComparison.OrdinalIgnoreCase)) EnhancedReadability = value;
             else if (string.Equals(key, "BrowserExpanded", StringComparison.OrdinalIgnoreCase)) BrowserExpanded = value;
             else if (string.Equals(key, "ModderMode", StringComparison.OrdinalIgnoreCase)) ModderMode = value;
             else if (string.Equals(key, "ShowMagnumUses", StringComparison.OrdinalIgnoreCase)) ShowMagnumUses = value;
@@ -195,6 +197,7 @@ namespace ItemIntelligence
                     "InspectorEnabled=" + InspectorEnabled + "\r\n" +
                     "InspectorKey=" + InspectorKeyName + "\r\n" +
                     "ShowInterfaceIcons=" + ShowInterfaceIcons + "\r\n" +
+                    "EnhancedReadability=" + EnhancedReadability + "\r\n" +
                     "ModderMode=" + ModderMode + "\r\n" +
                     "BrowserExpanded=" + BrowserExpanded + "\r\n" +
                     "BrowserWindowZoom=" + BrowserWindowZoom.ToString(CultureInfo.InvariantCulture) + "\r\n" +
@@ -266,6 +269,7 @@ namespace ItemIntelligence
                 AddMcmBool(add, list, configValueType, "InspectorEnabled", InspectorEnabled, Ui("mcm.header.inspector"), Ui("ui.enable_item_intelligence"), HotkeyUi("mcm.enable_browser_tip"));
                 AddMcmStringDropdown(add, list, dropdownConfigType, configValueType, "InspectorKey", GetInspectorKeyDisplayName(), Ui("mcm.header.inspector"), "F2", HotkeyUi("mcm.inspector_hotkey_tip"), Ui("mcm.inspector_hotkey"), GetInspectorHotkeyOptions());
                 AddMcmBool(add, list, configValueType, "ShowInterfaceIcons", ShowInterfaceIcons, Ui("mcm.header.inspector"), Ui("mcm.show_interface_icons"), Ui("mcm.show_interface_icons_tip"));
+                AddMcmBool(add, list, configValueType, "EnhancedReadability", EnhancedReadability, Ui("mcm.header.inspector"), Ui("mcm.enhanced_readability"), Ui("mcm.enhanced_readability_tip"));
                 AddMcmBool(add, list, configValueType, "ModderMode", ModderMode, Ui("mcm.header.inspector"), Ui("mcm.modder_mode"), Ui("mcm.modder_mode_tip"));
                 AddMcmBool(add, list, configValueType, "ShowMagnumUses", ShowMagnumUses, Ui("mcm.header.information"), Ui("ui.show_magnum_uses"), Ui("ui.show_unfinished_magnum_upgrade_uses"));
                 AddMcmBool(add, list, configValueType, "ShowFutureMagnumUses", ShowFutureMagnumUses, Ui("mcm.header.information"), Ui("ui.show_future_magnum_uses"), Ui("ui.include_locked_future_magnum_upgrades"));
@@ -360,6 +364,7 @@ namespace ItemIntelligence
                 if (TryReadMcmString(currentConfig, "InspectorKey", out savedInspectorKey))
                     SetInspectorKey(savedInspectorKey, "MCM");
                 ApplyMcmBool(currentConfig, "ShowInterfaceIcons", ref ShowInterfaceIcons);
+                ApplyMcmBool(currentConfig, "EnhancedReadability", ref EnhancedReadability);
                 ApplyMcmBool(currentConfig, "ModderMode", ref ModderMode);
                 ApplyMcmBool(currentConfig, "ShowMagnumUses", ref ShowMagnumUses);
                 ApplyMcmBool(currentConfig, "ShowFutureMagnumUses", ref ShowFutureMagnumUses);
@@ -382,6 +387,7 @@ namespace ItemIntelligence
                     ", UiLanguage=" + UiLanguagePreference +
                     ", InspectorKey=" + InspectorKeyName +
                     ", InterfaceIcons=" + ShowInterfaceIcons +
+                    ", EnhancedReadability=" + EnhancedReadability +
                     ", ModderMode=" + ModderMode +
                     ", Information={MagnumUses=" + ShowMagnumUses +
                     ", FutureMagnumUses=" + ShowFutureMagnumUses +

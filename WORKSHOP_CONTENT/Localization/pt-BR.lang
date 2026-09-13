@@ -330,6 +330,8 @@ mcm.inspector_hotkey	Tecla para abrir o navegador
 mcm.inspector_hotkey_tip	Escolha a tecla do navegador. A busca aceita digitação normal; Esc fecha a janela durante a digitação.
 mcm.show_interface_icons	Ícones de interface mínimos
 mcm.show_interface_icons_tip	Mostrar ícones de interface minimalistas. Os ícones dos itens e os indicadores funcionais de estado são mantidos.
+mcm.enhanced_readability	Melhor legibilidade
+mcm.enhanced_readability_tip	Aumenta as abas e as notas e clareia o texto auxiliar do navegador de itens. Mantém o tamanho da janela e a escala.
 ui.trade_layout_view	VISUAL
 ui.trade_layout_cards_short	F
 ui.trade_layout_table_short	T

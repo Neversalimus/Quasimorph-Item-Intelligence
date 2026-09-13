@@ -333,6 +333,8 @@ mcm.inspector_hotkey	Browser-Hotkey
 mcm.inspector_hotkey_tip	Wähle die Browser-Taste. Die Suche akzeptiert normale Eingabe; Esc schließt das Fenster auch während der Eingabe.
 mcm.show_interface_icons	Minimale Interface-Symbole
 mcm.show_interface_icons_tip	Minimalistische Interface-Symbole anzeigen. Gegenstandssymbole und funktionale Statusmarker bleiben erhalten.
+mcm.enhanced_readability	Verbesserte Lesbarkeit
+mcm.enhanced_readability_tip	Größere Reiter und Hinweise sowie hellere Zusatztexte im Gegenstandsbrowser. Fenstergröße und Zoom bleiben wie eingestellt.
 ui.trade_layout_view	ANSICHT
 ui.trade_layout_cards_short	K
 ui.trade_layout_table_short	T

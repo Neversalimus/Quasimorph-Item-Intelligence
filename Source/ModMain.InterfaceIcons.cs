@@ -491,11 +491,9 @@ namespace ItemIntelligence
 
         private static float GetBrowserInterfaceTabFontSize()
         {
-            if (IsCjkLanguage()) return BrowserInterfaceIconLayoutEnabled ? 10.25f : 11.25f;
-            bool compactLatin = IsUiRussianLanguage() || IsGermanLanguage() || IsPolishLanguage();
             return BrowserInterfaceIconLayoutEnabled
-                ? (compactLatin ? 10.5f : 11f)
-                : (compactLatin ? 11.5f : 12.5f);
+                ? (EnhancedReadability ? 15f : 13f)
+                : (EnhancedReadability ? 16f : 14f);
         }
 
         private static void UpdateBrowserHeaderInterfaceIconStyle(bool favorite, bool canBack)
@@ -515,7 +513,7 @@ namespace ItemIntelligence
                 ? new Color(0.38f, 0.38f, 0.38f, 1f)
                 : (selected
                     ? new Color(0.88f, 0.90f, 0.62f, 1f)
-                    : new Color(0.42f, 0.68f, 0.58f, 1f)));
+                    : BrowserAvailableTabColor));
         }
 
         private static void UpdateBrowserCatalogScopeInterfaceIconStyle(int index, bool selected)

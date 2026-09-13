@@ -330,6 +330,8 @@ mcm.inspector_hotkey	Touche d’ouverture de l’explorateur
 mcm.inspector_hotkey_tip	Choisissez la touche de l’explorateur. La recherche accepte la saisie normale ; Échap ferme la fenêtre pendant la saisie.
 mcm.show_interface_icons	Icônes d’interface minimales
 mcm.show_interface_icons_tip	Afficher des icônes d’interface minimalistes. Les icônes d’objets et les indicateurs d’état fonctionnels sont conservés.
+mcm.enhanced_readability	Lisibilité améliorée
+mcm.enhanced_readability_tip	Agrandit les onglets et les notes et éclaircit les textes secondaires du navigateur d’objets. Conserve la taille de la fenêtre et le zoom.
 ui.trade_layout_view	VUE
 ui.trade_layout_cards_short	F
 ui.trade_layout_table_short	T

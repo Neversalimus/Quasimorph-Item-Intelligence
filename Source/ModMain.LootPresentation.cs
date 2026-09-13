@@ -116,11 +116,11 @@ namespace ItemIntelligence
             if (visible) SetBrowserFontStyleIfChanged(column, FontStyles.Normal);
         }
 
-        private static void SetLootColumnHeaderStyle(TMP_Text column, Color color)
+        private static void SetLootColumnHeaderStyle(TMP_Text column)
         {
             if (column == null || !column.gameObject.activeSelf) return;
-            column.color = color;
-            column.fontStyle = FontStyles.Italic;
+            SetBrowserGraphicColorIfChanged(column, BrowserNoteColor);
+            SetBrowserFontStyleIfChanged(column, FontStyles.Normal);
         }
 
         private static void BuildBrowserLootSources(string itemId)

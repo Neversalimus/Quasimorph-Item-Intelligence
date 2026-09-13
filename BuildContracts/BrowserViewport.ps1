@@ -45,3 +45,4 @@ if (-not $viewportWeaponText.Contains('CalculateBrowserWeaponTooltipPosition('))
     throw 'Weapon hover card must respect the viewport and screen bounds.'
 }
 & (Join-Path $root 'Tests/Run-ViewportTests.ps1') -SourceRoot $root
+& (Join-Path $root 'Tests/Run-ReadabilityTests.ps1') -SourceRoot $root

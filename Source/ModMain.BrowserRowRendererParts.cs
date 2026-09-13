@@ -394,8 +394,8 @@ namespace ItemIntelligence
                 SetBrowserFontSizeIfChanged(left, 15f);
                 SetBrowserFontStyleIfChanged(left, FontStyles.Bold);
                 SetBrowserGraphicColorIfChanged(left, headerColor);
-                SetLootColumnHeaderStyle(factionReward, new Color(0.50f, 0.70f, 0.61f, 1f));
-                SetLootColumnHeaderStyle(factionUnlock, new Color(0.50f, 0.70f, 0.61f, 1f));
+                SetLootColumnHeaderStyle(factionReward);
+                SetLootColumnHeaderStyle(factionUnlock);
                 if (bg != null) SetBrowserGraphicColorIfChanged(bg, new Color(0.032f, 0.092f, 0.073f, 0.95f));
             }
             else
@@ -463,17 +463,11 @@ namespace ItemIntelligence
             
             if (line.RowKind == BrowserRowKind.FactionRewardHeader)
             {
-                SetBrowserFontStyleIfChanged(left, FontStyles.Italic);
-                SetBrowserGraphicColorIfChanged(left, new Color(0.35f, 0.58f, 0.52f, 1f));
-                Color headerColor = new Color(0.35f, 0.58f, 0.52f, 1f);
-                SetBrowserGraphicColorIfChanged(factionReward, headerColor);
-                SetBrowserGraphicColorIfChanged(factionUnlock, headerColor);
-                SetBrowserGraphicColorIfChanged(factionCurrent, headerColor);
-                SetBrowserGraphicColorIfChanged(factionState, headerColor);
-                SetBrowserFontStyleIfChanged(factionReward, FontStyles.Italic);
-                SetBrowserFontStyleIfChanged(factionUnlock, FontStyles.Italic);
-                SetBrowserFontStyleIfChanged(factionCurrent, FontStyles.Italic);
-                SetBrowserFontStyleIfChanged(factionState, FontStyles.Italic);
+                SetLootColumnHeaderStyle(left);
+                SetLootColumnHeaderStyle(factionReward);
+                SetLootColumnHeaderStyle(factionUnlock);
+                SetLootColumnHeaderStyle(factionCurrent);
+                SetLootColumnHeaderStyle(factionState);
                 if (bg != null) SetBrowserGraphicColorIfChanged(bg, new Color(0.010f, 0.030f, 0.027f, 0.30f));
             }
             else
@@ -566,9 +560,9 @@ namespace ItemIntelligence
                 Color headerColor = new Color(0.44f, 0.67f, 0.57f, 1f);
                 SetBrowserGraphicColorIfChanged(left, headerColor);
                 SetBrowserFontStyleIfChanged(left, FontStyles.Italic);
-                SetLootColumnHeaderStyle(kind, headerColor);
-                SetLootColumnHeaderStyle(condition, headerColor);
-                SetLootColumnHeaderStyle(result, headerColor);
+                SetLootColumnHeaderStyle(kind);
+                SetLootColumnHeaderStyle(condition);
+                SetLootColumnHeaderStyle(result);
                 if (bg != null) SetBrowserGraphicColorIfChanged(bg, new Color(0.010f, 0.030f, 0.027f, 0.30f));
             }
             else
@@ -686,10 +680,10 @@ namespace ItemIntelligence
                 Color headerColor = new Color(0.35f, 0.58f, 0.52f, 1f);
                 SetBrowserGraphicColorIfChanged(left, headerColor);
                 SetBrowserFontStyleIfChanged(left, FontStyles.Italic);
-                SetLootColumnHeaderStyle(factionReward, headerColor);
-                SetLootColumnHeaderStyle(factionUnlock, headerColor);
-                SetLootColumnHeaderStyle(factionCurrent, headerColor);
-                SetLootColumnHeaderStyle(factionState, headerColor);
+                SetLootColumnHeaderStyle(factionReward);
+                SetLootColumnHeaderStyle(factionUnlock);
+                SetLootColumnHeaderStyle(factionCurrent);
+                SetLootColumnHeaderStyle(factionState);
                 if (bg != null) SetBrowserGraphicColorIfChanged(bg, new Color(0.010f, 0.030f, 0.027f, 0.30f));
             }
             else
@@ -750,11 +744,11 @@ namespace ItemIntelligence
                 Color headerColor = new Color(0.35f, 0.58f, 0.52f, 1f);
                 SetBrowserGraphicColorIfChanged(left, headerColor);
                 SetBrowserFontStyleIfChanged(left, FontStyles.Italic);
-                SetLootColumnHeaderStyle(factionReward, headerColor);
-                SetLootColumnHeaderStyle(factionUnlock, headerColor);
-                SetLootColumnHeaderStyle(factionCurrent, headerColor);
-                SetLootColumnHeaderStyle(factionState, headerColor);
-                SetLootColumnHeaderStyle(right, headerColor);
+                SetLootColumnHeaderStyle(factionReward);
+                SetLootColumnHeaderStyle(factionUnlock);
+                SetLootColumnHeaderStyle(factionCurrent);
+                SetLootColumnHeaderStyle(factionState);
+                SetLootColumnHeaderStyle(right);
                 if (bg != null) SetBrowserGraphicColorIfChanged(bg, new Color(0.010f, 0.030f, 0.027f, 0.30f));
             }
             else
@@ -816,8 +810,8 @@ namespace ItemIntelligence
                 Color headerColor = new Color(0.35f, 0.58f, 0.52f, 1f);
                 SetBrowserGraphicColorIfChanged(left, headerColor);
                 SetBrowserFontStyleIfChanged(left, FontStyles.Italic);
-                SetLootColumnHeaderStyle(factionReward, headerColor);
-                SetLootColumnHeaderStyle(factionUnlock, headerColor);
+                SetLootColumnHeaderStyle(factionReward);
+                SetLootColumnHeaderStyle(factionUnlock);
                 if (bg != null) SetBrowserGraphicColorIfChanged(bg, new Color(0.010f, 0.030f, 0.027f, 0.30f));
             }
             else
@@ -849,14 +843,13 @@ namespace ItemIntelligence
         private static void RenderBrowserFullWidthTextRow(ref BrowserRowRenderContext ctx)
         {
             BrowserLine line = ctx.Line; TMP_Text left = ctx.Left; TMP_Text right = ctx.Right; RectTransform leftRt = ctx.LeftRt; string leftText = ctx.LeftText;
-            // Full-width informational rows avoid wasting the unused right column.
             // Full-width informational rows avoid wasting the unused right
             // column. FullSection is used by long localized section titles;
             // FullNote lines are pre-wrapped to preserve the fixed row pool.
             if (line.RowKind == BrowserRowKind.FullSection)
                 ApplyBrowserFullWidthRow(left, right, leftRt, 17f, 12.5f, true);
             else
-                ApplyBrowserFullWidthRow(left, right, leftRt, 11.5f, 10.5f, true);
+                ApplyBrowserFullWidthRow(left, right, leftRt, BrowserNoteFontSize, BrowserNoteFontSize, false);
             SetBrowserTextIfChanged(left, NormalizeModUiText(leftText));
         }
 
@@ -889,9 +882,9 @@ namespace ItemIntelligence
             }
             else if (line.Style == BrowserLineStyle.Note)
             {
-                SetBrowserFontStyleIfChanged(left, FontStyles.Italic);
-                SetBrowserGraphicColorIfChanged(left, new Color(0.35f, 0.58f, 0.52f, 1f));
-                SetBrowserGraphicColorIfChanged(right, new Color(0.35f, 0.58f, 0.52f, 1f));
+                SetBrowserFontStyleIfChanged(left, FontStyles.Normal);
+                SetBrowserGraphicColorIfChanged(left, BrowserNoteColor);
+                SetBrowserGraphicColorIfChanged(right, BrowserNoteColor);
                 if (bg != null) SetBrowserGraphicColorIfChanged(bg, new Color(0.010f, 0.030f, 0.027f, 0.30f));
             }
             else if (line.Style == BrowserLineStyle.Accent)

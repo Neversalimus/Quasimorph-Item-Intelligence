@@ -35,23 +35,49 @@ namespace ItemIntelligence
             }
         }
 
+        private static void WrapBrowserNoteRows()
+        {
+            // Some short/conditional notes are added directly by their feature.
+            // Wrap every FullNote once after rebuilding the page, before calculating
+            // scroll bounds. Scrolling pooled rows never changes the source list.
+            int fallback = GetLanguageAwareWrapFallback(100, 115);
+            for (int i = BrowserLines.Count - 1; i >= 0; i--)
+            {
+                BrowserLine note = BrowserLines[i];
+                if (note.RowKind != BrowserRowKind.FullNote || string.IsNullOrWhiteSpace(note.Left)) continue;
+                List<string> wrapped = WrapBrowserFullWidthText(NormalizeModUiText(note.Left), fallback);
+                if (wrapped.Count == 1 && string.Equals(wrapped[0], note.Left, StringComparison.Ordinal)) continue;
+                BrowserLines.RemoveAt(i);
+                for (int j = wrapped.Count - 1; j >= 0; j--)
+                    BrowserLines.Insert(i, BrowserLine.FullNote(wrapped[j]));
+            }
+        }
+
         private static List<string> WrapBrowserFullWidthText(string value, int fallbackMaxChars)
         {
             List<string> result = new List<string>();
             if (string.IsNullOrWhiteSpace(value)) return result;
-            fallbackMaxChars = Math.Max(36, fallbackMaxChars);
+            // Legacy fallback budgets were authored for 10.5-unit notes. Keep the
+            // no-font path conservative as the chosen profile increases text size.
+            fallbackMaxChars = Math.Max(24, (int)Math.Floor(Math.Max(36, fallbackMaxChars) * 10.5f / BrowserNoteFontSize));
 
             TMP_Text measure = BrowserRowLeft != null && BrowserRowLeft.Length > 0
                 ? BrowserRowLeft[0] : null;
             float oldFontSize = 0f;
             bool oldWordWrapping = false;
+            bool oldAutoSizing = false;
+            FontStyles oldFontStyle = FontStyles.Normal;
             if (measure != null)
             {
                 oldFontSize = measure.fontSize;
                 oldWordWrapping = measure.enableWordWrapping;
-                // FullNote renders with autosize down to 10.5. Measure at that exact
-                // lower bound so the pre-wrap cannot discard usable horizontal space.
-                measure.fontSize = 10.5f;
+                oldAutoSizing = measure.enableAutoSizing;
+                oldFontStyle = measure.fontStyle;
+                // Use the same fixed size and upright style as the rendered note.
+                // The measuring slot may currently hold a bold section/table row.
+                measure.enableAutoSizing = false;
+                measure.fontStyle = FontStyles.Normal;
+                measure.fontSize = BrowserNoteFontSize;
                 measure.enableWordWrapping = false;
             }
 
@@ -105,7 +131,14 @@ namespace ItemIntelligence
                             line.Length = 0;
                         }
                         if (line.Length > 0) line.Append(' ');
-                        line.Append(word);
+                        if (IsBrowserFullWidthTextTooWide(measure, word, fullWidthWrapLimit, fallbackMaxChars))
+                        {
+                            List<string> pieces = WrapUnspacedBrowserText(word, delegate(string part)
+                            { return IsBrowserFullWidthTextTooWide(measure, part, fullWidthWrapLimit, fallbackMaxChars); });
+                            for (int p = 0; p < pieces.Count - 1; p++) result.Add(pieces[p]);
+                            if (pieces.Count > 0) line.Append(pieces[pieces.Count - 1]);
+                        }
+                        else line.Append(word);
                     }
                 }
 
@@ -117,6 +150,8 @@ namespace ItemIntelligence
                 {
                     measure.fontSize = oldFontSize;
                     measure.enableWordWrapping = oldWordWrapping;
+                    measure.fontStyle = oldFontStyle;
+                    measure.enableAutoSizing = oldAutoSizing;
                 }
             }
             return result;
