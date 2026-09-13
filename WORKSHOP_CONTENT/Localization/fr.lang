@@ -488,7 +488,7 @@ ui.other_containers	PLACEMENT EN CONTENEURS GÉNÉRAUX
 ui.mission	MISSION
 ui.yes	OUI
 ui.mission_generation	MÉCANISME
-loot.note.general_spawn	✓ = le conteneur peut recevoir l’objet après la génération normale du butin de mission. Il s’agit du placement, pas d’une probabilité de butin supplémentaire ; l’objet peut rester au sol.
+loot.note.general_spawn	Coche : le conteneur peut recevoir l’objet après la génération du butin de mission. Il s’agit du placement, pas d’une probabilité supplémentaire ; l’objet peut rester au sol.
 ui.loot_modifiers_current	MODIFICATEURS : ACTUELS
 ui.loot_modifiers_manual	MODIFICATEURS : MANUELS
 ui.loot_marauder	Maraudeur

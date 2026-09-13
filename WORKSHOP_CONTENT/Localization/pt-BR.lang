@@ -488,7 +488,7 @@ ui.other_containers	POSICIONAMENTO EM RECIPIENTES GERAIS
 ui.mission	MISSÃO
 ui.yes	SIM
 ui.mission_generation	MECÂNICA
-loot.note.general_spawn	✓ = o recipiente pode receber o item após a geração normal de saque da missão. Indica posicionamento, não outra chance de saque; o item pode ficar no chão.
+loot.note.general_spawn	Marca de verificação: o recipiente pode receber o item após a geração do saque da missão. Indica posicionamento, não outra chance de saque; o item pode ficar no chão.
 ui.loot_modifiers_current	MODIFICADORES: ATUAIS
 ui.loot_modifiers_manual	MODIFICADORES: MANUAIS
 ui.loot_marauder	Saqueador

@@ -490,7 +490,7 @@ ui.other_containers	ALLGEMEINE BEHÄLTERPLATZIERUNG
 ui.mission	MISSION
 ui.yes	JA
 ui.mission_generation	MECHANIK
-loot.note.general_spawn	✓ = Behälter kann den Gegenstand nach normaler Missionsbeute aufnehmen. Nur Platzierung, keine weitere Dropchance; er kann am Boden bleiben.
+loot.note.general_spawn	Häkchen: Der Behälter kann den Gegenstand nach der normalen Beutegenerierung aufnehmen. Nur Platzierung, keine weitere Dropchance; er kann am Boden bleiben.
 ui.loot_modifiers_current	MODIFIKATOREN: AKTUELL
 ui.loot_modifiers_manual	MODIFIKATOREN: MANUELL
 ui.loot_marauder	Marodeur

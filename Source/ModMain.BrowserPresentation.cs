@@ -1523,7 +1523,7 @@ namespace ItemIntelligence
 
             if (hasStationProduced || hasStationUsed)
             {
-                BrowserLines.Add(BrowserLine.Note(Ui("ui.station_production_note")));
+                BrowserLines.Add(BrowserLine.FullNote(Ui("ui.station_production_note")));
 
                 if (hasStationProduced)
                 {

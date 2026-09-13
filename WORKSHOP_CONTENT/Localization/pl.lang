@@ -490,7 +490,7 @@ ui.other_containers	OGÓLNE ROZMIESZCZENIE W POJEMNIKACH
 ui.mission	MISJA
 ui.yes	TAK
 ui.mission_generation	MECHANIKA
-loot.note.general_spawn	✓ = pojemnik może dostać przedmiot po normalnym łupie misji. To tylko rozmieszczenie, nie kolejna szansa; przedmiot może zostać na podłodze.
+loot.note.general_spawn	Znak wyboru: pojemnik może przyjąć przedmiot po wygenerowaniu łupu misji. To rozmieszczenie, nie dodatkowa szansa na łup; przedmiot może zostać na podłodze.
 ui.loot_modifiers_current	MODYFIKATORY: AKTUALNE
 ui.loot_modifiers_manual	MODYFIKATORY: RĘCZNE
 ui.loot_marauder	Maruder

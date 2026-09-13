@@ -488,7 +488,7 @@ ui.other_containers	UBICACIÓN EN CONTENEDORES GENERALES
 ui.mission	MISIÓN
 ui.yes	SÍ
 ui.mission_generation	MECÁNICA
-loot.note.general_spawn	✓ = el contenedor puede recibir el objeto tras la generación normal de botín de la misión. Indica ubicación, no otra probabilidad de botín; el objeto puede quedarse en el suelo.
+loot.note.general_spawn	Marca de verificación: el contenedor puede recibir el objeto tras generarse el botín de la misión. Indica colocación, no otra probabilidad; el objeto puede quedar en el suelo.
 ui.loot_modifiers_current	MODIFICADORES: ACTUALES
 ui.loot_modifiers_manual	MODIFICADORES: MANUALES
 ui.loot_marauder	Saqueador

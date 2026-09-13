@@ -498,7 +498,7 @@ ui.other_containers	GENERAL CONTAINER PLACEMENT
 ui.mission	MISSION
 ui.yes	YES
 ui.mission_generation	MECHANIC
-loot.note.general_spawn	✓ = container can receive the item after normal mission loot generation. This is placement, not another drop chance; item may stay on the floor.
+loot.note.general_spawn	Check mark: container may receive the item after mission loot generation. This is placement, not another drop chance; the item may stay on the floor.
 ui.loot_modifiers_current	MODIFIERS: CURRENT
 ui.loot_modifiers_manual	MODIFIERS: MANUAL
 ui.loot_marauder	Marauder

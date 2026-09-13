@@ -12,7 +12,7 @@ $root = Split-Path -Parent $MyInvocation.MyCommand.Path
 $buildScript = Join-Path $root 'BUILD_AND_STAGE.ps1'
 if (-not (Test-Path -LiteralPath $buildScript -PathType Leaf)) { throw 'BUILD_AND_STAGE.ps1 not found.' }
 
-Write-Host 'Item Intelligence v1.7.42.7-test2 - Browser readability' -ForegroundColor Cyan
+Write-Host 'Item Intelligence v1.7.42.7-test3 - Browser readability' -ForegroundColor Cyan
 Write-Host 'Builds the DEV source and prepares the existing DEV Workshop payload.' -ForegroundColor DarkGray
 Write-Host 'No Steam upload is performed automatically.' -ForegroundColor DarkGray
 Write-Host 'Public Workshop item 3780078201 is protected; this installer only prepares DEV staging.' -ForegroundColor DarkGray
@@ -34,7 +34,7 @@ Write-Host 'DEV BUILD + STAGING OK.' -ForegroundColor Green
 Write-Host ('Stage: ' + $stage) -ForegroundColor Green
 Write-Host ('Stage DLL SHA256: ' + $stageHash) -ForegroundColor Green
 Write-Host 'Expected runtime marker:' -ForegroundColor Yellow
-Write-Host '[ItemIntelligence] ACTIVE VERSION 1.7.42.7-test2 (Readability17427Test02).' -ForegroundColor Cyan
+Write-Host '[ItemIntelligence] ACTIVE VERSION 1.7.42.7-test3 (Readability17427Test03).' -ForegroundColor Cyan
 Write-Host ''
 Write-Host 'Upload to the existing DEV item, then enable DEV in the game:' -ForegroundColor Yellow
 Write-Host ('mod_updateworkshopitem ' + $DevWorkshopId + ' ' + $stage + ' FALSE') -ForegroundColor Cyan

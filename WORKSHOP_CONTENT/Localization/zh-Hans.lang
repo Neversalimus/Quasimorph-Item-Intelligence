@@ -490,7 +490,7 @@ ui.other_containers	常规容器放置
 ui.mission	任务
 ui.yes	是
 ui.mission_generation	机制
-loot.note.general_spawn	✓ = 常规任务战利品生成后，容器可接收该物品。这表示放置方式，不是另一层掉落概率；物品也可能留在地面。
+loot.note.general_spawn	勾号表示容器可在常规任务战利品生成后接收该物品。这是放置规则，并非额外掉落概率；物品也可能留在地面。
 ui.loot_modifiers_current	修正：当前
 ui.loot_modifiers_manual	修正：手动
 ui.loot_marauder	掠夺者
