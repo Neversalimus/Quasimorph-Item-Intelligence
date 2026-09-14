@@ -686,7 +686,7 @@ foreach ($forbidden in @(
     if ($tradeText.IndexOf($forbidden,[StringComparison]::Ordinal) -ge 0) { throw "current retired sell heuristic returned: $forbidden" }
 }
 # Exact price presentation is feature-versioned: 1.0.3 mirrors TradeStationPanel, while the audited 1.0.2 path is retained separately.
-foreach ($token in @('IsCurrent103TradeAssembly()','TryGetExactStationPanelPrice103','GetMember(preset, "BarterValue")','Mathf.RoundToInt(displayed)','"GetBuyPrice"','Dictionary<string, int> oneItem','{ itemId, 1 }','TryGetLegacyExactStationPrice102','string methodName = stationBuys ? "GetItemSellPrice" : "GetItemBuyPrice";')) {
+foreach ($token in @('IsCurrent103TradeAssembly()','TryGetExactStationPanelPrice103','GetMember(preset, "BarterValue")','Mathf.RoundToInt(displayed)','TradePriceApi103.BuyPrice','Dictionary<string, int> oneItem','{ itemId, 1 }','TryGetLegacyExactStationPrice102','string methodName = stationBuys ? "GetItemSellPrice" : "GetItemBuyPrice";')) {
     if ($runtimeText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "current exact trade-price token missing: $token" }
 }
 

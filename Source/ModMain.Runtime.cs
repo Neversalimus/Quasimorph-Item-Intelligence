@@ -21,7 +21,7 @@ namespace ItemIntelligence
     /// </summary>
     public static partial class ModMain
     {
-        public const string Version = "1.7.42.7-test4";
+        public const string Version = "1.7.42.7-test5";
         // Ordinary Item Intelligence remains a read-only knowledge browser. The only
         // save-affecting exception is one explicit item-spawn click inside MCM Modder Mode;
         // economy, story variables and faction progression are never mutated.
@@ -55,7 +55,7 @@ namespace ItemIntelligence
         {
             if (context != null) _modContext = context;
             EnsureConfigLoaded();
-            Debug.Log("[ItemIntelligence] ACTIVE VERSION " + Version + " (Readability17427Test04).");
+            Debug.Log("[ItemIntelligence] ACTIVE VERSION " + Version + " (Readability17427Test05).");
             RunCompatibilityShieldStatic();
             RefreshBuildFingerprint();
             if (ShouldWriteAutomaticDiagnostics()) WriteDiagnosticsReportSafe("AfterConfigsLoaded");
@@ -3005,10 +3005,9 @@ namespace ItemIntelligence
             if (container == null || string.IsNullOrEmpty(itemId)) return 0;
             try
             {
-                Type itemStorageType = AccessTools.TypeByName("MGSC.ItemStorage");
+                Type itemStorageType = typeof(ItemStorage);
                 if (itemStorageType == null || !itemStorageType.IsInstanceOfType(container)) return 0;
-                MethodInfo countItems = itemStorageType.GetMethod(
-                    "CountItems", InstanceFlags, null, new Type[] { typeof(string) }, null);
+                MethodInfo countItems = TradeStockApi.CountItems;
                 if (countItems == null) return 0;
                 object raw = countItems.Invoke(container, new object[] { itemId });
                 int count;
@@ -3047,13 +3046,12 @@ namespace ItemIntelligence
 
             try
             {
-                Type tradeType = AccessTools.TypeByName("MGSC.TradeSystem");
-                Type stationType = AccessTools.TypeByName("MGSC.Station");
-                Type factionType = AccessTools.TypeByName("MGSC.Faction");
-                Type factionsType = AccessTools.TypeByName("MGSC.Factions");
-                Type pricesType = AccessTools.TypeByName("MGSC.ItemsPrices");
-                Type progressionType = AccessTools.TypeByName("MGSC.MagnumProgression");
-                if (tradeType == null || stationType == null || !stationType.IsInstanceOfType(station) ||
+                Type stationType = typeof(Station);
+                Type factionType = typeof(Faction);
+                Type factionsType = typeof(Factions);
+                Type pricesType = typeof(ItemsPrices);
+                Type progressionType = typeof(MagnumProgression);
+                if (!stationType.IsInstanceOfType(station) ||
                     pricesType == null || _itemsPrices == null || !pricesType.IsInstanceOfType(_itemsPrices) ||
                     progressionType == null)
                     return false;
@@ -3064,21 +3062,7 @@ namespace ItemIntelligence
                     if (faction == null || factionType == null || !factionType.IsInstanceOfType(faction))
                         return false;
 
-                    MethodInfo sellPrice = null;
-                    MethodInfo[] methods = tradeType.GetMethods(StaticFlags);
-                    for (int i = 0; i < methods.Length; i++)
-                    {
-                        MethodInfo method = methods[i];
-                        if (!string.Equals(method.Name, "GetItemSellPrice", StringComparison.Ordinal)) continue;
-                        ParameterInfo[] p = method.GetParameters();
-                        if (p.Length != 6 || p[0].ParameterType != progressionType ||
-                            p[1].ParameterType != factionType || p[2].ParameterType != stationType ||
-                            p[3].ParameterType != pricesType || p[4].ParameterType != typeof(string) ||
-                            p[5].ParameterType != typeof(bool))
-                            continue;
-                        sellPrice = method;
-                        break;
-                    }
+                    MethodInfo sellPrice = TradePriceApi103.SellPrice;
                     if (sellPrice == null) return false;
 
                     object rawBase = sellPrice.Invoke(
@@ -3088,7 +3072,7 @@ namespace ItemIntelligence
 
                     if (_difficultyState == null)
                     {
-                        Type difficultyType = AccessTools.TypeByName("MGSC.Difficulty");
+                        Type difficultyType = typeof(Difficulty);
                         if (difficultyType != null) _difficultyState = ResolveStateModule(difficultyType);
                     }
                     object preset = GetMember(_difficultyState, "Preset");
@@ -3111,21 +3095,7 @@ namespace ItemIntelligence
                     return false;
                 _factionsState = factions;
 
-                MethodInfo buyPrice = null;
-                MethodInfo[] buyMethods = tradeType.GetMethods(StaticFlags);
-                Type quantityMapType = typeof(Dictionary<string, int>);
-                for (int i = 0; i < buyMethods.Length; i++)
-                {
-                    MethodInfo method = buyMethods[i];
-                    if (!string.Equals(method.Name, "GetBuyPrice", StringComparison.Ordinal)) continue;
-                    ParameterInfo[] p = method.GetParameters();
-                    if (p.Length != 5 || p[0].ParameterType != progressionType ||
-                        p[1].ParameterType != factionsType || p[2].ParameterType != pricesType ||
-                        p[3].ParameterType != stationType || !p[4].ParameterType.IsAssignableFrom(quantityMapType))
-                        continue;
-                    buyPrice = method;
-                    break;
-                }
+                MethodInfo buyPrice = TradePriceApi103.BuyPrice;
                 if (buyPrice == null) return false;
 
                 Dictionary<string, int> oneItem = new Dictionary<string, int>(StringComparer.Ordinal)

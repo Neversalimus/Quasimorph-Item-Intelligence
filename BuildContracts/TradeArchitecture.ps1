@@ -37,7 +37,7 @@ foreach ($token in @('BuildBrowserTrade','AddTradeStationCard103','AddTradeStati
 foreach ($token in @('private static void BuildBrowserTrade','private static void AddTradeStationCard103','private static string FormatTradePriceRange')) {
     if ($tradeFacadeText.IndexOf($token,[StringComparison]::Ordinal) -ge 0) { throw "Trade facade regression: presentation helper returned to ModMain.Trade.cs: $token" }
 }
-foreach ($token in @('GetTradeBatchSampleQuantity','TryGetExactStationBatchPrice103','lastUnitPrice','rawBeforeLast','GetItemSellTradePoints','GetBuyPrice')) {
+foreach ($token in @('GetTradeBatchSampleQuantity','TryGetExactStationBatchPrice103','lastUnitPrice','rawBeforeLast','TradePriceApi103.SellTradePoints','TradePriceApi103.BuyPrice')) {
     if ($tradeBatchPricing103Text.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "Trade pricing owner missing contract token: $token" }
 }
 if ($runtimeTradeOwnerText.IndexOf('private static bool TryGetExactStationBatchPrice103',[StringComparison]::Ordinal) -ge 0) { throw 'Runtime ownership regression: 1.0.3 batch pricing returned to Runtime.cs.' }
@@ -108,3 +108,4 @@ $modderSpawnRuntimeText = [IO.File]::ReadAllText((Join-Path $sourceDir 'ModMain.
 if ($modderSpawnRuntimeText.IndexOf('IsCurrent103TradeAssembly()',[StringComparison]::Ordinal) -ge 0) { throw 'Trade-only hotfix gate leaked into Modder Mode cargo spawning.' }
 
 & (Join-Path $PSScriptRoot '../Tests/Run-TradeRuntimeTests.ps1') -SourceRoot (Split-Path -Parent $PSScriptRoot)
+& (Join-Path $PSScriptRoot '../Tests/Run-TradePricingTests.ps1') -SourceRoot (Split-Path -Parent $PSScriptRoot)
