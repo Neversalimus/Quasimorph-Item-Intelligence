@@ -77,6 +77,11 @@ try {
     # Execute the real publisher with in-memory git/gh transports. These functions
     # intercept every native call; no remote command or network request is executed.
     $mock = @{ remoteMain = $receipt.SourceCommit; remoteTag = $receipt.SourceCommit; release = [pscustomobject]@{ id = 17424; tag_name = $receipt.Tag; draft = $true; assets = @() }; pushes = 0; uploads = 0; edits = 0; creates = 0; tagQueries = 0; failList = $false; duplicateList = $false; failCreate = $false; failUpload = $false; remoteFiles = (Join-Path $temp 'remote-resume-assets') }
+    $mock.hiddenList = $false; $mock.graphQLErrors = $false; $mock.failGraphQL = $false
+    $mock.missingRepository = $false; $mock.wrongId = $false; $mock.wrongPublishedTag = $false
+    $mock.pendingRestTag = $false; $mock.graphQLReads = 0; $mock.hiddenGraphQLReads = 0
+    $mock.hideAfterCreate = 0; $mock.sleeps = 0; $mock.failRestId = $false
+    function Start-Sleep { param([int]$Seconds) $mock.sleeps++ }
     New-Item -ItemType Directory -Path $mock.remoteFiles | Out-Null
     function git {
         $v = @($args); $global:LASTEXITCODE = 0
@@ -105,10 +110,31 @@ try {
             if ($v[1] -eq ('repos/' + $receipt.Repo + '/releases') -and $v -contains '--slurp') {
                 if ($mock.failList) { $global:LASTEXITCODE = 1; return '{"message":"Not Found"}' }
                 $older = '{"id":17422,"tag_name":"v1.7.42.2","draft":false,"assets":[]}'
-                if ($null -eq $mock.release) { return '[[' + $older + '],[]]' }
+                if ($null -eq $mock.release -or $mock.hiddenList) { return '[[' + $older + '],[]]' }
                 $current = $mock.release | ConvertTo-Json -Depth 8 -Compress
                 if ($mock.duplicateList) { return '[[' + $current + '],[' + $current + ']]' }
                 return '[[' + $older + '],[' + $current + ']]'
+            }
+            if ($v[1] -eq 'graphql') {
+                $mock.graphQLReads++
+                if ($v -notcontains ('owner=Neversalimus') -or $v -notcontains ('name=Quasimorph-Item-Intelligence') -or
+                    $v -notcontains ('tag=' + $receipt.Tag) -or $v -notcontains 'github.com') { throw 'Incorrect pending-tag lookup variables.' }
+                if ($mock.failGraphQL) { $global:LASTEXITCODE = 1; return '{"message":"Forbidden"}' }
+                if ($mock.graphQLErrors) { return '{"data":null,"errors":[{"message":"denied"}]}' }
+                if ($mock.missingRepository) { return '{"data":{"repository":null}}' }
+                if ($null -eq $mock.release -or $mock.hiddenGraphQLReads -gt 0) {
+                    if ($mock.hiddenGraphQLReads -gt 0) { $mock.hiddenGraphQLReads-- }
+                    return '{"data":{"repository":{"release":null}}}'
+                }
+                return @{ data = @{ repository = @{ release = @{ databaseId = $mock.release.id; isDraft = $mock.release.draft } } } } | ConvertTo-Json -Depth 8 -Compress
+            }
+            if ($v[1] -eq ('repos/' + $receipt.Repo + '/releases/17424')) {
+                if ($mock.failRestId) { $global:LASTEXITCODE = 1; return '{"message":"Not Found"}' }
+                $body = $mock.release | ConvertTo-Json -Depth 8 | ConvertFrom-Json
+                if ($mock.wrongId) { $body.id = 999 }
+                if ($mock.pendingRestTag -and $body.draft) { $body.tag_name = 'untagged-fixture' }
+                if ($mock.wrongPublishedTag -and -not $body.draft) { $body.tag_name = 'v9.9.9.9' }
+                return $body | ConvertTo-Json -Depth 8 -Compress
             }
             if ($v[1] -eq ('repos/' + $receipt.Repo + '/releases/tags/' + $receipt.Tag)) {
                 $mock.tagQueries++
@@ -125,6 +151,7 @@ try {
             if ($null -ne $mock.release) { throw 'Attempted to recreate an existing release.' }
             $mock.release = [pscustomobject]@{ id = 17424; tag_name = $receipt.Tag; draft = $true; assets = @() }
             $mock.creates++
+            $mock.hiddenGraphQLReads = $mock.hideAfterCreate
             return
         }
         if ($v[1] -eq 'upload') {
@@ -156,10 +183,43 @@ try {
     Reject { & $publisher -ReceiptPath $receiptPath -WorkshopPublished } 'ambiguous same-tag release list blocks continuation'
     $mock.duplicateList = $false
 
+    # A successful create can leave a pending-tag draft absent from the REST list.
+    $mock.hiddenList = $true; $mock.pendingRestTag = $true; $mock.release.draft = $true
+    $beforeWrites = $mock.uploads + $mock.creates + $mock.pushes
+    & $publisher -ReceiptPath $receiptPath -WorkshopPublished -ExistingReleaseOnly 6>$null
+    Check ($mock.graphQLReads -gt 0 -and -not $mock.release.draft) 'pending-tag GraphQL plus REST ID resolves the unlisted draft'
+    Check (($mock.uploads + $mock.creates + $mock.pushes) -eq $beforeWrites) 'pending draft recovery preserves existing assets and refs'
+    $mock.graphQLErrors = $true
+    Reject { & $publisher -ReceiptPath $receiptPath -WorkshopPublished -ExistingReleaseOnly } 'GraphQL errors in HTTP-success response stop recovery'
+    $mock.graphQLErrors = $false; $mock.failGraphQL = $true
+    Reject { & $publisher -ReceiptPath $receiptPath -WorkshopPublished -ExistingReleaseOnly } 'failed GraphQL call is not absence'
+    $mock.failGraphQL = $false; $mock.missingRepository = $true
+    Reject { & $publisher -ReceiptPath $receiptPath -WorkshopPublished -ExistingReleaseOnly } 'inaccessible GraphQL repository is not absence'
+    $mock.missingRepository = $false; $mock.wrongId = $true
+    Reject { & $publisher -ReceiptPath $receiptPath -WorkshopPublished -ExistingReleaseOnly } 'different REST release identity is rejected'
+    $mock.wrongId = $false; $mock.wrongPublishedTag = $true
+    Reject { & $publisher -ReceiptPath $receiptPath -WorkshopPublished -ExistingReleaseOnly } 'different published tag is rejected'
+    $mock.wrongPublishedTag = $false; $mock.failRestId = $true
+    Reject { & $publisher -ReceiptPath $receiptPath -WorkshopPublished -ExistingReleaseOnly } 'REST by ID access failure stops recovery'
+    $mock.failRestId = $false
+    Check (($mock.uploads + $mock.creates + $mock.pushes) -eq $beforeWrites) 'failed identity lookups cause no writes'
+    $savedRelease = $mock.release; $mock.release = $null
+    $beforeSleeps = $mock.sleeps
+    Reject { & $publisher -ReceiptPath $receiptPath -WorkshopPublished -ExistingReleaseOnly } 'missing draft does not create a second release in recovery mode'
+    Check ($mock.sleeps -eq ($beforeSleeps + 2) -and ($mock.uploads + $mock.creates + $mock.pushes) -eq $beforeWrites) 'missing recovery is bounded and read-only'
+    $mock.release = $savedRelease; $mock.hiddenGraphQLReads = 2
+    & $publisher -ReceiptPath $receiptPath -WorkshopPublished -ExistingReleaseOnly 6>$null
+    Check ($mock.hiddenGraphQLReads -eq 0) 'delayed existing release becomes visible within bounded retry'
+    $mock.remoteTag = ''
+    Reject { & $publisher -ReceiptPath $receiptPath -WorkshopPublished -ExistingReleaseOnly } 'recovery never repairs Git refs by pushing'
+    $mock.remoteTag = $receipt.SourceCommit; $mock.hiddenList = $false; $mock.pendingRestTag = $false
+    Check ((Get-FileHash -LiteralPath $receiptPath -Algorithm SHA256).Hash -eq $beforeReceipt) 'all lookup recovery paths retain frozen receipt bytes'
+
     # Fresh publication still handles failures before creation and during asset upload.
     $mock.remoteMain = $receipt.BaseMain; $mock.remoteTag = ''; $mock.release = $null
     $mock.pushes = 0; $mock.uploads = 0; $mock.edits = 0; $mock.creates = 0
     $mock.failCreate = $true; $mock.failUpload = $true
+    $mock.hiddenList = $true; $mock.pendingRestTag = $true; $mock.hideAfterCreate = 2
     $mock.remoteFiles = Join-Path $temp 'remote-assets'
     New-Item -ItemType Directory -Path $mock.remoteFiles | Out-Null
     Reject { & $publisher -ReceiptPath $receiptPath } 'Steam acknowledgement required before publication'

@@ -60,9 +60,9 @@ function Get-RemoteReleaseRefs([string]$Source, [string]$Tag) {
 }
 
 function Find-ReleaseIncludingDrafts([string]$Repo, [string]$Tag) {
-    # The tag endpoint is documented for published releases. Authenticated listing
-    # includes drafts and is also the retry journal after a successful create.
-    $json = Invoke-ReleaseNative gh @('api',"repos/$Repo/releases",'--paginate','--slurp') | Out-String
+    # Keep the complete list for duplicate detection. Some drafts are resolved only
+    # by their pending tag; GitHub CLI itself uses GraphQL, then REST by numeric ID.
+    $json = Invoke-ReleaseNative gh @('api',"repos/$Repo/releases",'--hostname','github.com','--paginate','--slurp') | Out-String
     $pages = ConvertFrom-Json -InputObject $json -NoEnumerate
     $found = [Collections.Generic.List[object]]::new()
     foreach ($page in $pages) {
@@ -73,7 +73,40 @@ function Find-ReleaseIncludingDrafts([string]$Repo, [string]$Tag) {
     }
     if ($found.Count -gt 1) { throw 'Ambiguous release state.' }
     if ($found.Count -eq 1) { return $found[0] }
-    return $null
+
+    $parts = $Repo.Split('/')
+    if ($parts.Count -ne 2 -or -not $parts[0] -or -not $parts[1]) { throw 'Invalid release repository.' }
+    $query = 'query QIIReleaseByTag($owner: String!, $name: String!, $tag: String!) { repository(owner: $owner, name: $name) { release(tagName: $tag) { databaseId isDraft } } }'
+    $lookupJson = Invoke-ReleaseNative gh @('api','graphql','--hostname','github.com',
+        '-f',('query=' + $query),'-f',('owner=' + $parts[0]),'-f',('name=' + $parts[1]),'-f',('tag=' + $Tag)) | Out-String
+    $lookup = ConvertFrom-Json -InputObject $lookupJson
+    if ($null -eq $lookup -or ($lookup.PSObject.Properties['errors'] -and @($lookup.errors).Count -gt 0)) {
+        throw 'GitHub release lookup returned GraphQL errors; no release was created.'
+    }
+    if (-not $lookup.PSObject.Properties['data'] -or $null -eq $lookup.data -or
+        -not $lookup.data.PSObject.Properties['repository'] -or $null -eq $lookup.data.repository -or
+        -not $lookup.data.repository.PSObject.Properties['release']) {
+        throw 'GitHub release lookup did not return an accessible repository.'
+    }
+    $reference = $lookup.data.repository.release
+    if ($null -eq $reference) { return $null }
+    if (-not $reference.PSObject.Properties['databaseId'] -or
+        [string]$reference.databaseId -notmatch '^[1-9][0-9]*$' -or
+        -not $reference.PSObject.Properties['isDraft'] -or $reference.isDraft -isnot [bool]) {
+        throw 'Unexpected GitHub release identity.'
+    }
+    $releaseJson = Invoke-ReleaseNative gh @('api',("repos/$Repo/releases/" + $reference.databaseId),
+        '--hostname','github.com','-H','Cache-Control: no-cache') | Out-String
+    $release = ConvertFrom-Json -InputObject $releaseJson
+    if ($null -eq $release -or -not $release.PSObject.Properties['id'] -or
+        [string]$release.id -cne [string]$reference.databaseId -or
+        -not $release.PSObject.Properties['draft'] -or $release.draft -isnot [bool] -or
+        -not $release.PSObject.Properties['assets'] -or $null -eq $release.assets -or
+        -not $release.PSObject.Properties['tag_name']) { throw 'GitHub returned a different or incomplete release.' }
+    # A draft can have an internal REST tag. The exact GraphQL pending-tag lookup
+    # and numeric ID establish identity; a published release must have our tag.
+    if (-not $release.draft -and [string]$release.tag_name -cne $Tag) { throw 'Published release tag differs.' }
+    return $release
 }
 
 function Write-ReleaseJson([object]$Value, [string]$Path) {

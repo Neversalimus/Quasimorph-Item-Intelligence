@@ -28,4 +28,6 @@ pwsh -NoProfile -File .\Release\Publish-Release.ps1 -ReceiptPath "C:\QM_Workshop
 
 A retry uses the same source checkout, receipt and frozen files. Conflicting references or assets stop publication; the scripts do not replace them automatically. Keep main unchanged while a frozen release is being published. After publication, start a new version from a separate checkout instead of reusing the completed receipt for new source changes.
 
+Draft lookup also checks the pending tag through GraphQL and verifies the numeric release ID. If publication reports that a created draft is not yet visible, retry with `-ExistingReleaseOnly` in addition to `-WorkshopPublished`. This mode resumes an existing release without creating another draft or pushing Git references.
+
 The workflow's local regression tests are in [Tests/Run-ReleaseTests.ps1](../Tests/Run-ReleaseTests.ps1). Those tests use simulated GitHub and Steam interactions; they do not publish anything.

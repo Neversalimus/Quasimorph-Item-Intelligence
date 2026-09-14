@@ -1,11 +1,15 @@
 # Changelog
 
-## v1.7.42.7-test1 — 2026-09-12 (DEV)
+## v1.7.42.7 — 2026-09-14
 
 - Enlarged item IDs and corrected their double tinting, including hover and pressed colors.
 - Enlarged search hints and entered text, removed italic search hints and improved their contrast.
 - Enlarged and brightened keyboard hints, using two lines in all eight interface languages.
 - Adjusted label rectangles to fit the text while retaining the existing content-row capacity and zoom controls.
+- Added optional Enhanced readability in MCM for brighter secondary labels and larger tabs and notes, localized in all eight interface languages.
+- Fixed clipped station-production explanations and replaced an unsupported check-mark glyph in the Loot legend with localized text.
+- Greatly reduced Trade scan overhead by resolving price methods once and reading the current space interface directly for travel checks. Current prices, stock and batch calculations remain unchanged.
+- Improved GitHub release recovery for drafts that are not yet visible in the release list.
 
 ## v1.7.42.6 — 2026-09-11
 

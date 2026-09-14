@@ -4,9 +4,9 @@
 
 [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3780078201) · [Downloads](https://github.com/Neversalimus/Quasimorph-Item-Intelligence/releases) · [Changelog](CHANGELOG.md)
 
-This branch contains **1.7.42.7-test1**, a browser readability candidate based on stable **1.7.42.6**, for **Quasimorph 1.0.4.582s.c4335c5**.
+This branch contains **1.7.42.7** for **Quasimorph 1.0.4.582s.c4335c5**.
 
-The candidate enlarges item IDs, search text and keyboard hints, fixes double tinting of item IDs, and arranges keyboard hints on two lines in all eight interface languages. Use the existing DEV Workshop item **3781927679** to test it.
+This release improves browser readability and removes repeated game API discovery during Trade scans, greatly reducing the time spent retrieving station prices.
 
 ## Features
 
@@ -19,6 +19,7 @@ The candidate enlarges item IDs, search text and keyboard hints, fixes double ti
 - Enemy implant sources that account for body slots, tissue compatibility, preset implants and socket competition.
 - Faction technology, weapon/ammunition links and detailed fire-mode tooltips.
 - A large browser window and adjustable interface scale.
+- An optional enhanced readability setting for brighter labels and larger tabs and notes.
 - Optional Modder Mode for creating items in ship cargo or the mission clone's inventory.
 
 ## Installation and controls
@@ -28,6 +29,8 @@ Subscribe through [Steam Workshop](https://steamcommunity.com/sharedfiles/filede
 Press **F2** to open the browser. MCM provides the hotkey, interface language and other settings. The browser footer provides **Large window / Normal window** and **− / +** scale controls.
 
 Large view covers 94% of the screen. Normal view starts at 100% scale and large view at 150%; each remembers its own 100–200% setting in 25-point steps. On small screens, the effective scale is limited to keep controls accessible.
+
+Enable **Enhanced readability** in MCM for brighter secondary text and larger tab and note labels. It is off by default and works alongside the window-size and zoom controls.
 
 Modder Mode is optional and creates real items in the current game. Leave it disabled when using the mod solely as a reference browser.
 
@@ -53,12 +56,12 @@ A Windows build requires **PowerShell 7** and a local Quasimorph installation. F
 pwsh -NoProfile -ExecutionPolicy Bypass -File .\Install.ps1 -GameRoot "C:\Program Files (x86)\Steam\steamapps\common\Quasimorph"
 ```
 
-Use your actual game path. This compiles the candidate against the installed game and stages the files in `C:\QM_Workshop\ItemIntelligence_DEV`. The installer prints the command for updating the existing DEV Workshop item. It does not install over a subscribed copy or upload to Steam. Game assemblies and compiled binaries are not stored in this repository.
+Use your actual game path. This compiles the stable source against the installed game and stages the files in `C:\QM_Workshop\ItemIntelligence`. The installer prints the command for updating the existing public Workshop item. It does not install over a subscribed copy or upload to Steam. Game assemblies and compiled binaries are not stored in this repository.
 
 Run the source contracts and behavior tests without game files:
 
 ```powershell
-pwsh -NoProfile -File .\BUILD_AND_STAGE.ps1 -Mode TEST -ContractsOnly
+pwsh -NoProfile -File .\BUILD_AND_STAGE.ps1 -Mode RELEASE -ContractsOnly
 ```
 
 Maintainers can use the [release workflow](Release/README.md) to prepare and publish a new version.
