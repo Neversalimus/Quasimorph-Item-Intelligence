@@ -168,7 +168,7 @@ namespace ItemIntelligence
             _factionTechWarmupActive = FactionTechWarmupFactions.Count > 0;
             _factionTechWarmupComplete = !_factionTechWarmupActive;
 
-            Debug.Log("[ItemIntelligence] Faction technology warmup queued: " +
+            VerboseLog("[ItemIntelligence] Faction technology warmup queued: " +
                 FactionTechWarmupFactions.Count.ToString(CultureInfo.InvariantCulture) + " factions.");
         }
 
@@ -201,7 +201,7 @@ namespace ItemIntelligence
             foreach (KeyValuePair<string, List<FactionTechUnlock>> pair in FactionTechUnlocksByItem)
                 if (pair.Value != null) links += pair.Value.Count;
 
-            Debug.Log("[ItemIntelligence] Faction technology warmup complete: items=" +
+            VerboseLog("[ItemIntelligence] Faction technology warmup complete: items=" +
                 FactionTechUnlocksByItem.Count.ToString(CultureInfo.InvariantCulture) +
                 ", links=" + links.ToString(CultureInfo.InvariantCulture) + ".");
 
@@ -339,7 +339,7 @@ namespace ItemIntelligence
             if (!_factionTechApiLogged)
             {
                 _factionTechApiLogged = true;
-                Debug.Log("[ItemIntelligence] Faction reward API resolved: " +
+                VerboseLog("[ItemIntelligence] Faction reward API resolved: " +
                     dropCollection.GetType().FullName + ".GetTradeItems, category=" +
                     categoryType.FullName + ".");
             }
@@ -396,7 +396,7 @@ namespace ItemIntelligence
                 {
                     _factionEnabledContractLogged = true;
                     if (_factionsIsEnabledFactionMethod != null)
-                        Debug.Log("[ItemIntelligence][FactionAvailability] exactGate=Factions.IsEnabledFaction(Faction).");
+                        VerboseLog("[ItemIntelligence][FactionAvailability] exactGate=Factions.IsEnabledFaction(Faction).");
                     else
                         Debug.LogWarning("[ItemIntelligence][FactionAvailability] exact current-save gate unavailable; faction reward rows are not hidden by guesswork.");
                 }
@@ -587,7 +587,7 @@ namespace ItemIntelligence
             if (!_secretDataContractLogged)
             {
                 _secretDataContractLogged = true;
-                Debug.Log("[ItemIntelligence] Secret Data rewards resolved: records=" +
+                VerboseLog("[ItemIntelligence] Secret Data rewards resolved: records=" +
                     rewards.Count.ToString(CultureInfo.InvariantCulture) +
                     ", reputation=" + reputationText +
                     ", source=Data.AnComDataRewards.");
@@ -1208,7 +1208,7 @@ namespace ItemIntelligence
             if (!_factionTradeSchemaLogged)
             {
                 _factionTradeSchemaLogged = true;
-                Debug.Log("[ItemIntelligence] Faction trade visuals: owner=" + factionId +
+                VerboseLog("[ItemIntelligence] Faction trade visuals: owner=" + factionId +
                     ", runtimeType=" + (faction == null ? "null" : faction.GetType().FullName) +
                     ", icon=unresolved.");
             }

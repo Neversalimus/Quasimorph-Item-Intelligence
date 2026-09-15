@@ -3,6 +3,7 @@
 param([string]$SourceRoot = (Split-Path -Parent $PSScriptRoot))
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
+$verboseLoggingFixture = [IO.File]::ReadAllText((Join-Path $PSScriptRoot 'VerboseLoggingFixture.cs'))
 foreach ($name in @('Microsoft.CodeAnalysis.dll','Microsoft.CodeAnalysis.CSharp.dll')) {
     Add-Type -Path (Join-Path $PSHOME $name)
 }
@@ -23,6 +24,7 @@ $code = '#pragma warning disable 0649' + "`n" + $context + "`n" + $perf +
 $imports = [regex]::Matches($code, '(?m)^using [^;]+;\r?$') | ForEach-Object Value | Select-Object -Unique
 $code = ($imports -join "`n") + "`n" + [regex]::Replace($code, '(?m)^using [^;]+;\r?$', '')
 $code = $code.Replace('ItemIntelligence', $identity).Replace('UnityEngine', ($identity + '.UnityFixture')).Replace('MGSC', ($identity + '.GameFixture'))
+$code += "`n" + $verboseLoggingFixture.Replace('namespace ItemIntelligence', ('namespace ' + $identity))
 Add-Type -TypeDefinition $code -WarningAction Stop
 $type = ($identity + '.ModMain') -as [type]
 $count = $type::RunTradeRuntimeCases()

@@ -131,7 +131,7 @@ namespace ItemIntelligence
             }
 
             targetPanel = panels[targetIndex];
-            Debug.Log("[ItemIntelligence][FactionTechNav] target panel resolved by exact FactionsScreen.OnEnable order: faction=" +
+            VerboseLog("[ItemIntelligence][FactionTechNav] target panel resolved by exact FactionsScreen.OnEnable order: faction=" +
                 factionId + ", index=" + targetIndex.ToString() + ", panels=" + panels.Count.ToString() + ".");
             return true;
         }

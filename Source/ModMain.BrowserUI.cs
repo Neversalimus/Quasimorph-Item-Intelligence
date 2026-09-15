@@ -224,7 +224,7 @@ namespace ItemIntelligence
                     "Modal guard for " + typeName + " skipped " + failed + " method(s).",
                     firstFailure);
 
-            Debug.Log("[ItemIntelligence] Modal guard " + typeName + ": patched " + patched + " declared methods.");
+            VerboseLog("[ItemIntelligence] Modal guard " + typeName + ": patched " + patched + " declared methods.");
             return patched;
         }
 
@@ -418,7 +418,7 @@ namespace ItemIntelligence
                 int before = KnownItemIds.Count;
                 EnsureRuntimeIndexesReady();
                 if (before == 0 && KnownItemIds.Count > 0)
-                    Debug.Log("[ItemIntelligence] Direct mission resume: runtime indexes initialized on browser request. KnownItems=" +
+                    VerboseLog("[ItemIntelligence] Direct mission resume: runtime indexes initialized on browser request. KnownItems=" +
                         KnownItemIds.Count.ToString(CultureInfo.InvariantCulture) + ".");
             }
 
@@ -534,7 +534,7 @@ namespace ItemIntelligence
 
                         if (!string.IsNullOrEmpty(targetItemId))
                         {
-                            Debug.Log("[ItemIntelligence] " + GetInspectorKeyDisplayName() + " target resolved: " + targetItemId + ".");
+                            VerboseLog("[ItemIntelligence] " + GetInspectorKeyDisplayName() + " target resolved: " + targetItemId + ".");
                             OpenInspector(targetItemId, openRequestStarted, targetResolveMs);
                         }
                         else
@@ -584,7 +584,7 @@ namespace ItemIntelligence
                     if (!_browserSearchCaptureLogged)
                     {
                         _browserSearchCaptureLogged = true;
-                        Debug.Log("[ItemIntelligence] Search field focused; InventorySearch-style modal input guard active.");
+                        VerboseLog("[ItemIntelligence] Search field focused; InventorySearch-style modal input guard active.");
                         // onValueChanged owns normal query refreshes. Focus restoration only
                         // needs one cache-aware refresh to re-show the existing result window.
                         if (!string.IsNullOrEmpty(_browserSearchInput.text))
@@ -723,7 +723,7 @@ namespace ItemIntelligence
                 _inspectorItemId = itemId;
                 BrowserTabId adaptiveEntryTab = ResolveAdaptiveEntryTab(itemId);
                 BrowserNavigation.Tab = (int)adaptiveEntryTab;
-                Debug.Log("[ItemIntelligence][AdaptiveEntry] item=" + itemId + ", tab=" + adaptiveEntryTab.ToString() + ".");
+                VerboseLog("[ItemIntelligence][AdaptiveEntry] item=" + itemId + ", tab=" + adaptiveEntryTab.ToString() + ".");
                 BrowserNavigation.ScrollOffset = 0;
                 BrowserNavigation.History.Clear();
                 Array.Clear(BrowserNavigation.ScrollOffsets, 0, BrowserNavigation.ScrollOffsets.Length);
@@ -757,7 +757,7 @@ namespace ItemIntelligence
                     float knownStagesMs = targetResolveMs + perfIndexesMs + perfPanelMs + perfRenderMs;
                     float perfMiscMs = Mathf.Max(0f, perfTotalMs - knownStagesMs);
                     float coreBuildMs = _lastCoreIndexBuildFrame == Time.frameCount ? _lastCoreIndexBuildMs : 0f;
-                    Debug.Log("[ItemIntelligence][FirstOpenPerf] targetResolve=" +
+                    VerboseLog("[ItemIntelligence][FirstOpenPerf] targetResolve=" +
                         targetResolveMs.ToString("0.0", CultureInfo.InvariantCulture) +
                         "ms, coreBuild=" + coreBuildMs.ToString("0.0", CultureInfo.InvariantCulture) +
                         "ms, runtimeReady=" + perfIndexesMs.ToString("0.0", CultureInfo.InvariantCulture) +
@@ -783,7 +783,7 @@ namespace ItemIntelligence
                         ", StationProdInputs=" + GetListCount(StationProductionByInputItem, ResolveStaticRelationItemId(itemId)) + ".");
                 }
 
-                Debug.Log("[ItemIntelligence] Browser opened for " + itemId + ".");
+                VerboseLog("[ItemIntelligence] Browser opened for " + itemId + ".");
             }
             catch (Exception ex)
             {
@@ -1076,7 +1076,7 @@ namespace ItemIntelligence
                 if (!_browserPreviewTooltipTypeLogged)
                 {
                     _browserPreviewTooltipTypeLogged = true;
-                    Debug.Log("[ItemIntelligence] Browser native tooltip active: " + tooltip.GetType().FullName + ".");
+                    VerboseLog("[ItemIntelligence] Browser native tooltip active: " + tooltip.GetType().FullName + ".");
                 }
             }
             catch (Exception ex)
@@ -1294,7 +1294,7 @@ namespace ItemIntelligence
                     {
                         _secretDataSelectedFactionId = action.Payload;
                         BrowserNavigation.ScrollOffset = 0;
-                        Debug.Log("[ItemIntelligence] Secret Data faction package selected: " + action.Payload + ".");
+                        VerboseLog("[ItemIntelligence] Secret Data faction package selected: " + action.Payload + ".");
                         RenderBrowser(_inspectorItemId);
                     }
                     return;
@@ -1303,7 +1303,7 @@ namespace ItemIntelligence
                     if (!string.IsNullOrEmpty(action.Payload))
                     {
                         GUIUtility.systemCopyBuffer = action.Payload;
-                        Debug.Log("[ItemIntelligence][ModderMode] copied: " + action.Payload + ".");
+                        VerboseLog("[ItemIntelligence][ModderMode] copied: " + action.Payload + ".");
                     }
                     return;
 

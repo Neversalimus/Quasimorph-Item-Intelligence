@@ -153,7 +153,7 @@ namespace ItemIntelligence
         {
             ApplyBrowserInterfaceIconVisibility(true);
             UpdateBrowserTabs();
-            Debug.Log("[ItemIntelligence] Browser interface icons ready: proceduralSprites=" +
+            VerboseLog("[ItemIntelligence] Browser interface icons ready: proceduralSprites=" +
                 BrowserInterfaceIconSprites.Count + ", bindings=" + BrowserInterfaceIconBindings.Count +
                 ", enabled=" + BrowserInterfaceIconLayoutEnabled + ".");
         }

@@ -335,6 +335,9 @@ mcm.enhanced_readability_tip	Aumenta as abas e as notas e clareia o texto auxili
 ui.trade_layout_view	VISUAL
 ui.trade_layout_cards_short	F
 ui.trade_layout_table_short	T
+mcm.header.logging	Registro
+mcm.verbose_logging	Registro detalhado
+mcm.verbose_logging_tip	Grava mensagens detalhadas de execução e desempenho do Item Intelligence no Player.log. Ative apenas ao investigar problemas.
 mcm.mod_name	Item Intelligence - Banco de itens e fontes de saque
 compat.disabled_feature	Este recurso está temporariamente indisponível.
 mcm.save_failed	Não foi possível salvar as configurações do Item Intelligence.

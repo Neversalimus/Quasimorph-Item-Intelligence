@@ -108,7 +108,7 @@ namespace ItemIntelligence
             if (snapshot.Available && !_lootContainerSaveEstimateAvailableLogged)
             {
                 _lootContainerSaveEstimateAvailableLogged = true;
-                Debug.Log("[ItemIntelligence][ContainerSaveEstimate] neutralTechContext=true, RNG=untouched, " +
+                VerboseLog("[ItemIntelligence][ContainerSaveEstimate] neutralTechContext=true, RNG=untouched, " +
                     "missionContexts=" + snapshot.MissionContexts.ToString(CultureInfo.InvariantCulture) +
                     ", enabledFactionContexts=" + snapshot.FactionContexts.ToString(CultureInfo.InvariantCulture) +
                     ", missionPointBudget=excluded.");

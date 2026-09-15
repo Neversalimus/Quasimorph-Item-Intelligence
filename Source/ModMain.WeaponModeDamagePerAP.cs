@@ -155,7 +155,7 @@ namespace ItemIntelligence
                     if (!_weaponModeMeleeDamagePerApFormulaLogged)
                     {
                         _weaponModeMeleeDamagePerApFormulaLogged = true;
-                        Debug.Log("[ItemIntelligence][WeaponModeDamageAP] meleeFormula=Round(WeaponRecord.Damage*FireMode.DamageMult)*WeaponCastsCount; AP=1 per melee action; CreatureData.MeleeDamage/perks/effects excluded; GetMeleeDamageFromCreature omitted.");
+                        VerboseLog("[ItemIntelligence][WeaponModeDamageAP] meleeFormula=Round(WeaponRecord.Damage*FireMode.DamageMult)*WeaponCastsCount; AP=1 per melee action; CreatureData.MeleeDamage/perks/effects excluded; GetMeleeDamageFromCreature omitted.");
                     }
                     if (ModderMode && WeaponModeDamagePerApLoggedKeys.Count < 12 && WeaponModeDamagePerApLoggedKeys.Add(modeKey))
                     {
@@ -163,7 +163,7 @@ namespace ItemIntelligence
                         WeaponModeItemIdByKey.TryGetValue(modeKey, out itemId);
                         string rawId;
                         WeaponModeRawIdByKey.TryGetValue(modeKey, out rawId);
-                        Debug.Log("[ItemIntelligence][WeaponModeDamageAPValue] item=" + (itemId ?? string.Empty) +
+                        VerboseLog("[ItemIntelligence][WeaponModeDamageAPValue] item=" + (itemId ?? string.Empty) +
                             ", mode=" + (rawId ?? string.Empty) +
                             ", melee=true" +
                             ", base=" + baseMin.ToString(CultureInfo.InvariantCulture) + "-" + baseMax.ToString(CultureInfo.InvariantCulture) +
@@ -223,7 +223,7 @@ namespace ItemIntelligence
                 if (!_weaponModeDamagePerApFormulaLogged)
                 {
                     _weaponModeDamagePerApFormulaLogged = true;
-                    Debug.Log("[ItemIntelligence][WeaponModeDamageAP] formula=Round(baseDamage*FireMode.DamageMult*DefaultAmmo.DamageMult/BulletCastsPerShot)*BulletCastsPerShot*WeaponCastsCount; AP=1 per firearm action; neutral character modifiers.");
+                    VerboseLog("[ItemIntelligence][WeaponModeDamageAP] formula=Round(baseDamage*FireMode.DamageMult*DefaultAmmo.DamageMult/BulletCastsPerShot)*BulletCastsPerShot*WeaponCastsCount; AP=1 per firearm action; neutral character modifiers.");
                 }
                 if (ModderMode && WeaponModeDamagePerApLoggedKeys.Count < 12 && WeaponModeDamagePerApLoggedKeys.Add(modeKey))
                 {
@@ -231,7 +231,7 @@ namespace ItemIntelligence
                     WeaponModeItemIdByKey.TryGetValue(modeKey, out itemId);
                     string rawId;
                     WeaponModeRawIdByKey.TryGetValue(modeKey, out rawId);
-                    Debug.Log("[ItemIntelligence][WeaponModeDamageAPValue] item=" + (itemId ?? string.Empty) +
+                    VerboseLog("[ItemIntelligence][WeaponModeDamageAPValue] item=" + (itemId ?? string.Empty) +
                         ", mode=" + (rawId ?? string.Empty) +
                         ", ammo=" + ammoId +
                         ", base=" + baseMin.ToString(CultureInfo.InvariantCulture) + "-" + baseMax.ToString(CultureInfo.InvariantCulture) +

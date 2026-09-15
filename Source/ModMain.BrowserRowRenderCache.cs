@@ -140,7 +140,7 @@ namespace ItemIntelligence
         {
             if (!ModderMode || _browserRowReuseHitsThisPass <= 0 || _browserRowReuseLogCount >= 12) return;
             _browserRowReuseLogCount++;
-            UnityEngine.Debug.Log("[ItemIntelligence][RenderReuse] overviewRows=" +
+            VerboseLog("[ItemIntelligence][RenderReuse] overviewRows=" +
                 _browserRowReuseHitsThisPass.ToString() + "/" + BrowserVisibleRows.ToString() + ".");
         }
     }

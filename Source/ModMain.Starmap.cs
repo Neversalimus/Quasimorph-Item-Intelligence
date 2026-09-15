@@ -88,7 +88,7 @@ namespace ItemIntelligence
             }
 
             _starmapTravelSafetyPatchesReady = count >= 3;
-            Debug.Log("[ItemIntelligence][StarmapTravelSafety] hooks=" +
+            VerboseLog("[ItemIntelligence][StarmapTravelSafety] hooks=" +
                 count.ToString(CultureInfo.InvariantCulture) +
                 ", ready=" + (_starmapTravelSafetyPatchesReady ? "true" : "false") + ".");
             return count;
@@ -207,7 +207,7 @@ namespace ItemIntelligence
                 _observedSpaceshipTravelStartFrame = Time.frameCount;
                 _observedSpaceshipTravelActive = true;
 
-                Debug.Log("[ItemIntelligence][StarmapTravelSafety] observed vanilla travel start: origin=" +
+                VerboseLog("[ItemIntelligence][StarmapTravelSafety] observed vanilla travel start: origin=" +
                     (_observedSpaceshipTravelOriginId.Length == 0 ? "<empty>" : _observedSpaceshipTravelOriginId) +
                     ", destination=" +
                     (_observedSpaceshipTravelDestinationId.Length == 0 ? "<empty>" : _observedSpaceshipTravelDestinationId) +
@@ -277,7 +277,7 @@ namespace ItemIntelligence
                 // publication as arrival.
                 if (destinationReached && Time.frameCount > _observedSpaceshipTravelStartFrame + 5)
                 {
-                    Debug.Log("[ItemIntelligence][StarmapTravelSafety] observed vanilla travel completed: destination=" +
+                    VerboseLog("[ItemIntelligence][StarmapTravelSafety] observed vanilla travel completed: destination=" +
                         (_observedSpaceshipTravelDestinationId.Length == 0
                             ? "<empty>"
                             : _observedSpaceshipTravelDestinationId) +
@@ -343,7 +343,7 @@ namespace ItemIntelligence
                     _observedSpaceshipTravelState = state;
                     _observedSpaceshipTravelStartFrame = Time.frameCount;
 
-                    Debug.Log("[ItemIntelligence][StarmapTravelSafety] adopted active vanilla travel from loaded session: current=" +
+                    VerboseLog("[ItemIntelligence][StarmapTravelSafety] adopted active vanilla travel from loaded session: current=" +
                         (current.Length == 0 ? "<empty>" : current) +
                         ", target=" + target +
                         ", state=" + state + ".");
@@ -464,7 +464,7 @@ namespace ItemIntelligence
             _pendingStarmapPhaseFrames = 0;
             _pendingStarmapOpenIssued = false;
 
-            Debug.Log("[ItemIntelligence][StarmapNav] Captured fallback=" +
+            VerboseLog("[ItemIntelligence][StarmapNav] Captured fallback=" +
                 fallbackType.FullName + " activeViews=" + _pendingStarmapFallbackLabel +
                 " target=" + spaceObjectId + ".");
             CloseInspector();
@@ -814,7 +814,7 @@ namespace ItemIntelligence
 
                 _starmapSourceVisualSuspendFrame = Time.frameCount;
                 _starmapSourceVisualRestoreDueFrame = -1;
-                Debug.Log("[ItemIntelligence][StarmapNav] Suspended full source visual stack count=" +
+                VerboseLog("[ItemIntelligence][StarmapNav] Suspended full source visual stack count=" +
                     StarmapSourceViewVisualStates.Count + " views=[" + string.Join(", ", suspended.ToArray()) + "].");
                 return true;
             }
@@ -895,7 +895,7 @@ namespace ItemIntelligence
             StarmapSourceViewVisualStates.Clear();
             _starmapSourceVisualSuspendFrame = -1;
             _starmapSourceVisualRestoreDueFrame = -1;
-            Debug.Log("[ItemIntelligence][StarmapNav] Restored source view visuals count=" +
+            VerboseLog("[ItemIntelligence][StarmapNav] Restored source view visuals count=" +
                 restored + " reason=" + (reason ?? string.Empty) + ".");
         }
 
@@ -939,7 +939,7 @@ namespace ItemIntelligence
                     return false;
                 }
 
-                Debug.Log("[ItemIntelligence][StarmapNav] UI.Show StarmapScreen fallback=" +
+                VerboseLog("[ItemIntelligence][StarmapNav] UI.Show StarmapScreen fallback=" +
                     fallback.FullName + " target=" + _pendingStarmapTargetId + ".");
                 _qiiStarmapSessionOwned = true;
                 _qiiStarmapShowFailedUnsafe = false;
@@ -1067,7 +1067,7 @@ namespace ItemIntelligence
                         new Type[] { typeof(string) }, null);
                     if (select != null) select.Invoke(map, new object[] { _pendingStarmapTargetId });
                     if (zoom != null) zoom.Invoke(map, new object[] { _pendingStarmapTargetId });
-                    Debug.Log("[ItemIntelligence][StarmapNav] Starmap focused on " +
+                    VerboseLog("[ItemIntelligence][StarmapNav] Starmap focused on " +
                         _pendingStarmapTargetId + "; Back fallback=" +
                         (_pendingStarmapFallbackType == null ? "<null>" : _pendingStarmapFallbackType.FullName) + ".");
 

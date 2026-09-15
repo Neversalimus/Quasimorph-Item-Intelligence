@@ -55,7 +55,7 @@ namespace ItemIntelligence
             BuildAuditedHardcodedStorySources();
             BuildAuditedRewardAndByproductSources();
 
-            Debug.Log("[ItemIntelligence][LootSpecialSources] items=" +
+            VerboseLog("[ItemIntelligence][LootSpecialSources] items=" +
                 LootSpecialSourcesByItem.Count.ToString(CultureInfo.InvariantCulture) +
                 ", links=" + _lootSpecialSourceLinks.ToString(CultureInfo.InvariantCulture) +
                 ", hardcodedCurrentBuild=" + (IsAuditedSourceFamilyContractVerified() ? "enabled" : "disabled") + ".");

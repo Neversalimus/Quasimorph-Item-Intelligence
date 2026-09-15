@@ -101,7 +101,7 @@ namespace ItemIntelligence
                     ", declaredSources=" + auditDeclaredSources.ToString(CultureInfo.InvariantCulture) +
                     ", duplicateKeys=" + auditDuplicateKeys.ToString(CultureInfo.InvariantCulture) +
                     ", visibleRows=" + compact.Count.ToString(CultureInfo.InvariantCulture) + ".";
-                if (auditDuplicateKeys == 0) Debug.Log(audit); else Debug.LogWarning(audit);
+                if (auditDuplicateKeys == 0) VerboseLog(audit); else Debug.LogWarning(audit);
             }
 
             BrowserLines.Clear();
@@ -141,7 +141,7 @@ namespace ItemIntelligence
             if (BrowserNavigation.Tab >= 0 && BrowserNavigation.Tab < BrowserNavigation.ScrollOffsets.Length)
                 BrowserNavigation.ScrollOffsets[BrowserNavigation.Tab] = BrowserNavigation.ScrollOffset;
 
-            Debug.Log("[ItemIntelligence][LootAccordion] section=" + key +
+            VerboseLog("[ItemIntelligence][LootAccordion] section=" + key +
                 ", expanded=" + (!expanded ? "true" : "false") + ".");
             RenderBrowser(_inspectorItemId);
         }

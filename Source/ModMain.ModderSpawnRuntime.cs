@@ -146,7 +146,7 @@ namespace ItemIntelligence
                     ? "ui.modder_spawn_clone_success"
                     : "ui.modder_spawn_inventory_full";
                 if (added)
-                    Debug.Log("[ItemIntelligence][ModderMode] Added one item to clone inventory: " + itemId + ".");
+                    VerboseLog("[ItemIntelligence][ModderMode] Added one item to clone inventory: " + itemId + ".");
                 return added;
             }
             catch (Exception ex)
@@ -206,7 +206,7 @@ namespace ItemIntelligence
             if (IsCurrent103CargoSpawnAssembly() && TrySpawnModderItemToCargoViaSystem103(cargo, itemId))
             {
                 statusKey = "ui.modder_spawn_cargo_success";
-                Debug.Log("[ItemIntelligence][ModderMode] Added one item through audited cargo API: " + itemId + ".");
+                VerboseLog("[ItemIntelligence][ModderMode] Added one item through audited cargo API: " + itemId + ".");
                 return true;
             }
 
@@ -226,7 +226,7 @@ namespace ItemIntelligence
                 if (!ModderMode) return false;
                 execute.Invoke(command, new object[] { new List<string> { itemId, "1" } });
                 statusKey = "ui.modder_spawn_cargo_success";
-                Debug.Log("[ItemIntelligence][ModderMode] Added one item through vanilla ship-cargo command: " + itemId + ".");
+                VerboseLog("[ItemIntelligence][ModderMode] Added one item through vanilla ship-cargo command: " + itemId + ".");
                 return true;
             }
             catch (Exception ex)

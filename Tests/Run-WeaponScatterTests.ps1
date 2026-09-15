@@ -3,6 +3,7 @@
 param([string]$SourceRoot = (Split-Path -Parent $PSScriptRoot))
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
+$verboseLoggingFixture = [IO.File]::ReadAllText((Join-Path $PSScriptRoot 'VerboseLoggingFixture.cs'))
 foreach ($name in @('Microsoft.CodeAnalysis.dll','Microsoft.CodeAnalysis.CSharp.dll')) {
     Add-Type -Path (Join-Path $PSHOME $name)
 }
@@ -19,7 +20,8 @@ foreach ($variant in @('MODERN','LEGACY','INVALID')) {
         $code = $code.Replace(('namespace ' + $ns), ('namespace ' + $identity + '.' + $ns))
         $code = $code.Replace(('using ' + $ns + ';'), ('using ' + $identity + '.' + $ns + ';'))
     }
-    Add-Type -TypeDefinition $code -WarningAction Stop
+    $code += "`n" + $verboseLoggingFixture.Replace('namespace ItemIntelligence', ('namespace ' + $identity))
+Add-Type -TypeDefinition $code -WarningAction Stop
     $type = ($identity + '.ModMain') -as [type]
     $count += $type::RunScatterCases()
 }

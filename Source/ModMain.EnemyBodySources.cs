@@ -352,7 +352,7 @@ namespace ItemIntelligence
                 foreach (LootEnemySource row in rows)
                     if (row.Kind == "GrantedImplant" || row.Kind == "RandomImplant")
                     { if (float.IsNaN(row.MaxPercent)) conditional++; else exact++; }
-            UnityEngine.Debug.Log("[ItemIntelligence][EnemyBodySources] installedChanceLinks=" + exact +
+            VerboseLog("[ItemIntelligence][EnemyBodySources] installedChanceLinks=" + exact +
                 ", conditionalImplantLinks=" + conditional +
                 ", excludedImplantBodyCandidates=" + _enemyBodyExcludedImplantCandidates +
                 "; random augmentation paths remain conditional; gameplay RNG untouched.");

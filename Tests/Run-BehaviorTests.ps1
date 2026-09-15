@@ -3,6 +3,7 @@
 param([string]$SourceRoot = (Split-Path -Parent $PSScriptRoot))
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
+$verboseLoggingFixture = [IO.File]::ReadAllText((Join-Path $PSScriptRoot 'VerboseLoggingFixture.cs'))
 
 # Roslyn ships with PowerShell 7. Parse declarations, never match method bodies by regex.
 foreach ($name in @('Microsoft.CodeAnalysis.dll','Microsoft.CodeAnalysis.CSharp.dll')) {
@@ -74,6 +75,7 @@ $code = $code.Replace('namespace MGSC', ('namespace ' + $testNamespace + '.GameF
 # All using directives must precede namespace declarations. Fixtures use fully qualified
 # names outside the core, while production members inherit these compilation-unit imports.
 $code = "using System.Collections;`nusing System.Collections.Generic;`nusing $testNamespace.UnityFixture;`nusing $testNamespace.GameFixture;`n" + $code
+$code += "`n" + $verboseLoggingFixture.Replace('namespace ItemIntelligence', ('namespace ' + $testNamespace))
 Add-Type -TypeDefinition $code -WarningAction Stop
 $type = ($testNamespace + '.ModMain') -as [type]
 $count = $type::RunBehaviorCases()

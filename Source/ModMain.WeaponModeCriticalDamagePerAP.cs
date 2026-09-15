@@ -137,7 +137,7 @@ namespace ItemIntelligence
             if (!_weaponModeCriticalDamagePerApFormulaLogged)
             {
                 _weaponModeCriticalDamagePerApFormulaLogged = true;
-                Debug.Log("[ItemIntelligence][WeaponModeCriticalDamageAP] formula=Round(NormalDamageInstance*Weapon.Damage.critDmg)*damageInstances; AP=1 per attack action; character GetCritDamageBonus/backstab/perks/effects excluded.");
+                VerboseLog("[ItemIntelligence][WeaponModeCriticalDamageAP] formula=Round(NormalDamageInstance*Weapon.Damage.critDmg)*damageInstances; AP=1 per attack action; character GetCritDamageBonus/backstab/perks/effects excluded.");
             }
             if (ModderMode && WeaponModeCriticalDamagePerApLoggedKeys.Count < 12 &&
                 WeaponModeCriticalDamagePerApLoggedKeys.Add(modeKey))
@@ -146,7 +146,7 @@ namespace ItemIntelligence
                 WeaponModeItemIdByKey.TryGetValue(modeKey, out itemId);
                 string rawId;
                 WeaponModeRawIdByKey.TryGetValue(modeKey, out rawId);
-                Debug.Log("[ItemIntelligence][WeaponModeCriticalDamageAPValue] item=" + (itemId ?? string.Empty) +
+                VerboseLog("[ItemIntelligence][WeaponModeCriticalDamageAPValue] item=" + (itemId ?? string.Empty) +
                     ", mode=" + (rawId ?? string.Empty) +
                     ", critMult=" + critMult.ToString("0.###", CultureInfo.InvariantCulture) +
                     ", normal=" + normalMin.ToString(CultureInfo.InvariantCulture) + "-" + normalMax.ToString(CultureInfo.InvariantCulture) +

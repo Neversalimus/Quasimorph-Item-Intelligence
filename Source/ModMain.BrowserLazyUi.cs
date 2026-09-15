@@ -15,7 +15,7 @@ namespace ItemIntelligence
             if (_browserSearchDropdown != null || _inspectorRoot == null) return;
             float started = Time.realtimeSinceStartup;
             CreateBrowserSearchDropdown();
-            Debug.Log("[ItemIntelligence][LazyUi] searchDropdown=" +
+            VerboseLog("[ItemIntelligence][LazyUi] searchDropdown=" +
                 ((Time.realtimeSinceStartup - started) * 1000f).ToString("0.0", CultureInfo.InvariantCulture) + "ms.");
         }
 
@@ -27,7 +27,7 @@ namespace ItemIntelligence
             LayoutBrowserCatalogViewport();
             ApplyBrowserInterfaceIconVisibility(true);
             UpdateBrowserCatalogControls();
-            Debug.Log("[ItemIntelligence][LazyUi] catalog=" +
+            VerboseLog("[ItemIntelligence][LazyUi] catalog=" +
                 ((Time.realtimeSinceStartup - started) * 1000f).ToString("0.0", CultureInfo.InvariantCulture) + "ms.");
         }
 
@@ -67,7 +67,7 @@ namespace ItemIntelligence
                 currentGo.SetActive(false);
                 stateGo.SetActive(false);
             }
-            Debug.Log("[ItemIntelligence][LazyUi] factionColumns=" +
+            VerboseLog("[ItemIntelligence][LazyUi] factionColumns=" +
                 ((Time.realtimeSinceStartup - started) * 1000f).ToString("0.0", CultureInfo.InvariantCulture) + "ms.");
         }
 
@@ -112,7 +112,7 @@ namespace ItemIntelligence
                 BrowserRowChipIcons[i] = chipImage;
                 BrowserRowChipStatusIcons[i] = statusImage;
             }
-            Debug.Log("[ItemIntelligence][LazyUi] recipeContext=" +
+            VerboseLog("[ItemIntelligence][LazyUi] recipeContext=" +
                 ((Time.realtimeSinceStartup - started) * 1000f).ToString("0.0", CultureInfo.InvariantCulture) + "ms.");
         }
 
@@ -142,7 +142,7 @@ namespace ItemIntelligence
             float started = Time.realtimeSinceStartup;
             CreateLootProgressUi();
             LayoutBrowserViewportChrome();
-            Debug.Log("[ItemIntelligence][LazyUi] lootProgress=" +
+            VerboseLog("[ItemIntelligence][LazyUi] lootProgress=" +
                 ((Time.realtimeSinceStartup - started) * 1000f).ToString("0.0", CultureInfo.InvariantCulture) + "ms.");
         }
 

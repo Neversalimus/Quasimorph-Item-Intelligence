@@ -30,6 +30,7 @@ namespace ItemIntelligence
         private static bool ShowInterfaceIcons = true;
         private static bool EnhancedReadability = false;
         private static bool ModderMode = false;
+        private static bool VerboseLogging = false;
         private static bool ShowMagnumUses = true;
         private static bool ShowFutureMagnumUses = true;
         private static bool ShowRecipes = true;
@@ -126,6 +127,7 @@ namespace ItemIntelligence
             else if (string.Equals(key, "EnhancedReadability", StringComparison.OrdinalIgnoreCase)) EnhancedReadability = value;
             else if (string.Equals(key, "BrowserExpanded", StringComparison.OrdinalIgnoreCase)) BrowserExpanded = value;
             else if (string.Equals(key, "ModderMode", StringComparison.OrdinalIgnoreCase)) ModderMode = value;
+            else if (string.Equals(key, "VerboseLogging", StringComparison.OrdinalIgnoreCase)) VerboseLogging = value;
             else if (string.Equals(key, "ShowMagnumUses", StringComparison.OrdinalIgnoreCase)) ShowMagnumUses = value;
             else if (string.Equals(key, "ShowFutureMagnumUses", StringComparison.OrdinalIgnoreCase)) ShowFutureMagnumUses = value;
             else if (string.Equals(key, "ShowRecipes", StringComparison.OrdinalIgnoreCase)) ShowRecipes = value;
@@ -190,6 +192,8 @@ namespace ItemIntelligence
                     "[General]\r\n" +
                     "EnableItemIntelligence=" + EnableItemIntelligence + "\r\n" +
                     "UiLanguage=" + UiLanguagePreference + "\r\n\r\n" +
+                    "[Logging]\r\n" +
+                    "VerboseLogging=" + VerboseLogging + "\r\n\r\n" +
                     "[Tooltip]\r\n" +
                     "QuickIntelligence=" + QuickIntelligence + "\r\n" +
                     "ShowInspectorHint=" + ShowInspectorHint + "\r\n\r\n" +
@@ -250,7 +254,7 @@ namespace ItemIntelligence
                 if (apiType == null || interfaceType == null || configValueType == null)
                 {
                     if (!_mcmAttempted)
-                        Debug.Log("[ItemIntelligence] MCM not detected; config.ini remains available.");
+                        VerboseLog("[ItemIntelligence] MCM not detected; config.ini remains available.");
                     _mcmAttempted = true;
                     return;
                 }
@@ -265,6 +269,7 @@ namespace ItemIntelligence
                 // Do not expose a switch in MCM until a safe pointer-path replacement
                 // exists; showing it currently promises behavior the runtime cannot use.
                 AddMcmStringDropdown(add, list, dropdownConfigType, configValueType, "UiLanguage", UiLanguagePreference, Ui("mcm.header.language"), "Auto (Game)", Ui("mcm.language_tip"), Ui("mcm.language"), GetUiLanguageOptions());
+                AddMcmBool(add, list, configValueType, "VerboseLogging", VerboseLogging, Ui("mcm.header.logging"), Ui("mcm.verbose_logging"), Ui("mcm.verbose_logging_tip"));
                 AddMcmBool(add, list, configValueType, "ShowInspectorHint", ShowInspectorHint, Ui("mcm.header.tooltip"), HotkeyUi("mcm.show_f2_hint"), HotkeyUi("mcm.show_f2_hint_tip"));
                 AddMcmBool(add, list, configValueType, "InspectorEnabled", InspectorEnabled, Ui("mcm.header.inspector"), Ui("ui.enable_item_intelligence"), HotkeyUi("mcm.enable_browser_tip"));
                 AddMcmStringDropdown(add, list, dropdownConfigType, configValueType, "InspectorKey", GetInspectorKeyDisplayName(), Ui("mcm.header.inspector"), "F2", HotkeyUi("mcm.inspector_hotkey_tip"), Ui("mcm.inspector_hotkey"), GetInspectorHotkeyOptions());
@@ -351,6 +356,7 @@ namespace ItemIntelligence
             {
                 if (currentConfig == null) return true;
                 ApplyMcmBool(currentConfig, "QuickIntelligence", ref QuickIntelligence);
+                ApplyMcmBool(currentConfig, "VerboseLogging", ref VerboseLogging);
 
                 bool savedShowInspectorHint = ShowInspectorHint;
                 ApplyMcmBool(currentConfig, "ShowInspectorHint", ref savedShowInspectorHint);
@@ -383,7 +389,8 @@ namespace ItemIntelligence
                 RefreshBrowserInterfaceIconSetting();
                 if (_inspectorOpen && !string.IsNullOrEmpty(_inspectorItemId)) RenderBrowser(_inspectorItemId);
                 SaveConfig();
-                Debug.Log("[ItemIntelligence] MCM saved: ShowInspectorHint=" + ShowInspectorHint +
+                VerboseLog("[ItemIntelligence] MCM saved: VerboseLogging=" + VerboseLogging +
+                    ", ShowInspectorHint=" + ShowInspectorHint +
                     ", UiLanguage=" + UiLanguagePreference +
                     ", InspectorKey=" + InspectorKeyName +
                     ", InterfaceIcons=" + ShowInterfaceIcons +

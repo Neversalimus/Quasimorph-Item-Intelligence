@@ -83,7 +83,7 @@ namespace ItemIntelligence
                 _buildFingerprint =
                     (Application.version ?? string.Empty) + "|" + shortHash + "|" + _compatibilityVerdict;
 
-                Debug.Log("[ItemIntelligence] Build fingerprint: " + _buildFingerprint +
+                VerboseLog("[ItemIntelligence] Build fingerprint: " + _buildFingerprint +
                     "; lastVerifiedGame=" + LastVerifiedGameVersion + ".");
             }
             catch (Exception ex)
@@ -124,14 +124,14 @@ namespace ItemIntelligence
                     _diagnosticsHotkeyLastFrame = frame;
                     _diagnosticsHotkeyConsumedFrame = frame;
                     WriteDiagnosticsReportSafe("ManualCtrlShiftF10");
-                    Debug.Log("[ItemIntelligence] Diagnostics exported: " + DiagnosticsReportPath);
+                    VerboseLog("[ItemIntelligence] Diagnostics exported: " + DiagnosticsReportPath);
                 }
                 else if (ModderMode && Input.GetKeyDown(KeyCode.F11))
                 {
                     _diagnosticsHotkeyLastFrame = frame;
                     _diagnosticsHotkeyConsumedFrame = frame;
                     RunReadOnlySelfTestSafe("ManualCtrlShiftF11");
-                    Debug.Log("[ItemIntelligence] Modder read-only self-test exported: " + RegressionSelfTestPath);
+                    VerboseLog("[ItemIntelligence] Modder read-only self-test exported: " + RegressionSelfTestPath);
                 }
             }
             catch { }
@@ -378,7 +378,7 @@ namespace ItemIntelligence
                 MissingUiTranslationKeys.Clear();
                 BrowserLines.Clear();
 
-                Debug.Log("[ItemIntelligence] Memory hygiene " + (reason ?? string.Empty) +
+                VerboseLog("[ItemIntelligence] Memory hygiene " + (reason ?? string.Empty) +
                     ": LocalizationCache " + localizationBefore.ToString(CultureInfo.InvariantCulture) + "->0" +
                     ", ItemDisplayCache " + itemDisplayBefore.ToString(CultureInfo.InvariantCulture) + "->0" +
                     ", MagnumDisplayCache " + perkDisplayBefore.ToString(CultureInfo.InvariantCulture) + "->0" +

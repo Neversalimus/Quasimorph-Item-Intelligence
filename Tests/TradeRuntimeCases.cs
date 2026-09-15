@@ -95,21 +95,41 @@ namespace ItemIntelligence
             CheckTrade(GetTradeTravelTimeSafe("earth", out hours) == "ui.here" && hours == 0d, "Same-location semantics preserved");
             CheckTrade(GetTradeTravelTimeSafe("mars", out hours) == "48h" && hours == 48d, "Space mode restored without reloading mod");
 
-            Debug.Messages.Clear(); ResetTradePerformanceWindow();
+            // Logging cleanup contract: normal mode must stay silent even when a
+            // performance window becomes reportable. The counters must still reset,
+            // because logging is observational and must not alter Trade state.
+            Debug.Messages.Clear();
+            _testVerboseLogSink = Debug.Log;
+            _testVerboseLoggingEnabled = false;
+            ResetTradePerformanceWindow();
             _marketScanActive = true;
-            for (int i = 0; i < 200; i++) FinishTradePerformanceTick(TradePerfTimestamp(), false);
-            CheckTrade(Debug.Messages.Count == 0, "Diagnostic must not log every tick");
             _tradePerfWindowStart -= System.Diagnostics.Stopwatch.Frequency * 6;
             FinishTradePerformanceTick(TradePerfTimestamp(), false);
-            CheckTrade(Debug.Messages.Count == 1 && Debug.Messages[0].Contains("phase=scan"), "Five-second window emits a single scan summary");
+            CheckTrade(Debug.Messages.Count == 0, "Normal logging suppresses TradePerf summaries");
+            CheckTrade(_tradePerfTick.Count == 0, "Suppressed diagnostic still resets its bounded window");
+
+            // Verbose mode preserves the previous bounded-diagnostics semantics:
+            // no per-tick spam, one five-second summary, completion summary, and a
+            // fresh idle window with no leaked station timings.
+            _testVerboseLoggingEnabled = true;
+            Debug.Messages.Clear();
+            ResetTradePerformanceWindow();
+            _marketScanActive = true;
+            for (int i = 0; i < 200; i++) FinishTradePerformanceTick(TradePerfTimestamp(), false);
+            CheckTrade(Debug.Messages.Count == 0, "Verbose diagnostic must not log every tick");
+            _tradePerfWindowStart -= System.Diagnostics.Stopwatch.Frequency * 6;
+            FinishTradePerformanceTick(TradePerfTimestamp(), false);
+            CheckTrade(Debug.Messages.Count == 1 && Debug.Messages[0].Contains("phase=scan"), "Verbose five-second window emits a single scan summary");
             CheckTrade(_tradePerfTick.Count == 0, "Reported counters reset for independent next window");
             _marketScanActive = false;
             RecordTradePerformance(TradePerfStage.Station, TradePerfTimestamp());
             FinishTradePerformanceTick(TradePerfTimestamp(), true);
-            CheckTrade(Debug.Messages.Count == 2 && Debug.Messages[1].Contains("completed=True"), "Completion emits final partial window");
+            CheckTrade(Debug.Messages.Count == 2 && Debug.Messages[1].Contains("completed=True"), "Verbose completion emits final partial window");
             _tradePerfWindowStart -= System.Diagnostics.Stopwatch.Frequency * 6;
             FinishTradePerformanceTick(TradePerfTimestamp(), false);
-            CheckTrade(Debug.Messages.Count == 3 && Debug.Messages[2].Contains("station=0:"), "Idle window retains no previous station timings");
+            CheckTrade(Debug.Messages.Count == 3 && Debug.Messages[2].Contains("station=0:"), "Verbose idle window retains no previous station timings");
+            _testVerboseLoggingEnabled = false;
+            _testVerboseLogSink = null;
             return _assertions;
         }
     }

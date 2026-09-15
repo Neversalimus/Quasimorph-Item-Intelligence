@@ -393,7 +393,7 @@ namespace ItemIntelligence
             LocalizedItemDisplayCache.Clear();
             LocalizedMagnumPerkDisplayCache.Clear();
 
-            Debug.Log("[ItemIntelligence] Game language resolved from vanilla localization: " +
+            VerboseLog("[ItemIntelligence] Game language resolved from vanilla localization: " +
                 (string.IsNullOrEmpty(current) ? "<unknown>" : current) +
                 "; browser=" + (Ui("ui.english")) + ".");
         }
@@ -607,7 +607,7 @@ namespace ItemIntelligence
                     _externalUiTranslationFile = Path.GetFileName(activePath);
                 }
 
-                Debug.Log("[ItemIntelligence] UI localization: language=" + language +
+                VerboseLog("[ItemIntelligence] UI localization: language=" + language +
                     ", file=" + (string.IsNullOrEmpty(_externalUiTranslationFile) ? "<english fallback>" : _externalUiTranslationFile) +
                     ", entries=" + ExternalUiTranslations.Count.ToString(CultureInfo.InvariantCulture) +
                     ", english=" + EnglishUiFallback.Count.ToString(CultureInfo.InvariantCulture) + ".");

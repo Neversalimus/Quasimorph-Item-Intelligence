@@ -3,6 +3,7 @@
 param([string]$SourceRoot = (Split-Path -Parent $PSScriptRoot))
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
+$verboseLoggingFixture = [IO.File]::ReadAllText((Join-Path $PSScriptRoot 'VerboseLoggingFixture.cs'))
 foreach ($name in @('Microsoft.CodeAnalysis.dll','Microsoft.CodeAnalysis.CSharp.dll')) {
     Add-Type -Path (Join-Path $PSHOME $name)
 }
@@ -32,7 +33,7 @@ $whole = foreach ($file in @('BrowserReadability','BrowserRowRenderCache','Brows
 $members = @(
     Read-Members 'Configuration' 'VariableDeclaratorSyntax' @('_configLoaded','EnableItemIntelligence',
         'QuickIntelligence','InspectorEnabled','ShowInspectorHint','ShowInterfaceIcons','EnhancedReadability',
-        'ModderMode','ShowMagnumUses','ShowFutureMagnumUses','ShowRecipes','ShowSources','ShowTradeInformation',
+        'ModderMode','VerboseLogging','ShowMagnumUses','ShowFutureMagnumUses','ShowRecipes','ShowSources','ShowTradeInformation',
         'UsePreviousTradeLayout','ShowMagnumSurplus','ShowAmmoRelations','UiLanguagePreference','InspectorKeyName')
     Read-Members 'Configuration' 'PropertyDeclarationSyntax' @('ConfigDirectory','ConfigPath')
     Read-Members 'Configuration' 'MethodDeclarationSyntax' @('EnsureConfigLoaded','ApplyConfigValue',
@@ -57,7 +58,8 @@ $code = $code.Replace('UnityEngine', ($identity + '.UnityEngine')).Replace('TMPr
 $fixture = Join-Path ([IO.Path]::GetTempPath()) $identity
 New-Item -ItemType Directory -Path $fixture | Out-Null
 try {
-    Add-Type -TypeDefinition $code -WarningAction Stop
+    $code += "`n" + $verboseLoggingFixture.Replace('namespace ItemIntelligence', ('namespace ' + $identity))
+Add-Type -TypeDefinition $code -WarningAction Stop
     $type = ($identity + '.ModMain') -as [type]
     $count = $type::RunReadabilityCases($fixture, (Join-Path $SourceRoot 'WORKSHOP_CONTENT/Localization'))
     Write-Host "Production browser readability: PASS ($count assertions; config/cache and synthetic font metrics, not Unity rendering)." -ForegroundColor Green

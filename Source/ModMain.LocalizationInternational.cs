@@ -60,7 +60,7 @@ namespace ItemIntelligence
             ResolvedUiTextCache.Clear();
             MissingUiTranslationKeys.Clear();
             ResetLocalizationHealthForReload();
-            Debug.Log("[ItemIntelligence] UI language preference: " + normalized +
+            VerboseLog("[ItemIntelligence] UI language preference: " + normalized +
                 " (" + (source ?? "unknown") + ").");
         }
 

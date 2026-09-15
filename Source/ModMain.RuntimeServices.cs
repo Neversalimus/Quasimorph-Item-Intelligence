@@ -98,7 +98,7 @@ namespace ItemIntelligence
                 if (!_stateServicesLogged && (haveStationAccess || _tradeSystem != null || _worldPricesSystem != null || _customResources != null))
                 {
                     _stateServicesLogged = true;
-                    Debug.Log("[ItemIntelligence] State modules: StationSystem=" + (_stationSystem != null) +
+                    VerboseLog("[ItemIntelligence] State modules: StationSystem=" + (_stationSystem != null) +
                         ", Stations=" + (_stationsState != null) +
                         ", TradeSystem=" + (_tradeSystem != null) +
                         ", ItemsPrices=" + (_itemsPrices != null) +
@@ -309,7 +309,7 @@ namespace ItemIntelligence
                 if ((_stationsState != null || _stationSystem != null) && _itemsPrices != null && _factionsState != null)
                 {
                     _runtimeFallbackResolveActive = false;
-                    Debug.Log("[ItemIntelligence] Incremental market services resolved after " + _runtimeResolveOwnerIndex + " owner types.");
+                    VerboseLog("[ItemIntelligence] Incremental market services resolved after " + _runtimeResolveOwnerIndex + " owner types.");
                     return;
                 }
             }
@@ -317,7 +317,7 @@ namespace ItemIntelligence
             if (_runtimeResolveOwnerIndex >= _runtimeResolveOwnerTypes.Length)
             {
                 _runtimeFallbackResolveActive = false;
-                Debug.Log("[ItemIntelligence] Incremental market service resolver finished. StationSystem=" + (_stationSystem != null) +
+                VerboseLog("[ItemIntelligence] Incremental market service resolver finished. StationSystem=" + (_stationSystem != null) +
                     ", Stations=" + (_stationsState != null) +
                     ", ItemsPrices=" + (_itemsPrices != null) + ", Factions=" + (_factionsState != null) + ".");
             }

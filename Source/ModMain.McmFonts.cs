@@ -29,7 +29,7 @@ namespace ItemIntelligence
                     null, "McmButtonsBuiltPostfix");
                 count += PatchNamedMethods(harmony, "ModConfigMenu.GenericHoverTooltip", "OnPointerEnter",
                     "McmHoverFontPrefix", null);
-                Debug.Log("[ItemIntelligence][McmFonts] scoped hooks=" + count + "/3.");
+                VerboseLog("[ItemIntelligence][McmFonts] scoped hooks=" + count + "/3.");
                 if (count < 3) LogMcmFontWarning("Some MCM font hooks are unavailable in this MCM version.");
             }
             catch (Exception ex) { LogMcmFontWarning(ex.Message); }
@@ -140,7 +140,7 @@ namespace ItemIntelligence
                     if (!_mcmFontReadyLogged)
                     {
                         _mcmFontReadyLogged = true;
-                        Debug.Log("[ItemIntelligence][McmFonts] private fallback ready; Han=" +
+                        VerboseLog("[ItemIntelligence][McmFonts] private fallback ready; Han=" +
                             _mcmHanFont.name + "; Latin=" + _mcmLatinFont.name + ".");
                     }
                 }

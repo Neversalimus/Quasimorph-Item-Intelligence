@@ -1,4 +1,4 @@
-﻿# ============================================================================
+# ============================================================================
 # CODE HYGIENE / ZOMBIE-GATE CONTRACTS
 # Current dead-code and single-reference invariants.
 # ============================================================================
@@ -92,4 +92,51 @@ foreach ($token in @(
 }
 foreach ($retired in @('TrySetMemberValue','DetailedIntelligence','AppendDetailed(','QII_Detail_')) {
     if ($sourceText.IndexOf($retired,[StringComparison]::Ordinal) -ge 0) { throw "current architecture safety regression: retired symbol returned: $retired" }
+}
+
+# Player.log hygiene: ordinary informational logging is intentionally centralized.
+$loggingPath = Join-Path $sourceDir 'ModMain.Logging.cs'
+if (-not (Test-Path -LiteralPath $loggingPath -PathType Leaf)) { throw 'Logging owner missing: ModMain.Logging.cs' }
+$loggingText = Get-Content -LiteralPath $loggingPath -Raw
+foreach ($token in @('private static void VerboseLog(string message)','if (!VerboseLogging)','Debug.Log(message);')) {
+    if ($loggingText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "Verbose logging contract missing: $token" }
+}
+$configLoggingText = Get-Content -LiteralPath (Join-Path $sourceDir 'ModMain.Configuration.cs') -Raw
+foreach ($token in @('private static bool VerboseLogging = false;','"VerboseLogging=" + VerboseLogging','"VerboseLogging", VerboseLogging','ApplyMcmBool(currentConfig, "VerboseLogging", ref VerboseLogging)')) {
+    if ($configLoggingText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "Verbose logging configuration contract missing: $token" }
+}
+$ordinaryInfoLogCount = 0
+foreach ($candidateFile in $sourceFiles) {
+    if ($candidateFile.Name -eq 'ModMain.Logging.cs') { continue }
+    $candidateText = Get-Content -LiteralPath $candidateFile.FullName -Raw
+    $ordinaryInfoLogCount += [regex]::Matches($candidateText,'(?<![A-Za-z0-9_])(?:UnityEngine\.)?Debug\.Log\(').Count
+}
+if ($ordinaryInfoLogCount -ne 5) {
+    throw "Player.log hygiene regression: ordinary non-verbose Debug.Log sites=$ordinaryInfoLogCount, expected 5. Use VerboseLog for diagnostics."
+}
+
+# Isolated Add-Type suites compile selected production fragments without the full logging owner.
+# Keep their shared silent-by-default VerboseLog fixture wired in so logging refactors cannot break the
+# test harness before the real game compilation/staging step. Suites that explicitly test verbose
+# diagnostics may opt into the fixture sink.
+$verboseFixturePath = Join-Path $root 'Tests/VerboseLoggingFixture.cs'
+if (-not (Test-Path -LiteralPath $verboseFixturePath -PathType Leaf)) { throw 'Verbose logging test fixture missing.' }
+$verboseFixtureText = Get-Content -LiteralPath $verboseFixturePath -Raw
+foreach ($token in @('public static partial class ModMain','private static void VerboseLog(string message)','private static bool _testVerboseLoggingEnabled = false;','private static System.Action<string> _testVerboseLogSink = null;')) {
+    if ($verboseFixtureText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "Verbose logging test fixture malformed: $token" }
+}
+$tradeRuntimeCasesText = Get-Content -LiteralPath (Join-Path $root 'Tests/TradeRuntimeCases.cs') -Raw
+foreach ($token in @('Normal logging suppresses TradePerf summaries','Verbose five-second window emits a single scan summary','_testVerboseLoggingEnabled = true;')) {
+    if ($tradeRuntimeCasesText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "Trade verbose-logging runtime contract missing: $token" }
+}
+$dynamicTestScripts = @(Get-ChildItem -LiteralPath (Join-Path $root 'Tests') -File -Filter 'Run-*.ps1' | Where-Object {
+    (Get-Content -LiteralPath $_.FullName -Raw).IndexOf('Add-Type -TypeDefinition $code',[StringComparison]::Ordinal) -ge 0
+})
+foreach ($dynamicTestScript in $dynamicTestScripts) {
+    $dynamicTestText = Get-Content -LiteralPath $dynamicTestScript.FullName -Raw
+    foreach ($token in @('VerboseLoggingFixture.cs','verboseLoggingFixture.Replace')) {
+        if ($dynamicTestText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) {
+            throw "Verbose logging isolated-test guard missing in $($dynamicTestScript.Name): $token"
+        }
+    }
 }

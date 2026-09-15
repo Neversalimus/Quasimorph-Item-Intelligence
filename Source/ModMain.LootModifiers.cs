@@ -196,7 +196,7 @@ namespace ItemIntelligence
             else
                 return;
 
-            UnityEngine.Debug.Log(
+            VerboseLog(
                 "[ItemIntelligence][LootModifiers] mode=" + (_lootModifierUseManual ? "MANUAL" : "CURRENT") +
                 ", marauder=" + _lootManualMarauderLevel.ToString(CultureInfo.InvariantCulture) +
                 ", organization=" + _lootManualOrganization.ToString() +
@@ -212,7 +212,7 @@ namespace ItemIntelligence
                     double renderMs =
                         (System.Diagnostics.Stopwatch.GetTimestamp() - renderStarted) * 1000.0 /
                         System.Diagnostics.Stopwatch.Frequency;
-                    UnityEngine.Debug.Log(
+                    VerboseLog(
                         "[ItemIntelligence][LootModifiers][Perf] render=" +
                         renderMs.ToString("0.0", CultureInfo.InvariantCulture) + "ms, rows=" +
                         BrowserLines.Count.ToString(CultureInfo.InvariantCulture) + ".");

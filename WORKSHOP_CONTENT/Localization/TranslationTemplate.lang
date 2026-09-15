@@ -341,6 +341,9 @@ mcm.enhanced_readability_tip	Larger tabs and notes, with brighter supporting tex
 ui.trade_layout_view	VIEW
 ui.trade_layout_cards_short	C
 ui.trade_layout_table_short	T
+mcm.header.logging	Logging
+mcm.verbose_logging	Verbose logging
+mcm.verbose_logging_tip	Write detailed Item Intelligence runtime and performance messages to Player.log. Keep disabled unless troubleshooting.
 mcm.mod_name	Item Intelligence - Item Database & Loot Sources
 compat.disabled_feature	This feature is temporarily unavailable.
 mcm.save_failed	Could not save Item Intelligence settings.

@@ -51,7 +51,7 @@ namespace ItemIntelligence
                 ", falseAmmoLinks=" + staticMeleeFalseLinks +
                 ", energyMelee=" + energyMelee +
                 ", energyMeleeWithAmmo=" + energyMeleeWithAmmo + ".";
-            if (staticMeleeFalseLinks == 0) Debug.Log(message);
+            if (staticMeleeFalseLinks == 0) VerboseLog(message);
             else Debug.LogWarning(message + " Static non-energy melee must have zero player-facing ammo relations.");
         }
     }

@@ -105,7 +105,7 @@ namespace ItemIntelligence
             if (!_tradeMissionSchemaLogged)
             {
                 _tradeMissionSchemaLogged = true;
-                Debug.Log("[ItemIntelligence][TradeMission] exactGate=Missions.Values/StationId, Missions=" + records +
+                VerboseLog("[ItemIntelligence][TradeMission] exactGate=Missions.Values/StationId, Missions=" + records +
                     ", stationLinks=" + linked +
                     ", SpaceTime=" + (_tradeMissionSnapshotTime.HasValue ? "OK" : "unavailable") + ".");
             }

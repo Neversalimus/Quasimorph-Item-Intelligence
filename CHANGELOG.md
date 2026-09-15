@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.7.42.8 — 2026-09-15
+
+- Added optional Verbose logging in MCM and config.ini, disabled by default.
+- Normal mode keeps Player.log concise while retaining important warnings, errors and a small set of lifecycle/status messages.
+- Detailed UI, index, navigation, performance and audit diagnostics are now written only when verbose logging is enabled.
+- Added and persisted the new setting in all eight interface languages.
 ## v1.7.42.7 — 2026-09-14
 
 - Enlarged item IDs and corrected their double tinting, including hover and pressed colors.
@@ -76,3 +82,4 @@
 - Fixed stale or missing Magnum required and owned counts on first tab entry.
 - Added exact Damage/AP information to supported firearm and melee modes.
 - Corrected Trade consumer visibility and current availability checks.
+

@@ -161,7 +161,7 @@ namespace ItemIntelligence
 
                 if (_unlockedProductionItems != null)
                 {
-                    Debug.Log("[ItemIntelligence] Production unlock state resolved: " +
+                    VerboseLog("[ItemIntelligence] Production unlock state resolved: " +
                         _unlockedProductionItems.GetType().FullName + ".");
                         QueueBrowserRowsRefresh(); // QII_MAGNUM_REFRESH_PRODUCTION
                 }

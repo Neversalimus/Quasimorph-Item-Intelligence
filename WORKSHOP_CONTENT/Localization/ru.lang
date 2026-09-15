@@ -335,6 +335,9 @@ mcm.enhanced_readability_tip	Увеличивает вкладки и поясн
 ui.trade_layout_view	ВИД
 ui.trade_layout_cards_short	К
 ui.trade_layout_table_short	Т
+mcm.header.logging	Журналирование
+mcm.verbose_logging	Подробное журналирование
+mcm.verbose_logging_tip	Записывать подробные сообщения Item Intelligence о работе и производительности в Player.log. Оставьте выключенным, если не ищете проблему.
 mcm.mod_name	Item Intelligence - База предметов и добычи
 compat.disabled_feature	Эта функция временно недоступна.
 mcm.save_failed	Не удалось сохранить настройки Item Intelligence.

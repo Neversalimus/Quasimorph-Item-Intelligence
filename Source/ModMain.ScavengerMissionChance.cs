@@ -121,7 +121,7 @@ namespace ItemIntelligence
                 rows.Add(row);
             }
 
-            UnityEngine.Debug.Log("[ItemIntelligence][ScavengersExact] item=" + itemId +
+            VerboseLog("[ItemIntelligence][ScavengersExact] item=" + itemId +
                 ", missionEntries=" + entries.Count.ToString(CultureInfo.InvariantCulture) +
                 ", eligibleRows=" + rows.Count.ToString(CultureInfo.InvariantCulture) +
                 ", expiredSkipped=" + skippedExpired.ToString(CultureInfo.InvariantCulture) +

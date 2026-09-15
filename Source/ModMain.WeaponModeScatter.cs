@@ -99,7 +99,7 @@ namespace ItemIntelligence
                     if (!_weaponModeScatterFormulaLogged)
                     {
                         _weaponModeScatterFormulaLogged = true;
-                        Debug.Log("[ItemIntelligence][WeaponModeScatter] formula=" +
+                        VerboseLog("[ItemIntelligence][WeaponModeScatter] formula=" +
                             (augmentFormula ? "Max(0,(FireMode.ScatterAngle+WeaponRecord.BonusScatterAngle)*(GetScatterAngleMult+GetAugmentScatterAngleMult))" :
                                 "(FireMode.ScatterAngle+WeaponRecord.BonusScatterAngle)*CreatureData.GetScatterAngleMult") +
                             ", resolver=GetSimpleRecord<WeaponRecord>, multiplier=" +
@@ -111,7 +111,7 @@ namespace ItemIntelligence
                         WeaponModeItemIdByKey.TryGetValue(modeKey, out itemId);
                         string rawId;
                         WeaponModeRawIdByKey.TryGetValue(modeKey, out rawId);
-                        Debug.Log("[ItemIntelligence][WeaponModeScatterValue] item=" + (itemId ?? string.Empty) +
+                        VerboseLog("[ItemIntelligence][WeaponModeScatterValue] item=" + (itemId ?? string.Empty) +
                             ", mode=" + (rawId ?? string.Empty) +
                             ", fireMode=" + stats.ScatterAngle.Value.ToString("0.###", CultureInfo.InvariantCulture) +
                             ", weaponBonus=" + weaponBonus.ToString("0.###", CultureInfo.InvariantCulture) +

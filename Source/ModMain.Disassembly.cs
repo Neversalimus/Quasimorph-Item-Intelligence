@@ -113,7 +113,7 @@ namespace ItemIntelligence
 
             // The game's real dismantling path reads ItemRecord.Disassembly only.
             _disassemblyWarmupActive = true;
-            Debug.Log("[ItemIntelligence] Canonical disassembly warmup queued: " +
+            VerboseLog("[ItemIntelligence] Canonical disassembly warmup queued: " +
                 DisassemblyWarmupItems.Count.ToString(CultureInfo.InvariantCulture) +
                 " item records, rollChance=" + FormatPercentValue(_disassemblyRollChancePercent) + ".");
         }
@@ -153,7 +153,7 @@ namespace ItemIntelligence
             if (!ValidateDisassemblyIndexSymmetry(out reverseLinks, out symmetryError))
                 throw new InvalidOperationException("Disassembly forward/reverse index mismatch: " + symmetryError);
 
-            Debug.Log("[ItemIntelligence] Canonical disassembly warmup complete: items=" +
+            VerboseLog("[ItemIntelligence] Canonical disassembly warmup complete: items=" +
                 DisassemblyOutputsByItem.Count.ToString(CultureInfo.InvariantCulture) +
                 ", outputs=" + totalOutputs.ToString(CultureInfo.InvariantCulture) +
                 ", reverseItems=" + DisassemblySourcesByOutputItem.Count.ToString(CultureInfo.InvariantCulture) +
@@ -188,7 +188,7 @@ namespace ItemIntelligence
             ResolveDisassemblySpecialChanceContract();
 
             if (_disassemblyRollChancePercent >= 0f)
-                Debug.Log("[ItemIntelligence] Disassembly roll chance resolved from Data.Global: " +
+                VerboseLog("[ItemIntelligence] Disassembly roll chance resolved from Data.Global: " +
                     FormatPercentValue(_disassemblyRollChancePercent) + ".");
             else
                 Debug.LogWarning("[ItemIntelligence] Could not resolve Data.Global.SpawnItemOnDisassembleChance.");

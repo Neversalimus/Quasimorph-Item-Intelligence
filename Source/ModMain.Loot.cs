@@ -352,7 +352,7 @@ namespace ItemIntelligence
                 _lootWarmupComplete = _lootWarmupTotal <= 0;
                 _lootWarmupRequested = false;
 
-                Debug.Log(
+                VerboseLog(
                     "[ItemIntelligence] Loot Sources warmup deferred until Loot tab: items=" +
                     LootWarmupItemIds.Count +
                     ", containers=" + LootWarmupContainerDropIds.Count +

@@ -3,6 +3,7 @@
 param([string]$SourceRoot = (Split-Path -Parent $PSScriptRoot))
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
+$verboseLoggingFixture = [IO.File]::ReadAllText((Join-Path $PSScriptRoot 'VerboseLoggingFixture.cs'))
 foreach ($name in @('Microsoft.CodeAnalysis.dll','Microsoft.CodeAnalysis.CSharp.dll')) {
     Add-Type -Path (Join-Path $PSHOME $name)
 }
@@ -67,7 +68,8 @@ New-Item -ItemType Directory -Path $fixtureRoot | Out-Null
 try {
     Copy-Item -LiteralPath (Join-Path $SourceRoot 'WORKSHOP_CONTENT/Localization') -Destination $fixtureRoot -Recurse
     $dll = Join-Path $fixtureRoot ($identity + '.dll')
-    Add-Type -TypeDefinition $code -OutputAssembly $dll -WarningAction Stop
+    $code += "`n" + $verboseLoggingFixture.Replace('namespace ItemIntelligence', ('namespace ' + $identity))
+Add-Type -TypeDefinition $code -OutputAssembly $dll -WarningAction Stop
     $assembly = [Reflection.Assembly]::LoadFrom($dll)
     $type = $assembly.GetType($identity + '.ModMain')
     $count = $type::RunLocalizationCases($fixtureRoot)

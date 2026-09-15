@@ -173,7 +173,7 @@ namespace ItemIntelligence
                 _marketScanComplete = !_marketScanActive;
             }
 
-            Debug.Log("[ItemIntelligence] Market scan start for " + itemId +
+            VerboseLog("[ItemIntelligence] Market scan start for " + itemId +
                 ": stations=" + MarketStations.Count +
                 ", ItemsPrices=" + (_itemsPrices != null) +
                 ", Factions=" + (_factionsState != null) +
@@ -312,7 +312,7 @@ namespace ItemIntelligence
                     throw new MissingMethodException("Exact vanilla travel-time contract was not found.");
 
                 _tradeTravelContractAvailable = true;
-                Debug.Log("[ItemIntelligence] Trade travel-time contract resolved (vanilla double -> localized string).");
+                VerboseLog("[ItemIntelligence] Trade travel-time contract resolved (vanilla double -> localized string).");
                 return true;
             }
             catch (Exception ex)
@@ -580,7 +580,7 @@ namespace ItemIntelligence
                 if (!_tradeSellContractStatusLogged)
                 {
                     _tradeSellContractStatusLogged = true;
-                    Debug.Log("[ItemIntelligence][TradeSellContract] exactMembership=Station.ConsumableItems.ContainsKey(itemId).");
+                    VerboseLog("[ItemIntelligence][TradeSellContract] exactMembership=Station.ConsumableItems.ContainsKey(itemId).");
                 }
 
                 // IDictionary.Contains is the non-generic equivalent of the exact

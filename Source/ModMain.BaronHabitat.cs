@@ -87,7 +87,7 @@ namespace ItemIntelligence
             string auditKey = "group|" + baronId + "|" + sources.Count.ToString();
             if (BaronHabitatAuditLogged.Add(auditKey))
             {
-                Debug.Log("[ItemIntelligence][BaronHabitatGroup] baron=" + baronId +
+                VerboseLog("[ItemIntelligence][BaronHabitatGroup] baron=" + baronId +
                     ", rawSources=" + sources.Count.ToString() +
                     ", locations=" + (ids.Count == 0 ? "0" : string.Join(",", new List<string>(ids).ToArray())) +
                     ", roots=" + roots.Count.ToString() +

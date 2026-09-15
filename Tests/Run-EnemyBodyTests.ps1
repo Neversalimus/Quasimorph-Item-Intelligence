@@ -3,6 +3,7 @@
 param([string]$SourceRoot = (Split-Path -Parent $PSScriptRoot))
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
+$verboseLoggingFixture = [IO.File]::ReadAllText((Join-Path $PSScriptRoot 'VerboseLoggingFixture.cs'))
 foreach ($name in @('Microsoft.CodeAnalysis.dll','Microsoft.CodeAnalysis.CSharp.dll')) {
     Add-Type -Path (Join-Path $PSHOME $name)
 }
@@ -40,6 +41,7 @@ $code = $code.Replace('namespace UnityEngine', ('namespace ' + $identity + '.Uni
 $code = $code.Replace('UnityEngine.', ($identity + '.UnityFixture.'))
 # The fixtures model record access only. Math and runtime integration execute the
 # production declarations above; the independent oracle enumerates complete draws.
+$code += "`n" + $verboseLoggingFixture.Replace('namespace ItemIntelligence', ('namespace ' + $identity))
 Add-Type -TypeDefinition $code -WarningAction Stop
 $type = ($identity + '.ModMain') -as [type]
 $count = $type::RunEnemyBodyCases()

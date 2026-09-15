@@ -152,7 +152,7 @@ namespace ItemIntelligence
             bool persisted = SaveConfig();
             UpdateBrowserTradeLayoutControls();
 
-            Debug.Log("[ItemIntelligence][TradeLayoutSwitch] source=TradeWindow, " + before +
+            VerboseLog("[ItemIntelligence][TradeLayoutSwitch] source=TradeWindow, " + before +
                 " -> " + (UsePreviousTradeLayout ? "Table" : "Cards") +
                 ", persisted=" + persisted + ".");
 

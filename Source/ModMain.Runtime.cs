@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -21,7 +21,7 @@ namespace ItemIntelligence
     /// </summary>
     public static partial class ModMain
     {
-        public const string Version = "1.7.42.7";
+        public const string Version = "1.7.42.8";
         // Ordinary Item Intelligence remains a read-only knowledge browser. The only
         // save-affecting exception is one explicit item-spawn click inside MCM Modder Mode;
         // economy, story variables and faction progression are never mutated.
@@ -55,7 +55,9 @@ namespace ItemIntelligence
         {
             if (context != null) _modContext = context;
             EnsureConfigLoaded();
-            Debug.Log("[ItemIntelligence] ACTIVE VERSION " + Version + " (StableRelease17427).");
+            Debug.Log("[ItemIntelligence] ACTIVE VERSION " + Version + " (StableRelease17428).");
+            Debug.Log("[ItemIntelligence] Logging mode: " + (VerboseLogging ? "VERBOSE" : "NORMAL") +
+                (VerboseLogging ? "." : " (enable Verbose logging in MCM for detailed diagnostics)."));
             RunCompatibilityShieldStatic();
             RefreshBuildFingerprint();
             if (ShouldWriteAutomaticDiagnostics()) WriteDiagnosticsReportSafe("AfterConfigsLoaded");
@@ -1226,7 +1228,7 @@ namespace ItemIntelligence
                     throw new MissingMethodException(
                         "No supported vanilla tooltip methods were found.");
                 _harmonyPatched = true;
-                Debug.Log("[ItemIntelligence] Vanilla hover isolation ready. Generic station/production tooltip builders are not patched. Vanilla Alt details are not patched. Patched methods: " + patched);
+                VerboseLog("[ItemIntelligence] Vanilla hover isolation ready. Generic station/production tooltip builders are not patched. Vanilla Alt details are not patched. Patched methods: " + patched);
             }
             catch (Exception ex)
             {
@@ -1335,7 +1337,7 @@ namespace ItemIntelligence
                 Debug.LogWarning("[ItemIntelligence] InputController modal guard scan failed: " + ex.Message);
             }
 
-            Debug.Log("[ItemIntelligence] InputController modal action guard patched methods: " + patched);
+            VerboseLog("[ItemIntelligence] InputController modal action guard patched methods: " + patched);
             return patched;
         }
 
@@ -2785,7 +2787,7 @@ namespace ItemIntelligence
                 int skippedNodes = 0;
                 ScanRuntimeMagnumNodeSafe(
                     _magnumProgression, visited, 7, ref budget, ref skippedNodes);
-                Debug.Log("[ItemIntelligence] Runtime Magnum relation pass complete. Indexed items=" +
+                VerboseLog("[ItemIntelligence] Runtime Magnum relation pass complete. Indexed items=" +
                     MagnumUses.Count + ", skippedNodes=" + skippedNodes + ".");
                     QueueBrowserRowsRefresh(); // QII_MAGNUM_REFRESH_RELATIONS
             }
@@ -2941,7 +2943,7 @@ namespace ItemIntelligence
             if (!_stationSchemaLogged && result.Count > 0)
             {
                 _stationSchemaLogged = true;
-                Debug.Log("[ItemIntelligence] Runtime stations resolved: count=" + result.Count +
+                VerboseLog("[ItemIntelligence] Runtime stations resolved: count=" + result.Count +
                     ", firstType=" + result[0].GetType().FullName + ".");
             }
             return result;

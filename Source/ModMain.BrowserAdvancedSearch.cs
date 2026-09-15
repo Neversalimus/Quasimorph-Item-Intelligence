@@ -126,7 +126,7 @@ namespace ItemIntelligence
             {
                 _browserSearchWarmupActive = false;
                 if (_browserCatalogOpen) RefreshBrowserCatalog();
-                Debug.Log("[ItemIntelligence][AdvancedSearch] index ready: items=" +
+                VerboseLog("[ItemIntelligence][AdvancedSearch] index ready: items=" +
                     BrowserSearchIndexItemIds.Count.ToString(CultureInfo.InvariantCulture) +
                     ", type=" + BrowserSearchRecordTypes.Count.ToString(CultureInfo.InvariantCulture) +
                     ", tech=" + BrowserSearchTechLevels.Count.ToString(CultureInfo.InvariantCulture) +

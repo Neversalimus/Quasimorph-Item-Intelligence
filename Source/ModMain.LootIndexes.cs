@@ -136,7 +136,7 @@ namespace ItemIntelligence
 
             _lootWarmupActive = true;
             _lootWarmupNextFrame = Time.frameCount;
-            Debug.Log("[ItemIntelligence] Loot Sources warmup started on demand from Loot tab.");
+            VerboseLog("[ItemIntelligence] Loot Sources warmup started on demand from Loot tab.");
         }
 
         private static void TickLootSourcesWarmup()
@@ -298,7 +298,7 @@ namespace ItemIntelligence
             foreach (KeyValuePair<string, List<LootEnemySource>> pair in LootEnemySourcesByItem)
                 if (pair.Value != null) enemyLinks += pair.Value.Count;
 
-            Debug.Log(
+            VerboseLog(
                 "[ItemIntelligence] Loot Sources warmup complete: metadata=" +
                 LootItemMetaById.Count +
                 ", items(container/enemy/amputation/bramfatura/station/faction)=" +
@@ -544,7 +544,7 @@ namespace ItemIntelligence
                     if (line == null)
                     {
                         _lootEnemyContextIndexReady = _lootEnemyContextParsedRows > 0;
-                        Debug.Log("[ItemIntelligence] Enemy loot spawn contexts: rows=" +
+                        VerboseLog("[ItemIntelligence] Enemy loot spawn contexts: rows=" +
                             _lootEnemyContextParsedRows.ToString(CultureInfo.InvariantCulture) +
                             ", mobs=" + LootEnemyMinSpawnTechByFaction.Count.ToString(CultureInfo.InvariantCulture) +
                             ", factions=" + LootEnemyFactionIds.Count.ToString(CultureInfo.InvariantCulture) +
@@ -803,7 +803,7 @@ namespace ItemIntelligence
                 return false;
             }
 
-            Debug.Log("[ItemIntelligence][AmputationSources] slots=" + LootAmputationWarmupSlots.Count +
+            VerboseLog("[ItemIntelligence][AmputationSources] slots=" + LootAmputationWarmupSlots.Count +
                 ", items=" + LootAmputationSourcesByItem.Count + ", chance=base, RNG=untouched.");
             ResetLootAmputationBuildState();
             return true;

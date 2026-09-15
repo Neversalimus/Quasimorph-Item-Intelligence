@@ -469,7 +469,7 @@ namespace ItemIntelligence
 
             if (_chipUnlockChanceContractVerified)
             {
-                Debug.Log(
+                VerboseLog(
                     "[ItemIntelligence] Chip unlock chance contract: VERIFIED; " +
                     _chipUnlockChanceContractReason + ".");
             }
@@ -1006,7 +1006,7 @@ namespace ItemIntelligence
 
         private static void LogCompatibilitySummary(string phase)
         {
-            Debug.Log(
+            VerboseLog(
                 "[ItemIntelligence] Compatibility Shield " +
                 phase +
                 ": build=" + _compatBuildStatus +
@@ -1178,7 +1178,7 @@ namespace ItemIntelligence
             finally
             {
                 timer.Stop();
-                Debug.Log(
+                VerboseLog(
                     "[ItemIntelligence] Index stage " +
                     name + ": " +
                     timer.ElapsedMilliseconds +

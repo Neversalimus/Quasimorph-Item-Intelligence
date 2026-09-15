@@ -179,7 +179,7 @@ namespace ItemIntelligence
                 // not only pairs inserted by this state-machine pass.
                 _lootGeneralSpawnPairCount = CountLootGeneralSpawnPairs();
 
-                Debug.Log(
+                VerboseLog(
                     "[ItemIntelligence] Loot general-spawn index: containers=" +
                     _lootGeneralSpawnContainerCount.ToString(CultureInfo.InvariantCulture) +
                     ", classPairs=" +
@@ -280,7 +280,7 @@ namespace ItemIntelligence
 
             result.Sort(StringComparer.OrdinalIgnoreCase);
             LootGeneralSpawnContainersByItem[itemId] = result;
-            Debug.Log(
+            VerboseLog(
                 "[ItemIntelligence][LootGeneralSpawn][OnDemand] item=" + itemId +
                 ", itemClass=" + meta.ItemClass +
                 ", containers=" + result.Count.ToString(CultureInfo.InvariantCulture) +

@@ -338,6 +338,9 @@ mcm.enhanced_readability_tip	放大物品浏览器中的标签和说明，并提
 ui.trade_layout_view	视图
 ui.trade_layout_cards_short	卡
 ui.trade_layout_table_short	表
+mcm.header.logging	日志
+mcm.verbose_logging	详细日志
+mcm.verbose_logging_tip	将 Item Intelligence 的详细运行和性能信息写入 Player.log。仅在排查问题时启用。
 mcm.mod_name	Item Intelligence - 物品数据库与战利品来源
 compat.disabled_feature	此功能暂时不可用。
 mcm.save_failed	无法保存 Item Intelligence 设置。

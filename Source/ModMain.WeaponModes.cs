@@ -95,7 +95,7 @@ namespace ItemIntelligence
                    delayCount == WeaponModeStatsByRawId.Count
                     ? "FULL" : "PARTIAL");
 
-            Debug.Log("[ItemIntelligence][WeaponModeStats] records=" + WeaponModeRecordsById.Count.ToString(CultureInfo.InvariantCulture) +
+            VerboseLog("[ItemIntelligence][WeaponModeStats] records=" + WeaponModeRecordsById.Count.ToString(CultureInfo.InvariantCulture) +
                 ", indexed=" + WeaponModeStatsByRawId.Count.ToString(CultureInfo.InvariantCulture) +
                 ", ammo=" + ammoCount.ToString(CultureInfo.InvariantCulture) +
                 ", casts=" + castsCount.ToString(CultureInfo.InvariantCulture) +

@@ -17,7 +17,7 @@ namespace ItemIntelligence
             if (string.Equals(_lastTradeLayoutDiagnosticSignature, signature, StringComparison.Ordinal)) return;
             _lastTradeLayoutDiagnosticSignature = signature;
 
-            UnityEngine.Debug.Log("[ItemIntelligence][TradeLayout] layout=" + layout +
+            VerboseLog("[ItemIntelligence][TradeLayout] layout=" + layout +
                 ", PreviousTradeLayout=" + UsePreviousTradeLayout +
                 ", Exact103Pricing=" + exact103Pricing +
                 ", BuildStatus=" + (_compatBuildStatus ?? string.Empty) +

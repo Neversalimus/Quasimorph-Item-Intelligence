@@ -58,7 +58,7 @@ namespace ItemIntelligence
             _tradePerfFrame.Add(Time.unscaledDeltaTime * 1000d);
             if (!completed && TradePerfElapsedMs(_tradePerfWindowStart) < 5000d) return;
 
-            Debug.Log("[ItemIntelligence][TradePerf] item=" + _marketItemId +
+            VerboseLog("[ItemIntelligence][TradePerf] item=" + _marketItemId +
                 ", phase=" + (_marketScanActive ? "scan" : "idle") +
                 ", completed=" + completed +
                 ", stations=" + _marketStationIndex + "/" + MarketStations.Count +

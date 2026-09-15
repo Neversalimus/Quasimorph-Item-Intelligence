@@ -338,6 +338,9 @@ mcm.enhanced_readability_tip	Größere Reiter und Hinweise sowie hellere Zusatzt
 ui.trade_layout_view	ANSICHT
 ui.trade_layout_cards_short	K
 ui.trade_layout_table_short	T
+mcm.header.logging	Protokollierung
+mcm.verbose_logging	Ausführliche Protokollierung
+mcm.verbose_logging_tip	Schreibt detaillierte Laufzeit- und Leistungsmeldungen von Item Intelligence in die Player.log. Nur zur Fehlersuche aktivieren.
 mcm.mod_name	Item Intelligence - Gegenstandsdatenbank & Beutequellen
 compat.disabled_feature	Diese Funktion ist vorübergehend nicht verfügbar.
 mcm.save_failed	Item-Intelligence-Einstellungen konnten nicht gespeichert werden.

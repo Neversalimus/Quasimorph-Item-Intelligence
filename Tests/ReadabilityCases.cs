@@ -77,26 +77,31 @@ namespace ItemIntelligence
             Directory.CreateDirectory(ConfigDirectory);
             File.WriteAllText(ConfigPath, "[Inspector]\nBrowserWindowZoom=125\nBrowserExpanded=true\n");
             EnsureConfigLoaded();
-            CheckReadability(!EnhancedReadability && BrowserWindowZoom == 125 && BrowserExpanded,
-                "legacy config defaults to standard without resetting viewport");
+            CheckReadability(!EnhancedReadability && !VerboseLogging && BrowserWindowZoom == 125 && BrowserExpanded,
+                "legacy config defaults to standard/normal logging without resetting viewport");
             ApplyConfigValue("enhancedreadability", true);
-            CheckReadability(SaveConfig(), "save enhanced profile");
-            EnhancedReadability = false; _configLoaded = false; EnsureConfigLoaded();
-            CheckReadability(EnhancedReadability && BrowserWindowZoom == 125, "restart restores profile and zoom");
+            ApplyConfigValue("verboselogging", true);
+            CheckReadability(SaveConfig(), "save enhanced profile and verbose logging");
+            EnhancedReadability = false; VerboseLogging = false; _configLoaded = false; EnsureConfigLoaded();
+            CheckReadability(EnhancedReadability && VerboseLogging && BrowserWindowZoom == 125,
+                "restart restores profile, verbose logging and zoom");
             File.WriteAllText(ConfigPath, "EnhancedReadability=invalid\n");
             _configLoaded = false; EnsureConfigLoaded();
             CheckReadability(EnhancedReadability, "invalid value does not silently disable preference");
             string feedback;
             _inspectorOpen = true; _inspectorItemId = "powder";
             CheckReadability(OnMcmConfigSaved(new Dictionary<string, object> {
-                { "EnhancedReadability", new WrappedBool { Value = false } } }, out feedback), "MCM wrapper accepted");
-            CheckReadability(!EnhancedReadability && renderRequests == 1, "MCM refreshes existing page");
+                { "EnhancedReadability", new WrappedBool { Value = false } },
+                { "VerboseLogging", new WrappedBool { Value = false } } }, out feedback), "MCM wrapper accepted");
+            CheckReadability(!EnhancedReadability && !VerboseLogging && renderRequests == 1,
+                "MCM refreshes existing page and applies normal logging");
             EnhancedReadability = true; _configLoaded = false; EnsureConfigLoaded();
             CheckReadability(!EnhancedReadability, "MCM persists standard on restart");
-            OnMcmConfigSaved(new Dictionary<string, object> { { "EnhancedReadability", "true" } }, out feedback);
+            OnMcmConfigSaved(new Dictionary<string, object> {
+                { "EnhancedReadability", "true" }, { "VerboseLogging", "true" } }, out feedback);
             OnMcmConfigSaved(new Dictionary<string, object>(), out feedback);
-            CheckReadability(EnhancedReadability && BrowserWindowZoom == 125 && BrowserExpanded,
-                "missing MCM key preserves profile and independent zoom");
+            CheckReadability(EnhancedReadability && VerboseLogging && BrowserWindowZoom == 125 && BrowserExpanded,
+                "missing MCM key preserves profile, logging mode and independent zoom");
 
             _browserHelpText = new TMP_Text();
             EnhancedReadability = false; ApplyBrowserHelpReadability();

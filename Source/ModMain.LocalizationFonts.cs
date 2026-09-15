@@ -72,7 +72,7 @@ namespace ItemIntelligence
                     }
                     _uiResolvedFont = mixed;
                 }
-                Debug.Log("[ItemIntelligence] UI font: " + signature + "; asset=" +
+                VerboseLog("[ItemIntelligence] UI font: " + signature + "; asset=" +
                     (_uiResolvedFont == null ? "<pending>" : _uiResolvedFont.name) + ".");
             }
             catch (Exception ex)

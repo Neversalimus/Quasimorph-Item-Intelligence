@@ -4,9 +4,9 @@
 
 [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3780078201) · [Downloads](https://github.com/Neversalimus/Quasimorph-Item-Intelligence/releases) · [Changelog](CHANGELOG.md)
 
-This branch contains **1.7.42.7** for **Quasimorph 1.0.4.582s.c4335c5**.
+This branch contains **1.7.42.8** for **Quasimorph 1.0.4.582s.c4335c5**.
 
-This release improves browser readability and removes repeated game API discovery during Trade scans, greatly reducing the time spent retrieving station prices.
+This release adds optional verbose logging. Normal mode keeps `Player.log` concise while preserving warnings, errors and a small set of lifecycle/status messages; detailed runtime, UI, index, navigation and performance diagnostics can be enabled through **MCM → Logging → Verbose logging**.
 
 ## Features
 
@@ -31,6 +31,8 @@ Press **F2** to open the browser. MCM provides the hotkey, interface language an
 Large view covers 94% of the screen. Normal view starts at 100% scale and large view at 150%; each remembers its own 100–200% setting in 25-point steps. On small screens, the effective scale is limited to keep controls accessible.
 
 Enable **Enhanced readability** in MCM for brighter secondary text and larger tab and note labels. It is off by default and works alongside the window-size and zoom controls.
+
+**Verbose logging** is also optional and disabled by default. Enable it only when collecting detailed diagnostics for troubleshooting; the setting is saved across restarts.
 
 Modder Mode is optional and creates real items in the current game. Leave it disabled when using the mod solely as a reference browser.
 

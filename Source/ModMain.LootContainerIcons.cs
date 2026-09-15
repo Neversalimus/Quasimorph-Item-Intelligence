@@ -79,7 +79,7 @@ namespace ItemIntelligence
             _lootContainerRendererCatalog = usable.ToArray();
             int elapsed = unchecked(Environment.TickCount - started);
             if (elapsed < 0) elapsed = 0;
-            Debug.Log("[ItemIntelligence][ContainerIconPerf] renderer snapshot: entries=" +
+            VerboseLog("[ItemIntelligence][ContainerIconPerf] renderer snapshot: entries=" +
                 _lootContainerRendererCatalog.Length.ToString(CultureInfo.InvariantCulture) +
                 ", build=" + elapsed.ToString(CultureInfo.InvariantCulture) +
                 " ms; stemKeys=" + LootContainerRenderersByStem.Count.ToString(CultureInfo.InvariantCulture) +
@@ -1284,7 +1284,7 @@ namespace ItemIntelligence
             {
                 LootContainerIconMisses.Add(containerId);
                 if (ModderMode)
-                    Debug.Log("[ItemIntelligence][ContainerIconPerf] lazy id=" + containerId +
+                    VerboseLog("[ItemIntelligence][ContainerIconPerf] lazy id=" + containerId +
                         "; selected=<none>; reason=runtime-audited-ambiguous; heuristicScan=SKIPPED.");
                 return GetBrowserInterfaceIconSprite(BrowserInterfaceIconKind.Loot);
             }
@@ -1306,7 +1306,7 @@ namespace ItemIntelligence
                 {
                     int directElapsed = unchecked(Environment.TickCount - resolveStarted);
                     if (directElapsed < 0) directElapsed = 0;
-                    Debug.Log("[ItemIntelligence][ContainerIconAudit] lazy id=" + containerId +
+                    VerboseLog("[ItemIntelligence][ContainerIconAudit] lazy id=" + containerId +
                         "; resolveMs=" + directElapsed.ToString(CultureInfo.InvariantCulture) +
                         "; directRecord=true; " + audit);
                 }
@@ -1323,7 +1323,7 @@ namespace ItemIntelligence
                 {
                     int elapsed = unchecked(Environment.TickCount - resolveStarted);
                     if (elapsed < 0) elapsed = 0;
-                    Debug.Log("[ItemIntelligence][ContainerIconAudit] lazy id=" + containerId +
+                    VerboseLog("[ItemIntelligence][ContainerIconAudit] lazy id=" + containerId +
                         "; resolveMs=" + elapsed.ToString(CultureInfo.InvariantCulture) + "; " + audit);
                 }
                 return icon;
@@ -1343,7 +1343,7 @@ namespace ItemIntelligence
                 {
                     int elapsed = unchecked(Environment.TickCount - resolveStarted);
                     if (elapsed < 0) elapsed = 0;
-                    Debug.Log("[ItemIntelligence][ContainerIconAudit] lazy id=" + containerId +
+                    VerboseLog("[ItemIntelligence][ContainerIconAudit] lazy id=" + containerId +
                         "; resolveMs=" + elapsed.ToString(CultureInfo.InvariantCulture) +
                         "; " + audit);
                 }
@@ -1364,7 +1364,7 @@ namespace ItemIntelligence
                 {
                     int elapsed = unchecked(Environment.TickCount - resolveStarted);
                     if (elapsed < 0) elapsed = 0;
-                    Debug.Log("[ItemIntelligence][ContainerIconAudit] lazy id=" + containerId +
+                    VerboseLog("[ItemIntelligence][ContainerIconAudit] lazy id=" + containerId +
                         "; resolveMs=" + elapsed.ToString(CultureInfo.InvariantCulture) +
                         "; " + audit + "; " + familyAudit);
                 }
@@ -1385,7 +1385,7 @@ namespace ItemIntelligence
                         : (containerId.StartsWith("weapon_case_", StringComparison.OrdinalIgnoreCase)
                             ? "; " + BuildWeaponCaseTargetAudit(containerId)
                             : string.Empty));
-                Debug.Log("[ItemIntelligence][ContainerIconAudit] lazy id=" + containerId +
+                VerboseLog("[ItemIntelligence][ContainerIconAudit] lazy id=" + containerId +
                     "; resolveMs=" + missElapsed.ToString(CultureInfo.InvariantCulture) +
                     "; " + audit + "; " + familyAudit + "; " + neighborhoodAudit + targetedAudit);
             }

@@ -28,7 +28,7 @@ namespace ItemIntelligence
             catch { }
 
             if (!string.IsNullOrEmpty(_disassemblyDeathGiftItemId))
-                Debug.Log("[ItemIntelligence] Disassembly special chance resolved: DeathGiftId=" +
+                VerboseLog("[ItemIntelligence] Disassembly special chance resolved: DeathGiftId=" +
                     _disassemblyDeathGiftItemId + " => 100% direct dismantle.");
         }
 

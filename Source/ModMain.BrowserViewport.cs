@@ -54,7 +54,7 @@ namespace ItemIntelligence
             LayoutBrowserViewportChrome();
             LayoutBrowserCatalogViewport();
             UpdateBrowserViewportControls();
-            Debug.Log("[ItemIntelligence][BrowserViewport] screen=" + width + "x" + height +
+            VerboseLog("[ItemIntelligence][BrowserViewport] screen=" + width + "x" + height +
                 ", expanded=" + BrowserExpanded + ", requestedZoom=" + BrowserZoomPercent +
                 ", effectiveZoom=" + (_browserViewport.Scale * 100f).ToString("0.#", CultureInfo.InvariantCulture) +
                 ", rows=" + BrowserVisibleRows + ", catalogRows=" + BrowserCatalogVisibleRows + ".");

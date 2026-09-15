@@ -109,7 +109,7 @@ namespace ItemIntelligence
             }
             LootUnmappedContainerProfileIds.Sort(StringComparer.OrdinalIgnoreCase);
 
-            Debug.Log(
+            VerboseLog(
                 "[ItemIntelligence] Loot container profiles: profiles=" +
                 _lootContainerProfileCount.ToString(CultureInfo.InvariantCulture) +
                 ", mapped=" + _lootContainerMappedProfileCount.ToString(CultureInfo.InvariantCulture) +

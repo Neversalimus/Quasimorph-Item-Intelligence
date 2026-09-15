@@ -189,7 +189,7 @@ namespace ItemIntelligence
                 return;
             }
 
-            Debug.Log("[ItemIntelligence] Ammo descriptor warmup queued: " + AmmoWarmupItems.Count + " item records.");
+            VerboseLog("[ItemIntelligence] Ammo descriptor warmup queued: " + AmmoWarmupItems.Count + " item records.");
         }
 
         private static void TickAmmoIndexWarmup()
@@ -235,7 +235,7 @@ namespace ItemIntelligence
             _ammoWarmupActive = false;
             _ammoWarmupComplete = true;
 
-            Debug.Log("[ItemIntelligence] Ammo descriptor warmup complete: itemRecords=" + ItemRecordsById.Count +
+            VerboseLog("[ItemIntelligence] Ammo descriptor warmup complete: itemRecords=" + ItemRecordsById.Count +
                 ", weapons=" + WeaponsByItem.Count +
                 ", ammoItems=" + AmmoWarmupKeysByItem.Count +
                 ", ammoItemsWithWeapons=" + CompatibleWeaponsByAmmo.Count +
@@ -631,7 +631,7 @@ namespace ItemIntelligence
             int relationLinks = CountWeaponModeRelationLinks();
             if (relationLinks > 0)
             {
-                Debug.Log("[ItemIntelligence] Weapon mode relation index: weapons=" +
+                VerboseLog("[ItemIntelligence] Weapon mode relation index: weapons=" +
                     WeaponModeIdsByItem.Count.ToString(CultureInfo.InvariantCulture) +
                     ", links=" + relationLinks.ToString(CultureInfo.InvariantCulture) +
                     ", build=" + elapsed.ToString(CultureInfo.InvariantCulture) + " ms.");
@@ -971,7 +971,7 @@ namespace ItemIntelligence
 
             BuildWeaponModeStatsIndex();
 
-            Debug.Log("[ItemIntelligence] Weapon modes: runtime records=" +
+            VerboseLog("[ItemIntelligence] Weapon modes: runtime records=" +
                 WeaponModeRecordsById.Count.ToString(CultureInfo.InvariantCulture) +
                 ", staticStats=" + WeaponModeStatsByRawId.Count.ToString(CultureInfo.InvariantCulture) + ".");
         }

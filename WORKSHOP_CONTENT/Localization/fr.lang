@@ -335,6 +335,9 @@ mcm.enhanced_readability_tip	Agrandit les onglets et les notes et éclaircit les
 ui.trade_layout_view	VUE
 ui.trade_layout_cards_short	F
 ui.trade_layout_table_short	T
+mcm.header.logging	Journalisation
+mcm.verbose_logging	Journalisation détaillée
+mcm.verbose_logging_tip	Écrit des messages détaillés d’exécution et de performances d’Item Intelligence dans Player.log. À activer uniquement pour rechercher un problème.
 mcm.mod_name	Item Intelligence - Base d’objets et sources de butin
 compat.disabled_feature	Cette fonction est temporairement indisponible.
 mcm.save_failed	Impossible d’enregistrer les paramètres d’Item Intelligence.

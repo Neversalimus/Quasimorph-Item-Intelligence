@@ -82,7 +82,7 @@ namespace ItemIntelligence
                 EnsureExternalUiTranslations();
                 Verify(GetLanguageSignature() == languages[i, 0], "exact game metadata " + languages[i, 0]);
                 Verify(_externalUiTranslationFile == languages[i, 1], "Auto file " + languages[i, 0]);
-                Verify(ExternalUiTranslations.Count == 660, "complete language " + languages[i, 0]);
+                Verify(ExternalUiTranslations.Count == 663, "complete language " + languages[i, 0]);
                 foreach (string key in EnglishUiFallback.Keys)
                 {
                     Verify(Ui(key) == NormalizeGameText(ExternalUiTranslations[key]), "active value " + key);

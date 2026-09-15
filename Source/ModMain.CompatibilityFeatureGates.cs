@@ -226,7 +226,7 @@ namespace ItemIntelligence
                 bool marauder = marauderTenths.Contains(3) && marauderTenths.Contains(6) &&
                     marauderTenths.Contains(9) && marauderTenths.Contains(12);
                 _lootManualProjectionContractState = marauder && organization && fieldMedic ? 1 : -1;
-                UnityEngine.Debug.Log("[ItemIntelligence][LootManualContract] perkValues=" +
+                VerboseLog("[ItemIntelligence][LootManualContract] perkValues=" +
                     (_lootManualProjectionContractState > 0 ? "verified" : "mismatch") +
                     ", Marauder=" + marauder + ", Organization=" + organization +
                     ", FieldMedic=" + fieldMedic + ".");

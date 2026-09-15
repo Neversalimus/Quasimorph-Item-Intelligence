@@ -83,7 +83,7 @@ namespace ItemIntelligence
             _pendingFactionTechnologyFrames = 0;
             _pendingFactionTechnologyPhaseFrames = 0;
 
-            Debug.Log("[ItemIntelligence][FactionTechNav] Captured faction=" + factionId +
+            VerboseLog("[ItemIntelligence][FactionTechNav] Captured faction=" + factionId +
                 ", fallback=" + fallbackType.FullName + ", activeViews=" + (fallbackSummary ?? string.Empty) + ".");
             CloseInspector();
         }
@@ -245,7 +245,7 @@ namespace ItemIntelligence
                 Component technology = FindActiveUnityObject(factionTechnologyWindowType) as Component;
                 if (technology != null && technology.gameObject != null && technology.gameObject.activeInHierarchy)
                 {
-                    Debug.Log("[ItemIntelligence][FactionTechNav] opened faction=" +
+                    VerboseLog("[ItemIntelligence][FactionTechNav] opened faction=" +
                         _pendingFactionTechnologyFactionId +
                         ", screen=FactionsScreen, target=FactionTechnologyWindow.");
                     ClearFactionTechnologyNavigationState();

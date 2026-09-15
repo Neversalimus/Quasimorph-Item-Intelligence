@@ -140,7 +140,7 @@ namespace ItemIntelligence
             finally
             {
                 timer.Stop();
-                Debug.Log("[ItemIntelligence] Index stage " + name + ": " + timer.ElapsedMilliseconds + " ms.");
+                VerboseLog("[ItemIntelligence] Index stage " + name + ": " + timer.ElapsedMilliseconds + " ms.");
             }
         }
 
@@ -165,7 +165,7 @@ namespace ItemIntelligence
                 if ((KnownItemIds.Count == 0 && liveItems > 0) ||
                     (MagnumUses.Count == 0 && liveMagnum > 0))
                 {
-                    Debug.Log("[ItemIntelligence] Strategy data became available after bootstrap; rebuilding indexes. Items=" +
+                    VerboseLog("[ItemIntelligence] Strategy data became available after bootstrap; rebuilding indexes. Items=" +
                         liveItems.ToString(CultureInfo.InvariantCulture) + ", MagnumPerks=" +
                         liveMagnum.ToString(CultureInfo.InvariantCulture) + ".");
                     _indexesBuilt = false;
@@ -242,7 +242,7 @@ namespace ItemIntelligence
                 {
                     sourceCount++;
                     ItemDataSourceNames.Add("Items=" + canonicalMatched.ToString(CultureInfo.InvariantCulture));
-                    Debug.Log("[ItemIntelligence] Item data resolver: items=" + KnownItemIds.Count +
+                    VerboseLog("[ItemIntelligence] Item data resolver: items=" + KnownItemIds.Count +
                         ", sources=" + sourceCount +
                         ", tables=" + string.Join(", ", ItemDataSourceNames.ToArray()) + ".");
                     return;
@@ -292,7 +292,7 @@ namespace ItemIntelligence
                 }
             }
 
-            Debug.Log("[ItemIntelligence] Item data resolver: items=" + KnownItemIds.Count +
+            VerboseLog("[ItemIntelligence] Item data resolver: items=" + KnownItemIds.Count +
                 ", sources=" + sourceCount +
                 (ItemDataSourceNames.Count > 0 ? ", tables=" + string.Join(", ", ItemDataSourceNames.ToArray()) : string.Empty) + ".");
         }

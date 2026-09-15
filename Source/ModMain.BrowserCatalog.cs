@@ -40,7 +40,7 @@ namespace ItemIntelligence
                     BrowserFavoriteItemIds.Add(itemId);
                 }
 
-                Debug.Log("[ItemIntelligence] Catalog favorites loaded: " +
+                VerboseLog("[ItemIntelligence] Catalog favorites loaded: " +
                     BrowserFavoriteItemIds.Count.ToString(CultureInfo.InvariantCulture) + ".");
             }
             catch (Exception ex)
@@ -120,7 +120,7 @@ namespace ItemIntelligence
             SaveCatalogFavorites();
             UpdateBrowserHeaderActions();
             if (_browserCatalogOpen) RefreshBrowserCatalog();
-            Debug.Log("[ItemIntelligence] Catalog favorite " + (added ? "added: " : "removed: ") + itemId + ".");
+            VerboseLog("[ItemIntelligence] Catalog favorite " + (added ? "added: " : "removed: ") + itemId + ".");
         }
 
         private static void RecordBrowserItemVisit(string itemId)
@@ -143,7 +143,7 @@ namespace ItemIntelligence
             BrowserRecentItemIds.Clear();
             _browserCatalogScrollOffset = 0;
             RefreshBrowserCatalog();
-            Debug.Log("[ItemIntelligence] Catalog session history cleared.");
+            VerboseLog("[ItemIntelligence] Catalog session history cleared.");
         }
 
         private static void PushBrowserNavigationState()
@@ -188,7 +188,7 @@ namespace ItemIntelligence
             float navigationMs = (Time.realtimeSinceStartup - navigationStarted) * 1000f;
             ReportBrowserPerformanceBudget(itemId, false, navigationMs, renderMs);
             if (!string.IsNullOrEmpty(source))
-                Debug.Log("[ItemIntelligence] " + source + " selected: " + itemId + ".");
+                VerboseLog("[ItemIntelligence] " + source + " selected: " + itemId + ".");
             return true;
         }
 
@@ -215,7 +215,7 @@ namespace ItemIntelligence
                 if (BrowserNavigation.Tab == (int)BrowserTabId.Trade && (ShowSources || ShowTradeInformation))
                     StartMarketScan(_inspectorItemId);
                 RenderBrowser(_inspectorItemId);
-                Debug.Log("[ItemIntelligence] Browser Back restored: " + _inspectorItemId + ".");
+                VerboseLog("[ItemIntelligence] Browser Back restored: " + _inspectorItemId + ".");
                 return true;
             }
 

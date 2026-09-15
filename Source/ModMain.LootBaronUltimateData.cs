@@ -121,7 +121,7 @@ namespace ItemIntelligence
             _baronItemMetaReady = true;
             double ms = (System.Diagnostics.Stopwatch.GetTimestamp() - started) * 1000.0 /
                 System.Diagnostics.Stopwatch.Frequency;
-            Debug.Log("[ItemIntelligence][BaronUltimateLoot] itemMeta=" + BaronItemMetaById.Count.ToString(CultureInfo.InvariantCulture) +
+            VerboseLog("[ItemIntelligence][BaronUltimateLoot] itemMeta=" + BaronItemMetaById.Count.ToString(CultureInfo.InvariantCulture) +
                 ", techResolved=" + techResolved.ToString(CultureInfo.InvariantCulture) +
                 ", usableSkulls=" + usable.ToString(CultureInfo.InvariantCulture) +
                 ", quasiPacts=" + quasiPacts.ToString(CultureInfo.InvariantCulture) +
@@ -245,7 +245,7 @@ namespace ItemIntelligence
                 object mob;
                 if (!mobs.TryGetValue(phase.BaronCreatureId, out mob) || mob == null)
                 {
-                    Debug.Log("[ItemIntelligence][BaronUltimateLoot] phase=" + phase.Id + ", baron=" + phase.BaronCreatureId + ", mobResolved=false.");
+                    VerboseLog("[ItemIntelligence][BaronUltimateLoot] phase=" + phase.Id + ", baron=" + phase.BaronCreatureId + ", mobResolved=false.");
                     continue;
                 }
                 mobResolved++;
@@ -467,7 +467,7 @@ namespace ItemIntelligence
                 }
 
                 string classes = FormatBaronClassWeights(classWeights);
-                Debug.Log("[ItemIntelligence][BaronUltimateLoot] phase=" + phase.Id +
+                VerboseLog("[ItemIntelligence][BaronUltimateLoot] phase=" + phase.Id +
                     ", bramfatura=" + phase.BramfaturaId +
                     ", baron=" + phase.BaronCreatureId +
                     ", qmorph=" + phaseMin.ToString(CultureInfo.InvariantCulture) +
@@ -485,7 +485,7 @@ namespace ItemIntelligence
             }
 
             _lootBaronSpecialIndexBuilt = true;
-            Debug.Log("[ItemIntelligence][BaronUltimateLoot] records=" + rawRecords.Count.ToString(CultureInfo.InvariantCulture) +
+            VerboseLog("[ItemIntelligence][BaronUltimateLoot] records=" + rawRecords.Count.ToString(CultureInfo.InvariantCulture) +
                 ", baronFlags=" + baronFlags.ToString(CultureInfo.InvariantCulture) +
                 ", baronMobResolved=" + mobResolved.ToString(CultureInfo.InvariantCulture) +
                 ", aiResolved=" + aiResolvedCount.ToString(CultureInfo.InvariantCulture) +

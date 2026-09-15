@@ -503,7 +503,7 @@ namespace ItemIntelligence
             {
                 if (string.IsNullOrEmpty(_inspectorItemId)) return;
                 GUIUtility.systemCopyBuffer = _inspectorItemId;
-                Debug.Log("[ItemIntelligence] Item ID copied: " + _inspectorItemId + ".");
+                VerboseLog("[ItemIntelligence] Item ID copied: " + _inspectorItemId + ".");
             });
         }
 

@@ -1,4 +1,4 @@
-﻿# ============================================================================
+# ============================================================================
 # GAMEPLAY EXACTNESS / FAIL-CLOSED CONTRACTS
 # Current invariants only. Historical test/build provenance intentionally omitted.
 # ============================================================================
@@ -233,8 +233,8 @@ if ($ruLocalizationText.IndexOf('ШАНС ≥1',[StringComparison]::Ordinal) -ge
     $enLocalizationText.IndexOf('≥1 CHANCE',[StringComparison]::Ordinal) -ge 0) {
     throw 'current font-safety regression: unsupported Scavengers heading glyph returned.'
 }
-if ($runtimeText.IndexOf('public const string Version = "1.7.42.7";',[StringComparison]::Ordinal) -lt 0 -or
-    $runtimeText.IndexOf('StableRelease17427',[StringComparison]::Ordinal) -lt 0) {
+if ($runtimeText.IndexOf('public const string Version = "1.7.42.8";',[StringComparison]::Ordinal) -lt 0 -or
+    $runtimeText.IndexOf('StableRelease17428',[StringComparison]::Ordinal) -lt 0) {
     throw 'current runtime version/marker contract missing.'
 }
 

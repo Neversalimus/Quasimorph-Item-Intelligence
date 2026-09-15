@@ -17,7 +17,7 @@ namespace ItemIntelligence
             {
                 LootContainerIconMisses.Add(containerId);
                 if (ModderMode)
-                    Debug.Log("[ItemIntelligence][ContainerIconAudit] lazy id=" + containerId +
+                    VerboseLog("[ItemIntelligence][ContainerIconAudit] lazy id=" + containerId +
                         "; selected=<none>; reason=record-not-found.");
                 return null;
             }
@@ -31,7 +31,7 @@ namespace ItemIntelligence
             {
                 LootContainerIconMisses.Add(containerId);
                 if (ModderMode)
-                    Debug.Log("[ItemIntelligence][ContainerIconAudit] lazy id=AztecAltar; " +
+                    VerboseLog("[ItemIntelligence][ContainerIconAudit] lazy id=AztecAltar; " +
                         "selected=<none>; reason=exact-altar-renderer-not-loaded.");
                 return null;
             }
@@ -68,7 +68,7 @@ namespace ItemIntelligence
             {
                 LootContainerIconMisses.Add(containerId);
                 if (ModderMode)
-                    Debug.Log("[ItemIntelligence][ContainerIconAudit] lazy id=AztecAltar; " +
+                    VerboseLog("[ItemIntelligence][ContainerIconAudit] lazy id=AztecAltar; " +
                         "selected=<none>; reason=no-exact-altar-stem.");
                 return null;
             }
@@ -76,7 +76,7 @@ namespace ItemIntelligence
             LootContainerIconsById[containerId] = best.Sprite;
             LootContainerIconSourcesById[containerId] = bestSource;
             if (ModderMode)
-                Debug.Log("[ItemIntelligence][ContainerIconAudit] lazy id=AztecAltar; " +
+                VerboseLog("[ItemIntelligence][ContainerIconAudit] lazy id=AztecAltar; " +
                     "selected=" + (best.Sprite.name ?? "<unnamed>") +
                     "; source=" + bestSource + "; exactSemantic=true.");
             return best.Sprite;
