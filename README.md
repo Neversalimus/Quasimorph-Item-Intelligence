@@ -4,7 +4,7 @@
 
 [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3780078201) · [Downloads](https://github.com/Neversalimus/Quasimorph-Item-Intelligence/releases) · [Changelog](CHANGELOG.md)
 
-This branch contains **1.7.43.0** for **Quasimorph 1.0.4.590s.969afc6**.
+This branch contains **1.7.43.1** for **Quasimorph 1.0.4.590s.969afc6**.
 
 Compatibility for the new build is enabled through audited feature-owned gates. Unknown future builds continue to fail closed for exact calculations until their contracts are reviewed.
 
@@ -19,7 +19,7 @@ This release adds optional verbose logging. Normal mode keeps `Player.log` conci
 - Loot sources grouped by containers, enemies, faction rewards, mission pools and special sources.
 - Container chance estimates and a loot-modifier calculator for Marauder, Organization and Field Medic.
 - Enemy implant sources that account for body slots, tissue compatibility, preset implants and socket competition.
-- Faction technology, weapon/ammunition links and detailed fire-mode tooltips.
+- Faction technology, weapon/ammunition links and detailed fire-mode tooltips, including exact per-mode damage types.
 - Native **ALT / More details** support for item tooltips inside the Item Intelligence browser.
 - A large browser window and adjustable interface scale.
 - An optional enhanced readability setting for brighter labels and larger tabs and notes.
