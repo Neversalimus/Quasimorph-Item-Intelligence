@@ -464,6 +464,21 @@ ui.mode_tooltip_fire	Tryb ognia
 ui.mode_tooltip_attack	Tryb ataku
 ui.mode_rate_of_fire	Szybkostrzelność
 ui.mode_damage_modifier	Modyf. obrażeń
+ui.mode_damage_type	Typ obrażeń
+ui.mode_damage_type_default	Typ obrażeń (domyślny)
+ui.damage_type.blunt	Obuchowe
+ui.damage_type.pierce	Przebijające
+ui.damage_type.lacer	Cięte
+ui.damage_type.fire	Ogień
+ui.damage_type.cold	Zimno
+ui.damage_type.poison	Trucizna
+ui.damage_type.shock	Elektryczne
+ui.damage_type.beam	Wiązka
+ui.damage_type.explosion	Wybuchowe
+ui.damage_type.plasma	Plazma
+ui.damage_type.chaos	Chaos
+ui.damage_type.proton	Protonowe
+ui.damage_type.cryo	Kriogeniczne
 ui.mode_ammo_consumption	Zużycie amunicji
 mcm.modder_mode	Tryb moddera
 mcm.modder_mode_tip	Pokazuje dane techniczne i panel tworzenia przedmiotów. Utworzone przedmioty są zapisywane w bieżącej grze.
