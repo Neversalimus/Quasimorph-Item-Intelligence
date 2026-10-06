@@ -462,6 +462,21 @@ ui.mode_tooltip_fire	Mode de tir
 ui.mode_tooltip_attack	Mode d’attaque
 ui.mode_rate_of_fire	Cadence de tir
 ui.mode_damage_modifier	Mod. de dégâts
+ui.mode_damage_type	Type de dégâts
+ui.mode_damage_type_default	Type de dégâts (par défaut)
+ui.damage_type.blunt	Contondant
+ui.damage_type.pierce	Perforant
+ui.damage_type.lacer	Lacérant
+ui.damage_type.fire	Feu
+ui.damage_type.cold	Froid
+ui.damage_type.poison	Poison
+ui.damage_type.shock	Électrique
+ui.damage_type.beam	Faisceau
+ui.damage_type.explosion	Explosif
+ui.damage_type.plasma	Plasma
+ui.damage_type.chaos	Chaos
+ui.damage_type.proton	Proton
+ui.damage_type.cryo	Cryogénique
 ui.mode_ammo_consumption	Consommation de munitions
 mcm.modder_mode	Mode créateur de mods
 mcm.modder_mode_tip	Afficher les données techniques et le panneau de création d’objets. Les objets créés sont enregistrés dans la partie actuelle.
