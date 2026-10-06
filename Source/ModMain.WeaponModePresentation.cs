@@ -13,7 +13,7 @@ namespace ItemIntelligence
         // v1.7.37-test2: weapon-mode rows stay compact. The exact modeKey carried by
         // each row owns its hover payload, so two identically named modes can expose
         // different FireModeRecord stats without any label-based lookup.
-        private const int WeaponModeTooltipMaxRows = 7;
+        private const int WeaponModeTooltipMaxRows = 8;
         private static GameObject _browserWeaponModeTooltipRoot;
         private static RectTransform _browserWeaponModeTooltipRect;
         private static TMP_Text _browserWeaponModeTooltipTitle;
@@ -108,7 +108,7 @@ namespace ItemIntelligence
 
         private static List<KeyValuePair<string, string>> BuildWeaponModeTooltipRows(string modeKey, WeaponModeStaticStats stats)
         {
-            List<KeyValuePair<string, string>> rows = new List<KeyValuePair<string, string>>(7);
+            List<KeyValuePair<string, string>> rows = new List<KeyValuePair<string, string>>(8);
             if (stats == null) return rows;
 
             // Match MGSC.TooltipFactory.BuildFiremodeTooltip exactly for the fields it
@@ -118,6 +118,11 @@ namespace ItemIntelligence
             if (stats.DamageMult.HasValue && !float.IsNaN(stats.DamageMult.Value) &&
                 !float.IsInfinity(stats.DamageMult.Value))
                 rows.Add(new KeyValuePair<string, string>(Ui("ui.mode_damage_modifier"), FormatWeaponModeMultiplierPercent(stats.DamageMult.Value)));
+
+            string damageTypeLabel;
+            string damageTypeValue;
+            if (TryResolveWeaponModeDamageType(modeKey, out damageTypeLabel, out damageTypeValue))
+                rows.Add(new KeyValuePair<string, string>(damageTypeLabel, damageTypeValue));
 
             int damagePerApMin;
             int damagePerApMax;
