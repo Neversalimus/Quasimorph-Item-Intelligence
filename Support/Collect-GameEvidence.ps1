@@ -1,4 +1,4 @@
-#requires -Version 7.0
+﻿#requires -Version 7.0
 [CmdletBinding()]
 param([string]$GameRoot = '', [string]$OutputPath = '')
 $ErrorActionPreference = 'Stop'
@@ -14,7 +14,7 @@ if (-not $GameRoot) {
 $managed = Join-Path $GameRoot 'Quasimorph_Data/Managed'
 $assembly = Join-Path $managed 'Assembly-CSharp.dll'
 if (-not (Test-Path -LiteralPath $assembly -PathType Leaf)) { throw 'Assembly-CSharp.dll not found.' }
-if (-not $OutputPath) { $OutputPath = Join-Path $env:USERPROFILE 'Downloads/QII_17424_GameEvidence.zip' }
+if (-not $OutputPath) { $OutputPath = Join-Path $env:USERPROFILE 'Downloads/QII_17429_GameEvidence.zip' }
 $OutputPath = [IO.Path]::GetFullPath($OutputPath)
 $gamePrefix = [IO.Path]::GetFullPath($GameRoot).TrimEnd('\','/') + [IO.Path]::DirectorySeparatorChar
 if ($OutputPath.StartsWith($gamePrefix, [StringComparison]::OrdinalIgnoreCase)) { throw 'Evidence output must be outside the game installation.' }

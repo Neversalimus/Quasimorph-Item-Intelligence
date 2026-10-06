@@ -48,13 +48,15 @@ namespace ItemIntelligence
         public static int RunEnemyBodyCases()
         {
             string previousSha = _compatAssemblySha256;
+            string sha590 = "D72CD91F98DE4D6CCE8EE420AC1A906D89E68BA0CB164694D266B56F46339EBE";
             string sha582 = "9D0C784A764D75EC6616BD3B5744C0E581BB1CE148FD175BD8CABA8195854006";
-            foreach (string fingerprint in new[] { previousSha, previousSha.ToLowerInvariant(), sha582,
+            foreach (string fingerprint in new[] { previousSha, previousSha.ToLowerInvariant(), sha590, sha590.ToLowerInvariant(), sha582,
                 sha582.ToLowerInvariant(), sha582.Substring(0, 63) + "7", "unknown", "", null })
             {
                 _compatAssemblySha256 = fingerprint;
                 bool known = string.Equals(fingerprint, previousSha, StringComparison.OrdinalIgnoreCase) ||
-                    string.Equals(fingerprint, sha582, StringComparison.OrdinalIgnoreCase);
+                    string.Equals(fingerprint, sha582, StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(fingerprint, sha590, StringComparison.OrdinalIgnoreCase);
                 BodyAssert(IsAuditedEnemyBodyAssembly() == known, "body assembly scope excludes unknown builds");
                 Data.BodyTypes.Values.Clear();
                 Data.BodyTypes.Values.Add(new BodyTypeRecord { Id = "gate_body", WoundSlots = new List<string>() });

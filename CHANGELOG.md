@@ -1,5 +1,19 @@
 # Changelog
 
+## v1.7.43.0 — 2026-10-06
+
+- Added native **ALT / More details** support inside Item Intelligence item tooltips.
+- Reuses Quasimorph's own `UI_TooltipMore` action and native additional-tooltip path instead of duplicating the details panel.
+- Keeps the browser modal-safe: only the tooltip-more action is allowed while a QII-owned item tooltip is active; other vanilla actions remain blocked.
+- Added a narrow compatibility gate for the additional-tooltip API so the feature fails closed without breaking normal Item Intelligence tooltips if the game changes.
+
+## v1.7.42.9 — 2026-10-02
+
+- Restored compatibility with Quasimorph 1.0.4.590s.969afc6 for exact Trade prices, next-unit prices and stock-sensitive batch totals after re-auditing the vanilla pricing contracts.
+- Re-enabled audited cargo creation, Loot modifiers and container estimates, Scavengers/source-family data and ordinary enemy body/implant calculations for the new Assembly-CSharp fingerprint.
+- Added live verification of the current `RandomStart_*` reward pools before enabling hardcoded source-family claims.
+- Kept exact calculations fail-closed on unknown future game builds; the broad diagnostic build identity remains independent from feature-owned compatibility gates.
+
 ## v1.7.42.8 — 2026-09-15
 
 - Added optional Verbose logging in MCM and config.ini, disabled by default.

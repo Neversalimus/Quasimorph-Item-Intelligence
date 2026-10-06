@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using MGSC;
 using TMPro;
@@ -197,6 +197,7 @@ namespace ItemIntelligence
 
         private static void InitializeBrowserSpaceSessionState()
         {
+            ClearBrowserNativeTooltipMoreTarget(null);
             _priceBlockItemId = string.Empty;
             _priceBlockFrame = -1000;
             _itemPointerScope = false;
@@ -210,6 +211,7 @@ namespace ItemIntelligence
 
         private static void ResetBrowserMenuSessionState()
         {
+            ClearBrowserNativeTooltipMoreTarget(null);
             _lastHoveredItemId = string.Empty;
             _priceBlockItemId = string.Empty;
             _priceBlockFrame = -1000;

@@ -1,4 +1,4 @@
-﻿# ============================================================================
+# ============================================================================
 # FEATURE SEMANTICS / UI TRUTHFULNESS / NAVIGATION
 # Current invariants only. Historical test/build provenance intentionally omitted.
 # ============================================================================
@@ -220,10 +220,6 @@ if ($advancedSearchText.IndexOf('string.Join(" ", query.PlainTerms.ToArray())',[
 }
 if ($browserUiText.IndexOf('(_browserSearchDropdown == null || !_browserSearchDropdown.activeSelf)',[StringComparison]::Ordinal) -ge 0) {
     throw 'Search P0 regression: dropdown visibility must not trigger a full query rescan every frame.'
-}
-if ($runtimeText.IndexOf('InputControllerModalActionPrefix(object[] __args',[StringComparison]::Ordinal) -ge 0 -or
-    $runtimeText.IndexOf('InputControllerModalActionPrefix(ref bool __result)',[StringComparison]::Ordinal) -lt 0) {
-    throw 'Input hot-path regression: unused Harmony __args allocation returned.'
 }
 foreach ($token in @('FinalizeAmmoWarmupWeapon','_ammoWarmupPhase','PerformanceBudgetExceeded(started, frameBudgetMs)','AmmoFinalizeCompatibleBuffer')) {
     if ($ammoText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "Ammo incremental-finalize contract token missing: $token" }

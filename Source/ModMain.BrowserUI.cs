@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -794,6 +794,7 @@ namespace ItemIntelligence
 
         private static void CloseInspector()
         {
+            ClearBrowserNativeTooltipMoreTarget(null);
             _inspectorOpen = false;
             _inspectorItemId = string.Empty;
             _browserPreviewLiveItem = null;
@@ -837,6 +838,7 @@ namespace ItemIntelligence
 
         private static void ClearBrowserTooltipPreviewBindings()
         {
+            ClearBrowserNativeTooltipMoreTarget(null);
             // Browser rows are pooled. Clear only QII-owned detached preview item
             // references; the native ItemTooltipHandler components remain intact and
             // are reinitialized lazily when a row becomes visible again.

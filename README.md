@@ -4,7 +4,9 @@
 
 [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3780078201) · [Downloads](https://github.com/Neversalimus/Quasimorph-Item-Intelligence/releases) · [Changelog](CHANGELOG.md)
 
-This branch contains **1.7.42.8** for **Quasimorph 1.0.4.582s.c4335c5**.
+This branch contains **1.7.43.0** for **Quasimorph 1.0.4.590s.969afc6**.
+
+Compatibility for the new build is enabled through audited feature-owned gates. Unknown future builds continue to fail closed for exact calculations until their contracts are reviewed.
 
 This release adds optional verbose logging. Normal mode keeps `Player.log` concise while preserving warnings, errors and a small set of lifecycle/status messages; detailed runtime, UI, index, navigation and performance diagnostics can be enabled through **MCM → Logging → Verbose logging**.
 
@@ -18,6 +20,7 @@ This release adds optional verbose logging. Normal mode keeps `Player.log` conci
 - Container chance estimates and a loot-modifier calculator for Marauder, Organization and Field Medic.
 - Enemy implant sources that account for body slots, tissue compatibility, preset implants and socket competition.
 - Faction technology, weapon/ammunition links and detailed fire-mode tooltips.
+- Native **ALT / More details** support for item tooltips inside the Item Intelligence browser.
 - A large browser window and adjustable interface scale.
 - An optional enhanced readability setting for brighter labels and larger tabs and notes.
 - Optional Modder Mode for creating items in ship cargo or the mission clone's inventory.
@@ -26,7 +29,7 @@ This release adds optional verbose logging. Normal mode keeps `Player.log` conci
 
 Subscribe through [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3780078201), enable Item Intelligence in the game's mod list and restart the game. Enable only one copy of the mod at a time.
 
-Press **F2** to open the browser. MCM provides the hotkey, interface language and other settings. The browser footer provides **Large window / Normal window** and **− / +** scale controls.
+Press **F2** to open the browser. MCM provides the hotkey, interface language and other settings. Hover a QII item icon and hold **ALT** to use Quasimorph's native **More details** view. The browser footer provides **Large window / Normal window** and **− / +** scale controls.
 
 Large view covers 94% of the screen. Normal view starts at 100% scale and large view at 150%; each remembers its own 100–200% setting in 25-point steps. On small screens, the effective scale is limited to keep controls accessible.
 

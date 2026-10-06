@@ -1,4 +1,4 @@
-﻿# Item Intelligence static build-contract coordinator.
+# Item Intelligence static build-contract coordinator.
 #
 # BUILD_AND_STAGE.ps1 owns environment discovery, C# compilation and staging.
 # Files in BuildContracts/ own only CURRENT static invariants. They are dot-sourced in
@@ -9,13 +9,15 @@ if (-not (Test-Path -LiteralPath $buildContractRoot -PathType Container)) {
     throw 'BuildContracts directory is missing.'
 }
 
-$buildContractBudgets = @{
+$buildContractBudgets = [ordered]@{
     'Architecture.ps1' = 950
     'TradeArchitecture.ps1' = 120
     'StationProductionArchitecture.ps1' = 120
     'FeatureSemantics.ps1' = 850
+    'TooltipInteraction.ps1' = 120
     'GameplayExactness.ps1' = 550
     'SourceFamilyHotfix.ps1' = 80
+    'SourceFamilyRuntime.ps1' = 80
     'MathSafety.ps1' = 180
     'ModderActions.ps1' = 220
     'CodeHygiene.ps1' = 180
@@ -26,23 +28,7 @@ $buildContractBudgets = @{
     'BrowserViewport.ps1' = 150
     'Performance.ps1' = 160
 }
-$buildContractModules = @(
-    'Architecture.ps1',
-    'TradeArchitecture.ps1',
-    'StationProductionArchitecture.ps1',
-    'FeatureSemantics.ps1',
-    'GameplayExactness.ps1',
-    'SourceFamilyHotfix.ps1',
-    'MathSafety.ps1',
-    'ModderActions.ps1',
-    'CodeHygiene.ps1',
-    'ReleaseSafety.ps1',
-    'InstallSafety.ps1',
-    'LocalizationInternational.ps1',
-    'TextSafety.ps1',
-    'BrowserViewport.ps1',
-    'Performance.ps1'
-)
+$buildContractModules = @($buildContractBudgets.Keys)
 $runtimeContractText = Get-Content -LiteralPath (Join-Path $sourceDir 'ModMain.Runtime.cs') -Raw
 $currentVersionToken = [regex]::Match($runtimeContractText, 'public const string Version = "([^"]+)";').Groups[1].Value
 $currentMarkerToken = [regex]::Match($runtimeContractText, 'ACTIVE VERSION.*?\(([^)"]+)\)\.').Groups[1].Value
