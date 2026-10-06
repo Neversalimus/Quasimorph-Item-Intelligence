@@ -139,6 +139,7 @@ namespace ItemIntelligence
             RunScavengerCases();
             RunAmputationCases();
             RunTooltipInteractionCases();
+            RunWeaponModeDamageTypeCases();
             return assertions;
         }
         private static double EnumeratedChance(double p, int rolls)
