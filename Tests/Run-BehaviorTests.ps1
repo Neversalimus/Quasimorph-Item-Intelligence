@@ -34,6 +34,7 @@ $members = @(
     (Get-ProductionMember 'ModMain.ItemDropRandomizeMath.cs' 'MethodDeclarationSyntax' 'GetItemDropCategoryWeight'),
     (Get-ProductionMember 'ModMain.ItemDropRandomizeMath.cs' 'MethodDeclarationSyntax' 'TryResolveStrictlyPositiveItemDropTotal'),
     (Get-ProductionMember 'ModMain.NumericProjectionSafety.cs' 'MethodDeclarationSyntax' 'TryRoundAndScaleDamage'),
+    (Get-ProductionMember 'ModMain.BrowserNativeTooltipMore.cs' 'MethodDeclarationSyntax' 'ShouldAllowBrowserTooltipMoreAction'),
     (Get-ProductionMember 'ModMain.Loot.cs' 'ClassDeclarationSyntax' 'LootWeightedItem'),
     (Get-ProductionMember 'ModMain.LootContainerSaveEstimate.cs' 'ClassDeclarationSyntax' 'LootContainerWeightedPool'),
     (Get-ProductionMember 'ModMain.LootContainerSaveEstimate.cs' 'MethodDeclarationSyntax' 'TryGetExactContainerItemTechLevel'),
@@ -60,7 +61,7 @@ $gateConstants = $trees['ModMain.CompatibilityFeatureGates.cs'].GetRoot().Descen
     $_.GetType().Name -eq 'FieldDeclarationSyntax' -and $_.Modifiers.ToString() -match '\bconst\b'
 } | ForEach-Object { $_.ToFullString() }
 $members += "`n" + ($gateMembers -join "`n") + "`n" + ($gateConstants -join "`n")
-$cases = (@('BehaviorCases.cs','CompatibilityCases.cs','GameModelFixtures.cs','AmputationCases.cs') | ForEach-Object {
+$cases = (@('BehaviorCases.cs','CompatibilityCases.cs','GameModelFixtures.cs','AmputationCases.cs','TooltipInteractionCases.cs') | ForEach-Object {
     [IO.File]::ReadAllText((Join-Path $PSScriptRoot $_))
 }) -join "`n"
 $pure = foreach ($name in @('ModMain.LootProbabilityMath.cs','ModMain.LootAvailability.cs','ModMain.SourceFamilyPolicy.cs')) {
