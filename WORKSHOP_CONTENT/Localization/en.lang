@@ -464,6 +464,21 @@ ui.mode_tooltip_fire	Fire mode
 ui.mode_tooltip_attack	Attack mode
 ui.mode_rate_of_fire	Rate of fire
 ui.mode_damage_modifier	Damage mod.
+ui.mode_damage_type	Damage type
+ui.mode_damage_type_default	Damage type (default)
+ui.damage_type.blunt	Blunt
+ui.damage_type.pierce	Piercing
+ui.damage_type.lacer	Laceration
+ui.damage_type.fire	Fire
+ui.damage_type.cold	Cold
+ui.damage_type.poison	Poison
+ui.damage_type.shock	Shock
+ui.damage_type.beam	Beam
+ui.damage_type.explosion	Explosive
+ui.damage_type.plasma	Plasma
+ui.damage_type.chaos	Chaos
+ui.damage_type.proton	Proton
+ui.damage_type.cryo	Cryogenic
 ui.mode_ammo_consumption	Ammo consumption
 
 # Modder Mode and advanced search
