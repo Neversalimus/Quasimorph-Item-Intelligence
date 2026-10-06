@@ -20,8 +20,10 @@ if ($damageTypeText.IndexOf('Contains("slash"',[StringComparison]::OrdinalIgnore
     throw 'weapon damage type must never be inferred from mode names.'
 }
 if ($weaponModePresentationText.IndexOf('TryResolveWeaponModeDamageType',[StringComparison]::Ordinal) -lt 0 -or
-    $weaponModePresentationText.IndexOf('WeaponModeTooltipMaxRows = 8',[StringComparison]::Ordinal) -lt 0) {
-    throw 'weapon damage-type tooltip row contract missing.'
+    $weaponModePresentationText.IndexOf('WeaponModeTooltipMaxRows = 8',[StringComparison]::Ordinal) -lt 0 -or
+    $weaponModePresentationText.IndexOf('WeaponModeTooltipWidth = 420f',[StringComparison]::Ordinal) -lt 0 -or
+    $weaponModePresentationText.IndexOf('new Vector2(132f, 30f)',[StringComparison]::Ordinal) -lt 0) {
+    throw 'weapon damage-type tooltip row/value-width contract missing.'
 }
 foreach ($locText in @($enLocalizationText,$ruLocalizationText,$templateLocalizationText)) {
     foreach ($token in @('ui.mode_damage_type','ui.mode_damage_type_default','ui.damage_type.blunt','ui.damage_type.pierce','ui.damage_type.lacer')) {
