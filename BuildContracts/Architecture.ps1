@@ -10,7 +10,7 @@ if ($sourceFiles.Count -lt 30) { throw "Source decomposition contract failed: ex
 if (Test-Path -LiteralPath (Join-Path $sourceDir 'ItemIntelligence.cs')) { throw 'Monolithic ItemIntelligence.cs must not return in the hardening branch.' }
 if (Test-Path -LiteralPath (Join-Path $sourceDir 'ModMain.AmmoDisassembly.cs')) { throw 'Architecture regression: Ammo and Disassembly must remain separate feature files.' }
 foreach ($moduleFile in @(
-    'ModMain.Ammo.cs','ModMain.WeaponModes.cs','ModMain.WeaponModePresentation.cs','ModMain.WeaponModeLocalization.cs','ModMain.WeaponModeScatter.cs','ModMain.WeaponModeDamagePerAP.cs','ModMain.WeaponModeCriticalDamagePerAP.cs','ModMain.NumericProjectionSafety.cs','ModMain.Disassembly.cs','ModMain.BrowserModels.cs','ModMain.BrowserState.cs',
+    'ModMain.Ammo.cs','ModMain.WeaponModes.cs','ModMain.WeaponModePresentation.cs','ModMain.WeaponModeLocalization.cs','ModMain.WeaponModeScatter.cs','ModMain.WeaponModeDamagePerAP.cs','ModMain.WeaponModeCriticalDamagePerAP.cs','ModMain.WeaponModeDamageType.cs','ModMain.NumericProjectionSafety.cs','ModMain.Disassembly.cs','ModMain.BrowserModels.cs','ModMain.BrowserState.cs',
     'ModMain.BrowserCatalog.cs','ModMain.BrowserCatalogLabels.cs','ModMain.BrowserPresentation.cs','ModMain.OverviewDashboard.cs','ModMain.AdaptiveEntry.cs','ModMain.BrowserTextLayout.cs','ModMain.BrowserCatalogPresentation.cs','ModMain.BrowserLazyUi.cs',
     'ModMain.InterfaceIcons.cs',
     'ModMain.LootIndexes.cs','ModMain.LootContainerProfiles.cs','ModMain.LootContainerIcons.cs','ModMain.LootContainerSaveEstimate.cs','ModMain.LootContainerChanceMath.cs',
