@@ -462,6 +462,21 @@ ui.mode_tooltip_fire	Modo de disparo
 ui.mode_tooltip_attack	Modo de ataque
 ui.mode_rate_of_fire	Cadência de tiro
 ui.mode_damage_modifier	Mod. de dano
+ui.mode_damage_type	Tipo de dano
+ui.mode_damage_type_default	Tipo de dano (padrão)
+ui.damage_type.blunt	Contundente
+ui.damage_type.pierce	Perfurante
+ui.damage_type.lacer	Cortante
+ui.damage_type.fire	Fogo
+ui.damage_type.cold	Frio
+ui.damage_type.poison	Veneno
+ui.damage_type.shock	Choque
+ui.damage_type.beam	Feixe
+ui.damage_type.explosion	Explosivo
+ui.damage_type.plasma	Plasma
+ui.damage_type.chaos	Caos
+ui.damage_type.proton	Próton
+ui.damage_type.cryo	Criogênico
 ui.mode_ammo_consumption	Consumo de munição
 mcm.modder_mode	Modo criador de mods
 mcm.modder_mode_tip	Mostrar dados técnicos e o painel de criação de itens. Os itens criados são salvos na partida atual.
