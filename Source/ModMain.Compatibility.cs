@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -39,6 +39,7 @@ namespace ItemIntelligence
         private static bool _compatFactions = true;
         private static bool _compatLoot = true;
         private static bool _compatTooltip = true;
+        private static bool _compatTooltipMore = true;
         private static bool _compatInputGuard = true;
 
         private static readonly Dictionary<string, string> CompatibilityReasons =
@@ -149,6 +150,24 @@ namespace ItemIntelligence
                 TripCompatibilityFeature(
                     "Tooltip",
                     "ItemTooltipHandler contract changed.");
+
+            Type tooltipFactoryType = AccessTools.TypeByName("MGSC.TooltipFactory");
+            MethodInfo buildItemAdditionalTooltip = FindCompatibleMethod(
+                tooltipFactoryType, "BuildItemAdditionalTooltip", 0, null);
+            MethodInfo restoreItemTooltip = FindCompatibleMethod(
+                tooltipFactoryType, "RestoreItemTooltip", 0, null);
+            MethodInfo isShowingItemTooltip = FindCompatibleMethod(
+                tooltipFactoryType, "get_IsShowingItemTooltip", 0, null);
+            if (!_compatTooltip || tooltipFactoryType == null ||
+                buildItemAdditionalTooltip == null ||
+                buildItemAdditionalTooltip.ReturnType != typeof(void) ||
+                restoreItemTooltip == null ||
+                restoreItemTooltip.ReturnType != typeof(void) ||
+                isShowingItemTooltip == null ||
+                isShowingItemTooltip.ReturnType != typeof(bool))
+                TripCompatibilityFeature(
+                    "TooltipMore",
+                    "TooltipFactory native additional-item-tooltip contract changed.");
 
             int actionQueries = CountInputControllerActionContracts();
             if (actionQueries < 3 ||
@@ -415,6 +434,13 @@ namespace ItemIntelligence
                     MethodInfo method = methods[i];
                     if (method == null ||
                         method.ReturnType != typeof(bool))
+                        continue;
+
+                    ParameterInfo[] parameters = method.GetParameters();
+                    if (parameters == null || parameters.Length != 3 ||
+                        parameters[0].ParameterType != typeof(string) ||
+                        parameters[1].ParameterType != typeof(string) ||
+                        parameters[2].ParameterType != typeof(bool))
                         continue;
 
                     if (string.Equals(
@@ -919,6 +945,11 @@ namespace ItemIntelligence
                 _compatTooltip = value;
             else if (string.Equals(
                     feature,
+                    "TooltipMore",
+                    StringComparison.OrdinalIgnoreCase))
+                _compatTooltipMore = value;
+            else if (string.Equals(
+                    feature,
                     "InputGuard",
                     StringComparison.OrdinalIgnoreCase))
                 _compatInputGuard = value;
@@ -978,6 +1009,11 @@ namespace ItemIntelligence
                 return _compatTooltip;
             if (string.Equals(
                     feature,
+                    "TooltipMore",
+                    StringComparison.OrdinalIgnoreCase))
+                return _compatTooltipMore;
+            if (string.Equals(
+                    feature,
                     "InputGuard",
                     StringComparison.OrdinalIgnoreCase))
                 return _compatInputGuard;
@@ -1021,6 +1057,7 @@ namespace ItemIntelligence
                 ", Factions=" + CompatibilityState("Factions") +
                 ", Loot=" + CompatibilityState("Loot") +
                 ", Tooltip=" + CompatibilityState("Tooltip") +
+                ", TooltipMore=" + CompatibilityState("TooltipMore") +
                 ", Input=" + CompatibilityState("InputGuard") +
                 ".");
         }
@@ -1030,7 +1067,7 @@ namespace ItemIntelligence
             return string.Equals(_compatBuildStatus, "VERIFIED", StringComparison.OrdinalIgnoreCase) &&
                 _compatCore && _compatSearchCatalog && _compatMagnum && _compatRecipes &&
                 _compatTrade && _compatAmmo && _compatDisassembly && _compatFactions &&
-                _compatLoot && _compatTooltip && _compatInputGuard;
+                _compatLoot && _compatTooltip && _compatTooltipMore && _compatInputGuard;
         }
 
         private static void WriteCompatibilityReport()
@@ -1096,6 +1133,7 @@ namespace ItemIntelligence
                 AddCompatibilityReportLine(lines, "Factions");
                 AddCompatibilityReportLine(lines, "Loot");
                 AddCompatibilityReportLine(lines, "Tooltip");
+                AddCompatibilityReportLine(lines, "TooltipMore");
                 AddCompatibilityReportLine(lines, "InputGuard");
 
                 File.WriteAllLines(
