@@ -135,11 +135,34 @@ namespace ItemIntelligence
                 return NormalizeGameText(localized);
 
             // Vanilla's raw IDs are stable gameplay data; provide QII-localized names
-            // only for that audited set. Unknown/modded IDs remain exact raw tokens.
+            // only for that audited set. Keep every Ui(...) key literal so the release
+            // localization contract can prove EN/RU/template parity at build time.
             if (VanillaDamageTypeIds.Contains(raw))
-                return Ui("ui.damage_type." + raw.ToLowerInvariant());
+                return ResolveVanillaDamageTypeFallback(raw);
 
             return raw;
+        }
+
+        private static string ResolveVanillaDamageTypeFallback(string rawDamageType)
+        {
+            string raw = (rawDamageType ?? string.Empty).Trim().ToLowerInvariant();
+            switch (raw)
+            {
+                case "blunt": return Ui("ui.damage_type.blunt");
+                case "pierce": return Ui("ui.damage_type.pierce");
+                case "lacer": return Ui("ui.damage_type.lacer");
+                case "fire": return Ui("ui.damage_type.fire");
+                case "cold": return Ui("ui.damage_type.cold");
+                case "poison": return Ui("ui.damage_type.poison");
+                case "shock": return Ui("ui.damage_type.shock");
+                case "beam": return Ui("ui.damage_type.beam");
+                case "explosion": return Ui("ui.damage_type.explosion");
+                case "plasma": return Ui("ui.damage_type.plasma");
+                case "chaos": return Ui("ui.damage_type.chaos");
+                case "proton": return Ui("ui.damage_type.proton");
+                case "cryo": return Ui("ui.damage_type.cryo");
+                default: return rawDamageType ?? string.Empty;
+            }
         }
 
         private static bool TryResolveWeaponModeDamageType(
