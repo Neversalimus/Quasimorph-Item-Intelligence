@@ -1,4 +1,4 @@
-﻿# ============================================================================
+# ============================================================================
 # ARCHITECTURE / OWNERSHIP / CORE INVARIANTS
 # Current invariants only. Historical test/build provenance intentionally omitted.
 # ============================================================================
@@ -18,7 +18,7 @@ foreach ($moduleFile in @(
     'ModMain.Configuration.cs','ModMain.CoreIndexes.cs','ModMain.DataAccess.cs','ModMain.FeatureLifecycle.cs','ModMain.CompatibilityFeatureGates.cs',
     'ModMain.Icons.cs','ModMain.Information.cs','ModMain.Magnum.cs','ModMain.RuntimeServices.cs','ModMain.TradeMissionStatus.cs','ModMain.TradeFreshness.cs','ModMain.TradePresentation.cs','ModMain.TradeLayoutCompatibility.cs','ModMain.TradeLayoutControls.cs','ModMain.TradeBatchPricing103.cs','ModMain.StationProduction.cs',
     'ModMain.StarmapUiResolution.cs','ModMain.FactionTechnologyNavigation.cs','ModMain.FactionTechnologyPanelResolver.cs','ModMain.ScavengerMissionRewards.cs','ModMain.ScavengerMissionChance.cs','ModMain.ScavengerMissionPoolMath.cs','ModMain.ScavengerMissionPresentation.cs','ModMain.ScavengerMissionTiming.cs','ModMain.BrowserAdvancedSearch.cs','ModMain.ModderMode.cs',
-    'ModMain.ModderSpawnRuntime.cs','ModMain.ModderCargoSpawn103.cs','ModMain.ModderSpawnPanel.cs','ModMain.BrowserLinkPresentation.cs')) {
+    'ModMain.ModderSpawnRuntime.cs','ModMain.ModderCargoSpawn103.cs','ModMain.ModderSpawnPanel.cs','ModMain.BrowserLinkPresentation.cs','ModMain.BrowserNativeTooltipMore.cs')) {
     if (-not (Test-Path -LiteralPath (Join-Path $sourceDir $moduleFile) -PathType Leaf)) {
         throw "Architecture contract missing source module: $moduleFile"
     }
@@ -187,6 +187,7 @@ $stateOwnershipContracts = @{
     'ModMain.LootModifiers.cs' = @('_lootModifierUseManual','_lootManualMarauderLevel','_lootManualOrganization','_lootManualFieldMedic','LootActiveContainerPresentationBuffer')
     'ModMain.LootModifierRuntime.cs' = @('_lootModifierTypesResolved','_lootPerkSumMethod','_lootImplantBaseProgression')
     'ModMain.BrowserState.cs' = @('BrowserNavigation','_browserSearchInput','_browserCatalogOpen','_browserCatalogScope','BrowserFavoriteItemIds','BrowserRecentItemIds','_browserBackButton','BrowserLines','BrowserRowActionIcons','_lastHoveredItemId','_itemPointerScope','_inspectorRoot')
+    'ModMain.BrowserNativeTooltipMore.cs' = @('_browserNativeTooltipMoreActive','_browserNativeTooltipMoreHandler','_browserNativeTooltipMoreItemId')
     'ModMain.Configuration.cs' = @('_configLoaded','_mcmRegistered','EnableItemIntelligence','InspectorKeyCode','ShowInterfaceIcons','UsePreviousTradeLayout')
     'ModMain.InterfaceIcons.cs' = @('BrowserInterfaceIconSprites','BrowserInterfaceIconBindings','_browserInterfaceSearchIcon')
     'ModMain.DataAccess.cs' = @('InstanceFlags','StaticFlags','ReadableMemberCache','InstanceMemberLookupCache')
