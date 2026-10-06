@@ -21,7 +21,7 @@ namespace ItemIntelligence
     /// </summary>
     public static partial class ModMain
     {
-        public const string Version = "1.7.42.8";
+        public const string Version = "1.7.43.0";
         // Ordinary Item Intelligence remains a read-only knowledge browser. The only
         // save-affecting exception is one explicit item-spawn click inside MCM Modder Mode;
         // economy, story variables and faction progression are never mutated.
@@ -55,7 +55,7 @@ namespace ItemIntelligence
         {
             if (context != null) _modContext = context;
             EnsureConfigLoaded();
-            Debug.Log("[ItemIntelligence] ACTIVE VERSION " + Version + " (StableRelease17428).");
+            Debug.Log("[ItemIntelligence] ACTIVE VERSION " + Version + " (StableRelease17430).");
             Debug.Log("[ItemIntelligence] Logging mode: " + (VerboseLogging ? "VERBOSE" : "NORMAL") +
                 (VerboseLogging ? "." : " (enable Verbose logging in MCM for detailed diagnostics)."));
             RunCompatibilityShieldStatic();
@@ -1228,7 +1228,7 @@ namespace ItemIntelligence
                     throw new MissingMethodException(
                         "No supported vanilla tooltip methods were found.");
                 _harmonyPatched = true;
-                VerboseLog("[ItemIntelligence] Vanilla hover isolation ready. Generic station/production tooltip builders are not patched. Vanilla Alt details are not patched. Patched methods: " + patched);
+                VerboseLog("[ItemIntelligence] Vanilla hover isolation ready. Generic station/production tooltip builders are not patched. Vanilla ALT details are reused without patching. Patched methods: " + patched);
             }
             catch (Exception ex)
             {
@@ -1318,6 +1318,13 @@ namespace ItemIntelligence
                         !string.Equals(method.Name, "IsKeyUp", StringComparison.Ordinal))
                         continue;
 
+                    ParameterInfo[] parameters = method.GetParameters();
+                    if (parameters == null || parameters.Length != 3 ||
+                        parameters[0].ParameterType != typeof(string) ||
+                        parameters[1].ParameterType != typeof(string) ||
+                        parameters[2].ParameterType != typeof(bool))
+                        continue;
+
                     try
                     {
                         harmony.Patch(method, prefix: new HarmonyMethod(prefix));
@@ -1341,7 +1348,8 @@ namespace ItemIntelligence
             return patched;
         }
 
-        private static bool InputControllerModalActionPrefix(ref bool __result)
+        private static bool InputControllerModalActionPrefix(
+            string __0, string __1, bool __2, ref bool __result)
         {
             if (!_inspectorOpen)
             {
@@ -1366,8 +1374,13 @@ namespace ItemIntelligence
                 return true;
             }
 
-            // The Item Intelligence browser is modal. Quasimorph must see no gameplay/UI
-            // action while it is open. Raw keyboard text still reaches TMP_InputField.
+            // Keep the browser modal, but let Quasimorph process exactly its native
+            // "more tooltip" action while a QII-owned native item tooltip is active.
+            // This preserves remapped controls and reuses TooltipFactory's own ALT path
+            // without exposing any other gameplay/UI action behind the browser.
+            if (ShouldAllowBrowserTooltipMoreAction(__0, __1, __2))
+                return true;
+
             __result = false;
             return false;
         }
@@ -1752,6 +1765,9 @@ namespace ItemIntelligence
                     if (createdTooltip != null)
                         _activeTooltip = createdTooltip;
 
+                    if (IsBrowserOwnedItemTooltipHandler(__instance))
+                        SetBrowserNativeTooltipMoreTarget(__instance, itemId);
+
                     if (EnableItemIntelligence)
                         ShowHoverHint(itemId);
                     else
@@ -1759,6 +1775,8 @@ namespace ItemIntelligence
                 }
                 else
                 {
+                    if (IsBrowserOwnedItemTooltipHandler(__instance))
+                        ClearBrowserNativeTooltipMoreTarget(__instance);
                     HideHoverHint();
 
                     object record = GetMember(__instance, "_itemRecord");
@@ -1779,6 +1797,8 @@ namespace ItemIntelligence
             }
             catch (Exception ex)
             {
+                if (IsBrowserOwnedItemTooltipHandler(__instance))
+                    ClearBrowserNativeTooltipMoreTarget(__instance);
                 HideHoverHint();
 
                 if (_itemHoverResolveWarnings < 4)
@@ -1796,7 +1816,10 @@ namespace ItemIntelligence
         private static void ItemPointerExitPrefix(object __instance)
         {
             if (IsBrowserOwnedItemTooltipHandler(__instance))
+            {
+                ClearBrowserNativeTooltipMoreTarget(__instance);
                 RestoreBrowserTooltipLayer();
+            }
 
             _itemPointerScope = false;
             _itemPointerScopeFrame = -1000;
@@ -3862,6 +3885,11 @@ namespace ItemIntelligence
         {
             if (_raiseRoutine != null) StopCoroutine(_raiseRoutine);
             _raiseRoutine = null;
+            try
+            {
+                ModMain.ReleaseBrowserNativeTooltipMoreTarget(GetComponent<ItemTooltipHandler>());
+            }
+            catch { }
         }
     }
 
