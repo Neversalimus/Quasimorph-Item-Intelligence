@@ -464,6 +464,21 @@ ui.mode_tooltip_fire	Feuermodus
 ui.mode_tooltip_attack	Angriffsmodus
 ui.mode_rate_of_fire	Feuerrate
 ui.mode_damage_modifier	Schadensmod.
+ui.mode_damage_type	Schadensart
+ui.mode_damage_type_default	Schadensart (Standard)
+ui.damage_type.blunt	Stumpf
+ui.damage_type.pierce	Durchdringend
+ui.damage_type.lacer	Schnitt
+ui.damage_type.fire	Feuer
+ui.damage_type.cold	Kälte
+ui.damage_type.poison	Gift
+ui.damage_type.shock	Schock
+ui.damage_type.beam	Strahl
+ui.damage_type.explosion	Explosiv
+ui.damage_type.plasma	Plasma
+ui.damage_type.chaos	Chaos
+ui.damage_type.proton	Proton
+ui.damage_type.cryo	Kryogen
 ui.mode_ammo_consumption	Munitionsverbrauch
 mcm.modder_mode	Modder-Modus
 mcm.modder_mode_tip	Technische Daten und das Gegenstands-Spawnfeld anzeigen. Erzeugte Gegenstände werden im aktuellen Spielstand gespeichert.

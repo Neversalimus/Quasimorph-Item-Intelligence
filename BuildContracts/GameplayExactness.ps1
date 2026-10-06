@@ -17,7 +17,7 @@ foreach ($token in @(
     if ($weaponModeCriticalDamagePerApText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "current critical Damage/AP token missing: $token" }
 }
 if ($weaponModePresentationText.IndexOf('ui.mode_critical_damage_per_ap_default',[StringComparison]::Ordinal) -lt 0 -or
-    $weaponModePresentationText.IndexOf('WeaponModeTooltipMaxRows = 7',[StringComparison]::Ordinal) -lt 0) {
+    $weaponModePresentationText.IndexOf('WeaponModeTooltipMaxRows = 8',[StringComparison]::Ordinal) -lt 0) {
     throw 'current critical Damage/AP presentation row/height contract missing.'
 }
 if ($lootEnemyPresentationText.IndexOf('loot.note.enemy_bonus_separate',[StringComparison]::Ordinal) -lt 0 -or
@@ -233,8 +233,8 @@ if ($ruLocalizationText.IndexOf('ШАНС ≥1',[StringComparison]::Ordinal) -ge
     $enLocalizationText.IndexOf('≥1 CHANCE',[StringComparison]::Ordinal) -ge 0) {
     throw 'current font-safety regression: unsupported Scavengers heading glyph returned.'
 }
-if ($runtimeText.IndexOf('public const string Version = "1.7.43.0";',[StringComparison]::Ordinal) -lt 0 -or
-    $runtimeText.IndexOf('StableRelease17430',[StringComparison]::Ordinal) -lt 0) {
+if ($runtimeText.IndexOf('public const string Version = "1.7.43.1";',[StringComparison]::Ordinal) -lt 0 -or
+    $runtimeText.IndexOf('StableRelease17431',[StringComparison]::Ordinal) -lt 0) {
     throw 'current runtime version/marker contract missing.'
 }
 

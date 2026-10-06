@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.7.43.1 — 2026-10-06
+
+- Added exact damage-type labels to existing weapon-mode hover tooltips.
+- Melee modes resolve the damage type from the ammo payload actually paired with that mode, preserving positional `Firemodes ↔ OverrideAmmo` semantics.
+- Ranged modes show the damage type of the same default/override ammunition used by the existing standard Damage/AP calculation.
+- Unknown or unmappable mode/ammo combinations fail closed instead of guessing from mode names.
+- Expanded the weapon-mode tooltip value column so longer localized damage-type names are not truncated.
+- Added all eight interface translations and regression contracts for damage-type mapping, localization parity and tooltip geometry.
+
 ## v1.7.43.0 — 2026-10-06
 
 - Added native **ALT / More details** support inside Item Intelligence item tooltips.

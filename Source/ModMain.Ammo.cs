@@ -98,6 +98,7 @@ namespace ItemIntelligence
             WeaponModeRawIdByKey.Clear();
             WeaponModeItemIdByKey.Clear();
             ResetWeaponModeScatterCache();
+            ResetWeaponModeDamageTypeCache();
             WeaponModeIconMisses.Clear();
             // These buffers retain references to every item record and analyzed weapon.
             // Clear them at the index/session boundary rather than waiting for the next
@@ -168,6 +169,7 @@ namespace ItemIntelligence
             WeaponModeRawIdByKey.Clear();
             WeaponModeItemIdByKey.Clear();
             ResetWeaponModeScatterCache();
+            ResetWeaponModeDamageTypeCache();
             WeaponModeIconMisses.Clear();
             BuildWeaponModeRecordIndex();
             BuildWeaponModeRelationIndex();

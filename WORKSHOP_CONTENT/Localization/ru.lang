@@ -464,6 +464,21 @@ ui.mode_tooltip_fire	Режим огня
 ui.mode_tooltip_attack	Режим атаки
 ui.mode_rate_of_fire	Скорострельность
 ui.mode_damage_modifier	Мод. урона
+ui.mode_damage_type	Тип урона
+ui.mode_damage_type_default	Тип урона (станд.)
+ui.damage_type.blunt	Дробящий
+ui.damage_type.pierce	Проникающий
+ui.damage_type.lacer	Режущий
+ui.damage_type.fire	Огненный
+ui.damage_type.cold	Холод
+ui.damage_type.poison	Ядовитый
+ui.damage_type.shock	Электрический
+ui.damage_type.beam	Лучевой
+ui.damage_type.explosion	Взрывной
+ui.damage_type.plasma	Плазменный
+ui.damage_type.chaos	Хаотический
+ui.damage_type.proton	Протонный
+ui.damage_type.cryo	Криогенный
 ui.mode_ammo_consumption	Расход патронов
 
 # Modder Mode and advanced search

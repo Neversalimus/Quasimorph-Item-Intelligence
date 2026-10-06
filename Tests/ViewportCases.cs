@@ -54,13 +54,13 @@ namespace ItemIntelligence
                 {
                     float x, y;
                     CalculateBrowserWeaponTooltipPosition(g, expanded != 0, pinned != 0, drawer != 0,
-                        rowY + 18f, 312f, out x, out y);
+                        rowY + 18f, 420f, 312f, out x, out y);
                     float margin = g.CanvasWidth * 0.03f;
                     float rootLeft = expanded != 0
                         ? (g.CanvasWidth - g.Width * g.Scale + (drawer != 0 ? 232f * g.Scale : 0f)) * 0.5f
                         : (pinned != 0 ? margin : g.CanvasWidth - margin - g.Width * g.Scale);
                     CheckViewport(rootLeft + x * g.Scale >= -0.001f &&
-                        rootLeft + (x + 390f) * g.Scale <= g.CanvasWidth + 0.001f, "hover card screen bounds");
+                        rootLeft + (x + 420f) * g.Scale <= g.CanvasWidth + 0.001f, "hover card screen bounds");
                     CheckViewport(-y >= 92f && -y + 312f <= g.Height - 52f + 0.001f, "hover card above view controls");
                 }
             }

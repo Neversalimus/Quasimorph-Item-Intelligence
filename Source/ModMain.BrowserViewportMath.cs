@@ -57,7 +57,7 @@ namespace ItemIntelligence
         }
 
         private static void CalculateBrowserWeaponTooltipPosition(BrowserViewportGeometry view,
-            bool expanded, bool pinnedRight, bool drawer, float desiredY, float tooltipHeight,
+            bool expanded, bool pinnedRight, bool drawer, float desiredY, float tooltipWidth, float tooltipHeight,
             out float x, out float y)
         {
             float margin = view.CanvasWidth * (1f - BrowserScreenFraction) * 0.5f;
@@ -68,9 +68,10 @@ namespace ItemIntelligence
             float rightSpace = (view.CanvasWidth - rootLeft) / view.Scale - view.Width;
             // Prefer free space outside. A full-screen hover card stays inside,
             // above the footer controls; all its graphics are non-interactive.
-            if (leftSpace >= 410f) x = -398f;
-            else if (rightSpace >= 410f) x = view.Width + 8f;
-            else x = view.Width - 408f;
+            float outsideRequirement = tooltipWidth + 20f;
+            if (leftSpace >= outsideRequirement) x = -(tooltipWidth + 8f);
+            else if (rightSpace >= outsideRequirement) x = view.Width + 8f;
+            else x = view.Width - (tooltipWidth + 18f);
             y = -Math.Max(92f, Math.Min(-desiredY, view.Height - 52f - tooltipHeight));
         }
     }

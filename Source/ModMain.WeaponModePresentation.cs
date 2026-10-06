@@ -13,7 +13,8 @@ namespace ItemIntelligence
         // v1.7.37-test2: weapon-mode rows stay compact. The exact modeKey carried by
         // each row owns its hover payload, so two identically named modes can expose
         // different FireModeRecord stats without any label-based lookup.
-        private const int WeaponModeTooltipMaxRows = 7;
+        private const int WeaponModeTooltipMaxRows = 8;
+        private const float WeaponModeTooltipWidth = 420f;
         private static GameObject _browserWeaponModeTooltipRoot;
         private static RectTransform _browserWeaponModeTooltipRect;
         private static TMP_Text _browserWeaponModeTooltipTitle;
@@ -78,11 +79,11 @@ namespace ItemIntelligence
             }
 
             float height = 76f + visibleRows * 32f + 12f;
-            _browserWeaponModeTooltipRect.sizeDelta = new Vector2(390f, height);
+            _browserWeaponModeTooltipRect.sizeDelta = new Vector2(WeaponModeTooltipWidth, height);
             float desiredY = sourceRow == null ? -180f : sourceRow.anchoredPosition.y + 18f;
             float x, y;
             CalculateBrowserWeaponTooltipPosition(_browserViewport, BrowserExpanded,
-                _inspectorPinnedTooltipOnRight, ModderMode, desiredY, height, out x, out y);
+                _inspectorPinnedTooltipOnRight, ModderMode, desiredY, WeaponModeTooltipWidth, height, out x, out y);
             _browserWeaponModeTooltipRect.anchoredPosition = new Vector2(x, y);
             _browserWeaponModeTooltipRoot.transform.SetAsLastSibling();
             _browserWeaponModeTooltipRoot.SetActive(true);
@@ -108,7 +109,7 @@ namespace ItemIntelligence
 
         private static List<KeyValuePair<string, string>> BuildWeaponModeTooltipRows(string modeKey, WeaponModeStaticStats stats)
         {
-            List<KeyValuePair<string, string>> rows = new List<KeyValuePair<string, string>>(7);
+            List<KeyValuePair<string, string>> rows = new List<KeyValuePair<string, string>>(8);
             if (stats == null) return rows;
 
             // Match MGSC.TooltipFactory.BuildFiremodeTooltip exactly for the fields it
@@ -118,6 +119,11 @@ namespace ItemIntelligence
             if (stats.DamageMult.HasValue && !float.IsNaN(stats.DamageMult.Value) &&
                 !float.IsInfinity(stats.DamageMult.Value))
                 rows.Add(new KeyValuePair<string, string>(Ui("ui.mode_damage_modifier"), FormatWeaponModeMultiplierPercent(stats.DamageMult.Value)));
+
+            string damageTypeLabel;
+            string damageTypeValue;
+            if (TryResolveWeaponModeDamageType(modeKey, out damageTypeLabel, out damageTypeValue))
+                rows.Add(new KeyValuePair<string, string>(damageTypeLabel, damageTypeValue));
 
             int damagePerApMin;
             int damagePerApMax;
@@ -169,7 +175,7 @@ namespace ItemIntelligence
             rt.anchorMin = new Vector2(0f, 1f);
             rt.anchorMax = new Vector2(0f, 1f);
             rt.pivot = new Vector2(0f, 1f);
-            rt.sizeDelta = new Vector2(390f, 220f);
+            rt.sizeDelta = new Vector2(WeaponModeTooltipWidth, 220f);
             Image bg = root.AddComponent<Image>();
             bg.color = new Color(0.005f, 0.017f, 0.014f, 0.985f);
             bg.raycastTarget = false;
@@ -179,8 +185,8 @@ namespace ItemIntelligence
 
             _browserWeaponModeTooltipRoot = root;
             _browserWeaponModeTooltipRect = rt;
-            _browserWeaponModeTooltipTitle = CreateWeaponModeTooltipText(root.transform, "Title", new Vector2(14f, -7f), new Vector2(362f, 30f), 19f, new Color(0.72f, 0.88f, 0.62f, 1f), TextAlignmentOptions.MidlineLeft);
-            _browserWeaponModeTooltipSubtitle = CreateWeaponModeTooltipText(root.transform, "Subtitle", new Vector2(14f, -34f), new Vector2(362f, 24f), 15f, new Color(0.05f, 0.68f, 0.56f, 1f), TextAlignmentOptions.MidlineLeft);
+            _browserWeaponModeTooltipTitle = CreateWeaponModeTooltipText(root.transform, "Title", new Vector2(14f, -7f), new Vector2(392f, 30f), 19f, new Color(0.72f, 0.88f, 0.62f, 1f), TextAlignmentOptions.MidlineLeft);
+            _browserWeaponModeTooltipSubtitle = CreateWeaponModeTooltipText(root.transform, "Subtitle", new Vector2(14f, -34f), new Vector2(392f, 24f), 15f, new Color(0.05f, 0.68f, 0.56f, 1f), TextAlignmentOptions.MidlineLeft);
 
             GameObject rule = new GameObject("Rule");
             rule.transform.SetParent(root.transform, false);
@@ -189,7 +195,7 @@ namespace ItemIntelligence
             ruleRt.anchorMax = new Vector2(0f, 1f);
             ruleRt.pivot = new Vector2(0f, 1f);
             ruleRt.anchoredPosition = new Vector2(4f, -62f);
-            ruleRt.sizeDelta = new Vector2(382f, 2f);
+            ruleRt.sizeDelta = new Vector2(412f, 2f);
             Image ruleImage = rule.AddComponent<Image>();
             ruleImage.color = new Color(0.75f, 0.88f, 0.58f, 0.90f);
             ruleImage.raycastTarget = false;
@@ -198,7 +204,7 @@ namespace ItemIntelligence
             {
                 float y = -70f - i * 32f;
                 BrowserWeaponModeTooltipNames[i] = CreateWeaponModeTooltipText(root.transform, "Property_" + i + "_Name", new Vector2(18f, y), new Vector2(250f, 30f), 16f, new Color(0.45f, 0.76f, 0.55f, 1f), TextAlignmentOptions.MidlineLeft);
-                BrowserWeaponModeTooltipValues[i] = CreateWeaponModeTooltipText(root.transform, "Property_" + i + "_Value", new Vector2(270f, y), new Vector2(102f, 30f), 16f, new Color(0.92f, 0.91f, 0.72f, 1f), TextAlignmentOptions.MidlineRight);
+                BrowserWeaponModeTooltipValues[i] = CreateWeaponModeTooltipText(root.transform, "Property_" + i + "_Value", new Vector2(270f, y), new Vector2(132f, 30f), 16f, new Color(0.92f, 0.91f, 0.72f, 1f), TextAlignmentOptions.MidlineRight);
             }
 
             root.SetActive(false);
