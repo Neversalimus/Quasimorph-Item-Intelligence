@@ -86,7 +86,7 @@ namespace ItemIntelligence
             if (overrideAmmo != null && modeIndex < overrideAmmo.Length)
             {
                 string overridden = (overrideAmmo[modeIndex] ?? string.Empty).Trim();
-                if (!string.IsNullOrEmpty(overridden)) return overridden;
+                if (!string.IsNullOrEmpty(overridden) && !string.Equals(overridden, "none", StringComparison.OrdinalIgnoreCase)) return overridden;
             }
 
             return fallback;
