@@ -677,3 +677,8 @@ ui.view_expand	Grande fenêtre
 ui.view_window	Fenêtre normale
 ui.view_zoom	Zoom
 ui.view_save_failed	Impossible d’enregistrer les paramètres de la fenêtre.
+ui.mode_effect	Attribut du mode
+ui.mode_status_effect	Effet d'état
+ui.mode_trait_wounding	Blessant
+ui.arm_builtin_weapon	Arme après installation
+ui.arm_source_augmentation	Augmentation associée
