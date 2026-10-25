@@ -51,7 +51,8 @@ $identity = 'QiiReadability_' + [guid]::NewGuid().ToString('N')
 # Pooled state unrelated to this fixture remains at its declared defaults.
 $code = "#pragma warning disable 0649`nusing System; using System.IO; using System.Text; using System.Globalization; using System.Collections.Generic; using TMPro; using UnityEngine; using UnityEngine.UI;`n" +
     ($whole -join "`n") + "`nnamespace ItemIntelligence { public static partial class ModMain {`n" +
-    $members + "`n} }`n" + [IO.File]::ReadAllText((Join-Path $PSScriptRoot 'ReadabilityCases.cs'))
+    $members + "`n} }`n" + [IO.File]::ReadAllText((Join-Path $PSScriptRoot 'ReadabilityCases.cs')) + "`n" +
+    [IO.File]::ReadAllText((Join-Path $PSScriptRoot 'RowReuseCases.cs'))
 $code = $code.Replace('namespace ItemIntelligence', ('namespace ' + $identity))
 # Other contract suites use their own Unity/TMP fixtures in the same process.
 $code = $code.Replace('UnityEngine', ($identity + '.UnityEngine')).Replace('TMPro', ($identity + '.TMPro'))

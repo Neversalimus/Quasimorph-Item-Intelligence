@@ -110,6 +110,7 @@ foreach ($token in @('HasObservedInspectorItemUi','directMissionHotkeyBootstrap'
     if ($browserUiText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "Direct-mission first-hotkey regression guard missing: $token" }
 }
 & (Join-Path $root 'Tests/Run-BrowserEntryTests.ps1') -SourceRoot $root
+& (Join-Path $root 'Tests/Run-ReflectionTests.ps1') -SourceRoot $root
 if ($browserPresentationLines -gt 1700) { throw "Browser presentation ownership regressed: ModMain.BrowserPresentation.cs has $browserPresentationLines lines; current requires <= 1700." }
 if ($overviewDashboardLines -gt 460) { throw "Overview dashboard ownership regressed: ModMain.OverviewDashboard.cs has $overviewDashboardLines lines; current requires <= 460." }
 if ($adaptiveEntryLines -gt 90) { throw "Adaptive entry ownership regressed: ModMain.AdaptiveEntry.cs has $adaptiveEntryLines lines; current requires <= 90." }
@@ -191,7 +192,7 @@ $stateOwnershipContracts = @{
     'ModMain.BrowserNativeTooltipMore.cs' = @('_browserNativeTooltipMoreActive','_browserNativeTooltipMoreHandler','_browserNativeTooltipMoreItemId')
     'ModMain.Configuration.cs' = @('_configLoaded','_mcmRegistered','EnableItemIntelligence','InspectorKeyCode','ShowInterfaceIcons','UsePreviousTradeLayout')
     'ModMain.InterfaceIcons.cs' = @('BrowserInterfaceIconSprites','BrowserInterfaceIconBindings','_browserInterfaceSearchIcon')
-    'ModMain.DataAccess.cs' = @('InstanceFlags','StaticFlags','ReadableMemberCache','InstanceMemberLookupCache')
+    'ModMain.DataAccess.cs' = @('InstanceFlags','StaticFlags','ReflectionData')
     'ModMain.Icons.cs' = @('ItemSmallIcons','ItemSmallIconMisses','VanillaObservedItemIcons')
     'ModMain.Compatibility.cs' = @('_compatStaticChecked','_compatCore','CompatibilityReasons','RuntimeBoundaryWarningLogs')
     'ModMain.CompatibilityFeatureGates.cs' = @('_lootManualProjectionContractState','_containerSaveEstimateContractState','_scavengerChanceContractState','_sourceFamilyContractState')

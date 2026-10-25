@@ -33,14 +33,9 @@ $habitatRuntimeIndexPath = Join-Path $sourceDir 'ModMain.BaronHabitatRuntimeInde
 foreach ($requiredOptOwner in @($rowCachePath,$habitatRuntimeIndexPath)) {
     if (-not (Test-Path -LiteralPath $requiredOptOwner -PathType Leaf)) { throw "current optimization owner missing: $requiredOptOwner" }
 }
-$rowCacheText = [IO.File]::ReadAllText($rowCachePath)
 $habitatRuntimeIndexText = [IO.File]::ReadAllText($habitatRuntimeIndexPath)
-foreach ($token in @('IsBrowserRowRenderReuseSafe','CanReuseBrowserRowRender','RestoreCachedBrowserRowBindings','CaptureBrowserRowRenderStamp')) {
-    if ($rowCacheText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "current render-reuse gate missing: $token" }
-}
-foreach ($token in @('BrowserNavigation.Tab != (int)BrowserTabId.Overview','line.LeftContentKind != BrowserLeftContentKind.Text','line.Action.IsNone','line.ShowRecipeChipContext','line.ContainerIconId')) {
-    if ($rowCacheText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "current fail-closed render-reuse token missing: $token" }
-}
+# Run-ReadabilityTests compiles the complete production row cache. It exercises
+# every row kind/tab, dynamic inputs, language/profile changes and pooled bindings.
 foreach ($token in @('BaronStationBodiesByBramfatura','BaronStationBodyById','EnsureBaronHabitatRuntimeStationIndex','ResetBaronHabitatRuntimeStationIndex')) {
     if ($habitatRuntimeIndexText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "current habitat station-index gate missing: $token" }
 }
@@ -51,29 +46,18 @@ if ($baronHabitatText.IndexOf('EnumerateData(values)',[StringComparison]::Ordina
 # language-safe final display caches + no-op Unity/TMP dirty-write
 # suppression. These are projection/cache optimizations only; exact gameplay semantics stay owned
 # by the existing feature resolvers and Mission habitat remains live-scanned.
-$uiDirtyPath = Join-Path $sourceDir 'ModMain.BrowserUiDirtySuppression.cs'
-if (-not (Test-Path -LiteralPath $uiDirtyPath -PathType Leaf)) { throw 'current UI dirty-suppression owner missing.' }
-$uiDirtyText = [IO.File]::ReadAllText($uiDirtyPath)
 $hardeningText = [IO.File]::ReadAllText((Join-Path $sourceDir 'ModMain.Hardening.cs'))
-foreach ($token in @('SetBrowserActiveIfChanged','SetBrowserTextIfChanged','SetBrowserRectPositionIfChanged','SetBrowserRectSizeIfChanged','SetBrowserFontSizeIfChanged')) {
-    if ($uiDirtyText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "current UI dirty-suppression gate missing: $token" }
-}
+# Compile all production guards and count setter calls over repeated redraws,
+# changed values, pooled-object reuse, and missing/destroyed targets.
+& (Join-Path $root 'Tests/Run-UiWriteTests.ps1') -SourceRoot $root
 # Production localization tests count backend calls over repeated lookups, change
 # the game language, and reset the session; cache field spelling is not a contract.
 foreach ($token in @('ItemDisplayCache','MagnumDisplayCache')) {
     if ($hardeningText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "current memory-hygiene cache gate missing: $token" }
 }
-foreach ($token in @("value.IndexOf('Ё') < 0","value.IndexOf('ё') < 0")) {
-    if ($runtimeText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "current NormalizeGameText fast-path gate missing: $token" }
-}
-foreach ($token in @('BrowserRowKind.OverviewCombatHeader','BrowserRowKind.BaronLootHeader','BrowserRowKind.BaronLootRow','Tab == BrowserNavigation.Tab')) {
-    if ($rowCacheText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "current safe-reuse expansion gate missing: $token" }
-}
+# The same suite checks normalization results and unchanged string identity.
 foreach ($token in @('SetBrowserActiveIfChanged(column.gameObject, visible)','SetBrowserTextIfChanged(column, visible ? NormalizeModUiText(value) : string.Empty)','SetBrowserAutoSizingIfChanged(column, false)','SetBrowserWordWrappingIfChanged(column, false)','SetBrowserOverflowIfChanged(column, TextOverflowModes.Ellipsis)')) {
     if ($lootPresentationText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "current Loot column no-op gate missing: $token" }
-}
-if ($baronHabitatText.IndexOf('EnumerateData(values)',[StringComparison]::Ordinal) -lt 0) {
-    throw 'current exactness regression: Mission habitat live scan was removed.'
 }
 
 # finish no-op suppression across pooled row/search/catalog chrome and
@@ -81,9 +65,6 @@ if ($baronHabitatText.IndexOf('EnumerateData(values)',[StringComparison]::Ordina
 $browserPresentationText = [IO.File]::ReadAllText((Join-Path $sourceDir 'ModMain.BrowserPresentation.cs'))
 $browserCatalogPresentationText = [IO.File]::ReadAllText((Join-Path $sourceDir 'ModMain.BrowserCatalogPresentation.cs'))
 $overviewDashboardText = [IO.File]::ReadAllText((Join-Path $sourceDir 'ModMain.OverviewDashboard.cs'))
-foreach ($token in @('SetBrowserInteractableIfChanged','SetBrowserRaycastTargetIfChanged','SetBrowserGraphicColorIfChanged','SetBrowserImageSpriteIfChanged','SetBrowserImageEnabledIfChanged','SetBrowserAlignmentIfChanged','SetBrowserOutlineEnabledIfChanged','SetBrowserOutlineColorIfChanged','SetBrowserOutlineDistanceIfChanged')) {
-    if ($uiDirtyText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "current extended UI dirty-suppression gate missing: $token" }
-}
 foreach ($token in @('GetBrowserTabLabel','SetBrowserTextIfChanged(_browserSearchStatusText','SetBrowserImageSpriteIfChanged(icon, nextIcon)','SetBrowserGraphicColorIfChanged(BrowserTabBackgrounds[i]')) {
     if ($browserPresentationText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "current browser chrome/search suppression gate missing: $token" }
 }
@@ -102,9 +83,6 @@ foreach ($token in @('SetBrowserGraphicColorIfChanged','SetBrowserRowRectPositio
 }
 foreach ($forbidden in @('.fontSize =','.fontStyle =','.anchoredPosition =','.sizeDelta =','.sprite =','.alignment =','.raycastTarget =','.interactable =')) {
     if ($browserRowRenderCombinedText.IndexOf($forbidden,[StringComparison]::Ordinal) -ge 0) { throw "current pooled-row direct dirty setter returned: $forbidden" }
-}
-if ($baronHabitatText.IndexOf('EnumerateData(values)',[StringComparison]::Ordinal) -lt 0) {
-    throw 'current exactness regression: Mission habitat live scan was removed.'
 }
 
 # renderer decomposition must be behavior-preserving. Keep the hot loop

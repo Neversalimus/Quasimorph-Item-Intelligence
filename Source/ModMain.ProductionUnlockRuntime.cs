@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -208,7 +208,7 @@ namespace ItemIntelligence
             if (!ns.StartsWith("MGSC", StringComparison.Ordinal))
                 return null;
 
-            List<MemberInfo> members = GetReadableMembers(type);
+            IList<MemberInfo> members = GetReadableMembers(type);
             for (int i = 0; i < members.Count; i++)
             {
                 object child = GetMemberValue(value, members[i]);

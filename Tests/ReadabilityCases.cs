@@ -73,6 +73,7 @@ namespace ItemIntelligence
 
         public static int RunReadabilityCases(string fixture, string localization)
         {
+            RunRowReuseCases();
             Application.persistentDataPath = Path.Combine(fixture, "game");
             Directory.CreateDirectory(ConfigDirectory);
             File.WriteAllText(ConfigPath, "[Inspector]\nBrowserWindowZoom=125\nBrowserExpanded=true\n");

@@ -4,9 +4,9 @@
 
 [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3780078201) · [Downloads](https://github.com/Neversalimus/Quasimorph-Item-Intelligence/releases) · [Changelog](CHANGELOG.md)
 
-This branch contains **1.7.43.3-test3** for **Quasimorph 1.0.4.590s.969afc6**.
+This branch contains **1.7.43.3-test4** for **Quasimorph 1.0.4.590s.969afc6**.
 
-This test build completes all 11 official interface languages with Japanese, Korean and Turkish, and revises the existing translations for clearer wording and current game terminology. It includes language selection, fonts and text wrapping for the new languages. See [release notes](Release/Notes-v1.7.43.3-test3.md).
+This test series completes all 11 official interface languages with Japanese, Korean and Turkish, and revises the existing translations for clearer wording and current game terminology. Test4 isolates reflection metadata, removes repeated localization-key allocations and strengthens cache and UI regression tests. See [release notes](Release/Notes-v1.7.43.3-test4.md).
 
 Compatibility for the new build is enabled through audited feature-owned gates. Unknown future builds continue to fail closed for exact calculations until their contracts are reviewed.
 
@@ -76,13 +76,16 @@ pwsh -NoProfile -File .\BUILD_AND_STAGE.ps1 -Mode TEST -ContractsOnly
 
 Language metadata lives in `Source/LanguageCatalog.cs`. The UI selector, loader, number formatting and build tools use this registry. `UiLocalization`, `GameLocalization` and `UiFontResolver` own their caches; the game hooks explicitly reset them on returning to the menu and on exit. Optional reflection probes remain quiet; required reads report missing members or getter failures once per schema member, with a 32-entry session limit.
 
-Run the localization regression sensitivity checks:
+`ReflectionDataReader` owns cached reflection metadata and exposes read-only member snapshots. Game values are read on every request. Metadata remains valid for the lifetime of the loaded game assemblies, so returning to the menu does not rescan it.
+
+Run regression sensitivity checks against deliberately broken temporary source copies:
 
 ```powershell
 pwsh -NoProfile -File .\Tests\Run-LocalizationMutationTests.ps1
+pwsh -NoProfile -File .\Tests\Run-CacheMutationTests.ps1
 ```
 
-This introduces six deliberate bugs in disposable copies and requires the behavior tests to reject them. Ordinary builds also check translations, placeholders and language switching. They do not require Python or game assets.
+Each command introduces six deliberate bugs in disposable copies and requires the behavior tests to reject them. Ordinary builds also check translations, placeholders and language switching. They do not require Python or game assets.
 
 To check glyph coverage against your installed game's actual language enum and TMP font presets, use Python 3.12 and the pinned audit dependencies (validated with Quasimorph **1.0.4.590s.969afc6**):
 

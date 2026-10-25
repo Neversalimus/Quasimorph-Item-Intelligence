@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -199,7 +199,7 @@ namespace ItemIntelligence
                 // unrelated record fields can never become icon candidates.
                 try
                 {
-                    List<MemberInfo> members = GetReadableMembers(type);
+                    IList<MemberInfo> members = GetReadableMembers(type);
                     for (int i = 0; i < members.Count; i++)
                     {
                         MemberInfo member = members[i];
@@ -507,7 +507,7 @@ namespace ItemIntelligence
             {
                 try
                 {
-                    List<MemberInfo> members = GetReadableMembers(slot.GetType());
+                    IList<MemberInfo> members = GetReadableMembers(slot.GetType());
                     int bestScore = 0;
                     for (int i = 0; i < members.Count; i++)
                     {
@@ -577,7 +577,7 @@ namespace ItemIntelligence
 
                     try
                     {
-                        List<MemberInfo> members = GetReadableMembers(type);
+                        IList<MemberInfo> members = GetReadableMembers(type);
                         for (int i = 0; i < members.Count && candidates.Count < 18; i++)
                         {
                             MemberInfo memberInfo = members[i];

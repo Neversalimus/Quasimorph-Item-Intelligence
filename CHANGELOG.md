@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.7.43.3-test4 — 2026-10-25
+
+- Reduce excessive tab-label padding so long names such as Turkish MÜHİMMAT fit the normal window.
+- Move reflection metadata and method lookup into an independent reader with private caches and read-only member snapshots. Live game values are still read on each request.
+- Avoid rebuilding language prefixes for cached item, Magnum and native translation lookups; reuse the font signature while both languages remain unchanged.
+- Replace selected UI/cache source-text checks with tests that count actual setter calls and exercise row reuse, language changes, dynamic rows and missing UI objects.
+- Add six regression-sensitivity cases for metadata ownership, immutable snapshots, redundant UI writes and stale row reuse.
+
 ## v1.7.43.3-test3 — 2026-10-25
 
 - Separate UI translations, game-name caches and private font ownership from the shared mod state, with explicit session cleanup.

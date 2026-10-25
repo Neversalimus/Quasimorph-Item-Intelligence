@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -14,22 +14,13 @@ using UnityEngine.UI;
 namespace ItemIntelligence
 {
     /// <summary>
-    /// Shared read-only reflection, record enumeration and quantity extraction owner.
-    /// Extracted in v1.7.36-test11 without changing runtime behavior.
+    /// Adapters for reflection reads, record enumeration and quantity extraction.
     /// </summary>
     public static partial class ModMain
     {
+        private static readonly ReflectionDataReader ReflectionData = new ReflectionDataReader();
         private static readonly BindingFlags InstanceFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
         private static readonly BindingFlags StaticFlags = BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
-        private static readonly Dictionary<string, MethodInfo> BoolMethodCache =
-            new Dictionary<string, MethodInfo>(StringComparer.Ordinal);
-        // Reflection metadata is immutable for the lifetime of the AppDomain.
-        private static readonly Dictionary<Type, List<MemberInfo>> ReadableMemberCache =
-            new Dictionary<Type, List<MemberInfo>>();
-        private static readonly Dictionary<Type, Dictionary<string, MemberInfo>> InstanceMemberLookupCache =
-            new Dictionary<Type, Dictionary<string, MemberInfo>>();
-        private static readonly Dictionary<Type, Dictionary<string, MemberInfo>> StaticMemberLookupCache =
-            new Dictionary<Type, Dictionary<string, MemberInfo>>();
         private static readonly string[] ItemIdNestedMemberNames = new string[]
         {
             "Item", "ItemRecord", "Record", "OutputItem", "InputItem", "Value"
@@ -62,108 +53,14 @@ namespace ItemIntelligence
             }
         }
 
-        private static object GetStaticMember(Type type, string name)
-        {
-            if (type == null || string.IsNullOrEmpty(name)) return null;
-            try
-            {
-                MemberInfo member = FindCachedMember(type, name, true);
-                if (member == null) return null;
-                return GetMemberValue(null, member);
-            }
-            catch { }
-            return null;
-        }
+        private static object GetStaticMember(Type type, string name) { return ReflectionData.GetStaticMember(type, name); }
 
-        private static object GetMember(object obj, string name)
-        {
-            if (obj == null || string.IsNullOrEmpty(name)) return null;
-            try
-            {
-                MemberInfo member = FindCachedMember(obj.GetType(), name, false);
-                if (member == null) return null;
-                return GetMemberValue(obj, member);
-            }
-            catch { }
-            return null;
-        }
+        private static object GetMember(object obj, string name) { return ReflectionData.GetMember(obj, name); }
 
-        private static MemberInfo FindCachedMember(Type type, string name, bool isStatic)
-        {
-            if (type == null || string.IsNullOrEmpty(name)) return null;
+        private static MemberInfo FindCachedMember(Type type, string name, bool isStatic) { return ReflectionData.FindCachedMember(type, name, isStatic); }
 
-            Dictionary<Type, Dictionary<string, MemberInfo>> ownerCache =
-                isStatic ? StaticMemberLookupCache : InstanceMemberLookupCache;
+        private static string NormalizeMemberLookupName(string name) { return ReflectionDataReader.NormalizeMemberLookupName(name); }
 
-            Dictionary<string, MemberInfo> lookup;
-            if (!ownerCache.TryGetValue(type, out lookup))
-            {
-                lookup = BuildMemberLookup(type, isStatic);
-                ownerCache[type] = lookup;
-            }
-
-            MemberInfo member;
-            if (lookup.TryGetValue(name, out member)) return member;
-
-            string normalized = NormalizeMemberLookupName(name);
-            if (lookup.TryGetValue(normalized, out member)) return member;
-
-            // Cache misses as null to avoid repeating fallback work.
-            lookup[name] = null;
-            if (!string.Equals(name, normalized, StringComparison.OrdinalIgnoreCase))
-                lookup[normalized] = null;
-            return null;
-        }
-
-        private static Dictionary<string, MemberInfo> BuildMemberLookup(Type type, bool isStatic)
-        {
-            Dictionary<string, MemberInfo> result = new Dictionary<string, MemberInfo>(StringComparer.OrdinalIgnoreCase);
-            BindingFlags flags = isStatic ? StaticFlags : InstanceFlags;
-
-            try
-            {
-                PropertyInfo[] props = type.GetProperties(flags);
-                for (int i = 0; i < props.Length; i++)
-                {
-                    PropertyInfo property = props[i];
-                    if (!property.CanRead || property.GetIndexParameters().Length != 0) continue;
-                    AddMemberLookupAlias(result, property.Name, property);
-                    AddMemberLookupAlias(result, NormalizeMemberLookupName(property.Name), property);
-                }
-            }
-            catch { }
-
-            try
-            {
-                FieldInfo[] fields = type.GetFields(flags);
-                for (int i = 0; i < fields.Length; i++)
-                {
-                    FieldInfo field = fields[i];
-                    if (field.IsStatic != isStatic) continue;
-                    AddMemberLookupAlias(result, field.Name, field);
-                    AddMemberLookupAlias(result, NormalizeMemberLookupName(field.Name), field);
-                }
-            }
-            catch { }
-
-            return result;
-        }
-
-        private static void AddMemberLookupAlias(Dictionary<string, MemberInfo> map, string key, MemberInfo member)
-        {
-            if (map == null || string.IsNullOrEmpty(key) || member == null) return;
-            if (!map.ContainsKey(key)) map[key] = member;
-        }
-
-        private static string NormalizeMemberLookupName(string name)
-        {
-            if (string.IsNullOrEmpty(name)) return string.Empty;
-            string value = name.Trim();
-            while (value.StartsWith("_", StringComparison.Ordinal)) value = value.Substring(1);
-            if (value.StartsWith("<", StringComparison.Ordinal) && value.IndexOf(">k__BackingField", StringComparison.Ordinal) > 1)
-                value = value.Substring(1, value.IndexOf(">k__BackingField", StringComparison.Ordinal) - 1);
-            return value;
-        }
 
         private static string GetStringMember(object obj, string name)
         {
@@ -377,7 +274,7 @@ namespace ItemIntelligence
             }
 
             if (depth == 0) return;
-            List<MemberInfo> members = GetReadableMembers(valueType);
+            IList<MemberInfo> members = GetReadableMembers(valueType);
             for (int i = 0; i < members.Count; i++)
             {
                 string name = members[i].Name ?? string.Empty;
@@ -546,47 +443,9 @@ namespace ItemIntelligence
             return string.Empty;
         }
 
-        private static List<MemberInfo> GetReadableMembers(Type type)
-        {
-            if (type == null) return new List<MemberInfo>();
+        private static IList<MemberInfo> GetReadableMembers(Type type) { return ReflectionData.GetReadableMembers(type); }
 
-            List<MemberInfo> cached;
-            if (ReadableMemberCache.TryGetValue(type, out cached))
-                return cached;
+        private static object GetMemberValue(object obj, MemberInfo member) { return ReflectionDataReader.GetMemberValue(obj, member); }
 
-            List<MemberInfo> result = new List<MemberInfo>();
-            try
-            {
-                FieldInfo[] fields = type.GetFields(InstanceFlags);
-                for (int i = 0; i < fields.Length; i++)
-                    if (!fields[i].IsStatic) result.Add(fields[i]);
-            }
-            catch { }
-
-            try
-            {
-                PropertyInfo[] props = type.GetProperties(InstanceFlags);
-                for (int i = 0; i < props.Length; i++)
-                    if (props[i].GetIndexParameters().Length == 0 && props[i].CanRead)
-                        result.Add(props[i]);
-            }
-            catch { }
-
-            ReadableMemberCache[type] = result;
-            return result;
-        }
-
-        private static object GetMemberValue(object obj, MemberInfo member)
-        {
-            try
-            {
-                FieldInfo f = member as FieldInfo;
-                if (f != null) return f.GetValue(obj);
-                PropertyInfo p = member as PropertyInfo;
-                if (p != null) return p.GetValue(obj, null);
-            }
-            catch { }
-            return null;
-        }
     }
 }

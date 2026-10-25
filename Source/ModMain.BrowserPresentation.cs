@@ -248,6 +248,9 @@ namespace ItemIntelligence
                     13f, new Color(0.44f, 0.70f, 0.60f, 1f), FontStyles.Bold,
                     TextAlignmentOptions.Center);
                 TMP_Text label = labelGo.GetComponent<TMP_Text>();
+                // Centered tabs already have an inset from the button edges. The
+                // generic six-unit text margins clip long labels such as MÜHİMMAT.
+                label.margin = new Vector4(2f, 0f, 2f, 0f);
                 label.text = NormalizeModUiText(tabs[i]);
                 BrowserTabTexts[i] = label;
                 CreateBrowserTabInterfaceIcon(tab.transform, i);

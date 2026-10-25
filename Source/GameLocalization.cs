@@ -38,7 +38,8 @@ namespace ItemIntelligence
         private readonly Dictionary<string, string> LocalizationCache =
             new Dictionary<string, string>(StringComparer.Ordinal);
         // Final entity-display caches avoid rebuilding candidate-key arrays and re-running
-        // normalization on every pooled-row redraw. Keys include the active language.
+        // normalization on every pooled-row redraw. These separate caches hold only
+        // the active language; EnsureLocalizationCacheLanguage clears all three.
         private readonly Dictionary<string, string> LocalizedItemDisplayCache =
             new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         private readonly Dictionary<string, string> LocalizedMagnumPerkDisplayCache =
@@ -52,13 +53,12 @@ namespace ItemIntelligence
         {
             if (string.IsNullOrEmpty(itemId)) return string.Empty;
             EnsureLocalizationCacheLanguage();
-            string displayKey = (_localizationCacheLanguage ?? string.Empty) + "|item|" + itemId;
             string cachedDisplay;
-            if (LocalizedItemDisplayCache.TryGetValue(displayKey, out cachedDisplay)) return cachedDisplay;
+            if (LocalizedItemDisplayCache.TryGetValue(itemId, out cachedDisplay)) return cachedDisplay;
 
             string[] keys = new string[] { "item." + itemId + ".name", "items." + itemId + ".name", itemId };
             string resolved = normalize(LocalizeCandidates(keys, itemId));
-            LocalizedItemDisplayCache[displayKey] = resolved;
+            LocalizedItemDisplayCache[itemId] = resolved;
             return resolved;
         }
 
@@ -66,9 +66,8 @@ namespace ItemIntelligence
         {
             if (string.IsNullOrEmpty(perkId)) return string.Empty;
             EnsureLocalizationCacheLanguage();
-            string displayKey = (_localizationCacheLanguage ?? string.Empty) + "|magnum|" + perkId;
             string cachedDisplay;
-            if (LocalizedMagnumPerkDisplayCache.TryGetValue(displayKey, out cachedDisplay)) return cachedDisplay;
+            if (LocalizedMagnumPerkDisplayCache.TryGetValue(perkId, out cachedDisplay)) return cachedDisplay;
 
             string[] keys = new string[]
             {
@@ -80,7 +79,7 @@ namespace ItemIntelligence
                 perkId
             };
             string resolved = normalize(LocalizeCandidates(keys, perkId));
-            LocalizedMagnumPerkDisplayCache[displayKey] = resolved;
+            LocalizedMagnumPerkDisplayCache[perkId] = resolved;
             return resolved;
         }
 
@@ -96,9 +95,8 @@ namespace ItemIntelligence
                 string key = keys[k];
                 if (string.IsNullOrEmpty(key)) continue;
 
-                string cacheKey = _localizationCacheLanguage + "|" + key;
                 string cached;
-                if (LocalizationCache.TryGetValue(cacheKey, out cached))
+                if (LocalizationCache.TryGetValue(key, out cached))
                 {
                     if (!string.IsNullOrEmpty(cached)) return cached;
                     continue;
@@ -110,12 +108,12 @@ namespace ItemIntelligence
                     string.Equals(value, key, StringComparison.OrdinalIgnoreCase) ||
                     value.IndexOf("No localization", StringComparison.OrdinalIgnoreCase) >= 0)
                 {
-                    LocalizationCache[cacheKey] = string.Empty;
+                    LocalizationCache[key] = string.Empty;
                     continue;
                 }
 
                 value = normalize(value);
-                LocalizationCache[cacheKey] = value;
+                LocalizationCache[key] = value;
                 return value;
             }
 

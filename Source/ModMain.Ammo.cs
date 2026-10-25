@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -732,7 +732,7 @@ namespace ItemIntelligence
                 visited.Add(value);
             }
 
-            List<MemberInfo> members = GetReadableMembers(type);
+            IList<MemberInfo> members = GetReadableMembers(type);
             for (int i = 0; i < members.Count && budget > 0; i++)
             {
                 object nested = null;
@@ -794,7 +794,7 @@ namespace ItemIntelligence
                 visited.Add(value);
             }
 
-            List<MemberInfo> members = GetReadableMembers(type);
+            IList<MemberInfo> members = GetReadableMembers(type);
             for (int i = 0; i < members.Count && budget > 0; i++)
             {
                 object nested = null;
@@ -857,7 +857,7 @@ namespace ItemIntelligence
                 visited.Add(value);
             }
 
-            List<MemberInfo> members = GetReadableMembers(type);
+            IList<MemberInfo> members = GetReadableMembers(type);
             for (int i = 0; i < members.Count && budget > 0; i++)
             {
                 MemberInfo member = members[i];
@@ -921,7 +921,7 @@ namespace ItemIntelligence
                 return;
             }
 
-            List<MemberInfo> members = GetReadableMembers(value.GetType());
+            IList<MemberInfo> members = GetReadableMembers(value.GetType());
             for (int i = 0; i < members.Count; i++)
             {
                 string name = members[i].Name ?? string.Empty;
@@ -1176,7 +1176,7 @@ namespace ItemIntelligence
                 if (sprite != null) return sprite;
             }
 
-            List<MemberInfo> members = GetReadableMembers(node.GetType());
+            IList<MemberInfo> members = GetReadableMembers(node.GetType());
             for (int i = 0; i < members.Count; i++)
             {
                 string name = members[i].Name ?? string.Empty;
@@ -1234,7 +1234,7 @@ namespace ItemIntelligence
                 seen.Add(value);
             }
 
-            List<MemberInfo> members = GetReadableMembers(type);
+            IList<MemberInfo> members = GetReadableMembers(type);
             List<KeyValuePair<int, Sprite>> candidates = new List<KeyValuePair<int, Sprite>>();
 
             // First pass: only members that explicitly describe visual/icon content.
@@ -1350,7 +1350,7 @@ namespace ItemIntelligence
         {
             HashSet<string> keys = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             if (record == null) return keys;
-            List<MemberInfo> members = GetReadableMembers(record.GetType());
+            IList<MemberInfo> members = GetReadableMembers(record.GetType());
             for (int i = 0; i < members.Count; i++)
             {
                 MemberInfo member = members[i];

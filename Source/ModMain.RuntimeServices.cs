@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -165,7 +165,7 @@ namespace ItemIntelligence
 
             try
             {
-                List<MemberInfo> members = GetReadableMembers(state.GetType());
+                IList<MemberInfo> members = GetReadableMembers(state.GetType());
                 for (int i = 0; i < members.Count; i++)
                 {
                     object value = GetMemberValue(state, members[i]);
@@ -213,7 +213,7 @@ namespace ItemIntelligence
             string ns = value.GetType().Namespace ?? string.Empty;
             if (!ns.StartsWith("MGSC", StringComparison.Ordinal)) return null;
 
-            List<MemberInfo> members = GetReadableMembers(value.GetType());
+            IList<MemberInfo> members = GetReadableMembers(value.GetType());
             for (int i = 0; i < members.Count; i++)
             {
                 object child = GetMemberValue(value, members[i]);
@@ -367,7 +367,7 @@ namespace ItemIntelligence
             if (depth <= 0 || IsSimple(root.GetType()) || visited.Contains(root)) return null;
             visited.Add(root);
 
-            List<MemberInfo> members = GetReadableMembers(root.GetType());
+            IList<MemberInfo> members = GetReadableMembers(root.GetType());
             for (int i = 0; i < members.Count; i++)
             {
                 object value = GetMemberValue(root, members[i]);

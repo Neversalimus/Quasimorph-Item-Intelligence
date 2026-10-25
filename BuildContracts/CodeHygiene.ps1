@@ -113,28 +113,6 @@ if ($ordinaryInfoLogCount -ne 5) {
     throw "Player.log hygiene regression: ordinary non-verbose Debug.Log sites=$ordinaryInfoLogCount, expected 5. Use VerboseLog for diagnostics."
 }
 
-# Isolated Add-Type suites compile selected production fragments without the full logging owner.
-# Keep their shared silent-by-default VerboseLog fixture wired in so logging refactors cannot break the
-# test harness before the real game compilation/staging step. Suites that explicitly test verbose
-# diagnostics may opt into the fixture sink.
-$verboseFixturePath = Join-Path $root 'Tests/VerboseLoggingFixture.cs'
-if (-not (Test-Path -LiteralPath $verboseFixturePath -PathType Leaf)) { throw 'Verbose logging test fixture missing.' }
-$verboseFixtureText = Get-Content -LiteralPath $verboseFixturePath -Raw
-foreach ($token in @('public static partial class ModMain','private static void VerboseLog(string message)','private static bool _testVerboseLoggingEnabled = false;','private static System.Action<string> _testVerboseLogSink = null;')) {
-    if ($verboseFixtureText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "Verbose logging test fixture malformed: $token" }
-}
-$tradeRuntimeCasesText = Get-Content -LiteralPath (Join-Path $root 'Tests/TradeRuntimeCases.cs') -Raw
-foreach ($token in @('Normal logging suppresses TradePerf summaries','Verbose five-second window emits a single scan summary','_testVerboseLoggingEnabled = true;')) {
-    if ($tradeRuntimeCasesText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "Trade verbose-logging runtime contract missing: $token" }
-}
-$dynamicTestScripts = @(Get-ChildItem -LiteralPath (Join-Path $root 'Tests') -File -Filter 'Run-*.ps1' | Where-Object {
-    (Get-Content -LiteralPath $_.FullName -Raw).IndexOf('Add-Type -TypeDefinition $code',[StringComparison]::Ordinal) -ge 0
-})
-foreach ($dynamicTestScript in $dynamicTestScripts) {
-    $dynamicTestText = Get-Content -LiteralPath $dynamicTestScript.FullName -Raw
-    foreach ($token in @('VerboseLoggingFixture.cs','verboseLoggingFixture.Replace')) {
-        if ($dynamicTestText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) {
-            throw "Verbose logging isolated-test guard missing in $($dynamicTestScript.Name): $token"
-        }
-    }
-}
+# Each isolated suite compiles its dependencies; suites with no logging calls
+# do not need a ModMain logging fixture. Run-TradeRuntimeTests already executes
+# the normal/verbose scan-summary assertions instead of checking their wording.

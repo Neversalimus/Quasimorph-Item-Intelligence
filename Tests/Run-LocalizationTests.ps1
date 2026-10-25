@@ -34,9 +34,9 @@ $members = @(
         'ProbeVanillaLanguage',
         'EnsureExternalUiTranslations','Ui','IsEnglishLanguageToken','IsEnglishLanguage')
     Read-Members 'ModMain.DataAccess.cs' 'VariableDeclaratorSyntax' @(
-        'InstanceFlags','StaticFlags','InstanceMemberLookupCache','StaticMemberLookupCache')
+        'ReflectionData')
     Read-Members 'ModMain.DataAccess.cs' 'MethodDeclarationSyntax' @(
-        'GetStaticMember','GetMember','FindCachedMember','BuildMemberLookup','AddMemberLookupAlias',
+        'GetStaticMember','GetMember','FindCachedMember',
         'NormalizeMemberLookupName','GetMemberValue','FirstNonNull')
     Read-Members 'ModMain.Runtime.cs' 'MethodDeclarationSyntax' @('ConvertToStableString','ContainsCyrillic','NormalizeGameText','IsRussian')
     Read-Members 'ModMain.Runtime.cs' 'ClassDeclarationSyntax' @('LiveMarketEntry')
@@ -48,7 +48,7 @@ $members = @(
     Read-Members 'ModMain.LocalizationFonts.cs' 'VariableDeclaratorSyntax' @('UiFonts')
     Read-Members 'ModMain.LocalizationFonts.cs' 'MethodDeclarationSyntax' @('FindGameLanguageFont','ResolveUiFont')
 ) -join "`n"
-$whole = foreach ($file in @('ModMain.LocalizationInternational','ModMain.LocalizationTextLayout','ModMain.LocalizationTiming','LanguageCatalog','GameLocalization','UiLocalization','UiFontResolver','RequiredDataReader','ModMain.RequiredData')) {
+$whole = foreach ($file in @('ModMain.LocalizationInternational','ModMain.LocalizationTextLayout','ModMain.LocalizationTiming','LanguageCatalog','ReflectionDataReader','GameLocalization','UiLocalization','UiFontResolver','RequiredDataReader','ModMain.RequiredData')) {
     $text = [IO.File]::ReadAllText((Join-Path $SourceRoot ('Source/' + $file + '.cs')))
     $tree = [Microsoft.CodeAnalysis.CSharp.CSharpSyntaxTree]::ParseText($text)
     $tree.GetRoot().Members | ForEach-Object { $_.ToFullString() }

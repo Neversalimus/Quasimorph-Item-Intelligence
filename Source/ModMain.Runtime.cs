@@ -21,7 +21,7 @@ namespace ItemIntelligence
     /// </summary>
     public static partial class ModMain
     {
-        public const string Version = "1.7.43.3-test3";
+        public const string Version = "1.7.43.3-test4";
         // Ordinary Item Intelligence remains a read-only knowledge browser. The only
         // save-affecting exception is one explicit item-spawn click inside MCM Modder Mode;
         // economy, story variables and faction progression are never mutated.
@@ -55,7 +55,7 @@ namespace ItemIntelligence
         {
             if (context != null) _modContext = context;
             EnsureConfigLoaded();
-            Debug.Log("[ItemIntelligence] ACTIVE VERSION " + Version + " (OfficialLanguagesTest3).");
+            Debug.Log("[ItemIntelligence] ACTIVE VERSION " + Version + " (OfficialLanguagesTest4).");
             Debug.Log("[ItemIntelligence] Logging mode: " + (VerboseLogging ? "VERBOSE" : "NORMAL") +
                 (VerboseLogging ? "." : " (enable Verbose logging in MCM for detailed diagnostics)."));
             RunCompatibilityShieldStatic();
@@ -1050,7 +1050,7 @@ namespace ItemIntelligence
                     continue;
                 }
 
-                List<MemberInfo> members = GetReadableMembers(type);
+                IList<MemberInfo> members = GetReadableMembers(type);
                 for (int i = 0; i < members.Count; i++)
                 {
                     MemberInfo member = members[i];
@@ -1949,55 +1949,8 @@ namespace ItemIntelligence
             catch { }
         }
 
-
-
-
-
         private static bool? CallBool(object instance, string methodName, string id)
-        {
-            if (instance == null || string.IsNullOrEmpty(id)) return null;
-            try
-            {
-                Type type = instance.GetType();
-                string cacheKey = type.AssemblyQualifiedName + "|" + methodName;
-                MethodInfo method;
-                if (!BoolMethodCache.TryGetValue(cacheKey, out method))
-                {
-                    MethodInfo[] methods = type.GetMethods(InstanceFlags);
-                    for (int i = 0; i < methods.Length; i++)
-                    {
-                        MethodInfo candidate = methods[i];
-                        if (!string.Equals(candidate.Name, methodName, StringComparison.Ordinal) || candidate.ReturnType != typeof(bool)) continue;
-                        ParameterInfo[] p = candidate.GetParameters();
-                        if (p.Length != 1) continue;
-                        method = candidate;
-                        break;
-                    }
-                    BoolMethodCache[cacheKey] = method;
-                }
-
-                if (method == null) return null;
-                ParameterInfo[] parameters = method.GetParameters();
-                object arg = ConvertArgument(id, parameters[0].ParameterType);
-                if (arg == null && parameters[0].ParameterType.IsValueType) return null;
-                return (bool)method.Invoke(instance, new object[] { arg });
-            }
-            catch { }
-            return null;
-        }
-
-        private static object ConvertArgument(string value, Type targetType)
-        {
-            if (targetType == typeof(string) || targetType == typeof(object)) return value;
-            try
-            {
-                if (targetType.IsEnum) return Enum.Parse(targetType, value, true);
-                ConstructorInfo ctor = targetType.GetConstructor(new Type[] { typeof(string) });
-                if (ctor != null) return ctor.Invoke(new object[] { value });
-                return Convert.ChangeType(value, targetType, CultureInfo.InvariantCulture);
-            }
-            catch { return null; }
-        }
+        { return ReflectionData.CallBool(instance, methodName, id); }
 
 
 
@@ -2892,7 +2845,7 @@ namespace ItemIntelligence
                 GetStringMember(value, "ProjectId"),
                 GetStringMember(value, "Id"));
 
-            List<MemberInfo> members = GetReadableMembers(type);
+            IList<MemberInfo> members = GetReadableMembers(type);
             if (!string.IsNullOrEmpty(projectId))
             {
                 for (int i = 0; i < members.Count; i++)
@@ -3022,7 +2975,7 @@ namespace ItemIntelligence
             string ns = valueType.Namespace ?? string.Empty;
             if (!ns.StartsWith("MGSC", StringComparison.Ordinal)) return;
 
-            List<MemberInfo> members = GetReadableMembers(valueType);
+            IList<MemberInfo> members = GetReadableMembers(valueType);
             for (int i = 0; i < members.Count; i++)
             {
                 object child = GetMemberValue(value, members[i]);

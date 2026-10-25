@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -137,7 +137,7 @@ namespace ItemIntelligence
             AddLootContainerDropReference(
                 result, "ManualDropId", GetMember(record, "ManualDropId"), validDropIds);
 
-            List<MemberInfo> members = GetReadableMembers(record.GetType());
+            IList<MemberInfo> members = GetReadableMembers(record.GetType());
             for (int i = 0; i < members.Count; i++)
             {
                 MemberInfo member = members[i];

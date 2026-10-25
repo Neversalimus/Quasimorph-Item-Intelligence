@@ -25,6 +25,7 @@ namespace ItemIntelligence
                 if (font != null) UnityEngine.Object.Destroy(font);
             UiMixedFonts.Clear();
             _uiFontSignature = string.Empty;
+            _signatureUiLanguage = _signatureGameLanguage = null;
             _uiResolvedFont = null;
             _uiFontReady = false;
             _uiFontRetryFrame = _lastFrame = 0;
@@ -33,18 +34,25 @@ namespace ItemIntelligence
         private readonly Dictionary<string, TMP_FontAsset> UiMixedFonts =
             new Dictionary<string, TMP_FontAsset>(StringComparer.Ordinal);
         private string _uiFontSignature = string.Empty;
+        private string _signatureUiLanguage, _signatureGameLanguage;
         private TMP_FontAsset _uiResolvedFont;
         private int _uiFontRetryFrame;
         private bool _uiFontReady;
 
         internal TMP_FontAsset Resolve(string uiLanguage, string gameLanguage, TMP_FontAsset inspectorFont, int frame)
         {
-            string signature = uiLanguage + "|" + gameLanguage;
+            // Reuse the signature for unchanged inputs. An initialized signature
+            // always includes "|", including when both language values are null.
+            string signature = _uiFontSignature.Length != 0 &&
+                uiLanguage == _signatureUiLanguage && gameLanguage == _signatureGameLanguage
+                ? _uiFontSignature : uiLanguage + "|" + gameLanguage;
             if (signature == _uiFontSignature &&
                 ((_uiFontReady && _uiResolvedFont != null) || frame >= _lastFrame && frame < _uiFontRetryFrame))
                 return _uiResolvedFont ?? inspectorFont;
             _lastFrame = frame;
             _uiFontSignature = signature;
+            _signatureUiLanguage = uiLanguage;
+            _signatureGameLanguage = gameLanguage;
             _uiFontRetryFrame = frame + 240;
             _uiFontReady = false;
             try

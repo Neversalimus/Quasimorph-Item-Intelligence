@@ -25,13 +25,9 @@ function Get-ProductionMember([string]$file, [string]$kind, [string]$name) {
     return $found[0].ToFullString()
 }
 $members = @(
-    (Get-ProductionMember 'ModMain.DataAccess.cs' 'VariableDeclaratorSyntax' 'InstanceFlags'),
-    (Get-ProductionMember 'ModMain.DataAccess.cs' 'VariableDeclaratorSyntax' 'StaticFlags'),
-    (Get-ProductionMember 'ModMain.DataAccess.cs' 'VariableDeclaratorSyntax' 'InstanceMemberLookupCache'),
-    (Get-ProductionMember 'ModMain.DataAccess.cs' 'VariableDeclaratorSyntax' 'StaticMemberLookupCache'),
+    (Get-ProductionMember 'ReflectionDataReader.cs' 'ClassDeclarationSyntax' 'ReflectionDataReader'),
+    (Get-ProductionMember 'ModMain.DataAccess.cs' 'VariableDeclaratorSyntax' 'ReflectionData'),
     (Get-ProductionMember 'ModMain.DataAccess.cs' 'MethodDeclarationSyntax' 'FindCachedMember'),
-    (Get-ProductionMember 'ModMain.DataAccess.cs' 'MethodDeclarationSyntax' 'BuildMemberLookup'),
-    (Get-ProductionMember 'ModMain.DataAccess.cs' 'MethodDeclarationSyntax' 'AddMemberLookupAlias'),
     (Get-ProductionMember 'ModMain.DataAccess.cs' 'MethodDeclarationSyntax' 'NormalizeMemberLookupName'),
     (Get-ProductionMember 'RequiredDataReader.cs' 'EnumDeclarationSyntax' 'MemberReadStatus'),
     (Get-ProductionMember 'RequiredDataReader.cs' 'StructDeclarationSyntax' 'MemberReadResult'),
@@ -92,7 +88,7 @@ $code = $code.Replace('namespace UnityEngine', ('namespace ' + $testNamespace + 
 $code = $code.Replace('namespace MGSC', ('namespace ' + $testNamespace + '.GameFixture'))
 # All using directives must precede namespace declarations. Fixtures use fully qualified
 # names outside the core, while production members inherit these compilation-unit imports.
-$code = "using System.Globalization;`nusing System.Reflection;`nusing System.Collections;`nusing System.Collections.Generic;`nusing $testNamespace.UnityFixture;`nusing $testNamespace.GameFixture;`n" + $code
+$code = "using System.Collections.ObjectModel; using System.Globalization;`nusing System.Reflection;`nusing System.Collections;`nusing System.Collections.Generic;`nusing $testNamespace.UnityFixture;`nusing $testNamespace.GameFixture;`n" + $code
 $code += "`n" + $verboseLoggingFixture.Replace('namespace ItemIntelligence', ('namespace ' + $testNamespace))
 Add-Type -TypeDefinition $code -WarningAction Stop
 $type = ($testNamespace + '.ModMain') -as [type]
