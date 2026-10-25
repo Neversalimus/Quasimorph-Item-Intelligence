@@ -3,16 +3,19 @@
 # Current dead-code and single-reference invariants.
 # ============================================================================
 
-# Advisory only: a private static method whose identifier occurs exactly once in Source
-# is suspicious dead code. Reflection/Harmony conventions can make this legitimate, so
-# this check deliberately reports candidates instead of blocking a build.
+# A single textual mention is a candidate for dead code, not proof of reachability.
+# Keep this existing gate, but count all identifiers in one pass instead of scanning
+# the entire source tree separately for every method.
+. (Join-Path $root 'BuildTools/SourceReferences.ps1')
+& (Join-Path $root 'Tests/Run-SourceReferenceTests.ps1') -SourceRoot $root
+$sourceIdentifierCounts = Get-QiiIdentifierCounts $sourceText
 $singleReferencePrivateStatic = @()
 $privateStaticMethodPattern = '(?m)^\s*private\s+static\s+(?:(?:readonly|unsafe|async)\s+)*[^;=\r\n]+?\s+([A-Za-z_]\w*)\s*\('
 foreach ($candidateFile in $sourceFiles) {
     $candidateText = Get-Content -LiteralPath $candidateFile.FullName -Raw
     foreach ($match in [regex]::Matches($candidateText, $privateStaticMethodPattern)) {
         $methodName = $match.Groups[1].Value
-        $mentionCount = ([regex]::Matches($sourceText, ('\b' + [regex]::Escape($methodName) + '\b'))).Count
+        $mentionCount = $sourceIdentifierCounts[$methodName]
         if ($mentionCount -eq 1) {
             $singleReferencePrivateStatic += ($candidateFile.Name + '::' + $methodName)
         }

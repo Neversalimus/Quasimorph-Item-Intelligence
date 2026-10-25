@@ -14,6 +14,7 @@ namespace ItemIntelligence
         private static string _uiFontSignature = string.Empty;
         private static TMP_FontAsset _uiResolvedFont;
         private static int _uiFontRetryFrame;
+        private static bool _uiFontReady;
 
         private static TMP_FontAsset FindGameLanguageFont(string language)
         {
@@ -42,14 +43,19 @@ namespace ItemIntelligence
         {
             string signature = GetUiLanguageSignature() + "|" + GetLanguageSignature();
             if (signature == _uiFontSignature &&
-                (_uiResolvedFont != null || Time.frameCount < _uiFontRetryFrame))
+                ((_uiFontReady && _uiResolvedFont != null) || Time.frameCount < _uiFontRetryFrame))
                 return _uiResolvedFont ?? _inspectorFont;
             _uiFontSignature = signature;
             _uiFontRetryFrame = Time.frameCount + 240;
+            _uiFontReady = false;
             try
             {
                 TMP_FontAsset ui = FindGameLanguageFont(GetUiLanguageSignature());
-                TMP_FontAsset game = FindGameLanguageFont(GetLanguageSignature()) ?? _inspectorFont;
+                TMP_FontAsset game = FindGameLanguageFont(GetLanguageSignature());
+                // A temporary fallback must not prevent retrying a late preset.
+                // Both scripts are required when mod and game languages differ.
+                _uiFontReady = ui != null && game != null;
+                if (game == null) game = _inspectorFont;
                 if (ui == null) ui = game;
                 _uiResolvedFont = ui;
                 if (ui != null && game != null && ui != game)
@@ -78,6 +84,7 @@ namespace ItemIntelligence
             catch (Exception ex)
             {
                 _uiResolvedFont = null;
+                _uiFontReady = false;
                 Debug.LogWarning("[ItemIntelligence] UI font lookup unavailable: " + ex.Message);
             }
             return _uiResolvedFont ?? _inspectorFont;

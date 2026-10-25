@@ -8,6 +8,7 @@
 $installPath = Join-Path $root 'Install.ps1'
 if (-not (Test-Path -LiteralPath $installPath -PathType Leaf)) { throw 'Install.ps1 is missing.' }
 $installText = Read-Utf8Strict -Path $installPath
+& (Join-Path $root 'Tests/Run-StagePathTests.ps1') -SourceRoot $root
 
 if ($Mode -eq 'TEST') {
     # The test installer defaults to a package beside the source tree. Installation

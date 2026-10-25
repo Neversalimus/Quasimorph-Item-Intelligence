@@ -48,7 +48,7 @@ $members = @(
     Read-Members 'ModMain.LootContainerChanceMath.cs' 'MethodDeclarationSyntax' @('FormatContainerEstimateNumber')
     Read-Members 'ModMain.LootModifiers.cs' 'MethodDeclarationSyntax' @('FormatExpectedNumber')
     Read-Members 'ModMain.WeaponModeLocalization.cs' 'MethodDeclarationSyntax' @('IsWeaponModeLabelCompatibleWithCurrentLanguage')
-    Read-Members 'ModMain.LocalizationFonts.cs' 'VariableDeclaratorSyntax' @('UiMixedFonts','_uiFontSignature','_uiResolvedFont','_uiFontRetryFrame')
+    Read-Members 'ModMain.LocalizationFonts.cs' 'VariableDeclaratorSyntax' @('UiMixedFonts','_uiFontSignature','_uiResolvedFont','_uiFontRetryFrame','_uiFontReady')
     Read-Members 'ModMain.LocalizationFonts.cs' 'MethodDeclarationSyntax' @('FindGameLanguageFont','ResolveUiFont')
 ) -join "`n"
 $whole = foreach ($file in @('LocalizationInternational','LocalizationTextLayout','LocalizationTiming')) {

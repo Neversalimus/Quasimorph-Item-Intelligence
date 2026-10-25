@@ -276,6 +276,32 @@ namespace ItemIntelligence
             }
             Verify(UiMixedFonts.Count == 12, "all script pairs reuse a bounded font cache");
 
+            // A usable fallback is temporary when the selected language's preset
+            // has not loaded yet. Both UI and game-name fonts must recover.
+            List<MGSC.FontPreset> presets = MGSC.LocalizationFontKeeper.Instance.FontPresets;
+            MGSC.FontPreset japanesePreset = presets.Find(p => p.FontAsset == kana);
+            presets.Remove(japanesePreset);
+            GameLanguage("Russian"); SetUiLanguagePreference("Japanese", "test");
+            Verify(ResolveUiFont() == latin, "late UI font temporarily uses the game font");
+            presets.Add(japanesePreset);
+            UnityEngine.Time.frameCount++;
+            Verify(ResolveUiFont() == latin, "late UI font retries are throttled");
+            UnityEngine.Time.frameCount += 241;
+            TMP_FontAsset recoveredUi = ResolveUiFont();
+            Verify(recoveredUi != latin && recoveredUi.name.Contains(kana.name) && recoveredUi.fallbackFontAssetTable.Contains(latin),
+                "late UI font recovers without changing language or restarting");
+
+            MGSC.FontPreset chinesePreset = presets.Find(p => p.FontAsset == han);
+            presets.Remove(chinesePreset);
+            GameLanguage("ChineseSimp"); SetUiLanguagePreference("Korean", "test");
+            TMP_FontAsset temporaryGame = ResolveUiFont();
+            Verify(temporaryGame.fallbackFontAssetTable.Contains(latin), "late game font temporarily uses inspector fallback");
+            presets.Add(chinesePreset);
+            UnityEngine.Time.frameCount += 241;
+            TMP_FontAsset recoveredGame = ResolveUiFont();
+            Verify(recoveredGame.fallbackFontAssetTable.Contains(han) && recoveredGame != temporaryGame,
+                "late game font recovers without changing language or restarting");
+
             string mcmValue;
             Verify(TryReadMcmString(new Dictionary<string, object> { { "UiLanguage", new McmValue { Value = "Polski" } } }, "UiLanguage", out mcmValue)
                 && mcmValue == "Polski", "MCM wrapped string");

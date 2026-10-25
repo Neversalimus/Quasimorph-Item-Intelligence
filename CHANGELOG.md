@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.7.43.3-test2 — 2026-10-25
+
+- Recover the selected UI and game-name fonts when their presets load after the inspector fallback.
+- Validate package and temporary paths before replacement; reject source/game paths, junctions and unrelated directory contents.
+- Exclude the default `_stage` output from Git.
+- Count source identifiers once for the existing dead-code check instead of rescanning all source files for every method.
+
 ## v1.7.43.3-test1 — 2026-10-25
 
 - Added complete Japanese, Korean and Turkish interfaces (695 strings each), covering all 11 official Quasimorph languages.

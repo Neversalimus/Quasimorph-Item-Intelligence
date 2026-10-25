@@ -12,7 +12,7 @@ $stage = if ($WorkshopStage) { $WorkshopStage } else { Join-Path $root '_stage\I
 $buildScript = Join-Path $root 'BUILD_AND_STAGE.ps1'
 if (-not (Test-Path -LiteralPath $buildScript -PathType Leaf)) { throw 'BUILD_AND_STAGE.ps1 not found.' }
 
-Write-Host 'Item Intelligence v1.7.43.3-test1 - Official Languages' -ForegroundColor Cyan
+Write-Host 'Item Intelligence v1.7.43.3-test2 - Official Languages' -ForegroundColor Cyan
 Write-Host 'Builds the test source and prepares a local package.' -ForegroundColor DarkGray
 Write-Host 'No Steam upload is performed automatically.' -ForegroundColor DarkGray
 Write-Host 'This installer does not overwrite the live subscribed Workshop copy.' -ForegroundColor DarkGray
@@ -34,6 +34,6 @@ Write-Host 'TEST BUILD + STAGING OK.' -ForegroundColor Green
 Write-Host ('Stage: ' + $stage) -ForegroundColor Green
 Write-Host ('Stage DLL SHA256: ' + $stageHash) -ForegroundColor Green
 Write-Host 'Expected runtime marker:' -ForegroundColor Yellow
-Write-Host '[ItemIntelligence] ACTIVE VERSION 1.7.43.3-test1 (OfficialLanguagesTest1).' -ForegroundColor Cyan
+Write-Host '[ItemIntelligence] ACTIVE VERSION 1.7.43.3-test2 (OfficialLanguagesTest2).' -ForegroundColor Cyan
 Write-Host ''
 Write-Host 'Package ready for local testing. Keep a backup before replacing an installed copy.' -ForegroundColor Yellow

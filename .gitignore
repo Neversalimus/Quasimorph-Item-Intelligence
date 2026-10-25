@@ -3,6 +3,7 @@ bin/
 obj/
 [Bb]uild/
 [Ss]tage/
+/_stage/
 *.dll
 *.pdb
 *.mdb

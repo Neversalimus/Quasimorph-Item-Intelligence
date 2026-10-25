@@ -159,6 +159,9 @@ if ($ContractsOnly) {
 }
 
 $game = Resolve-GameRoot -ExplicitRoot $GameRoot
+. (Join-Path $root 'BuildTools/StagePaths.ps1')
+$WorkshopStage = Resolve-QiiStagePath $WorkshopStage $root $game
+$tmpStage = Resolve-QiiStagePath ($WorkshopStage + '.tmp') $root $game
 $managed = Join-Path $game 'Quasimorph_Data\Managed'
 $csc = Resolve-Csc
 Write-Host ('Mode: ' + $Mode) -ForegroundColor DarkGray
@@ -203,18 +206,24 @@ Write-Host ('SHA256: ' + $hash) -ForegroundColor Green
 
 $stageParent = Split-Path -Parent $WorkshopStage
 New-Item -ItemType Directory -Force -Path $stageParent | Out-Null
-$tmpStage = $WorkshopStage + '.tmp'
-if (Test-Path -LiteralPath $tmpStage) { Remove-Item -LiteralPath $tmpStage -Recurse -Force }
+if (Test-Path -LiteralPath $tmpStage) {
+    $null = Resolve-QiiStagePath $tmpStage $root $game
+    Remove-Item -LiteralPath $tmpStage -Recurse -Force
+}
 New-Item -ItemType Directory -Force -Path $tmpStage | Out-Null
 Copy-Item -Path (Join-Path $content '*') -Destination $tmpStage -Recurse -Force
+$null = Resolve-QiiStagePath $tmpStage $root $game
 
 if (Test-Path -LiteralPath $WorkshopStage) {
-    $stamp = Get-Date -Format 'yyyyMMdd_HHmmss'
-    $backupDir = Join-Path $env:USERPROFILE 'Downloads\Quasimorph_Mod_Backups'
-    New-Item -ItemType Directory -Force -Path $backupDir | Out-Null
-    $backupZip = Join-Path $backupDir ('ItemIntelligence_' + $Mode + '_Stage_' + $stamp + '.zip')
-    Compress-Archive -Path (Join-Path $WorkshopStage '*') -DestinationPath $backupZip -Force
-    Write-Host ('Previous stage backup: ' + $backupZip) -ForegroundColor DarkGray
+    $null = Resolve-QiiStagePath $WorkshopStage $root $game
+    if (@(Get-ChildItem -LiteralPath $WorkshopStage -Force).Count -gt 0) {
+        $stamp = Get-Date -Format 'yyyyMMdd_HHmmss_fffffff'
+        $backupDir = Join-Path $env:USERPROFILE 'Downloads\Quasimorph_Mod_Backups'
+        New-Item -ItemType Directory -Force -Path $backupDir | Out-Null
+        $backupZip = Join-Path $backupDir ('ItemIntelligence_' + $Mode + '_Stage_' + $stamp + '.zip')
+        [IO.Compression.ZipFile]::CreateFromDirectory($WorkshopStage, $backupZip)
+        Write-Host ('Previous stage backup: ' + $backupZip) -ForegroundColor DarkGray
+    }
     Remove-Item -LiteralPath $WorkshopStage -Recurse -Force
 }
 Move-Item -LiteralPath $tmpStage -Destination $WorkshopStage

@@ -4,9 +4,9 @@
 
 [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3780078201) · [Downloads](https://github.com/Neversalimus/Quasimorph-Item-Intelligence/releases) · [Changelog](CHANGELOG.md)
 
-This branch contains **1.7.43.3-test1** for **Quasimorph 1.0.4.590s.969afc6**.
+This branch contains **1.7.43.3-test2** for **Quasimorph 1.0.4.590s.969afc6**.
 
-This test build completes all 11 official interface languages with Japanese, Korean and Turkish, and revises the existing translations for clearer wording and current game terminology. It includes language selection, fonts and text wrapping for the new languages. See [release notes](Release/Notes-v1.7.43.3-test1.md).
+This test build completes all 11 official interface languages with Japanese, Korean and Turkish, and revises the existing translations for clearer wording and current game terminology. It includes language selection, fonts and text wrapping for the new languages. See [release notes](Release/Notes-v1.7.43.3-test2.md).
 
 Compatibility for the new build is enabled through audited feature-owned gates. Unknown future builds continue to fail closed for exact calculations until their contracts are reviewed.
 
@@ -65,6 +65,8 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File .\Install.ps1 -GameRoot "C:\Progra
 ```
 
 Use your actual game path. This compiles the test source against the installed game and stages the files in `_stage\ItemIntelligence` beside the source. Pass `-WorkshopStage` to choose another package directory. The installer does not replace a subscribed copy or upload to Steam. Game assemblies and compiled binaries are not stored in this repository.
+
+A stage must be empty or contain an Item Intelligence package. Source directories, game installations, live Steam content, linked paths and folders with unrelated files are rejected. Existing packages are backed up before replacement. If an interrupted build leaves an incomplete `.tmp` folder, inspect it and choose a fresh stage path.
 
 Run the source contracts and behavior tests without game files:
 
