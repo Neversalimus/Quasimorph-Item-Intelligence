@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace ItemIntelligence
 {
     public static partial class ModMain
