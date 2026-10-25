@@ -4,11 +4,12 @@
 # ============================================================================
 
 # A single textual mention is a candidate for dead code, not proof of reachability.
-# Keep this existing gate, but count all identifiers in one pass instead of scanning
+# Report candidates for review; this heuristic cannot establish reachability. Scan
 # the entire source tree separately for every method.
 . (Join-Path $root 'BuildTools/SourceReferences.ps1')
 & (Join-Path $root 'Tests/Run-SourceReferenceTests.ps1') -SourceRoot $root
 $sourceIdentifierCounts = Get-QiiIdentifierCounts $sourceText
+$sourceDeclarations = Get-QiiDeclaredIdentifiers $sourceText
 $singleReferencePrivateStatic = @()
 $privateStaticMethodPattern = '(?m)^\s*private\s+static\s+(?:(?:readonly|unsafe|async)\s+)*[^;=\r\n]+?\s+([A-Za-z_]\w*)\s*\('
 foreach ($candidateFile in $sourceFiles) {
@@ -51,15 +52,9 @@ $retiredDeadCodeTokens = @(
     'ContainerCountMethodsByType','ContainerCountInvokeArgs','ContainerDeepSearchVisited',
     '_loggedTooltipTemplateFailure','MaxQuickRows','DisplayRow')
 foreach ($retiredToken in $retiredDeadCodeTokens) {
-    # Retired entries are C# identifiers. Match identifier boundaries instead of substrings:
-    # e.g. retired FindNestedObject must not reject live FindNestedObjectByTypeName.
-    $retiredIdentifierPattern = '(?<![A-Za-z0-9_])' + [Regex]::Escape($retiredToken) + '(?![A-Za-z0-9_])'
-    if ([Regex]::IsMatch($sourceText, $retiredIdentifierPattern)) {
+    if ($sourceDeclarations.Contains($retiredToken)) {
         throw "current dead-code hygiene regression: retired symbol returned: $retiredToken"
     }
-}
-if ($singleReferencePrivateStatic.Count -ne 0) {
-    throw "current dead-code closure incomplete: private static single-reference candidates=$($singleReferencePrivateStatic.Count)."
 }
 # Release-polish dead-state and user-facing dedup gates.
 foreach ($retired in @('QuickTooltipPool','QuickTooltipPools','_quickTooltipLastPruneFrame','_slowTooltipWarnings','_pendingStarmapBackAttempts','_starmapExperimentRecoveryLastFrame')) {

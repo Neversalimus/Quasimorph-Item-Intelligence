@@ -47,6 +47,17 @@ namespace ItemIntelligence
         private static void RunContainerCases()
         {
             ItemRecordsById.Clear();
+            bool eligible;
+            Check(!TryGetExactContainerBonusEligibility("missing", out eligible), "absent container item stays unresolved");
+            ItemRecordsById["normal"] = new CompositeItemRecord("normal", Primary("normal", 1));
+            Check(TryGetExactContainerBonusEligibility("normal", out eligible) && eligible, "non-trash item is bonus-eligible");
+            ItemRecordsById["trash"] = new CompositeItemRecord("trash", Primary("trash", 1), new TrashRecord { SubType = 2 });
+            Check(TryGetExactContainerBonusEligibility("trash", out eligible) && !eligible, "excluded trash subtype is not bonus-eligible");
+            ItemRecordsById["trash"] = new CompositeItemRecord("trash", Primary("trash", 1), new TrashRecord { SubType = 1 });
+            Check(TryGetExactContainerBonusEligibility("trash", out eligible) && eligible, "other trash subtype is bonus-eligible");
+            ItemRecordsById["trash"] = new CompositeItemRecord("trash", Primary("trash", 1), new TrashRecord { SubType = "unknown" });
+            Check(!TryGetExactContainerBonusEligibility("trash", out eligible), "unknown subtype does not become an exact chance");
+            ItemRecordsById.Clear();
             ItemRecordsById["target"] = new CompositeItemRecord("target", Primary("target", 1));
             ItemRecordsById["quest"] = new CompositeItemRecord("quest", Primary("quest", 0));
             List<LootWeightedItem> entries = new List<LootWeightedItem> {

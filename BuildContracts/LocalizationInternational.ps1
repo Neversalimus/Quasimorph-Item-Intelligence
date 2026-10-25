@@ -4,30 +4,27 @@
 # ============================================================================
 
 $internationalLocalizationDir = Join-Path $root 'WORKSHOP_CONTENT\Localization'
-$internationalLanguageSpecs = @(
-    @{ Name='EN'; File='en.lang'; Declaration='EnglishUS;English;english;en;Английский' },
-    @{ Name='RU'; File='ru.lang'; Declaration='Russian;russian;ru;Русский;рус' },
-    @{ Name='DE'; File='de.lang'; Declaration='German;german;Deutsch;de;de-DE' },
-    @{ Name='PL'; File='pl.lang'; Declaration='Polish;polish;Polski;pl;pl-PL' },
-    @{ Name='ZH'; File='zh-Hans.lang'; Declaration='ChineseSimp;ChineseSimplified;SimplifiedChinese;schinese;zhcn;zh-CN;zh-Hans;简体中文;Chinese (Simplified);Simplified Chinese' },
-    @{ Name='ES'; File='es.lang'; Declaration='Spanish;Español;Espanol;es;es-ES' },
-    @{ Name='PTBR'; File='pt-BR.lang'; Declaration='BrazilianPortugal;BrazilianPortuguese;PortugueseBrazil;Português (Brasil);Portugues (Brasil);pt-BR' },
-    @{ Name='FR'; File='fr.lang'; Declaration='French;Français;Francais;fr;fr-FR' },
-    @{ Name='JA'; File='ja.lang'; Declaration='Japanese;japanese;ja;ja-JP;日本語' },
-    @{ Name='KO'; File='ko.lang'; Declaration='Korean;korean;ko;ko-KR;한국어' },
-    @{ Name='TR'; File='tr.lang'; Declaration='Turkish;turkish;Türkçe;Turkce;tr;tr-TR' },
-    @{ Name='TPL'; File='TranslationTemplate.lang'; Declaration='CHANGE_ME' }
-)
+. (Join-Path $root 'BuildTools/LanguageCatalog.ps1')
+$languages = @(Get-QiiLanguageCatalog $root)
+$catalogType = ($languages[0].GetType().Namespace + '.LanguageCatalog') -as [type]
+$internationalLanguageSpecs = @($languages | ForEach-Object { @{ Name=$_.Id; File=$_.FileName } }) +
+    @(@{ Name='TPL'; File='TranslationTemplate.lang' })
 
-function Get-QiiInternationalLangMap([string]$path,[string]$name,[string]$expectedDeclaration) {
+function Get-QiiInternationalLangMap([string]$path,[string]$name) {
     if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { throw "international localization missing: $path" }
     $text = Read-Utf8Strict -Path $path
     if ($text -match '(?im)^\s*@force\s*=\s*true\s*$') {
         throw "shipped localization must never force language selection: $name"
     }
     $declaration = [regex]::Match($text,'(?m)^@language=(.+)$').Groups[1].Value.Trim()
-    if ($declaration -ne $expectedDeclaration) {
-        throw "international localization declaration mismatch: $name = $declaration"
+    if ($name -eq 'TPL') {
+        if ($declaration -ne 'CHANGE_ME') { throw 'Translation template must not claim a real language.' }
+    } else {
+        if (-not $declaration) { throw "Language declaration missing: $name" }
+        foreach ($alias in ($declaration -split ';')) {
+            $resolved = $catalogType::Find($alias)
+            if (-not $resolved -or $resolved.Id -ne $name) { throw "Language declaration disagrees with registry: $name / $alias" }
+        }
     }
 
     $map = @{}
@@ -49,7 +46,7 @@ function Get-QiiInternationalLangMap([string]$path,[string]$name,[string]$expect
 $internationalMaps = @{}
 foreach ($spec in $internationalLanguageSpecs) {
     $path = Join-Path $internationalLocalizationDir $spec.File
-    $internationalMaps[$spec.Name] = Get-QiiInternationalLangMap $path $spec.Name $spec.Declaration
+    $internationalMaps[$spec.Name] = Get-QiiInternationalLangMap $path $spec.Name
     Assert-No-PlayerFacingDevText -Path $path
 }
 
@@ -57,7 +54,7 @@ $internationalEnglish = $internationalMaps['EN']
 if ($internationalEnglish.Count -ne 695) {
     throw "international localization key count drifted: $($internationalEnglish.Count), expected 695"
 }
-foreach ($name in @('RU','DE','PL','ZH','ES','PTBR','FR','JA','KO','TR','TPL')) {
+foreach ($name in @($internationalMaps.Keys | Where-Object { $_ -ne 'EN' })) {
     $map = $internationalMaps[$name]
     if ($map.Count -ne $internationalEnglish.Count) {
         throw "international localization count mismatch: ${name}=$($map.Count), EN=$($internationalEnglish.Count)"
@@ -91,7 +88,7 @@ $zhText = (($internationalMaps['ZH'].Values) -join "`n")
 if ([regex]::Matches($deText,'[ÄÖÜäöüß]').Count -lt 100) { throw 'German translation script-density sanity failed.' }
 if ([regex]::Matches($plText,'[ĄĆĘŁŃÓŚŹŻąćęłńóśźż]').Count -lt 150) { throw 'Polish translation script-density sanity failed.' }
 if ([regex]::Matches($zhText,'[\u3400-\u4DBF\u4E00-\u9FFF]').Count -lt 900) { throw 'Simplified Chinese translation script-density sanity failed.' }
-foreach ($name in @('DE','PL','ZH','ES','PTBR','FR','JA','KO','TR')) {
+foreach ($name in @($internationalMaps.Keys | Where-Object { $_ -notin @('EN','RU','TPL') })) {
     $joined = (($internationalMaps[$name].Values) -join "`n")
     if ($joined -match '[А-Яа-яЁё]') { throw "unexpected Cyrillic residue in shipped $name translation." }
 }
@@ -124,31 +121,15 @@ foreach ($name in @('JA','KO')) {
 foreach ($key in @(
     'ui.loot_storage_short','ui.loot_corpse_short','ui.loot_implant_short','ui.loot_storage_corpse_short',
     'ui.unit_day_short','ui.unit_hour_short','ui.unit_minute_short')) {
-    foreach ($name in @('EN','RU','DE','PL','ZH','ES','PTBR','FR','JA','KO','TR','TPL')) {
+    foreach ($name in $internationalMaps.Keys) {
         if (-not $internationalMaps[$name].ContainsKey($key)) {
             throw "international compact UI key missing: $name / $key"
         }
     }
 }
 
-$internationalSourcePath = Join-Path $sourceDir 'ModMain.LocalizationInternational.cs'
-if (-not (Test-Path -LiteralPath $internationalSourcePath -PathType Leaf)) {
-    throw 'international localization presentation owner missing.'
-}
-$internationalSource = Read-Utf8Strict -Path $internationalSourcePath
-if ((Get-Content -LiteralPath $internationalSourcePath).Count -gt 250) {
-    throw 'international localization presentation owner exceeded 250 lines.'
-}
-foreach ($token in @(
-    'GetUiLanguageOptions()','SetUiLanguagePreference(','GetUiLanguageSignature()','IsUiRussianLanguage()',
-    'IsGermanLanguage()','IsPolishLanguage()','IsSimplifiedChineseLanguage()','IsCjkLanguage()',
-    'GetUiNumberCulture()','GetUiPercentSuffix()','GetLanguageAwareWrapFallback(',
-    'FormatCompactUiDurationFallback(','ContainsHanScript(','ContainsKanaScript(','ContainsHangulScript(')) {
-    if ($internationalSource.IndexOf($token,[StringComparison]::Ordinal) -lt 0) {
-        throw "international localization presentation contract missing: $token"
-    }
-}
-
+# Language selection, aliases, cultures, file precedence and cache/font lifetimes
+# are executed by the production-component suite below, independent of source spelling.
 $lootModifierInternational = Read-Utf8Strict -Path (Join-Path $sourceDir 'ModMain.LootModifiers.cs')
 $scavengerTimingInternational = Read-Utf8Strict -Path (Join-Path $sourceDir 'ModMain.ScavengerMissionTiming.cs')
 $tradeTimingInternational = Read-Utf8Strict -Path (Join-Path $sourceDir 'ModMain.TradeMissionStatus.cs')
@@ -160,22 +141,10 @@ foreach ($forbidden in @('IsRussian() ? "Т" : "B"','IsRussian() ? "К/Т" : "C/
 
 
 foreach ($selectorKey in @('mcm.header.language','mcm.language','mcm.language_tip')) {
-    foreach ($name in @('EN','RU','DE','PL','ZH','ES','PTBR','FR','JA','KO','TR','TPL')) {
+    foreach ($name in $internationalMaps.Keys) {
         if (-not $internationalMaps[$name].ContainsKey($selectorKey)) {
             throw "language-selector localization key missing: $name / $selectorKey"
         }
-    }
-}
-
-$configurationInternational = Read-Utf8Strict -Path (Join-Path $sourceDir 'ModMain.Configuration.cs')
-foreach ($token in @(
-    'UiLanguagePreference = "Auto (Game)"',
-    '"UiLanguage=" + UiLanguagePreference',
-    '"UiLanguage", UiLanguagePreference',
-    'GetUiLanguageOptions()',
-    'SetUiLanguagePreference(savedUiLanguage, "MCM")')) {
-    if ($configurationInternational.IndexOf($token,[StringComparison]::Ordinal) -lt 0) {
-        throw "language-selector configuration contract missing: $token"
     }
 }
 

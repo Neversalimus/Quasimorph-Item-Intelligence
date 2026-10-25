@@ -4,9 +4,9 @@
 
 [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3780078201) · [Downloads](https://github.com/Neversalimus/Quasimorph-Item-Intelligence/releases) · [Changelog](CHANGELOG.md)
 
-This branch contains **1.7.43.3-test2** for **Quasimorph 1.0.4.590s.969afc6**.
+This branch contains **1.7.43.3-test3** for **Quasimorph 1.0.4.590s.969afc6**.
 
-This test build completes all 11 official interface languages with Japanese, Korean and Turkish, and revises the existing translations for clearer wording and current game terminology. It includes language selection, fonts and text wrapping for the new languages. See [release notes](Release/Notes-v1.7.43.3-test2.md).
+This test build completes all 11 official interface languages with Japanese, Korean and Turkish, and revises the existing translations for clearer wording and current game terminology. It includes language selection, fonts and text wrapping for the new languages. See [release notes](Release/Notes-v1.7.43.3-test3.md).
 
 Compatibility for the new build is enabled through audited feature-owned gates. Unknown future builds continue to fail closed for exact calculations until their contracts are reviewed.
 
@@ -73,6 +73,27 @@ Run the source contracts and behavior tests without game files:
 ```powershell
 pwsh -NoProfile -File .\BUILD_AND_STAGE.ps1 -Mode TEST -ContractsOnly
 ```
+
+Language metadata lives in `Source/LanguageCatalog.cs`. The UI selector, loader, number formatting and build tools use this registry. `UiLocalization`, `GameLocalization` and `UiFontResolver` own their caches; the game hooks explicitly reset them on returning to the menu and on exit. Optional reflection probes remain quiet; required reads report missing members or getter failures once per schema member, with a 32-entry session limit.
+
+Run the localization regression sensitivity checks:
+
+```powershell
+pwsh -NoProfile -File .\Tests\Run-LocalizationMutationTests.ps1
+```
+
+This introduces six deliberate bugs in disposable copies and requires the behavior tests to reject them. Ordinary builds also check translations, placeholders and language switching. They do not require Python or game assets.
+
+To check glyph coverage against your installed game's actual language enum and TMP font presets, use Python 3.12 and the pinned audit dependencies (validated with Quasimorph **1.0.4.590s.969afc6**):
+
+```powershell
+python -m venv .venv-fonts
+.\.venv-fonts\Scripts\python.exe -m pip install -r .\Tests\font-coverage-requirements.txt
+.\.venv-fonts\Scripts\python.exe -m unittest discover -s Tests -p test_font_coverage.py
+pwsh -NoProfile -File .\Tests\Run-FontCoverage.ps1 -GameRoot "C:\Program Files (x86)\Steam\steamapps\common\Quasimorph" -Python .\.venv-fonts\Scripts\python.exe
+```
+
+The command reads local game assets and writes `_build/font-coverage.json`, including the game-assembly hash, dependency versions, translation hashes and missing characters with their source keys. It does not export game assets. Missing font presets or unsupported game-language metadata fail the audit; dynamic fonts are checked conservatively against existing atlas glyphs. For a stable release, also check the browser, tooltips and MCM in game, especially Japanese, Korean and mixed UI/game language combinations.
 
 Maintainers can use the [release workflow](Release/README.md) to prepare and publish a new version.
 

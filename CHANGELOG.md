@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.7.43.3-test3 — 2026-10-25
+
+- Separate UI translations, game-name caches and private font ownership from the shared mod state, with explicit session cleanup.
+- Use one registry for official languages, settings aliases, file names and number cultures.
+- Refresh direct native translation lookups when the game language changes.
+- Diagnose missing required data members and failed getters with bounded, deduplicated messages.
+- Replace selected source-text gates with production behavior tests; parse retired declarations and keep heuristic reference counts advisory.
+- Add a reproducible local-game glyph audit and regression-sensitivity tests. All 11 shipped languages pass the game-font check.
+
 ## v1.7.43.3-test2 — 2026-10-25
 
 - Recover the selected UI and game-name fonts when their presets load after the inspector fallback.

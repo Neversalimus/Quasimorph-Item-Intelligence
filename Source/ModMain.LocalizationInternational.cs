@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,82 +9,32 @@ namespace ItemIntelligence
     {
         private static List<string> GetUiLanguageOptions()
         {
-            return new List<string>
-            {
-                "Auto (Game)",
-                "English",
-                "Русский",
-                "Deutsch",
-                "Polski",
-                "简体中文 / Chinese", // Latin suffix remains readable in an MCM font without Han glyphs.
-                "Español",
-                "Português (Brasil)",
-                "Français",
-                "日本語 / Japanese", // Keep a Latin label for MCM fonts without CJK glyphs.
-                "한국어 / Korean",
-                "Türkçe"
-            };
+            var options = new List<string> { LanguageCatalog.Auto };
+            foreach (UiLanguage language in LanguageCatalog.All) options.Add(language.Label);
+            return options;
         }
 
         private static string NormalizeUiLanguagePreference(string value)
         {
-            string token = NormalizeModLanguageToken(value);
-            if (string.IsNullOrEmpty(token) || token == "auto" || token == "autogame" ||
-                token == "game" || token == "default")
-                return "Auto (Game)";
-            if (token == "english" || token == "en" || token == "englishus" || token == "enus" || token == "engb") return "English";
-            if (token == "russian" || token == "ru" || token == "ruru" || token == "русский" || token == "рус")
-                return "Русский";
-            if (token == "german" || token == "deutsch" || token == "de" || token == "dede")
-                return "Deutsch";
-            if (token == "polish" || token == "polski" || token == "pl" || token == "plpl")
-                return "Polski";
-            if (token == "spanish" || token == "español" || token == "espanol" || token == "es" || token == "eses") return "Español";
-            if (token == "brazilianportugal" || token == "brazilianportuguese" || token == "portuguesebrazil" ||
-                token == "portuguêsbrasil" || token == "portuguesbrasil" || token == "ptbr") return "Português (Brasil)";
-            if (token == "french" || token == "français" || token == "francais" || token == "fr" || token == "frfr") return "Français";
-            if (token == "japanese" || token == "ja" || token == "jajp" || token == "日本語" || token == "日本語japanese") return "日本語 / Japanese";
-            if (token == "korean" || token == "ko" || token == "kokr" || token == "한국어" || token == "한국어korean") return "한국어 / Korean";
-            if (token == "turkish" || token == "türkçe" || token == "turkce" || token == "tr" || token == "trtr") return "Türkçe";
-            if (token == "chinesesimp" || token == "chinesesimplified" || token == "simplifiedchinese" ||
-                token == "schinese" || token == "zhcn" || token == "zhhans" ||
-                token == "简体中文" || token == "简体中文chinese")
-                return "简体中文 / Chinese";
-            return "Auto (Game)";
+            UiLanguage language = LanguageCatalog.Find(value);
+            return language == null ? LanguageCatalog.Auto : language.Label;
         }
 
         private static void SetUiLanguagePreference(string value, string source)
         {
             string normalized = NormalizeUiLanguagePreference(value);
-            if (string.Equals(normalized, UiLanguagePreference, StringComparison.Ordinal))
-                return;
-
+            if (string.Equals(normalized, UiLanguagePreference, StringComparison.Ordinal)) return;
             UiLanguagePreference = normalized;
-            _externalUiTranslationLanguage = string.Empty;
-            _externalUiTranslationFile = string.Empty;
-            ExternalUiTranslations.Clear();
-            ResolvedUiTextCache.Clear();
-            MissingUiTranslationKeys.Clear();
-            ResetLocalizationHealthForReload();
+            UiText.Reset();
             VerboseLog("[ItemIntelligence] UI language preference: " + normalized +
                 " (" + (source ?? "unknown") + ").");
         }
 
         private static string GetUiLanguageSignature()
         {
-            string preference = UiLanguagePreference;
-            if (string.Equals(preference, "English", StringComparison.Ordinal)) return "English";
-            if (string.Equals(preference, "Русский", StringComparison.Ordinal)) return "Russian";
-            if (string.Equals(preference, "Deutsch", StringComparison.Ordinal)) return "German";
-            if (string.Equals(preference, "Polski", StringComparison.Ordinal)) return "Polish";
-            if (string.Equals(preference, "Español", StringComparison.Ordinal)) return "Spanish";
-            if (string.Equals(preference, "Português (Brasil)", StringComparison.Ordinal)) return "BrazilianPortugal";
-            if (string.Equals(preference, "Français", StringComparison.Ordinal)) return "French";
-            if (string.Equals(preference, "简体中文 / Chinese", StringComparison.Ordinal)) return "ChineseSimplified";
-            if (string.Equals(preference, "日本語 / Japanese", StringComparison.Ordinal)) return "Japanese";
-            if (string.Equals(preference, "한국어 / Korean", StringComparison.Ordinal)) return "Korean";
-            if (string.Equals(preference, "Türkçe", StringComparison.Ordinal)) return "Turkish";
-            return GetLanguageSignature();
+            if (UiLanguagePreference == LanguageCatalog.Auto) return GetLanguageSignature();
+            UiLanguage language = LanguageCatalog.Find(UiLanguagePreference);
+            return language == null ? GetLanguageSignature() : language.Signature;
         }
 
         private static object GetLocalizationOwnerInstance(Type owner)
@@ -102,76 +52,24 @@ namespace ItemIntelligence
             return null;
         }
 
-        private static bool IsUiRussianLanguage()
-        {
-            return ExternalLanguageMatches(GetUiLanguageSignature(), "Russian;ru;Русский;рус");
-        }
-
-        private static bool IsGermanLanguage()
-        {
-            return ExternalLanguageMatches(GetUiLanguageSignature(), "German;german;Deutsch;de;de-DE");
-        }
-
-        private static bool IsPolishLanguage()
-        {
-            return ExternalLanguageMatches(GetUiLanguageSignature(), "Polish;polish;Polski;pl;pl-PL");
-        }
-
-        private static bool IsSimplifiedChineseLanguage()
-        {
-            return ExternalLanguageMatches(
-                GetUiLanguageSignature(),
-                "ChineseSimp;ChineseSimplified;SimplifiedChinese;schinese;zhcn;zh-CN;zh-Hans;简体中文;Chinese (Simplified);Simplified Chinese");
-        }
-
-        private static bool IsCjkLanguage()
-        {
-            string language = GetUiLanguageSignature();
-            return ExternalLanguageMatches(
-                language,
-                "ChineseSimp;ChineseSimplified;SimplifiedChinese;schinese;zhcn;zh-CN;zh-Hans;简体中文;Chinese (Simplified);Simplified Chinese;" +
-                "Japanese;japanese;ja;ja-JP;日本語;Korean;korean;ko;ko-KR;한국어");
-        }
-
-        private static string _uiNumberLanguage = string.Empty;
-        private static CultureInfo _uiNumberCulture = CultureInfo.InvariantCulture;
         private static CultureInfo GetUiNumberCulture()
         {
-            string language = GetUiLanguageSignature();
-            if (_uiNumberLanguage == language) return _uiNumberCulture;
-            _uiNumberLanguage = language;
-            string preference = NormalizeUiLanguagePreference(language);
-            _uiNumberCulture = IsUiRussianLanguage() ? CultureInfo.GetCultureInfo("ru-RU") :
-                IsGermanLanguage() ? CultureInfo.GetCultureInfo("de-DE") :
-                IsPolishLanguage() ? CultureInfo.GetCultureInfo("pl-PL") :
-                preference == "Español" ? CultureInfo.GetCultureInfo("es-ES") :
-                preference == "Português (Brasil)" ? CultureInfo.GetCultureInfo("pt-BR") :
-                preference == "Français" ? CultureInfo.GetCultureInfo("fr-FR") :
-                preference == "日本語 / Japanese" ? CultureInfo.GetCultureInfo("ja-JP") :
-                preference == "한국어 / Korean" ? CultureInfo.GetCultureInfo("ko-KR") :
-                preference == "Türkçe" ? CultureInfo.GetCultureInfo("tr-TR") :
-                IsSimplifiedChineseLanguage() ? CultureInfo.GetCultureInfo("zh-CN") : CultureInfo.InvariantCulture;
-            return _uiNumberCulture;
+            UiLanguage language = LanguageCatalog.Find(GetUiLanguageSignature());
+            return language == null ? CultureInfo.InvariantCulture : language.Culture;
         }
 
         private static string GetUiPercentSuffix()
         {
-            string culture = GetUiNumberCulture().Name;
-            return culture == "ru-RU" || culture == "de-DE" || culture == "pl-PL" || culture == "es-ES" || culture == "fr-FR" ? " %" : "%";
+            UiLanguage language = LanguageCatalog.Find(GetUiLanguageSignature());
+            return language != null && language.SpaceBeforePercent ? " %" : "%";
         }
 
-        private static int GetLanguageAwareWrapFallback(
-            int russianFallbackChars,
-            int englishFallbackChars)
+        private static int GetLanguageAwareWrapFallback(int russianFallbackChars, int englishFallbackChars)
         {
-            if (IsCjkLanguage())
-                return Math.Max(36, (int)Math.Floor(englishFallbackChars * 0.62));
-
-            string culture = GetUiNumberCulture().Name;
-            if (IsUiRussianLanguage() || IsGermanLanguage() || IsPolishLanguage() || culture == "es-ES" || culture == "pt-BR" || culture == "fr-FR" || culture == "tr-TR")
-                return Math.Min(russianFallbackChars, englishFallbackChars);
-
-            return englishFallbackChars;
+            UiLanguage language = LanguageCatalog.Find(GetUiLanguageSignature());
+            if (language == null || language.Id == "EN") return englishFallbackChars;
+            return language.Cjk ? Math.Max(36, (int)Math.Floor(englishFallbackChars * 0.62)) :
+                Math.Min(russianFallbackChars, englishFallbackChars);
         }
 
         private static string FormatCompactUiDurationFallback(double hours)

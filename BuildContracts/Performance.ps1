@@ -54,14 +54,12 @@ if ($baronHabitatText.IndexOf('EnumerateData(values)',[StringComparison]::Ordina
 $uiDirtyPath = Join-Path $sourceDir 'ModMain.BrowserUiDirtySuppression.cs'
 if (-not (Test-Path -LiteralPath $uiDirtyPath -PathType Leaf)) { throw 'current UI dirty-suppression owner missing.' }
 $uiDirtyText = [IO.File]::ReadAllText($uiDirtyPath)
-$localizationText = [IO.File]::ReadAllText((Join-Path $sourceDir 'ModMain.Localization.cs'))
 $hardeningText = [IO.File]::ReadAllText((Join-Path $sourceDir 'ModMain.Hardening.cs'))
 foreach ($token in @('SetBrowserActiveIfChanged','SetBrowserTextIfChanged','SetBrowserRectPositionIfChanged','SetBrowserRectSizeIfChanged','SetBrowserFontSizeIfChanged')) {
     if ($uiDirtyText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "current UI dirty-suppression gate missing: $token" }
 }
-foreach ($token in @('LocalizedItemDisplayCache','LocalizedMagnumPerkDisplayCache','EnsureLocalizationCacheLanguage();','|item|','|magnum|')) {
-    if ($localizationText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "current localization hot-cache gate missing: $token" }
-}
+# Production localization tests count backend calls over repeated lookups, change
+# the game language, and reset the session; cache field spelling is not a contract.
 foreach ($token in @('ItemDisplayCache','MagnumDisplayCache')) {
     if ($hardeningText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "current memory-hygiene cache gate missing: $token" }
 }

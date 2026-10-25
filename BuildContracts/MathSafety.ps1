@@ -41,14 +41,8 @@ foreach ($token in @(
         throw "Numeric fail-closed guard missing: $token"
     }
 }
-# Container save estimates must be visually unambiguous: a range separator is
-# typographic, never a minus-sign-like ASCII hyphen, and RU decimal output uses commas.
-foreach ($token in @('"~ " + maxText + percentSuffix','"~ " + minText + "–" + maxText + percentSuffix',
-    'string percentSuffix = GetUiPercentSuffix();','CultureInfo culture = GetUiNumberCulture();')) {
-    if ($containerMathText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) {
-        throw "Container estimate presentation contract missing: $token"
-    }
-}
+# Estimate formatting is checked through actual results in Run-LocalizationTests:
+# localized decimals, range separators, approximation disclosure and invalid values.
 
 foreach ($token in @(
     '1.0 - Math.Pow(1.0 - basePerRoll, baseRolls)',

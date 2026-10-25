@@ -4,6 +4,9 @@ obj/
 [Bb]uild/
 [Ss]tage/
 /_stage/
+/_build/
+/.venv-fonts/
+__pycache__/
 *.dll
 *.pdb
 *.mdb

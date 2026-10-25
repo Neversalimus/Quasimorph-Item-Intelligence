@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -19,11 +19,6 @@ namespace ItemIntelligence
         private static string _compatibilityVerdict = "UNKNOWN";
         private static int _diagnosticsHotkeyLastFrame = -1000;
         private static int _diagnosticsHotkeyConsumedFrame = -1000;
-
-        private static readonly List<string> LocalizationHealthDuplicateKeys = new List<string>();
-        private static readonly List<string> LocalizationHealthMalformedLines = new List<string>();
-        private static readonly List<string> LocalizationHealthUtf8Failures = new List<string>();
-        private static bool _localizationHealthDirty = true;
 
         private static string DiagnosticsReportPath
         {
@@ -261,19 +256,23 @@ namespace ItemIntelligence
                 lines.Add("CatalogFavorites=" + BrowserFavoriteItemIds.Count.ToString(CultureInfo.InvariantCulture));
                 lines.Add("CatalogRecent=" + BrowserRecentItemIds.Count.ToString(CultureInfo.InvariantCulture));
                 lines.Add("BrowserBackDepth=" + BrowserNavigation.History.Count.ToString(CultureInfo.InvariantCulture));
-                lines.Add("GameLanguage=" + (_externalUiTranslationLanguage ?? string.Empty));
-                lines.Add("LocalizationFile=" + (_externalUiTranslationFile ?? string.Empty));
-                lines.Add("LocalizationEnglishKeys=" + EnglishUiFallback.Count.ToString(CultureInfo.InvariantCulture));
-                lines.Add("LocalizationActiveKeys=" + ExternalUiTranslations.Count.ToString(CultureInfo.InvariantCulture));
-                lines.Add("LocalizationMissingKeys=" + MissingUiTranslationKeys.Count.ToString(CultureInfo.InvariantCulture));
-                lines.Add("LocalizationDuplicateKeys=" + LocalizationHealthDuplicateKeys.Count.ToString(CultureInfo.InvariantCulture));
-                lines.Add("LocalizationMalformedLines=" + LocalizationHealthMalformedLines.Count.ToString(CultureInfo.InvariantCulture));
-                lines.Add("LocalizationUtf8Failures=" + LocalizationHealthUtf8Failures.Count.ToString(CultureInfo.InvariantCulture));
+                lines.Add("GameLanguage=" + (UiText.Language ?? string.Empty));
+                lines.Add("LocalizationFile=" + (UiText.FileName ?? string.Empty));
+                lines.Add("LocalizationEnglishKeys=" + UiText.EnglishCount.ToString(CultureInfo.InvariantCulture));
+                lines.Add("LocalizationActiveKeys=" + UiText.ActiveCount.ToString(CultureInfo.InvariantCulture));
+                lines.Add("LocalizationMissingKeys=" + UiText.MissingCount.ToString(CultureInfo.InvariantCulture));
+                lines.Add("LocalizationDuplicateKeys=" + UiText.Duplicates.Count.ToString(CultureInfo.InvariantCulture));
+                lines.Add("LocalizationMalformedLines=" + UiText.MalformedLines.Count.ToString(CultureInfo.InvariantCulture));
+                lines.Add("LocalizationUtf8Failures=" + UiText.Utf8Failures.Count.ToString(CultureInfo.InvariantCulture));
+                lines.Add("");
+                lines.Add("[RequiredData]");
+                lines.Add("DistinctFailures=" + RequiredData.DistinctFailures.ToString(CultureInfo.InvariantCulture));
+                lines.Add("LimitReached=" + RequiredData.LimitReached);
                 lines.Add("");
                 lines.Add("[MemoryHygiene]");
                 lines.Add("ManagedBytesApprox=" + GC.GetTotalMemory(false).ToString(CultureInfo.InvariantCulture));
-                lines.Add("LocalizationCache=" + LocalizationCache.Count.ToString(CultureInfo.InvariantCulture));
-                lines.Add("ResolvedUiTextCache=" + ResolvedUiTextCache.Count.ToString(CultureInfo.InvariantCulture));
+                lines.Add("LocalizationCache=" + GameText.KeyCount.ToString(CultureInfo.InvariantCulture));
+                lines.Add("ResolvedUiTextCache=" + UiText.ResolvedCount.ToString(CultureInfo.InvariantCulture));
                 lines.Add("SuppressedRaycasters=" + SuppressedRaycasters.Count.ToString(CultureInfo.InvariantCulture));
                 lines.Add("");
                 lines.Add("ManualExportHotkey=Ctrl+Shift+F10");
@@ -327,14 +326,15 @@ namespace ItemIntelligence
                     "Count=" + KnownItemIds.Count.ToString(CultureInfo.InvariantCulture));
                 AddSelfTest(lines, "ItemRecords", ItemRecordsById.Count > 0, ref failures,
                     "Count=" + ItemRecordsById.Count.ToString(CultureInfo.InvariantCulture));
-                AddSelfTest(lines, "LocalizationEnglishFallback", EnglishUiFallback.Count > 0 || !_externalUiEnglishLoaded,
-                    ref failures, "Keys=" + EnglishUiFallback.Count.ToString(CultureInfo.InvariantCulture));
-                AddSelfTest(lines, "LocalizationUTF8", LocalizationHealthUtf8Failures.Count == 0, ref failures,
-                    "Failures=" + LocalizationHealthUtf8Failures.Count.ToString(CultureInfo.InvariantCulture));
-                AddSelfTest(lines, "LocalizationDuplicateKeys", LocalizationHealthDuplicateKeys.Count == 0, ref failures,
-                    "Duplicates=" + LocalizationHealthDuplicateKeys.Count.ToString(CultureInfo.InvariantCulture));
-                AddSelfTest(lines, "LocalizationMalformedLines", LocalizationHealthMalformedLines.Count == 0, ref failures,
-                    "Malformed=" + LocalizationHealthMalformedLines.Count.ToString(CultureInfo.InvariantCulture));
+                EnsureExternalUiTranslations();
+                AddSelfTest(lines, "LocalizationEnglishFallback", UiText.EnglishCount > 0,
+                    ref failures, "Keys=" + UiText.EnglishCount.ToString(CultureInfo.InvariantCulture));
+                AddSelfTest(lines, "LocalizationUTF8", UiText.Utf8Failures.Count == 0, ref failures,
+                    "Failures=" + UiText.Utf8Failures.Count.ToString(CultureInfo.InvariantCulture));
+                AddSelfTest(lines, "LocalizationDuplicateKeys", UiText.Duplicates.Count == 0, ref failures,
+                    "Duplicates=" + UiText.Duplicates.Count.ToString(CultureInfo.InvariantCulture));
+                AddSelfTest(lines, "LocalizationMalformedLines", UiText.MalformedLines.Count == 0, ref failures,
+                    "Malformed=" + UiText.MalformedLines.Count.ToString(CultureInfo.InvariantCulture));
 
                 lines.Add("");
                 lines.Add("ModuleStatus=" + (_compatibilityVerdict ?? string.Empty));
@@ -364,18 +364,15 @@ namespace ItemIntelligence
         {
             try
             {
-                int localizationBefore = LocalizationCache.Count;
-                int itemDisplayBefore = LocalizedItemDisplayCache.Count;
-                int perkDisplayBefore = LocalizedMagnumPerkDisplayCache.Count;
-                int resolvedBefore = ResolvedUiTextCache.Count;
+                int localizationBefore = GameText.KeyCount;
+                int itemDisplayBefore = GameText.ItemCount;
+                int perkDisplayBefore = GameText.PerkCount;
+                int resolvedBefore = UiText.ResolvedCount;
 
                 // Only transient string/result caches are cleared. Reflection metadata is
                 // intentionally retained because it is immutable and expensive to rediscover.
-                LocalizationCache.Clear();
-                LocalizedItemDisplayCache.Clear();
-                LocalizedMagnumPerkDisplayCache.Clear();
-                ResolvedUiTextCache.Clear();
-                MissingUiTranslationKeys.Clear();
+                GameText.ClearResults();
+                UiText.ClearResolvedCache();
                 BrowserLines.Clear();
 
                 VerboseLog("[ItemIntelligence] Memory hygiene " + (reason ?? string.Empty) +
@@ -390,77 +387,12 @@ namespace ItemIntelligence
             }
         }
 
-        private static string[] ReadUtf8LinesStrict(string path)
-        {
-            if (string.IsNullOrEmpty(path) || !File.Exists(path)) return new string[0];
-            try
-            {
-                UTF8Encoding strict = new UTF8Encoding(false, true);
-                string text = File.ReadAllText(path, strict);
-                text = text.Replace("\r\n", "\n").Replace('\r', '\n');
-                return text.Split(new char[] { '\n' });
-            }
-            catch (DecoderFallbackException ex)
-            {
-                RecordLocalizationUtf8Failure(path, ex.Message);
-                throw;
-            }
-        }
-
-        private static void ResetLocalizationHealthForReload()
-        {
-            LocalizationHealthDuplicateKeys.Clear();
-            LocalizationHealthMalformedLines.Clear();
-            LocalizationHealthUtf8Failures.Clear();
-            _localizationHealthDirty = true;
-        }
-
-        private static void RecordLocalizationDuplicateKey(string path, string key)
-        {
-            string value = Path.GetFileName(path ?? string.Empty) + ":" + (key ?? string.Empty);
-            if (!LocalizationHealthDuplicateKeys.Contains(value))
-                LocalizationHealthDuplicateKeys.Add(value);
-            _localizationHealthDirty = true;
-            Debug.LogWarning("[ItemIntelligence] Localization duplicate key: " + value);
-        }
-
-        private static void RecordLocalizationMalformedLine(string path, int line)
-        {
-            string value = Path.GetFileName(path ?? string.Empty) + ":line " + line.ToString(CultureInfo.InvariantCulture);
-            if (!LocalizationHealthMalformedLines.Contains(value))
-                LocalizationHealthMalformedLines.Add(value);
-            _localizationHealthDirty = true;
-            Debug.LogWarning("[ItemIntelligence] Localization malformed line: " + value);
-        }
-
-        private static void RecordLocalizationUtf8Failure(string path, string detail)
-        {
-            string value = Path.GetFileName(path ?? string.Empty) + ":" + (detail ?? "invalid UTF-8");
-            if (!LocalizationHealthUtf8Failures.Contains(value))
-                LocalizationHealthUtf8Failures.Add(value);
-            _localizationHealthDirty = true;
-            Debug.LogWarning("[ItemIntelligence] Localization file is not valid UTF-8: " + value);
-        }
-
-        private static void MarkLocalizationHealthDirty()
-        {
-            _localizationHealthDirty = true;
-        }
-
-        private static bool HasLocalizationHealthProblems()
-        {
-            return MissingUiTranslationKeys.Count > 0 ||
-                LocalizationHealthDuplicateKeys.Count > 0 ||
-                LocalizationHealthMalformedLines.Count > 0 ||
-                LocalizationHealthUtf8Failures.Count > 0;
-        }
-
         private static void WriteLocalizationHealthReportSafe(bool force)
         {
-            if (!_localizationHealthDirty && !force) return;
-            if (!force && !ModderMode && !HasLocalizationHealthProblems())
+            if (!UiText.HealthDirty && !force) return;
+            if (!force && !ModderMode && !UiText.HasLocalizationHealthProblems())
             {
-                _localizationHealthDirty = false;
+                UiText.AcknowledgeHealth();
                 return;
             }
             try
@@ -469,23 +401,23 @@ namespace ItemIntelligence
                 List<string> lines = new List<string>();
                 lines.Add("Item Intelligence Localization Health");
                 lines.Add("ModVersion=" + Version);
-                lines.Add("GameLanguage=" + (_externalUiTranslationLanguage ?? string.Empty));
-                lines.Add("ActiveFile=" + (_externalUiTranslationFile ?? string.Empty));
-                lines.Add("EnglishFallbackKeys=" + EnglishUiFallback.Count.ToString(CultureInfo.InvariantCulture));
-                lines.Add("ActiveKeys=" + ExternalUiTranslations.Count.ToString(CultureInfo.InvariantCulture));
-                lines.Add("MissingKeys=" + MissingUiTranslationKeys.Count.ToString(CultureInfo.InvariantCulture));
-                lines.Add("DuplicateKeys=" + LocalizationHealthDuplicateKeys.Count.ToString(CultureInfo.InvariantCulture));
-                lines.Add("MalformedLines=" + LocalizationHealthMalformedLines.Count.ToString(CultureInfo.InvariantCulture));
-                lines.Add("Utf8Failures=" + LocalizationHealthUtf8Failures.Count.ToString(CultureInfo.InvariantCulture));
+                lines.Add("GameLanguage=" + (UiText.Language ?? string.Empty));
+                lines.Add("ActiveFile=" + (UiText.FileName ?? string.Empty));
+                lines.Add("EnglishFallbackKeys=" + UiText.EnglishCount.ToString(CultureInfo.InvariantCulture));
+                lines.Add("ActiveKeys=" + UiText.ActiveCount.ToString(CultureInfo.InvariantCulture));
+                lines.Add("MissingKeys=" + UiText.MissingCount.ToString(CultureInfo.InvariantCulture));
+                lines.Add("DuplicateKeys=" + UiText.Duplicates.Count.ToString(CultureInfo.InvariantCulture));
+                lines.Add("MalformedLines=" + UiText.MalformedLines.Count.ToString(CultureInfo.InvariantCulture));
+                lines.Add("Utf8Failures=" + UiText.Utf8Failures.Count.ToString(CultureInfo.InvariantCulture));
                 lines.Add("");
 
-                AppendHealthSection(lines, "Missing", MissingUiTranslationKeys);
-                AppendHealthSection(lines, "Duplicates", LocalizationHealthDuplicateKeys);
-                AppendHealthSection(lines, "Malformed", LocalizationHealthMalformedLines);
-                AppendHealthSection(lines, "UTF8", LocalizationHealthUtf8Failures);
+                AppendHealthSection(lines, "Missing", UiText.MissingKeys);
+                AppendHealthSection(lines, "Duplicates", UiText.Duplicates);
+                AppendHealthSection(lines, "Malformed", UiText.MalformedLines);
+                AppendHealthSection(lines, "UTF8", UiText.Utf8Failures);
 
                 File.WriteAllLines(LocalizationHealthReportPath, lines.ToArray(), Encoding.UTF8);
-                _localizationHealthDirty = false;
+                UiText.AcknowledgeHealth();
             }
             catch (Exception ex)
             {

@@ -26,14 +26,12 @@ function Read-Members([string]$file, [string]$kind, [string[]]$names) {
 }
 $members = @(
     Read-Members 'ModMain.Localization.cs' 'VariableDeclaratorSyntax' @(
-        'ExternalUiTranslations','EnglishUiFallback','MissingUiTranslationKeys','ResolvedUiTextCache',
-        '_externalUiTranslationLanguage','_externalUiTranslationFile','_externalUiEnglishLoaded',
-        '_cachedGameLanguageSignature','_cachedGameLanguageFrame','GameLanguageRefreshFrames',
+        'UiText','GameText',
         '_localizationManagerType','_localizationManagerTypeResolved')
     Read-Members 'ModMain.Localization.cs' 'MethodDeclarationSyntax' @(
-        'NormalizeModLanguageToken','ExternalLanguageMatches','LanguageAliasMatches','ReadLanguageFromOwner',
+        'ExternalLanguageMatches','ReadLanguageFromOwner',
         'ResolveLocalizationManagerType','ResolveLanguageSignatureUncached','GetLanguageSignature',
-        'ProbeVanillaLanguage','LoadUiLanguageFile','ReadUiLanguageDeclaration','ReadUiForceDeclaration',
+        'ProbeVanillaLanguage',
         'EnsureExternalUiTranslations','Ui','IsEnglishLanguageToken','IsEnglishLanguage')
     Read-Members 'ModMain.DataAccess.cs' 'VariableDeclaratorSyntax' @(
         'InstanceFlags','StaticFlags','InstanceMemberLookupCache','StaticMemberLookupCache')
@@ -44,20 +42,19 @@ $members = @(
     Read-Members 'ModMain.Runtime.cs' 'ClassDeclarationSyntax' @('LiveMarketEntry')
     Read-Members 'ModMain.Configuration.cs' 'VariableDeclaratorSyntax' @('UiLanguagePreference')
     Read-Members 'ModMain.Configuration.cs' 'MethodDeclarationSyntax' @('TryReadMcmString','AddMcmStringDropdown')
-    Read-Members 'ModMain.Hardening.cs' 'MethodDeclarationSyntax' @('ReadUtf8LinesStrict')
-    Read-Members 'ModMain.LootContainerChanceMath.cs' 'MethodDeclarationSyntax' @('FormatContainerEstimateNumber')
+    Read-Members 'ModMain.LootContainerChanceMath.cs' 'MethodDeclarationSyntax' @('FormatContainerEstimateNumber','FormatContainerEstimateRange')
     Read-Members 'ModMain.LootModifiers.cs' 'MethodDeclarationSyntax' @('FormatExpectedNumber')
     Read-Members 'ModMain.WeaponModeLocalization.cs' 'MethodDeclarationSyntax' @('IsWeaponModeLabelCompatibleWithCurrentLanguage')
-    Read-Members 'ModMain.LocalizationFonts.cs' 'VariableDeclaratorSyntax' @('UiMixedFonts','_uiFontSignature','_uiResolvedFont','_uiFontRetryFrame','_uiFontReady')
+    Read-Members 'ModMain.LocalizationFonts.cs' 'VariableDeclaratorSyntax' @('UiFonts')
     Read-Members 'ModMain.LocalizationFonts.cs' 'MethodDeclarationSyntax' @('FindGameLanguageFont','ResolveUiFont')
 ) -join "`n"
-$whole = foreach ($file in @('LocalizationInternational','LocalizationTextLayout','LocalizationTiming')) {
-    $text = [IO.File]::ReadAllText((Join-Path $SourceRoot ('Source/ModMain.' + $file + '.cs')))
+$whole = foreach ($file in @('ModMain.LocalizationInternational','ModMain.LocalizationTextLayout','ModMain.LocalizationTiming','LanguageCatalog','GameLocalization','UiLocalization','UiFontResolver','RequiredDataReader','ModMain.RequiredData')) {
+    $text = [IO.File]::ReadAllText((Join-Path $SourceRoot ('Source/' + $file + '.cs')))
     $tree = [Microsoft.CodeAnalysis.CSharp.CSharpSyntaxTree]::ParseText($text)
     $tree.GetRoot().Members | ForEach-Object { $_.ToFullString() }
 }
 $cases = [IO.File]::ReadAllText((Join-Path $PSScriptRoot 'LocalizationCases.cs'))
-$code = "using System; using System.IO; using System.Text; using System.Reflection; using System.Globalization; using System.Collections; using System.Collections.Generic; using TMPro; using UnityEngine; using HarmonyLib;`n" +
+$code = "using System; using System.IO; using System.Text; using System.Reflection; using System.Globalization; using System.Collections; using System.Collections.Generic; using System.Collections.ObjectModel; using TMPro; using UnityEngine; using HarmonyLib;`n" +
     ($whole -join "`n") + "`nnamespace ItemIntelligence { public static partial class ModMain {`n" + $members + "`n} }`n" + $cases
 # Keep emitted assembly next to real language files so production path discovery and
 # selection run unchanged. Every test run gets a fresh assembly identity and directory.

@@ -21,7 +21,7 @@ namespace ItemIntelligence
     /// </summary>
     public static partial class ModMain
     {
-        public const string Version = "1.7.43.3-test2";
+        public const string Version = "1.7.43.3-test3";
         // Ordinary Item Intelligence remains a read-only knowledge browser. The only
         // save-affecting exception is one explicit item-spawn click inside MCM Modder Mode;
         // economy, story variables and faction progression are never mutated.
@@ -55,7 +55,7 @@ namespace ItemIntelligence
         {
             if (context != null) _modContext = context;
             EnsureConfigLoaded();
-            Debug.Log("[ItemIntelligence] ACTIVE VERSION " + Version + " (OfficialLanguagesTest2).");
+            Debug.Log("[ItemIntelligence] ACTIVE VERSION " + Version + " (OfficialLanguagesTest3).");
             Debug.Log("[ItemIntelligence] Logging mode: " + (VerboseLogging ? "VERBOSE" : "NORMAL") +
                 (VerboseLogging ? "." : " (enable Verbose logging in MCM for detailed diagnostics)."));
             RunCompatibilityShieldStatic();
@@ -145,6 +145,8 @@ namespace ItemIntelligence
             // destroyed game objects. This only changes QII-owned state.
             _applicationQuitting = true;
             StopFeatureFrameWorkForApplicationQuit();
+            ResetUiFontSession();
+            ResetLocalizationSession();
         }
 
 
@@ -2024,6 +2026,9 @@ namespace ItemIntelligence
             ResetMagnumRuntimeSessionState();
             ResetStarmapRuntimeSessionState();
             ResetBrowserMenuSessionState();
+            RequiredData.Reset();
+            ResetLocalizationSession();
+            ResetUiFontSession();
         }
 
         private static void SuppressVanillaGraphicRaycasters()
@@ -2603,7 +2608,7 @@ namespace ItemIntelligence
         {
             if (!IsRussian() || string.IsNullOrEmpty(mobClassId)) return string.Empty;
 
-            string cacheKey = (_localizationCacheLanguage ?? string.Empty) + "|exact-russian-mob|" + mobClassId;
+            string cacheKey = GetLanguageSignature() + "|exact-russian-mob|" + mobClassId;
             string cached;
             if (LootDisplayNameCache.TryGetValue(cacheKey, out cached)) return cached;
 

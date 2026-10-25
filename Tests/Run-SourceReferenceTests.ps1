@@ -12,4 +12,16 @@ foreach ($entry in $expected) {
 }
 if ((Get-QiiIdentifierCounts '').Count -ne 0) { throw 'Empty source should have no identifiers.' }
 if ($counts.ContainsKey('0Alpha') -or $counts.ContainsKey('ЯAlpha')) { throw 'Identifier start boundary changed.' }
-Write-Host 'Production source-reference index: PASS (10 assertions; case and token boundaries).' -ForegroundColor Green
+$declarations = Get-QiiDeclaredIdentifiers @'
+class Live {
+    // void Retired() {}
+    string Message = "Retired";
+    void Alive() { var Other = "x"; }
+}
+'@
+if ($declarations.Contains('Retired')) { throw 'Comments and strings are not declarations.' }
+foreach ($name in @('Live','Message','Alive','Other')) {
+    if (-not $declarations.Contains($name)) { throw "Missing C# declaration: $name" }
+}
+if (-not (Get-QiiDeclaredIdentifiers 'class X { void Retired() {} }').Contains('Retired')) { throw 'Retired method declaration missed.' }
+Write-Host 'Production source-reference index: PASS (16 assertions; token boundaries and C# declarations).' -ForegroundColor Green

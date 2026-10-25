@@ -751,10 +751,8 @@ foreach ($locText in @($enLocalizationText,$ruLocalizationText,$templateLocaliza
         if ($locText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "current localization token missing: $token" }
     }
 }
-if ($enLocalizationText.IndexOf("loot.note.container_context_chance`t~ = chance to get the item at least once.",[StringComparison]::Ordinal) -lt 0 -or
-    $ruLocalizationText.IndexOf("loot.note.container_context_chance`t~ = шанс получить предмет хотя бы раз.",[StringComparison]::Ordinal) -lt 0) {
-    throw 'current regression: save-aware container chance disclosure missing.'
-}
+# Approximation-marker disclosure is checked for every language by the behavior
+# suite. Editorial wording may change without weakening numeric correctness.
 
 # release UX recovery contracts. MCM/faction fixes remain; its
 # auto-expanded Space Loot modifier rows are intentionally retired.

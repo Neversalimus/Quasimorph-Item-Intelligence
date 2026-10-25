@@ -2,6 +2,7 @@
 // All algorithms under test are compiled from current Source declarations by the runner.
 namespace UnityEngine
 {
+    internal static class Debug { public static void LogWarning(object value) {} }
     internal static class Mathf
     {
         public static int RoundToInt(float value)

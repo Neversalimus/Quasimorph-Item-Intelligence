@@ -29,7 +29,7 @@ namespace ItemIntelligence
                 return true;
             }
 
-            object rawSubtype = GetMember(trash, "SubType");
+            object rawSubtype = GetRequiredMember(trash, "SubType");
             int subtype;
             if (rawSubtype != null && rawSubtype.GetType().IsEnum)
                 subtype = Convert.ToInt32(rawSubtype, CultureInfo.InvariantCulture);
@@ -69,6 +69,14 @@ namespace ItemIntelligence
                     itemId, pool, techContexts, source.MaxRolls, bonusExpected, out maximum))
                 return "—";
 
+            return FormatContainerEstimateRange(minimum, maximum, modifierKnown);
+        }
+
+        private static string FormatContainerEstimateRange(double minimum, double maximum, bool modifierKnown)
+        {
+            if (double.IsNaN(minimum) || double.IsInfinity(minimum) ||
+                double.IsNaN(maximum) || double.IsInfinity(maximum) ||
+                minimum < 0 || maximum > 1 || maximum < minimum) return "—";
             string minText = FormatContainerEstimateNumber(minimum * 100.0);
             string maxText = FormatContainerEstimateNumber(maximum * 100.0);
             string percentSuffix = GetUiPercentSuffix();

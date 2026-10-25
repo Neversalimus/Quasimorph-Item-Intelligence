@@ -1,0 +1,2 @@
+UnityPy==1.25.4
+TypeTreeGeneratorAPI==0.0.10

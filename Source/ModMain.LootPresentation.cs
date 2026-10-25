@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -646,7 +646,7 @@ namespace ItemIntelligence
             if (string.IsNullOrEmpty(id))
                 return Ui("ui.container_2");
 
-            string cacheKey = (_localizationCacheLanguage ?? string.Empty) + "|container|" + id;
+            string cacheKey = GetLanguageSignature() + "|container|" + id;
             string cached;
             if (LootDisplayNameCache.TryGetValue(cacheKey, out cached)) return cached;
 
@@ -706,7 +706,7 @@ namespace ItemIntelligence
         {
             if (string.IsNullOrEmpty(id)) return string.Empty;
 
-            string cacheKey = (_localizationCacheLanguage ?? string.Empty) + "|source|" + (kind ?? string.Empty) + "|" + id;
+            string cacheKey = GetLanguageSignature() + "|source|" + (kind ?? string.Empty) + "|" + id;
             string cached;
             if (LootDisplayNameCache.TryGetValue(cacheKey, out cached)) return cached;
 

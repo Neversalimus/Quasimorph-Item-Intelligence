@@ -235,8 +235,8 @@ if ($ruLocalizationText.IndexOf('ШАНС ≥1',[StringComparison]::Ordinal) -ge
     $enLocalizationText.IndexOf('≥1 CHANCE',[StringComparison]::Ordinal) -ge 0) {
     throw 'current font-safety regression: unsupported Scavengers heading glyph returned.'
 }
-if ($runtimeText.IndexOf('public const string Version = "1.7.43.3-test2";',[StringComparison]::Ordinal) -lt 0 -or
-    $runtimeText.IndexOf('OfficialLanguagesTest2',[StringComparison]::Ordinal) -lt 0) {
+if ($runtimeText.IndexOf('public const string Version = "1.7.43.3-test3";',[StringComparison]::Ordinal) -lt 0 -or
+    $runtimeText.IndexOf('OfficialLanguagesTest3',[StringComparison]::Ordinal) -lt 0) {
     throw 'current runtime version/marker contract missing.'
 }
 
@@ -534,7 +534,7 @@ if ($allSourceTextForContainerGate.IndexOf('new LootContainerDescriptor(' + "`n"
     $allSourceTextForContainerGate.IndexOf('dropId, dropId, 0, 0, false',[StringComparison]::Ordinal) -ge 0) {
     throw 'fabricated unmapped ContainerItemDrop physical descriptor returned'
 }
-foreach ($token in @('MissionTechByStationType','mission.IsStoryMission','Math.Max(mission.MinTechLevel, victim.CurrentTechLevel)','ResolveFactionAvailabilityForCurrentSave(factionId) != 1','TryGetExactContainerItemTechLevel','TryGetExactContainerBonusEligibility','GetMember(trash, "SubType")','BonusEligibilityResolved','composite.PrimaryRecord as ItemRecord','entry.Weight <= 0.0','1.0 - Math.Pow(1.0 - basePerRoll, baseRolls)','CorpseBonusAtLeastOnceChance(bonusPerRoll, bonusExpected)','missionPointBudget=excluded.','return "—";')) {
+foreach ($token in @('MissionTechByStationType','mission.IsStoryMission','Math.Max(mission.MinTechLevel, victim.CurrentTechLevel)','ResolveFactionAvailabilityForCurrentSave(factionId) != 1','TryGetExactContainerItemTechLevel','TryGetExactContainerBonusEligibility','BonusEligibilityResolved','composite.PrimaryRecord as ItemRecord','entry.Weight <= 0.0','1.0 - Math.Pow(1.0 - basePerRoll, baseRolls)','CorpseBonusAtLeastOnceChance(bonusPerRoll, bonusExpected)','missionPointBudget=excluded.','return "—";')) {
     if ($lootContainerSaveEstimateText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "manual container save-estimate exactness contract missing: $token" }
 }
 if ($lootContainerSaveEstimateText.IndexOf('Random.Range',[StringComparison]::Ordinal) -ge 0 -or

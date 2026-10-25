@@ -24,7 +24,7 @@ namespace MGSC
             return null;
         }
     }
-    internal sealed class TrashRecord { }
+    internal sealed class TrashRecord { public object SubType { get; set; } }
     internal sealed class WeaponRecord { }
     internal sealed class HelmetRecord { }
     internal sealed class ArmorRecord { }

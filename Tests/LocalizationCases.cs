@@ -7,6 +7,8 @@ namespace UnityEngine
     public static class Debug { public static void Log(object value) {} public static void LogWarning(object value) {} }
     public class Object
     {
+        public static readonly List<TMPro.TMP_FontAsset> Destroyed = new List<TMPro.TMP_FontAsset>();
+        public static void Destroy(TMPro.TMP_FontAsset value) { Destroyed.Add(value); }
         public static T Instantiate<T>(T value) where T : TMPro.TMP_FontAsset
         { return (T)value.Copy(); }
     }
@@ -49,22 +51,17 @@ namespace ItemIntelligence
 {
     public static partial class ModMain
     {
-        private static int localizationChecks, duplicates, malformed, invalidUtf8;
+        private static int localizationChecks;
         private static TMP_FontAsset _inspectorFont;
         private static string _tradeTravelOriginSpaceObjectId = "earth";
         private static string InvokeLocalizationRaw(string key) { return "Game item"; }
-        private static void ResetLocalizationHealthForReload() { duplicates = malformed = invalidUtf8 = 0; }
-        private static void RecordLocalizationDuplicateKey(string path, string key) { duplicates++; }
-        private static void RecordLocalizationMalformedLine(string path, int line) { malformed++; }
-        private static void RecordLocalizationUtf8Failure(string path, string detail) { invalidUtf8++; }
-        private static void MarkLocalizationHealthDirty() {}
         private static void WriteLocalizationHealthReportSafe(bool force) {}
         private static void Verify(bool success, string reason)
         { localizationChecks++; if (!success) throw new Exception("Localization regression: " + reason); }
         private static void GameLanguage(string language)
         { MGSC.Localization.Instance.CurrentLang = language; UnityEngine.Time.frameCount += 241; }
         private static void ReloadUi()
-        { _externalUiTranslationLanguage = string.Empty; ResolvedUiTextCache.Clear(); }
+        { UiText.Reset(); }
 
         public static int RunLocalizationCases(string root)
         {
@@ -82,15 +79,15 @@ namespace ItemIntelligence
                 GameLanguage(languages[i, 0]);
                 EnsureExternalUiTranslations();
                 Verify(GetLanguageSignature() == languages[i, 0], "exact game metadata " + languages[i, 0]);
-                Verify(_externalUiTranslationFile == languages[i, 1], "Auto file " + languages[i, 0]);
-                Verify(ExternalUiTranslations.Count == 695, "complete language " + languages[i, 0]);
-                foreach (string key in EnglishUiFallback.Keys)
+                Verify(UiText.FileName == languages[i, 1], "Auto file " + languages[i, 0]);
+                Verify(UiText.ActiveCount == 695, "complete language " + languages[i, 0]);
+                foreach (string key in UiText.EnglishKeys)
                 {
-                    Verify(Ui(key) == NormalizeGameText(ExternalUiTranslations[key]), "active value " + key);
+                    Verify(Ui(key) == NormalizeGameText(UiText.GetActiveValue(key)), "active value " + key);
                     string format = Ui(key).Replace("{KEY}", "F2");
                     string.Format(CultureInfo.InvariantCulture, format, new object[] { 2, 3, 4, 5, 6 });
                 }
-                Verify(MissingUiTranslationKeys.Count == 0, "no fallback for shipped language");
+                Verify(UiText.MissingCount == 0, "no fallback for shipped language");
             }
             GameLanguage("Russian");
             SetUiLanguagePreference("de-DE", "MCM");
@@ -129,7 +126,7 @@ namespace ItemIntelligence
             for (int i = 0; i < latinAliases.GetLength(0); i++)
                 Verify(NormalizeUiLanguagePreference(latinAliases[i, 0]) == latinAliases[i, 1], "Latin saved preference alias " + latinAliases[i, 0]);
             Verify(NormalizeUiLanguagePreference("pt-PT") == "Auto (Game)", "European Portuguese is not Brazilian Portuguese");
-            Verify(!ExternalLanguageMatches("pt-PT", ReadUiLanguageDeclaration(Path.Combine(dir, "pt-BR.lang"))), "Brazilian file does not claim European Portuguese");
+            Verify(!ExternalLanguageMatches("pt-PT", UiText.ReadUiLanguageDeclaration(Path.Combine(dir, "pt-BR.lang"))), "Brazilian file does not claim European Portuguese");
             SetUiLanguagePreference("ChineseSimp", "test");
             Verify(Ui("tab.loot.short") == "战利品" && GetUiNumberCulture().Name == "zh-CN", "Chinese alias and culture");
             Verify(FormatCompactUiDurationFallback(0.25) == "15分", "Chinese fallback minutes");
@@ -152,7 +149,7 @@ namespace ItemIntelligence
                 Verify(Ui("tab.loot.short") == addedLanguages[i, 2], "new language replaces previous cache");
                 Verify(GetUiNumberCulture().Name == addedLanguages[i, 3] && FormatExpectedNumber(1.25) == addedLanguages[i, 4], "new number cultures");
                 Verify(FormatCompactUiDurationFallback(0.25) == addedLanguages[i, 5] && FormatUiDaysAndHours(27) == addedLanguages[i, 6], "new compact time units");
-                Verify(IsCjkLanguage() == (i < 2), "Turkish is not CJK");
+                Verify(LanguageCatalog.Find(GetUiLanguageSignature()).Cjk == (i < 2), "Turkish is not CJK");
                 Verify(GetLanguageAwareWrapFallback(60, 90) == (i < 2 ? 55 : 60), "new conservative fallback widths");
             }
             string[,] addedAliases = {
@@ -163,7 +160,48 @@ namespace ItemIntelligence
                 Verify(NormalizeUiLanguagePreference(addedAliases[i, 0]) == addedAliases[i, 1], "new saved language alias " + addedAliases[i, 0]);
             foreach (string option in GetUiLanguageOptions())
                 Verify(NormalizeUiLanguagePreference(option) == option, "dropdown label round-trips through saved config: " + option);
-            Verify(!ExternalLanguageMatches("TraditionalChinese", ReadUiLanguageDeclaration(Path.Combine(dir, "tr.lang"))), "tr is not a substring match");
+            Verify(!ExternalLanguageMatches("TraditionalChinese", UiText.ReadUiLanguageDeclaration(Path.Combine(dir, "tr.lang"))), "tr is not a substring match");
+
+            int nativeReads = 0, nativeFrame = 0, languageReads = 0;
+            string nativeLanguage = "English";
+            var gameText = new GameLocalization(() => { languageReads++; return nativeLanguage; },
+                key => { nativeReads++; return key == "missing" ? string.Empty : nativeLanguage + ":" + key; },
+                () => nativeFrame, NormalizeGameText, message => {});
+            string cachedItem = gameText.LocalizeItem("test");
+            Verify(gameText.LocalizeItem("test") == cachedItem && nativeReads == 1, "game entity cache avoids repeated native calls");
+            for (int i = 0; i < 1000; i++) gameText.LocalizeItem("test");
+            Verify(nativeReads == 1 && languageReads == 1, "warm redraw does not repeat native lookup or metadata reflection");
+            gameText.LocalizeMagnumPerk("test"); gameText.LocalizeMagnumPerk("test");
+            Verify(nativeReads == 2 && gameText.PerkCount == 1, "Magnum names have their own warm result cache");
+            nativeLanguage = "Russian";
+            Verify(gameText.GetLanguageSignature() == "English", "game metadata refresh is throttled");
+            nativeFrame += 241;
+            Verify(gameText.LocalizeCandidates(new[] { "direct" }, "fallback") == "Russian:direct", "direct key lookup invalidates on game language change");
+            Verify(gameText.LocalizeItem("test") == "Russian:item.test.name" && gameText.ItemCount == 1, "game names refresh independently of UI preference");
+            Verify(gameText.LocalizeCandidates(new[] { "missing" }, "fallback") == "fallback", "unknown native key keeps fallback");
+            gameText.LocalizeMagnumPerk("perk"); gameText.Reset();
+            Verify(gameText.ItemCount == 0 && gameText.KeyCount == 0 && gameText.PerkCount == 0, "game-localization session clears all result caches");
+            nativeFrame = 0; nativeLanguage = "Japanese";
+            Verify(gameText.GetLanguageSignature() == "Japanese", "session reset forces a fresh game language read");
+            var normalizedGameText = new GameLocalization(() => "Russian", key => "Ёлка", () => 0, NormalizeGameText, message => {});
+            Verify(normalizedGameText.LocalizeCandidates(new[] { "key" }, "") == "Елка" &&
+                normalizedGameText.LocalizeCandidates(new[] { "key" }, "") == "Елка", "cached and fresh native text use identical normalization");
+
+            // Verify presentation results instead of particular source expressions.
+            SetUiLanguagePreference("English", "test");
+            Verify(FormatContainerEstimateRange(.001, .25, true) == "~ 0.1–25%", "estimate range uses a separator, not subtraction");
+            Verify(FormatContainerEstimateRange(.25, .25, false) == "~ 25%*", "unknown modifier is disclosed");
+            Verify(FormatContainerEstimateRange(double.NaN, .25, true) == "—" &&
+                FormatContainerEstimateRange(.5, .25, true) == "—" &&
+                FormatContainerEstimateRange(-.1, .25, true) == "—" &&
+                FormatContainerEstimateRange(0, double.PositiveInfinity, true) == "—", "invalid estimate ranges are hidden");
+            SetUiLanguagePreference("Russian", "test");
+            Verify(FormatContainerEstimateRange(.001, .25, true) == "~ 0,1–25 %", "estimate range follows UI number culture");
+            foreach (UiLanguage language in LanguageCatalog.All)
+            {
+                SetUiLanguagePreference(language.Label, "test");
+                Verify(Ui("loot.note.container_context_chance").Contains("~"), "approximation symbol is explained in every language");
+            }
 
             // Community overrides, force rules, English fallback and damaged files.
             string custom = Path.Combine(dir, "custom.lang");
@@ -173,7 +211,7 @@ namespace ItemIntelligence
             SetUiLanguagePreference("Deutsch", "test");
             Verify(Ui("tab.loot.short") == "Custom", "exact community override");
             Verify(Ui("tab.trade.short") == "TRADE", "missing community key falls back to English");
-            Verify(MissingUiTranslationKeys.Contains("tab.trade.short"), "fallback diagnosed");
+            Verify(UiText.MissingKeys.Contains("tab.trade.short"), "fallback diagnosed");
             for (int i = 0; i < latinLanguages.GetLength(0); i++)
             {
                 SetUiLanguagePreference(latinLanguages[i, 0], "test");
@@ -200,15 +238,15 @@ namespace ItemIntelligence
             Verify(Ui("tab.loot.short") == "戦利品", "removing override restores shipped Japanese");
             File.WriteAllText(custom, "@language=Custom\na\t leading \na\treplacement\nmalformed\n", new UTF8Encoding(false));
             Dictionary<string, string> map = new Dictionary<string, string>();
-            ResetLocalizationHealthForReload(); LoadUiLanguageFile(custom, map);
-            Verify(duplicates == 1 && malformed == 1, "duplicate/malformed lines diagnosed");
+            UiText.ResetLocalizationHealthForReload(); UiText.LoadUiLanguageFile(custom, map);
+            Verify(UiText.Duplicates.Count == 1 && UiText.MalformedLines.Count == 1, "duplicate/malformed lines diagnosed");
             Verify(map["a"] == "replacement", "duplicate policy stays deterministic");
-            File.WriteAllText(custom, "a\t leading \n", new UTF8Encoding(false)); map.Clear(); LoadUiLanguageFile(custom, map);
+            File.WriteAllText(custom, "a\t leading \n", new UTF8Encoding(false)); map.Clear(); UiText.LoadUiLanguageFile(custom, map);
             Verify(map["a"] == " leading ", "authored separators preserved");
             File.WriteAllBytes(custom, new byte[] { 0x61, 0x09, 0xc3, 0x28 });
             bool rejected = false;
-            try { LoadUiLanguageFile(custom, map); } catch (DecoderFallbackException) { rejected = true; }
-            Verify(rejected && invalidUtf8 == 1, "invalid UTF8 rejected and diagnosed"); File.Delete(custom);
+            try { UiText.LoadUiLanguageFile(custom, map); } catch (DecoderFallbackException) { rejected = true; }
+            Verify(rejected && UiText.Utf8Failures.Count == 1, "invalid UTF8 rejected and diagnosed"); File.Delete(custom);
 
             string cjk = "成功截肢后的基础概率，不计入Magnum升级。已安装的植入体单独列出。";
             List<string> wrapped = WrapUnspacedBrowserText(cjk, s => s.Length > 9);
@@ -242,7 +280,7 @@ namespace ItemIntelligence
             Verify(mixed != han && mixed != latin && mixed.fallbackFontAssetTable.Contains(latin), "private mixed Chinese/Russian font");
             Verify(han.fallbackFontAssetTable.Count == 0 && latin.fallbackFontAssetTable.Count == 0, "no vanilla font mutation");
             SetUiLanguagePreference("English", "test"); Verify(ResolveUiFont() == latin, "Latin restored");
-            SetUiLanguagePreference("简体中文", "test"); Verify(ResolveUiFont() == mixed && UiMixedFonts.Count == 1, "mixed font reused");
+            SetUiLanguagePreference("简体中文", "test"); Verify(ResolveUiFont() == mixed && UiFonts.OwnedFontCount == 1, "mixed font reused");
             GameLanguage("ChineseSimp");
             TMP_FontAsset mixedLatin = null;
             for (int i = 0; i < latinLanguages.GetLength(0); i++)
@@ -252,7 +290,7 @@ namespace ItemIntelligence
                 TMP_FontAsset currentFont = ResolveUiFont();
                 Verify(currentFont != latin && currentFont != han && currentFont.fallbackFontAssetTable.Contains(han), "Latin UI keeps Chinese game names readable");
                 if (mixedLatin == null) mixedLatin = currentFont;
-                Verify(currentFont == mixedLatin && UiMixedFonts.Count == 2, "Latin languages reuse one private mixed font");
+                Verify(currentFont == mixedLatin && UiFonts.OwnedFontCount == 2, "Latin languages reuse one private mixed font");
             }
             Verify(han.fallbackFontAssetTable.Count == 0 && latin.fallbackFontAssetTable.Count == 0, "Latin switches preserve shared font lists");
             TMP_FontAsset kana = new TMP_FontAsset { name = "Japanese" };
@@ -274,7 +312,7 @@ namespace ItemIntelligence
                     actual != nativeFonts[uiIndex] && actual.fallbackFontAssetTable.Contains(nativeFonts[gameIndex]), "mixed scripts preserve game names");
                 foreach (TMP_FontAsset shared in nativeFonts) Verify(shared.fallbackFontAssetTable.Count == 0, "shared game font remains untouched");
             }
-            Verify(UiMixedFonts.Count == 12, "all script pairs reuse a bounded font cache");
+            Verify(UiFonts.OwnedFontCount == 12, "all script pairs reuse a bounded font cache");
 
             // A usable fallback is temporary when the selected language's preset
             // has not loaded yet. Both UI and game-name fonts must recover.
@@ -302,6 +340,33 @@ namespace ItemIntelligence
             Verify(recoveredGame.fallbackFontAssetTable.Contains(han) && recoveredGame != temporaryGame,
                 "late game font recovers without changing language or restarting");
 
+            // Session reset frees only owned assets, and a fresh resolver can recover.
+            int ownedFonts = UiFonts.OwnedFontCount;
+            UiFonts.Reset();
+            Verify(UiFonts.OwnedFontCount == 0 && UnityEngine.Object.Destroyed.Count == ownedFonts, "session releases every private font");
+            foreach (TMP_FontAsset shared in nativeFonts)
+                Verify(!UnityEngine.Object.Destroyed.Contains(shared), "session never destroys a borrowed font");
+            TMP_FontAsset afterReset = ResolveUiFont();
+            Verify(afterReset != recoveredGame && afterReset.fallbackFontAssetTable.Contains(han), "font recreated after session reset");
+            UiFonts.Reset(); UiFonts.Reset();
+            Verify(UiFonts.OwnedFontCount == 0, "font reset is idempotent");
+
+            UiText.Reset();
+            Verify(UiText.ActiveCount == 0 && UiText.EnglishCount == 0 && UiText.ResolvedCount == 0 && UiText.MissingCount == 0,
+                "localization owner clears its session state");
+            Verify(Ui("tab.loot.short") == "전리품", "translations reload after session reset");
+            var independent = new UiLocalization(() => dir, NormalizeGameText, message => {}, message => {});
+            independent.EnsureLoaded("German", false);
+            Verify(independent.GetText("tab.loot.short") == "BEUTE" && Ui("tab.loot.short") == "전리품", "localization instances do not share mutable caches");
+            Verify(LanguageCatalog.All.Count == 11, "official game language count");
+            foreach (UiLanguage language in LanguageCatalog.All)
+            {
+                Verify(LanguageCatalog.Find(language.Signature) == language && LanguageCatalog.Find(language.Label) == language, "registry canonical names round trip");
+                Verify(LanguageCatalog.IsBuiltInFile(language.FileName), "registry owns built-in files");
+                foreach (string alias in language.Aliases.Split(';'))
+                    Verify(LanguageCatalog.Find(alias) == language, "registry alias resolves: " + alias);
+            }
+
             string mcmValue;
             Verify(TryReadMcmString(new Dictionary<string, object> { { "UiLanguage", new McmValue { Value = "Polski" } } }, "UiLanguage", out mcmValue)
                 && mcmValue == "Polski", "MCM wrapped string");
@@ -316,7 +381,31 @@ namespace ItemIntelligence
             AddMcmStringDropdown(typeof(List<object>).GetMethod("Add"), configs, null, typeof(LegacyDropdown),
                 "UiLanguage", "Auto (Game)", "Language", "Auto (Game)", "Tip", "Label", GetUiLanguageOptions());
             Verify(((LegacyDropdown)configs[1]).Options.Count == 12, "legacy dropdown constructor");
+            var warnings = new List<string>();
+            var reader = new RequiredDataReader((type, name) => FindCachedMember(type, name, false), warnings.Add);
+            var owner = new RequiredReadFixture();
+            Verify(reader.Read(owner, "Present").Status == MemberReadStatus.Success &&
+                (int)reader.Read(owner, "Present").Value == 7, "required field read");
+            Verify(reader.Read(owner, "Empty").Status == MemberReadStatus.Success &&
+                reader.Read(owner, "Empty").Value == null, "null value is not a missing member");
+            Verify(reader.Read(null, "Present").Status == MemberReadStatus.OwnerUnavailable && warnings.Count == 0, "unloaded owner is quiet");
+            Verify(reader.Read(owner, "Missing").Status == MemberReadStatus.MissingMember, "missing member is identified");
+            Verify(reader.Read(owner, "Broken").Status == MemberReadStatus.ReadFailed, "throwing getter is identified");
+            for (int i = 0; i < 100; i++) reader.Read(owner, "Broken");
+            Verify(warnings.Count == 2 && warnings[1].Contains("InvalidOperationException") && !warnings[1].Contains("secret"), "diagnostics deduplicate and omit values");
+            for (int i = 0; i < 100; i++) reader.Read(owner, "Missing" + i);
+            Verify(reader.DistinctFailures == 32 && reader.LimitReached && warnings.Count == 33, "diagnostics have bounded storage and output");
+            reader.Reset();
+            Verify(reader.DistinctFailures == 0 && !reader.LimitReached, "diagnostics reset at session boundary");
+            reader.Read(owner, "Broken");
+            Verify(warnings.Count == 34, "new session can report a recurring failure");
             return localizationChecks;
+        }
+        private class RequiredReadFixture
+        {
+            public int Present = 7;
+            public object Empty { get { return null; } }
+            public object Broken { get { throw new InvalidOperationException("secret"); } }
         }
         private class McmValue { public string Value { get; set; } }
         public class ModernDropdown
