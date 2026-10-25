@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.7.43.3-test1 — 2026-10-25
+
+- Added complete Japanese, Korean and Turkish interfaces (695 strings each), covering all 11 official Quasimorph languages.
+- Added automatic and manual selection for the new languages, local number and time formats, and Japanese/Korean font fallbacks in the mod settings menu.
+- Korean notes now wrap at word boundaries. Japanese punctuation clusters and small kana stay with the preceding text.
+- Reviewed the eight existing translations. Replaced awkward literal wording in recipes, body parts, trade, loot and upgrade descriptions.
+- Matched skill names, damage types, Conveyor and Civil Resistance to the current game. Marika's skill now reads Thrift; Ion, Entropy and Cryolaser use their current names.
+- Corrected unfinished-research labels and the browser hotkey hint. No changes to gameplay, upgrade requirements or probability calculations.
+- Checked all translations against the game's font atlases; replaced unsupported characters and text separators. Turkish overview headings now preserve dotted and dotless I when capitalized.
+
 ## v1.7.43.2 — 2026-10-25
 
 - Added recurring upgrade uses to Magnum and direct links from Overview: ranged and melee weapons, all armor slots, clone genomes, class modifications, pact rituals, implants and augmentations.

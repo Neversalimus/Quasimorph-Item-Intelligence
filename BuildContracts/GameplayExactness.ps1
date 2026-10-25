@@ -56,8 +56,10 @@ if ($overviewDashboardText.IndexOf('Ui("ui.trade_links")',[StringComparison]::Or
 if ($overviewDashboardText.IndexOf('Ui("ui.faction_technology")',[StringComparison]::Ordinal) -ge 0) { throw 'current regression: Faction technologies returned to Overview summary.' }
 foreach ($token in @('AddWrappedBrowserNoteGroup(','"loot.note.tech"','"loot.note.enemy_chance"','"loot.note.corpse_transfer"','"loot.note.enemy_bonus_separate"')) { if ($lootEnemyPresentationText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "current enemy Loot page-safe explanation group missing: $token" } }
 if ($ruLocalizationText.IndexOf('перk Марики',[StringComparison]::OrdinalIgnoreCase) -ge 0) { throw 'current localization typo guard triggered.' }
-if ($ruLocalizationText.IndexOf("ui.loot_marika_organization`tМарика — Организация",[StringComparison]::Ordinal) -lt 0) { throw 'current RU Organization attribution missing.' }
-if ($enLocalizationText.IndexOf("ui.loot_marika_organization`tMarika — Organization",[StringComparison]::Ordinal) -lt 0) { throw 'current EN Organization attribution missing.' }
+# perk.talent_organization.name in Quasimorph 1.0.4.590s is Thrift / Запасливость.
+# Keep the stable key, but verify the current player-facing name.
+if ($ruLocalizationText.IndexOf("ui.loot_marika_organization`tМарика — Запасливость",[StringComparison]::Ordinal) -lt 0) { throw 'current RU Thrift attribution missing.' }
+if ($enLocalizationText.IndexOf("ui.loot_marika_organization`tMarika — Thrift",[StringComparison]::Ordinal) -lt 0) { throw 'current EN Thrift attribution missing.' }
 
 # exact Scavengers closure + continuous-scroll UX.
 $scavengerMissionRewardsText = Get-Content -LiteralPath $scavengerMissionRewardsPath -Raw
@@ -233,8 +235,8 @@ if ($ruLocalizationText.IndexOf('ШАНС ≥1',[StringComparison]::Ordinal) -ge
     $enLocalizationText.IndexOf('≥1 CHANCE',[StringComparison]::Ordinal) -ge 0) {
     throw 'current font-safety regression: unsupported Scavengers heading glyph returned.'
 }
-if ($runtimeText.IndexOf('public const string Version = "1.7.43.2";',[StringComparison]::Ordinal) -lt 0 -or
-    $runtimeText.IndexOf('StableRelease17432',[StringComparison]::Ordinal) -lt 0) {
+if ($runtimeText.IndexOf('public const string Version = "1.7.43.3-test1";',[StringComparison]::Ordinal) -lt 0 -or
+    $runtimeText.IndexOf('OfficialLanguagesTest1',[StringComparison]::Ordinal) -lt 0) {
     throw 'current runtime version/marker contract missing.'
 }
 

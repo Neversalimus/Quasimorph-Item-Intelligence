@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
@@ -15,7 +15,7 @@ namespace ItemIntelligence
         private static readonly HashSet<string> LootAccordionAuditLogged =
             new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-        private const string LootSectionCountSeparator = "  •  ";
+        private const string LootSectionCountSeparator = "  /  ";
 
         private static bool GetLootSectionExpandedState(string label, int sourceCount)
         {

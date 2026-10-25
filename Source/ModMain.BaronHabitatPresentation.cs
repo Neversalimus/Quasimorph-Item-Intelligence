@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace ItemIntelligence
 {
@@ -21,7 +21,7 @@ namespace ItemIntelligence
             if (node == null || string.IsNullOrWhiteSpace(node.Label)) return;
             string indent = depth <= 0 ? string.Empty : new string(' ', depth * 4);
             if (node.IsHabitat)
-                BrowserLines.Add(BrowserLine.Normal(indent + "• " + node.Label, string.Empty));
+                BrowserLines.Add(BrowserLine.Normal(indent + "/ " + node.Label, string.Empty));
             else
                 BrowserLines.Add(BrowserLine.Note(indent + node.Label));
 

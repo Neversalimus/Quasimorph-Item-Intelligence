@@ -67,13 +67,13 @@ tab.trade	4 TRADE
 ui.navigation_keys	[1-7] SECTION   [Q/E] TAB
 ui.scroll_close_keys	[WHEEL] SCROLL   [ESC] CLOSE
 ui.lmb_open_item	[LMB] OPEN ITEM
-ui.after_all_magnum	After all Magnum
+ui.after_all_magnum	After all ship research
 ui.after_all_research	After all research
-ui.after_open_research	After open research
+ui.after_open_research	After unfinished research
 ui.all_related_research_is_already_completed	All related research is already completed.
 ui.alternative_recipes	Alternative recipes
 ui.ammo	ammo
-ui.ammo_links	Ammo links
+ui.ammo_links	Compatible weapons and ammo
 ui.ammunition	AMMUNITION
 ui.amputate	amputate
 ui.amputation	amputation
@@ -108,7 +108,7 @@ ui.compatibility	COMPATIBILITY
 ui.compatible_weapons	COMPATIBLE WEAPONS
 ui.completed	completed
 ui.completed_research	Completed research
-ui.connecting_to_market_data	Connecting to market data...
+ui.connecting_to_market_data	Loading trade data...
 ui.consumers	CONSUMERS
 ui.container	CONTAINER
 ui.container_2	Container
@@ -118,7 +118,7 @@ ui.context	LOCATION TYPE
 ui.conveyor	Conveyor
 ui.corporate_stations	Corporate stations
 ui.corpse	corpse
-ui.corpse_bonus	corpse bonus
+ui.corpse_bonus	bonus corpse loot
 ui.craftable	craftable
 ui.crafted_by_recipes	Crafted by recipes
 ui.crafted_from	Crafted from
@@ -135,7 +135,7 @@ ui.english	English
 ui.extra_item	extra item
 ui.extra_weapon_ammo	extra-weapon ammo
 ui.f2_close	[{KEY}] CLOSE
-ui.f2_item_analysis	[{KEY}]  ITEM ANALYSIS
+ui.f2_item_analysis	[{KEY}]  ITEM INFO
 ui.faction	faction
 ui.faction_2	FACTION
 ui.faction_index	Loading faction data: 
@@ -168,17 +168,17 @@ ui.magnum_research	Magnum research
 ui.magnum_research_2	MAGNUM RESEARCH
 ui.market_processed	Market: processed 
 ui.master_switch_for_the_mod	Enable or disable Item Intelligence.
-ui.mission_pools	MISSION POOLS
+ui.mission_pools	MISSION LOOT
 ui.mission_workbench	Mission workbench
-ui.more_relationships	More relationships
+ui.more_relationships	More info
 ui.more_rows_format	+ {0} more ({1})
-ui.no_disassembly_relationships	No disassembly relationships.
+ui.no_disassembly_relationships	No disassembly data.
 ui.no_explicit_loot_sources_found_check_trade_recip	No explicit sources found. Check Trade, Recipes, Factions, and special events.
-ui.no_recipe_or_disassembly_relationships	No recipe or disassembly relationships.
-ui.no_recipe_relationships	No recipe relationships.
+ui.no_recipe_or_disassembly_relationships	No recipes or disassembly data.
+ui.no_recipe_relationships	No recipes found.
 ui.no_related_magnum_research_was_found	No related Magnum research was found.
-ui.no_trade_relationships_found_yet	No trade relationships found yet.
-ui.no_weapon_ammo_relationships	No weapon/ammo relationships.
+ui.no_trade_relationships_found_yet	No trading locations found yet.
+ui.no_weapon_ammo_relationships	No compatible weapons or ammo.
 ui.none	none
 ui.not_found	not found
 ui.not_required	not required
@@ -191,7 +191,7 @@ ui.page	PAGE
 ui.pirates	Pirates
 ui.possible_outcomes	Possible outcomes
 ui.price	PRICE
-ui.trade_repricing_note	First → last unit in batch. Price recalculates per unit; stock may change before arrival.
+ui.trade_repricing_note	First -> last unit in batch. Price recalculates per unit; stock may change before arrival.
 ui.next	NEXT
 ui.batch	BATCH
 ui.trade_previous_note	NEXT = next unit; BATCH = total for next 5 or remaining stock. Repriced per unit.
@@ -212,9 +212,9 @@ ui.random_augmentation	random augmentation
 ui.random_implant	random implant
 ui.recipe	Recipe 
 ui.recognized_as_a_trade_item_but_current_game_tabl	Trade item; no trade entries found.
-ui.recyclable	recyclable
+ui.recyclable	disassemblable
 ui.remaining	 remaining
-ui.required_for_open_research	Required for open research
+ui.required_for_open_research	Needed for unfinished research
 ui.result	RESULT
 ui.reward	REWARD %
 ui.role	Role
@@ -226,19 +226,19 @@ ui.search_item	SEARCH ITEM...
 ui.secondary_ammo	secondary ammo
 ui.secondary_weapon	secondary weapon
 ui.sell_to_stations	ACCEPTED BY STATIONS
-ui.show_ammo_relations	Show Ammo Relations
-ui.show_barter_and_consumer_relationships	Show station buyers and station-economy recipe inputs.
+ui.show_ammo_relations	Show compatible ammo
+ui.show_barter_and_consumer_relationships	Show buying stations and station recipes that use this item.
 ui.show_future_magnum_uses	Show Future Magnum Uses
 ui.show_magnum_surplus	Show Magnum Surplus
 ui.show_magnum_uses	Show Magnum Uses
-ui.show_production_and_barter_source_relationships	Show loot sources, station sellers, and station-economy recipe outputs.
+ui.show_production_and_barter_source_relationships	Show loot sources, selling stations and station production recipes.
 ui.show_recipes	Show Recipes
-ui.show_remaining_amount_relative_to_all_unfinished	Show remaining amount relative to all unfinished Magnum upgrades.
+ui.show_remaining_amount_relative_to_all_unfinished	Show what remains after reserving materials for all unfinished Magnum upgrades.
 ui.show_sources	Show acquisition sources
 ui.show_trade_information	Show selling and barter uses
 ui.show_unfinished_magnum_upgrade_uses	Show unfinished Magnum upgrade uses.
-ui.show_used_in_and_crafted_from_relationships	Show Used In and Crafted From relationships.
-ui.show_weapon_ammo_relationships	Show weapon-ammo relationships.
+ui.show_used_in_and_crafted_from_relationships	Show crafting ingredients and recipes that use this item.
+ui.show_weapon_ammo_relationships	Show compatible weapons and ammo.
 ui.source	SOURCE
 ui.sources	SOURCES
 ui.sources_producers	SOURCES / PRODUCERS
@@ -258,7 +258,7 @@ ui.this_item_was_not_found_in_faction_reward_pools	This item was not found in fa
 ui.total_remaining	Total remaining
 ui.trade	trade
 ui.trade_consumers	TRADE / CONSUMERS
-ui.trade_links	Trade links
+ui.trade_links	Trading locations
 ui.travel	TRAVEL
 ui.type	TYPE
 ui.unlock	UNLOCK
@@ -270,15 +270,15 @@ ui.vanilla_exposes_the_remaining_total_but_the_rela	Research details unavailable
 ui.var	 var.
 ui.variants	 variants
 ui.weapon	weapon
-ui.wheel_pgup_pgdn	   •   WHEEL: SCROLL   PGUP/PGDN: FAST
+ui.wheel_pgup_pgdn	   /   WHEEL: SCROLL   PGUP/PGDN: FAST
 ui.workbench	Workbench: 
-ui.wound_slot	WOUND SLOT
-ui.wound_slot_2	wound slot
+ui.wound_slot	BODY PART
+ui.wound_slot_2	body part
 ammo.index_prefix	Loading weapon data: 
 loot.note.amputation	Base chance after a successful amputation, without Magnum's guaranteed augmentation upgrade. Installed implants are separate.
-loot.note.augmentation_woundslot	Can appear as an enemy body-part module.
+loot.note.augmentation_woundslot	Can be installed in an enemy body part.
 loot.note.augmentations	Chance = an installed augmentation. Rolls = generation attempts; random augmentation chances are conditional.
-loot.note.container_chance	Manual-container chance depends on the live mission context.
+loot.note.container_chance	Chances in containers with their own loot depend on the current mission conditions.
 loot.note.corpse_transfer	On death, inventory and equipment move to the corpse, except bare hands. A full inventory can discard the item.
 loot.note.enemy_chance	CHANCE = item generation on this enemy, not enemy encounter chance. The range depends on Tech and faction.
 loot.note.implants	Chance = an installed implant at enemy generation. “Amputate X%” = chance to recover it.
@@ -331,9 +331,9 @@ mcm.header.information	Information
 mcm.show_f2_hint	Show Browser Hotkey Hint
 mcm.show_f2_hint_tip	Show the browser hotkey hint while hovering items. Current key: {KEY}.
 mcm.enable_browser	Enable Item Browser
-mcm.enable_browser_tip	Press {KEY} while hovering an item. Alt item details remain unchanged.
+mcm.enable_browser_tip	Press {KEY} to open the catalog, or hover an item to open its page.
 mcm.inspector_hotkey	Open Browser Hotkey
-mcm.inspector_hotkey_tip	Choose the browser key. Search accepts normal typing; Esc closes the window while typing.
+mcm.inspector_hotkey_tip	Choose the browser key. Esc closes the window even while typing in search.
 mcm.show_interface_icons	Minimal Interface Icons
 mcm.show_interface_icons_tip	Show minimalist interface icons. Item icons and functional status markers remain.
 mcm.enhanced_readability	Enhanced Readability
@@ -416,13 +416,13 @@ ui.secret_data_rewards_note	Fixed starter package and reputation reward.
 ui.secret_data_items	items
 ui.secret_data_rep	rep.
 ui.secret_data_view	VIEW
-ui.secret_data_back	← BACK TO FACTIONS
+ui.secret_data_back	BACK TO FACTIONS
 ui.secret_data_reputation	REPUTATION
 ui.secret_data_package	STARTER PACKAGE
-ui.secret_data_story_effect	This hand-in has dedicated story handling and may advance faction story content.
+ui.secret_data_story_effect	Handing this in may advance the faction's story.
 ui.secret_data_no_rewards	Secret Data rewards are unavailable.
 ui.chip_unlocks	UNLOCKS
-ui.back_to	← BACK TO
+ui.back_to	BACK TO
 compat.module	Module
 compat.reason	Reason:
 
@@ -436,7 +436,7 @@ ui.baron_depends_on_mission_tech	depends on mission Tech
 ui.overview_magnum_available_now	available now
 ui.overview_magnum_not_available_now	not available now
 ui.overview_magnum_all_completed	all researched
-ui.loot_accordion_hint	▶ / ▼  Click a section to expand or collapse it
+ui.loot_accordion_hint	Click a section to expand or collapse it
 ui.baron_habitat	Habitat
 ui.baron_guaranteed	Guaranteed
 ui.baron_one_pact	1 pact
@@ -479,12 +479,12 @@ ui.damage_type.fire	Fire
 ui.damage_type.cold	Cold
 ui.damage_type.poison	Poison
 ui.damage_type.shock	Shock
-ui.damage_type.beam	Beam
+ui.damage_type.beam	Radiation
 ui.damage_type.explosion	Explosive
 ui.damage_type.plasma	Plasma
-ui.damage_type.chaos	Chaos
-ui.damage_type.proton	Proton
-ui.damage_type.cryo	Cryogenic
+ui.damage_type.chaos	Entropy
+ui.damage_type.proton	Ion
+ui.damage_type.cryo	Cryolaser
 ui.mode_ammo_consumption	Ammo consumption
 
 # Modder Mode and advanced search
@@ -520,7 +520,7 @@ loot.note.general_spawn	Check mark: container may receive the item after mission
 ui.loot_modifiers_current	MODIFIERS: CURRENT
 ui.loot_modifiers_manual	MODIFIERS: MANUAL
 ui.loot_marauder	Marauder
-ui.loot_marika_organization	Marika — Organization
+ui.loot_marika_organization	Marika — Thrift
 ui.loot_laksha_field_medic	Laksha — Field Medic
 ui.loot_on	ON
 ui.loot_off	OFF
@@ -528,7 +528,7 @@ ui.loot_pp	pp
 
 ui.bonus_corpse_loot	BONUS LOOT FROM CORPSES
 ui.bonus_rolls	BONUS ROLLS
-loot.note.corpse_bonus_rolls	Marauder and Organization add corpse-loot rolls. Range = roll count; bracketed % = max-roll chance; FINAL = chance to get the item at least once.
+loot.note.corpse_bonus_rolls	Marauder and Thrift add corpse-loot rolls. Range = roll count; bracketed % = max-roll chance; FINAL = chance to get the item at least once.
 
 ui.per_roll	PER ROLL
 ui.final_chance	FINAL
@@ -537,13 +537,13 @@ loot.note.unknown_container_rolls	? = roll count is not known exactly; total cha
 ui.station_production_produced_from	STATION PRODUCTION — PRODUCED FROM
 ui.station_production_used_to_produce	STATION PRODUCTION — USED TO PRODUCE
 ui.station_production_note	Station production recipe. Active only on stations whose current production set includes it.
-ui.station_production_output	OUTPUT
-ui.station_production_input	INPUT
+ui.station_production_output	PRODUCT
+ui.station_production_input	MATERIAL
 ui.station_production_recipe	STATION RECIPE
 ui.no_active_faction_reward_in_current_save	This item is only in reward pools of factions unavailable in this save.
-loot.note.enemy_bonus_separate	Marauder and Organization do not change enemy-equipment chance; they add separate corpse-loot rolls.
+loot.note.enemy_bonus_separate	Marauder and Thrift do not change enemy-equipment chance; they add separate corpse-loot rolls.
 ui.mode_critical_damage_per_ap_default	Crit Damage/AP (default)
-ui.faction_technology_navigation_unavailable	Faction technology navigation is unavailable in the current context.
+ui.faction_technology_navigation_unavailable	The faction technology screen cannot be opened here.
 ui.scavenger_mission_rewards	SCAVENGERS — ITEM CHANCE ON MISSION SUCCESS
 ui.rows_visible	ROWS
 ui.opponent	OPPONENT
@@ -555,7 +555,7 @@ stats.modes	MODES
 ui.overview_combat	COMBAT
 ui.overview_damage_ap_short	DMG/AP
 ui.overview_crit_short	CRIT
-ui.overview_relationships	RELATED TO THIS ITEM
+ui.overview_relationships	ITEM USES AND SOURCES
 ui.overview_magnum_research	Magnum research
 ui.overview_used_in_recipes	Used in recipes
 ui.overview_crafted_by_recipes	Crafted by recipes
@@ -564,7 +564,7 @@ ui.overview_disassembles_into	Disassembles into
 ui.overview_compatible_ammo	Compatible ammo
 ui.overview_compatible_weapons	Compatible weapons
 ui.overview_recipe_ingredients	Recipe ingredients
-ui.overview_no_core_links	No core item links here — check Trade, Factions or Loot for world sources.
+ui.overview_no_core_links	Nothing to show here. Check Trade, Factions or Loot for acquisition sources.
 loot.baron.section	BARON DROP
 loot.baron.column.baron	BARON
 loot.baron.column.qmorph	QUASIMORPHOSIS
@@ -574,7 +574,7 @@ loot.baron.column.death_restore	RESTORE
 loot.note.baron_ultimate_death	A Baron drops 1 pact. The pact depends on mission Tech and available loot.
 loot.note.baron_dynamic_tech	Range = the pool depends on mission/faction Tech when the Baron is generated.
 loot.note.baron_ksiomara_exception	Story: vanilla may replace a normal Baron with Ksiomara. This row does not apply to Ksiomara.
-loot.note.baron_consumption_bound	If RESTORE <100%, the pact range includes the exact safe consumption bound before death; AI timing is not guessed.
+loot.note.baron_consumption_bound	If RESTORE is below 100%, the range accounts for the pact being consumed before death. The time of consumption is unknown.
 loot.special.section	OTHER SOURCES
 loot.special.condition	CONDITION
 loot.special.result	RESULT
@@ -585,7 +585,7 @@ loot.special.starting_loadout	STARTING LOADOUT
 loot.special.ancom_exchange	SECRET DATA EXCHANGE
 loot.special.expire_conversion	ITEM CONVERSION
 loot.special.skull_ritual	SKULL RITUAL
-loot.special.story_script	STORY SCRIPT
+loot.special.story_script	STORY EVENT
 loot.special.complete_story_mission	Complete the story mission
 loot.special.story_mission	Story mission
 loot.special.selected_start_preset	Selected fixed starting preset + random starting equipment off
@@ -607,7 +607,7 @@ loot.special.death_gift_condition	Death Gift enabled + reward eligibility
 loot.special.faction_reward_condition	Faction reward pool / Tech requirement
 loot.special.random_start_condition	Random starting equipment enabled
 loot.special.station_production_condition	Currently in station production + enough reward points
-loot.note.container_context_chance	≈ = chance to get the item at least once. CURRENT/MANUAL rolls/Marauder; mission/faction Tech. Budget, temporary Tech and location events excluded.
+loot.note.container_context_chance	~ = chance to get the item at least once. CURRENT/MANUAL rolls/Marauder; mission/faction Tech. Budget, temporary Tech and location events excluded.
 loot.note.container_modifier_unavailable	* = base rolls only: current Marauder value is unavailable. In space, choose MANUAL.
 loot.note.container_save_unavailable	— = no exact estimate: save Tech, eligible pool, or base-roll range is unavailable.
 loot.special.other_section	SPECIAL ACQUISITION
@@ -631,7 +631,7 @@ loot.special.kind_reward	REWARD
 loot.special.kind_start_pool	START POOL
 loot.special.kind_station_reward	PRODUCTION
 loot.special.cond_complete	Complete mission
-loot.special.cond_fixed_start	Fixed preset • random start off
+loot.special.cond_fixed_start	Fixed preset / random start off
 loot.special.cond_exchange	Exchange
 loot.special.cond_expire	After expiration
 loot.special.cond_ritual_failed	Failure
@@ -640,7 +640,7 @@ loot.special.cond_ritual_sidegrade	Sidegrade
 loot.special.cond_ritual_downgrade	Downgrade
 loot.special.cond_ritual_outcome	Ritual result
 loot.special.cond_story	On story event
-loot.special.cond_use	After use when the item rule triggers
+loot.special.cond_use	After use, if the item's conditions are met
 loot.special.cond_death	On death: reward allowed
 loot.special.cond_mission	Mission
 loot.special.cond_mission_orbit	Mission / orbit
@@ -661,14 +661,14 @@ loot.special.kind_random_pool	RANDOM POOL
 loot.special.cond_no_extra_requirement	NO EXTRA REQUIREMENT
 loot.special.cond_random_start_enabled	Random equipment on
 loot.special.cond_fixed_start_enabled	Random equipment off
-loot.note.faction_reward_sources	✓ = item is in the pool, not guaranteed. “Mission/orbit” needs Tech. “Production” = station has the item and enough reward points.
-loot.note.starting_sources	New game only: a fixed set grants the item; a random pool may only select it.
+loot.note.faction_reward_sources	Check mark = item is in the pool, not guaranteed. “Mission/orbit” needs Tech. “Production” = station has the item and enough reward points.
+loot.note.starting_sources	New game only: a fixed loadout gives the item; a random loadout may include it.
 loot.general_spawn.placement	PLACEMENT
 loot.column.container	CONTAINER
 loot.note.special_sources	Rare routes. For rituals: “Source” = starting skull; “Condition” = required outcome.
 loot.special.fixed_loadout_count	LOADOUTS
 
-loot.special.story_missions_count	Story missions ×{0}
+loot.special.story_missions_count	Story missions x{0}
 
 loot.note.container_modifier_basic	* = base rolls only: the current Marauder value is unavailable.
 loot.note.container_save_compatibility	— = chance estimates for this save are temporarily unavailable after a game update.
@@ -699,7 +699,7 @@ ui.mode_effect	Mode trait
 ui.mode_status_effect	Status effect
 ui.mode_trait_wounding	Wounding
 ui.arm_builtin_weapon	Weapon when installed
-ui.arm_source_augmentation	Augmentation item
+ui.arm_source_augmentation	Augmentation to install
 ui.upgrade_uses	USED IN UPGRADES
 ui.upgrade_genomes	Genome upgrades
 ui.upgrade_uses_note	May still be needed after ship research is complete. The amount depends on the chosen upgrades and is not included in the remaining research total.
@@ -708,7 +708,7 @@ ui.upgrade_ranged	Ranged weapon upgrades
 ui.upgrade_melee	Melee weapon upgrades
 ui.upgrade_armor	Armor upgrades (all slots)
 ui.upgrade_classes	Class modifications
-ui.upgrade_pacts	Pact rituals (Morphanal)
+ui.upgrade_pacts	Pact rituals
 ui.upgrade_implants	Implant installation on clones
 ui.upgrade_augmentations	Augmentation installation on clones
 ui.upgrade_equipment	EQUIPMENT UPGRADED WITH THIS RESOURCE

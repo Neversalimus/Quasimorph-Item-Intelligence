@@ -1,0 +1,696 @@
+@language=Korean;korean;ko;ko-KR;한국어
+catalog.compact.all	전체
+catalog.compact.ammo	탄약
+catalog.compact.armor	방어구
+catalog.compact.chips	칩
+catalog.compact.consumables	소모품
+catalog.compact.containers	보관함
+catalog.compact.implants	임플란트
+catalog.compact.other	기타
+catalog.compact.weapons	무기
+catalog.scope.all.compact	전체
+catalog.scope.favorites.compact	즐겨찾기
+catalog.scope.recent.compact	최근
+catalog.scope.all	모든 아이템
+catalog.scope.favorites	즐겨찾기
+catalog.scope.recent	방문 기록
+catalog.favorite.short	즐겨찾기
+catalog.label.data	정보
+catalog.data.any	전체
+catalog.data.recipes	제작법
+catalog.data.sources	정거장 생산품
+catalog.data.consumers	정거장 재료
+catalog.data.magnum	MAGNUM
+catalog.data.factions	팩션
+catalog.data.ammo	탄약
+catalog.data.disassembly	분해
+catalog.label.sort	정렬
+catalog.sort.name	이름
+catalog.sort.tech	기술
+catalog.sort.id	ID
+catalog.sort.recent	최근
+catalog.sort.asc	오름차순
+catalog.sort.desc	내림차순
+catalog.sort.fixed	고정 순서
+catalog.reset	초기화
+catalog.clear.history	기록 지우기
+catalog.full.all	모든 아이템
+catalog.full.ammo	탄약
+catalog.full.armor	방어구 및 장비
+catalog.full.chips	칩
+catalog.full.consumables	소모품
+catalog.full.containers	보관함
+catalog.full.implants	임플란트
+catalog.full.other	기타
+catalog.full.weapons	무기
+chrome.close	[{KEY}] 닫기
+label.magnum	MAGNUM
+note.improved_variant	개량형
+stats.ammo	탄약
+stats.weapons	무기
+stats.magnum	MAGNUM
+stats.recipes	제작법
+stats.trade	거래 / 생산
+tab.ammo	5 탄약
+tab.factions	6 팩션
+tab.loot	7 전리품
+tab.magnum	2 MAGNUM
+tab.overview	1 개요
+tab.recipes	3 제작법
+tab.trade	4 거래
+ui.navigation_keys	[1-7] 항목 선택   [Q/E] 탭 이동
+ui.scroll_close_keys	[마우스] 스크롤   [ESC] 닫기
+ui.lmb_open_item	[왼쪽 클릭] 아이템 보기
+ui.after_all_magnum	함선 연구 완료 후
+ui.after_all_research	모든 연구 완료 후
+ui.after_open_research	미완료 연구 완료 후
+ui.all_related_research_is_already_completed	이 재료를 사용하는 연구를 모두 완료했습니다.
+ui.alternative_recipes	다른 제작법
+ui.ammo	탄약
+ui.ammo_links	호환 무기 및 탄약
+ui.ammunition	탄약
+ui.amputate	절단
+ui.amputation	절단
+ui.amputation_drops	절단 시 획득
+ui.any	모두
+ui.armor	방어구
+ui.available	이용 가능
+ui.available_2	이용 가능
+ui.available_3	이용 가능
+ui.available_now	현재 이용 가능
+ui.available_now_2	현재 이용 가능
+ui.back	뒤로
+ui.barter_give	주는 물품
+ui.barter_option	교환안
+ui.barter_receive	받는 물품
+ui.barter_receive_this_item	물물교환 — 이 아이템 받기
+ui.barter_recipes	물물교환 목록
+ui.barter_give_this_item	물물교환 — 이 아이템 주기
+ui.bonus	보너스
+ui.boots	장화
+ui.buy_at_stations	판매하는 정거장
+ui.item_id	아이템 ID
+ui.catalog	목록
+ui.chance	확률
+ui.base_share	기본 비율
+ui.tech	기술
+ui.civil_resistance	시민 저항 세력
+ui.click_a_station_to_open_its_location_on_the_star	정거장을 클릭하면 항성 지도에서 위치를 볼 수 있습니다.
+ui.cloning	복제
+ui.compact_intelligence_on_normal_hover	아이템에 마우스를 올리면 간단한 정보를 표시합니다.
+ui.compatibility	호환성
+ui.compatible_weapons	호환 무기
+ui.completed	완료
+ui.completed_research	완료한 연구
+ui.connecting_to_market_data	거래 정보 불러오는 중…
+ui.consumers	사용처
+ui.container	보관함
+ui.container_2	보관함
+ui.container_3	보관함 
+ui.containers	고유 전리품이 있는 보관함
+ui.context	시설 유형
+ui.conveyor	컨베이어
+ui.corporate_stations	기업 정거장
+ui.corpse	시체
+ui.corpse_bonus	시체 추가 전리품
+ui.craftable	제작 가능
+ui.crafted_by_recipes	제작법
+ui.crafted_from	제작 재료
+ui.crafted_from_2	제작 재료
+ui.current_tech	현재 기술
+ui.disassembly_index	분해 정보 불러오는 중: 
+ui.disassembly_outputs	분해 결과물
+ui.obtained_by_disassembling	분해하여 획득
+ui.done	완료
+ui.enable_item_intelligence	Item Intelligence 켜기
+ui.enemy	적
+ui.enemy_corpse_loot	적 전리품
+ui.english	한국어
+ui.extra_item	추가 아이템
+ui.extra_weapon_ammo	추가 무기 탄약
+ui.f2_close	[{KEY}] 닫기
+ui.f2_item_analysis	[{KEY}]  아이템 정보
+ui.faction	팩션
+ui.faction_2	팩션
+ui.faction_index	팩션 정보 불러오는 중: 
+ui.faction_rewards	팩션 보상
+ui.faction_technology	팩션 기술
+ui.floor	바닥
+ui.future	  추후
+ui.future_2	추후
+ui.future_3	추후
+ui.granted_augmentation	고정 증강체
+ui.granted_implant	고정 임플란트
+ui.granted_item	지급 아이템
+ui.granted_weapon_ammo	지급 무기 탄약
+ui.head_gear	머리 장비
+ui.here	현재 위치
+ui.in_locked_branches	잠긴 연구 계통
+ui.include_locked_future_magnum_upgrades	아직 잠긴 Magnum 강화도 표시합니다.
+ui.ingredient	재료
+ui.item_intelligence	ITEM INTELLIGENCE
+ui.key_intel	요약
+ui.leggings	다리 장비
+ui.location	위치
+ui.locked	잠김
+ui.locked_2	잠김
+ui.loot_index	전리품 정보  
+ui.low_rep	평판 부족
+ui.magnum	Magnum
+ui.magnum_required	Magnum 필요 수량: 
+ui.magnum_research	Magnum 연구
+ui.magnum_research_2	MAGNUM 연구
+ui.market_processed	거래: 처리 완료 
+ui.master_switch_for_the_mod	Item Intelligence를 켜거나 끕니다.
+ui.mission_pools	임무 전리품
+ui.mission_workbench	임무 작업대
+ui.more_relationships	더 보기
+ui.more_rows_format	+ {0}개 더 보기 ({1})
+ui.no_disassembly_relationships	분해 정보가 없습니다.
+ui.no_explicit_loot_sources_found_check_trade_recip	획득처를 찾지 못했습니다. 거래, 제작법, 팩션 및 특수 이벤트를 확인하세요.
+ui.no_recipe_or_disassembly_relationships	제작법이나 분해 정보가 없습니다.
+ui.no_recipe_relationships	제작법이 없습니다.
+ui.no_related_magnum_research_was_found	이 아이템을 사용하는 Magnum 연구가 없습니다.
+ui.no_trade_relationships_found_yet	거래처를 아직 찾지 못했습니다.
+ui.no_weapon_ammo_relationships	호환되는 무기나 탄약이 없습니다.
+ui.none	없음
+ui.not_found	찾을 수 없음
+ui.not_required	불필요
+ui.note	참고
+ui.now	  현재
+ui.other_compatible_item_intelligence_features_rema	다른 항목에는 영향을 주지 않습니다.
+ui.other_uses_also_exist	다른 용도도 있음
+ui.owned	보유 수량
+ui.page	페이지 
+ui.pirates	해적
+ui.possible_outcomes	가능한 결과
+ui.price	가격
+ui.trade_repricing_note	묶음의 첫 개 -> 마지막 개 가격입니다. 가격은 개별 재계산되며 도착 전에 재고가 바뀔 수 있습니다.
+ui.next	다음 1개
+ui.batch	묶음
+ui.trade_previous_note	다음 1개는 한 개의 가격, 묶음은 다음 5개 또는 남은 재고의 총액입니다. 가격은 개별 재계산됩니다.
+ui.trade_payout	수령액
+ui.trade_stock_short	재고
+ui.trade_all	전체
+ui.trade_pcs	개
+ui.trade_total	합계
+ui.primary_ammo	주무기 탄약
+ui.primary_weapon	주무기
+ui.production	생산
+ui.profile	구성
+ui.qty	수량
+ui.qty_rolls	수량 / 추첨 횟수
+ui.quasimorph_sources	쿼지모프 획득처
+ui.quick_intelligence	간단한 정보
+ui.random_augmentation	무작위 증강체
+ui.random_implant	무작위 임플란트
+ui.recipe	제작법 
+ui.recognized_as_a_trade_item_but_current_game_tabl	거래용 아이템이지만 거래처 정보가 없습니다.
+ui.recyclable	분해 가능
+ui.remaining	 남음
+ui.required_for_open_research	미완료 연구에 필요
+ui.result	획득 방법
+ui.reward	보상 %
+ui.role	역할
+ui.roll	/회
+ui.rolls	추첨 횟수
+ui.rolls_2	 회
+ui.rows	 행
+ui.search_item	아이템 검색…
+ui.secondary_ammo	보조 무기 탄약
+ui.secondary_weapon	보조 무기
+ui.sell_to_stations	매입하는 정거장
+ui.show_ammo_relations	호환 무기 및 탄약 표시
+ui.show_barter_and_consumer_relationships	매입하는 정거장과 이 아이템을 재료로 쓰는 정거장 제작법을 표시합니다.
+ui.show_future_magnum_uses	잠긴 Magnum 강화 표시
+ui.show_magnum_surplus	Magnum 연구 후 잔여량 표시
+ui.show_magnum_uses	Magnum 용도 표시
+ui.show_production_and_barter_source_relationships	전리품 획득처, 판매하는 정거장 및 정거장 제작법을 표시합니다.
+ui.show_recipes	제작법 표시
+ui.show_remaining_amount_relative_to_all_unfinished	모든 미완료 Magnum 연구에 필요한 수량을 뺀 잔여량을 표시합니다.
+ui.show_sources	획득처 표시
+ui.show_trade_information	판매 및 물물교환 용도 표시
+ui.show_unfinished_magnum_upgrade_uses	미완료 Magnum 강화에서의 용도를 표시합니다.
+ui.show_used_in_and_crafted_from_relationships	제작에 필요한 재료와 이 아이템을 사용하는 제작법을 표시합니다.
+ui.show_weapon_ammo_relationships	호환되는 탄약과 무기를 표시합니다.
+ui.source	획득처
+ui.sources	획득처
+ui.sources_producers	획득처 / 생산처
+ui.sources_trade	획득처 및 거래
+ui.state_unknown	알 수 없음
+ui.station	정거장
+ui.station_2	정거장
+ui.station_list_is_unavailable_from_the_current_gam	정거장 정보를 불러올 수 없습니다.
+ui.stations	정거장
+ui.status	상태
+ui.status_2	상태
+ui.stock	재고
+ui.tech_lock	기술 부족
+ui.this_item	이 아이템
+ui.this_is_not_a_safe_to_sell_value_the_item_has_ot	다른 용도도 있습니다.
+ui.this_item_was_not_found_in_faction_reward_pools	이 아이템은 팩션 보상 목록에 없습니다.
+ui.total_remaining	남은 총량
+ui.trade	거래
+ui.trade_consumers	거래 / 사용처
+ui.trade_links	거래처
+ui.travel	이동 시간
+ui.type	유형
+ui.unlock	잠금 해제
+ui.used_by_recipes	사용하는 제작법
+ui.used_in	사용처
+ui.used_in_2	사용처
+ui.used_in_barter	물물교환에 사용
+ui.vanilla_exposes_the_remaining_total_but_the_rela	연구 상세 정보를 불러올 수 없습니다.
+ui.var	 종
+ui.variants	 종
+ui.weapon	무기
+ui.wheel_pgup_pgdn	   /   마우스 스크롤   PGUP/PGDN: 빠르게
+ui.workbench	작업대: 
+ui.wound_slot	신체 부위
+ui.wound_slot_2	신체 부위
+ammo.index_prefix	무기 정보 불러오는 중: 
+loot.note.amputation	절단 성공 시 기본 확률입니다. 증강체 획득을 보장하는 Magnum 강화는 제외합니다. 장착된 임플란트는 별도로 표시합니다.
+loot.note.augmentation_woundslot	적의 신체 부위에 장착될 수 있습니다.
+loot.note.augmentations	확률은 증강체가 장착될 확률, 추첨 횟수는 생성 시도 횟수입니다. 무작위 증강체의 확률은 조건부입니다.
+loot.note.container_chance	고유 전리품이 있는 보관함의 확률은 현재 임무 조건에 따라 달라집니다.
+loot.note.corpse_transfer	사망 시 맨손을 제외한 소지품과 장비가 시체로 옮겨집니다. 소지품이 가득 차면 아이템이 사라질 수 있습니다.
+loot.note.enemy_chance	확률은 이 적이 아이템을 갖고 생성될 확률이며, 적과 조우할 확률이 아닙니다. 범위는 기술과 팩션에 따라 달라집니다.
+loot.note.implants	확률은 적 생성 시 임플란트가 장착될 확률입니다. '절단 X%'는 절단으로 회수할 확률입니다.
+loot.note.mission_pools	해당 임무의 일반 전리품 목록에 있으며 보관함이나 바닥에서 나올 수 있습니다.
+loot.note.placement_generic	방의 전리품은 보관함에 들어갈 수 있으며 복도의 전리품은 바닥에 놓입니다.
+loot.note.placement_percent_prefix	방에서 보관함에 넣기를 시도할 확률: 
+loot.note.placement_percent_suffix	%. 그 외에는 바닥에 놓입니다. 복도에서는 항상 바닥에 놓입니다.
+loot.note.random_equipment	생성 확률입니다. 적의 소지품이 가득 차면 생성된 아이템이 사라질 수 있습니다.
+loot.note.tech	기술은 획득처의 최소 기술 수준입니다. 아이템 기술과 적 장비 보너스를 반영합니다.
+overview.trade.consumers_separator	 / 사용처 
+overview.trade.sources_prefix	획득처 
+tab.overview.short	개요
+tab.magnum.short	MAGNUM
+tab.recipes.short	제작법
+tab.trade.short	거래
+tab.ammo.short	탄약
+tab.factions.short	팩션
+tab.loot.short	전리품
+magnum.module.navigation	항법
+magnum.module.research	연구
+magnum.module.hangar	격납고
+magnum.module.supply	보급
+magnum.module.cloning	복제
+magnum.module.science	과학
+magnum.module.medical	의료
+magnum.module.engineering	공학
+magnum.module.industry	산업
+magnum.module.security	보안
+magnum.module.logistics	물류
+magnum.module.communications	통신
+magnum.module.storage	창고
+magnum.module.command	지휘
+magnum.module.crew	승무원
+magnum.module.armory	무기고
+magnum.module.workshop	작업장
+magnum.module.training	훈련
+magnum.module.habitation	거주 구역
+magnum.node.scanner	스캐너
+magnum.node.travel	항행
+magnum.node.shuttle	왕복선
+magnum.node.capsule	캡슐
+magnum.node.trade	무역
+source.station	정거장
+source.stations	정거장
+source.barter	물물교환
+mcm.header.general	일반
+mcm.header.tooltip	툴팁
+mcm.header.inspector	아이템 목록
+mcm.header.information	정보
+mcm.show_f2_hint	목록 단축키 안내 표시
+mcm.show_f2_hint_tip	아이템에 마우스를 올리면 목록 단축키를 표시합니다. 현재 키: {KEY}.
+mcm.enable_browser	아이템 목록 사용
+mcm.enable_browser_tip	{KEY} 키로 목록을 엽니다. 아이템에 마우스를 올린 채 누르면 해당 아이템 정보를 엽니다.
+mcm.inspector_hotkey	목록 단축키
+mcm.inspector_hotkey_tip	목록을 여는 키를 선택합니다. 검색어를 입력하는 중에도 Esc로 창을 닫을 수 있습니다.
+mcm.show_interface_icons	간단한 아이콘
+mcm.show_interface_icons_tip	간단한 인터페이스 아이콘을 표시합니다. 아이템 아이콘과 상태 표시도 유지됩니다.
+mcm.enhanced_readability	가독성 높이기
+mcm.enhanced_readability_tip	탭과 설명을 키우고 보조 글자를 밝게 표시합니다. 창 크기와 배율은 유지됩니다.
+ui.trade_layout_view	보기
+ui.trade_layout_cards_short	카드
+ui.trade_layout_table_short	표
+mcm.header.logging	로그
+mcm.verbose_logging	상세 로그
+mcm.verbose_logging_tip	동작 및 성능 정보를 Player.log에 자세히 기록합니다. 문제를 조사할 때만 켜세요.
+mcm.mod_name	Item Intelligence - 아이템 및 획득처 정보
+compat.disabled_feature	이 기능은 일시적으로 사용할 수 없습니다.
+mcm.save_failed	Item Intelligence 설정을 저장하지 못했습니다.
+station_group.corporate	기업 정거장
+station_group.resistance	시민 저항 세력
+station_group.quasimorph	쿼지모프 획득처
+station_group.pirates	해적
+station_group.stations	정거장
+loot.container.common_box	일반 상자
+loot.container.common_container	일반 보관함
+loot.container.common_rack	일반 선반
+loot.container.common_locker	일반 사물함
+loot.container.cloth_locker	의류 사물함
+loot.container.wooden_box	나무 상자
+loot.container.industry	산업용 보관함
+loot.container.science	연구용 보관함
+loot.container.medical	의료용 보관함
+loot.container.medical_case	의료 상자
+loot.container.medical_holder	의료 선반
+loot.container.weapon_case_big	대형 무기 상자
+loot.container.weapon_case_small	소형 무기 상자
+loot.container.elite_weapon_case	고급 무기 상자
+loot.container.weapon_stand	무기 거치대
+loot.container.ammo_case	탄약 상자
+loot.container.data	데이터 보관함
+loot.container.server	서버 보관함
+loot.container.tool_case	공구 상자
+loot.column.container_profile	유형 / 구성
+loot.column.save_estimate	예상 확률
+loot.column.base_chance	기본 확률
+loot.container.trash_can	쓰레기통
+loot.container.armor_locker	방어구 사물함
+loot.container.food	식품 보관함
+loot.container.plants	식물 보관함
+loot.container.aztec_chest	아즈텍 궤짝
+loot.container.matrix_box	매트릭스 상자
+loot.container.gas_barrel	연료통
+loot.container.toxic_barrel	독성 물질 통
+loot.container.water_sink	싱크대
+loot.container.blood_sink	피가 담긴 싱크대
+loot.container.toilet	변기
+loot.container.water_tank	물탱크
+loot.container.corpse_pile	시체 더미
+loot.container.station_stash	정거장 은닉물
+loot.container.airdrop_capsule	공중 투하 캡슐
+loot.container.autonomous_capsule	자율 캡슐
+loot.container.aztec_altar	아즈텍 제단
+loot.container.snowman	눈사람
+loot.container.aed_case	제세동기 상자
+loot.container.extinguisher_holder	소화기 거치대
+loot.container.watermelon_growbox	수박 재배 상자
+loot.container.cabbage_growbox	양배추 재배 상자
+loot.container.silence_casket	침묵의 관
+loot.station_type.industrial	산업 시설
+loot.station_type.lab	연구소
+loot.station_type.mine	광산
+loot.station_type.military	군사 시설
+loot.station_type.prison	교도소
+loot.station_type.colony_farm	식민지 농장
+loot.station_type.civilian	민간 시설
+loot.station_type.quasimorphic_temple	쿼지모프 사원
+loot.station_type.space_station	우주 정거장
+loot.station_type.bramfatura	브람파투라
+ui.close_current_ship_screen_before_starmap	항성 지도를 열려면 현재 함선 화면을 먼저 닫으세요.
+ui.starmap_unavailable_in_bramfatura	브람파투라에서는 항성 지도를 열 수 없습니다. 먼저 탐사를 끝내거나 나오세요.
+ui.starmap_unavailable_during_raid_prep	출격 준비 중에는 항성 지도를 열 수 없습니다. 준비 화면을 먼저 닫으세요.
+ui.starmap_unavailable_during_travel	이동 중에는 항성 지도를 열 수 없습니다. 도착할 때까지 기다리세요.
+ui.secret_data_rewards	기밀 데이터 — 팩션 보상
+ui.secret_data_rewards_note	고정된 시작 물품과 평판 보상입니다.
+ui.secret_data_items	아이템
+ui.secret_data_rep	평판
+ui.secret_data_view	보기
+ui.secret_data_back	팩션 목록으로
+ui.secret_data_reputation	평판
+ui.secret_data_package	시작 물품
+ui.secret_data_story_effect	전달하면 팩션 이야기가 진행될 수 있습니다.
+ui.secret_data_no_rewards	기밀 데이터 보상을 불러올 수 없습니다.
+ui.chip_unlocks	잠금 해제
+ui.back_to	돌아가기:
+compat.module	모듈
+compat.reason	이유:
+ui.chip_unlock_chance_note	칩 1개 기준 확률입니다. 이미 해제한 아이템도 추첨 대상에 남습니다.
+ui.chip_summary_unlocked	해제됨
+ui.chip_summary_locked	잠김
+ui.chip_summary_unknown	알 수 없음
+ui.baron_guaranteed_one_pact	팩트 1개 확정
+ui.baron_this_pact	이 팩트:
+ui.baron_depends_on_mission_tech	임무 기술에 따라 다름
+ui.overview_magnum_available_now	현재 이용 가능
+ui.overview_magnum_not_available_now	현재 이용 불가
+ui.overview_magnum_all_completed	모두 연구 완료
+ui.loot_accordion_hint	항목을 클릭하여 펼치기 / 접기
+ui.baron_habitat	서식지
+ui.baron_guaranteed	확정
+ui.baron_one_pact	팩트 1개
+ui.loot_quick_jump	빠른 이동
+ui.jump	이동
+ui.weapon_modes	모드
+ui.mode_when_empty	탄약 없음
+ui.mode_single	단발
+ui.mode_burst	점사
+ui.mode_auto	연사
+ui.mode_launcher	발사
+ui.mode_throw	투척
+ui.mode_melee	근접 공격
+ui.mode_buttstroke	개머리판 공격
+ui.mode_single_shot	단발 사격
+ui.mode_shots	발사 수
+ui.mode_accuracy	명중률
+ui.mode_damage	피해
+ui.mode_scatter	탄 퍼짐
+ui.mode_shot_delay	간격
+ui.mode_ammo	탄약
+ui.mode_full_ammo_required	탄약이 가득 차야 사용 가능
+ui.unit_seconds_short	초
+ui.mode_stab	찌르기
+ui.mode_slash	베기
+ui.mode_chop	내려베기
+ui.mode_smash	강타
+ui.mode_punch	주먹질
+ui.mode_tooltip_fire	사격 모드
+ui.mode_tooltip_attack	공격 모드
+ui.mode_rate_of_fire	발사 속도
+ui.mode_damage_modifier	피해 보정
+ui.mode_damage_type	피해 유형
+ui.mode_damage_type_default	피해 유형 (기본)
+ui.damage_type.blunt	둔기
+ui.damage_type.pierce	관통
+ui.damage_type.lacer	절단
+ui.damage_type.fire	불
+ui.damage_type.cold	냉기
+ui.damage_type.poison	독
+ui.damage_type.shock	충격
+ui.damage_type.beam	빔
+ui.damage_type.explosion	폭발
+ui.damage_type.plasma	플라즈마
+ui.damage_type.chaos	엔트로피
+ui.damage_type.proton	이온
+ui.damage_type.cryo	크리오레이저
+ui.mode_ammo_consumption	탄약 소모
+mcm.modder_mode	모드 제작자 모드
+mcm.modder_mode_tip	기술 정보와 아이템 생성 패널을 표시합니다. 생성한 아이템은 현재 게임에 저장됩니다.
+ui.modder_section	모드 제작
+ui.modder_record_type	레코드 유형
+ui.modder_item_class	아이템 클래스
+ui.modder_tech_level	기술 수준
+ui.modder_relation_id	관계 ID
+ui.modder_firemode_ids	사격 모드 ID
+ui.modder_search_syntax	고급 검색: id:  name:  type:  rel:  tech:  cat:   예: cat:weapon tech:>=5
+ui.search_item_modder	검색…  id: / tech: / cat:
+ui.open_item_link	아이템 보기
+ui.modder_spawn_title	모드 제작 도구
+ui.modder_spawn_save_warning	이 저장 파일에 실제 아이템을 생성합니다.
+ui.modder_spawn_clone	클론에게 1개 추가
+ui.modder_spawn_cargo	화물에 1개 추가
+ui.modder_spawn_failed	아이템을 추가하지 못했습니다.
+ui.modder_spawn_invalid_item	이 레코드로 아이템을 생성할 수 없습니다.
+ui.modder_spawn_wait	현재 작업이 끝날 때까지 기다리세요.
+ui.modder_spawn_clone_unavailable	클론의 소지품에 접근할 수 없습니다.
+ui.modder_spawn_contract_unavailable	이 게임 버전에서는 아이템을 생성할 수 없습니다.
+ui.modder_spawn_clone_success	클론 소지품에 추가했습니다.
+ui.modder_spawn_inventory_full	클론의 소지품이 가득 찼습니다.
+ui.modder_spawn_cargo_unavailable	함선 화물에 접근할 수 없습니다.
+ui.modder_spawn_cargo_success	함선 화물에 추가했습니다.
+ui.other_containers	일반 전리품 배치
+ui.mission	임무
+ui.yes	예
+ui.mission_generation	방식
+loot.note.general_spawn	체크 표시는 생성된 임무 전리품이 이 보관함에 들어갈 수 있다는 뜻입니다. 추가 획득 확률이 아니며, 아이템이 바닥에 남을 수도 있습니다.
+ui.loot_modifiers_current	보정: 현재 값
+ui.loot_modifiers_manual	보정: 수동 설정
+ui.loot_marauder	약탈자
+ui.loot_marika_organization	마리카 — 절약
+ui.loot_laksha_field_medic	락샤 — 야전 의무병
+ui.loot_on	켜짐
+ui.loot_off	꺼짐
+ui.loot_pp	%p
+ui.bonus_corpse_loot	시체 추가 전리품
+ui.bonus_rolls	추가 추첨 횟수
+loot.note.corpse_bonus_rolls	약탈자와 절약은 시체 전리품 추첨을 추가합니다. 범위는 추첨 횟수, 괄호 안 %는 최대 횟수가 될 확률, 최종은 한 번 이상 얻을 확률입니다.
+ui.per_roll	1회당
+ui.final_chance	최종
+ui.mode_damage_per_ap_default	피해/AP (기본)
+loot.note.unknown_container_rolls	?는 정확한 추첨 횟수를 알 수 없어 전체 확률을 계산하지 않는다는 뜻입니다.
+ui.station_production_produced_from	정거장 생산 — 재료
+ui.station_production_used_to_produce	정거장 생산 — 이 재료의 용도
+ui.station_production_note	정거장 생산용 제작법입니다. 현재 생산 목록에 포함된 정거장에서만 사용됩니다.
+ui.station_production_output	생산품
+ui.station_production_input	재료
+ui.station_production_recipe	정거장 제작법
+ui.no_active_faction_reward_in_current_save	이 아이템을 보상으로 주는 팩션은 현재 저장 파일에서 이용할 수 없습니다.
+loot.note.enemy_bonus_separate	약탈자와 절약은 적 장비 확률을 바꾸지 않고 별도의 시체 전리품 추첨을 추가합니다.
+ui.mode_critical_damage_per_ap_default	치명타 피해/AP (기본)
+ui.faction_technology_navigation_unavailable	현재는 팩션 기술 화면으로 이동할 수 없습니다.
+ui.scavenger_mission_rewards	폐품 수집가 — 임무 성공 시 획득 확률
+ui.rows_visible	행
+ui.opponent	상대
+ui.scavenger_current_missions	해당 임무: 
+ui.scavenger_best_chance	최고 확률: 
+ui.scavenger_time_left	남은 시간
+stats.tech	기술
+stats.modes	모드
+ui.overview_combat	전투
+ui.overview_damage_ap_short	피해/AP
+ui.overview_crit_short	치명타
+ui.overview_relationships	용도 및 획득처
+ui.overview_magnum_research	Magnum 연구
+ui.overview_used_in_recipes	사용하는 제작법
+ui.overview_crafted_by_recipes	제작법
+ui.overview_obtainable_by_disassembly	분해로 획득
+ui.overview_disassembles_into	분해 결과물
+ui.overview_compatible_ammo	호환 탄약
+ui.overview_compatible_weapons	호환 무기
+ui.overview_recipe_ingredients	제작 재료
+ui.overview_no_core_links	여기에 표시할 정보가 없습니다. 획득처는 거래, 팩션, 전리품 탭을 확인하세요.
+loot.baron.section	남작 전리품
+loot.baron.column.baron	남작
+loot.baron.column.qmorph	쿼지모포시스
+loot.baron.column.item_chance	이 팩트
+loot.baron.column.any_pact	팩트
+loot.baron.column.death_restore	반환
+loot.note.baron_ultimate_death	남작은 팩트 1개를 떨어뜨립니다. 종류는 임무 기술과 획득 가능한 전리품에 따라 달라집니다.
+loot.note.baron_dynamic_tech	확률 범위는 남작 생성 시 임무 및 팩션 기술에 따라 보상 목록이 달라지기 때문입니다.
+loot.note.baron_ksiomara_exception	이야기 진행에 따라 일반 남작 대신 샤오마라가 나타날 수 있습니다. 이 행은 샤오마라에 적용되지 않습니다.
+loot.note.baron_consumption_bound	반환이 100% 미만이면 사망 전 팩트 소비 가능성을 포함한 범위를 표시합니다. 소비 시점은 예측하지 않습니다.
+loot.special.section	기타 획득처
+loot.special.condition	조건
+loot.special.result	결과
+loot.special.deterministic	조건 충족 시 확정
+loot.special.outcome_dependent	결과에 따라 다름
+loot.special.story_reward	이야기 보상
+loot.special.starting_loadout	시작 장비
+loot.special.ancom_exchange	기밀 데이터 교환
+loot.special.expire_conversion	아이템 변환
+loot.special.skull_ritual	해골 의식
+loot.special.story_script	이야기 이벤트
+loot.special.complete_story_mission	이야기 임무 완료
+loot.special.story_mission	이야기 임무
+loot.special.selected_start_preset	고정 시작 장비 선택, 무작위 시작 장비 끄기
+loot.special.exchange_secret_data	AnCom 기밀 데이터 교환
+loot.special.item_expires	원래 아이템의 유효 기간 만료
+loot.special.ritual_failed	의식 실패
+loot.special.ritual_outcome	해당 의식 결과
+loot.special.story_trigger	이야기 이벤트 / 지정 배치
+loot.special.use_byproduct	사용 후 부산물
+loot.special.death_gift	죽음의 선물
+loot.special.mission_reward_pool	임무 보상 목록
+loot.special.mission_orbit_reward_pool	임무 / 궤도 보상 목록
+loot.special.random_starting_pool	무작위 시작 장비 목록
+loot.special.station_production_reward	정거장 생산품 보상
+loot.special.death_gift_source	죽음의 선물
+loot.special.random_start_source	무작위 시작 장비
+loot.special.use_source_item	원래 아이템 사용 / 소모
+loot.special.death_gift_condition	죽음의 선물 켜짐 및 보상 조건 충족
+loot.special.faction_reward_condition	팩션 보상 목록 / 기술 요구량
+loot.special.random_start_condition	무작위 시작 장비 켜짐
+loot.special.station_production_condition	정거장에서 현재 생산 중이며 보상 점수 충분
+loot.note.container_context_chance	~는 한 번 이상 얻을 확률입니다. 현재 또는 수동 추첨 횟수·약탈자와 임무·팩션 기술을 반영합니다. 전리품 예산, 임시 기술, 지역 이벤트는 제외합니다.
+loot.note.container_modifier_unavailable	*는 현재 약탈자 수치를 알 수 없어 기본 추첨만 계산한다는 뜻입니다. 우주에서는 수동 설정을 선택하세요.
+loot.note.container_save_unavailable	—는 저장 파일의 기술, 보상 목록 또는 기본 추첨 범위를 알 수 없어 정확히 추정할 수 없다는 뜻입니다.
+loot.special.other_section	특수 획득 방법
+loot.special.reward_section	팩션 보상
+loot.special.start_section	새 게임 시작
+loot.special.result_pool	추첨 대상
+loot.special.result_outcome	결과
+loot.special.result_guaranteed	확정
+loot.special.result_conditional	조건부
+loot.special.kind_story	이야기 임무
+loot.special.kind_start	시작
+loot.special.kind_secret_data	기밀 데이터
+loot.special.kind_expire	만료
+loot.special.kind_ritual	의식
+loot.special.kind_story_script	이야기
+loot.special.story_source	이야기 분기
+loot.special.kind_use	사용 시
+loot.special.kind_death	사망 후
+loot.special.kind_mission_reward	임무 보상
+loot.special.kind_reward	보상
+loot.special.kind_start_pool	시작 장비 목록
+loot.special.kind_station_reward	생산
+loot.special.cond_complete	임무 완료
+loot.special.cond_fixed_start	고정 장비 · 무작위 시작 끄기
+loot.special.cond_exchange	교환
+loot.special.cond_expire	만료 후
+loot.special.cond_ritual_failed	실패
+loot.special.cond_ritual_upgrade	강화
+loot.special.cond_ritual_sidegrade	동급 변환
+loot.special.cond_ritual_downgrade	약화
+loot.special.cond_ritual_outcome	의식 결과
+loot.special.cond_story	이야기 이벤트 발생 시
+loot.special.cond_use	사용 후 아이템 고유 조건 충족 시
+loot.special.cond_death	사망 시 보상 조건 충족
+loot.special.cond_mission	임무
+loot.special.cond_mission_orbit	임무 / 궤도
+loot.special.cond_random_start	무작위 시작
+loot.special.cond_station_current	현재 생산품, 점수 충분
+loot.special.result_in_pool	추첨 대상
+loot.special.header_method	방법
+loot.special.header_status	상태
+loot.special.header_faction	팩션
+loot.special.header_where	장소
+loot.special.header_requirement	요구 조건
+loot.special.header_loadout	장비 구성
+loot.special.header_mode	모드
+loot.special.kind_fixed_start	고정 장비
+loot.special.kind_mission_only	임무
+loot.special.kind_mission_orbit	임무 / 궤도
+loot.special.kind_random_pool	무작위 추첨
+loot.special.cond_no_extra_requirement	추가 조건 없음
+loot.special.cond_random_start_enabled	무작위 장비 켜짐
+loot.special.cond_fixed_start_enabled	무작위 장비 꺼짐
+loot.note.faction_reward_sources	체크 표시는 추첨 대상이며 확정 보상이 아닙니다. '임무 / 궤도'는 기술 조건이 있습니다. '생산'은 정거장에 해당 물품이 있고 보상 점수가 충분해야 합니다.
+loot.note.starting_sources	새 게임에서만 적용됩니다. 고정 장비는 확정 지급하고, 무작위 목록에서는 선택될 수도 있습니다.
+loot.general_spawn.placement	배치
+loot.column.container	보관함
+loot.note.special_sources	특수 획득 방법입니다. 의식의 '획득처'는 원래 해골, '조건'은 필요한 결과입니다.
+loot.special.fixed_loadout_count	장비 구성 수
+loot.special.story_missions_count	이야기 임무 x{0}
+loot.note.container_modifier_basic	*는 현재 약탈자 수치를 알 수 없어 기본 추첨만 계산한다는 뜻입니다.
+loot.note.container_save_compatibility	—는 게임 업데이트 후 이 저장 파일의 확률 추정이 일시적으로 불가능하다는 뜻입니다.
+loot.note.manual_unavailable	수동 계산은 일시적으로 사용할 수 없습니다.
+loot.note.manual_compatibility	게임 업데이트 후 수동 계산은 일시적으로 사용할 수 없습니다.
+loot.note.container_calculation_unavailable	—는 이 저장 파일의 확률 추정이 일시적으로 불가능하다는 뜻입니다.
+mcm.header.language	언어
+mcm.language	Item Intelligence 언어
+mcm.language_tip	Auto는 게임 언어를 따릅니다. 수동 선택은 이 모드의 화면만 바꾸며, 아이템과 팩션 이름은 게임 언어로 표시됩니다.
+ui.loot_storage_short	보관
+ui.loot_corpse_short	시체
+ui.loot_implant_short	임플
+ui.loot_storage_corpse_short	보/시
+ui.unit_day_short	일
+ui.unit_hour_short	시
+ui.unit_minute_short	분
+ui.body_dependent	조건부
+loot.note.body_dependent	'조건부'는 획득 가능하지만 확률이 확인되지 않은 출처입니다. 신체 생성 결과와 장착 제한에 따라 달라집니다.
+ui.view_expand	큰 창
+ui.view_window	기본 창
+ui.view_zoom	배율
+ui.view_save_failed	창 설정을 저장하지 못했습니다.
+ui.mode_effect	모드 특성
+ui.mode_status_effect	상태 효과
+ui.mode_trait_wounding	부상 유발
+ui.arm_builtin_weapon	장착 후 무기
+ui.arm_source_augmentation	장착할 증강체
+ui.upgrade_uses	강화 용도
+ui.upgrade_genomes	게놈 강화
+ui.upgrade_uses_note	함선 연구를 마친 뒤에도 필요할 수 있습니다. 필요한 수량은 선택한 강화에 따라 달라지며 남은 연구의 총 필요량에는 포함되지 않습니다.
+ui.mode_no_effects	없음
+ui.upgrade_ranged	원거리 무기 강화
+ui.upgrade_melee	근접 무기 강화
+ui.upgrade_armor	방어구 강화 (모든 부위)
+ui.upgrade_classes	클래스 개조
+ui.upgrade_pacts	팩트 의식
+ui.upgrade_implants	클론에 임플란트 장착
+ui.upgrade_augmentations	클론에 증강체 장착
+ui.upgrade_equipment	이 재료로 강화하는 장비

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -442,19 +442,19 @@ namespace ItemIntelligence
                 chancePercent = _disassemblyRollChancePercent;
 
             if (chancePercent >= 99.999f)
-                return "x" + rolls.ToString(CultureInfo.InvariantCulture) + "  •  100%" + Ui("ui.roll");
+                return "x" + rolls.ToString(CultureInfo.InvariantCulture) + "  /  100%" + Ui("ui.roll");
 
             if (chancePercent >= 0f)
             {
                 string chance = FormatPercentValue(chancePercent);
                 if (rolls <= 1)
-                    return "x1  •  " + chance + Ui("ui.roll");
+                    return "x1  |  " + chance + Ui("ui.roll");
 
-                return "0-" + rolls.ToString(CultureInfo.InvariantCulture) + "  •  " + chance + Ui("ui.roll");
+                return "0-" + rolls.ToString(CultureInfo.InvariantCulture) + "  /  " + chance + Ui("ui.roll");
             }
 
             // Unknown means unknown: never show a bare chance label without a number.
-            return "0-" + rolls.ToString(CultureInfo.InvariantCulture) + "  •  ?";
+            return "0-" + rolls.ToString(CultureInfo.InvariantCulture) + "  /  ?";
         }
     }
 }

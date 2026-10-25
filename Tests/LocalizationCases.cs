@@ -71,7 +71,8 @@ namespace ItemIntelligence
             string dir = Path.Combine(root, "Localization");
             string[,] languages = { { "EnglishUS", "en.lang", "English" }, { "Russian", "ru.lang", "Русский" },
                 { "German", "de.lang", "Deutsch" }, { "Polish", "pl.lang", "Polski" }, { "ChineseSimp", "zh-Hans.lang", "简体中文" },
-                { "Spanish", "es.lang", "Español" }, { "BrazilianPortugal", "pt-BR.lang", "Português (Brasil)" }, { "French", "fr.lang", "Français" } };
+                { "Spanish", "es.lang", "Español" }, { "BrazilianPortugal", "pt-BR.lang", "Português (Brasil)" }, { "French", "fr.lang", "Français" },
+                { "Japanese", "ja.lang", "日本語 / Japanese" }, { "Korean", "ko.lang", "한국어 / Korean" }, { "Turkish", "tr.lang", "Türkçe" } };
             // A plain reflection call cannot see inherited static Instance. The
             // production owner traversal must recover it, never guess from the OS.
             Verify(GetStaticMember(typeof(MGSC.Localization), "Instance") == null, "fixture reproduces inherited static member boundary");
@@ -140,6 +141,30 @@ namespace ItemIntelligence
             Verify(!ExternalLanguageMatches("Belarusian", "ru;Russian"), "no substring language match");
             Verify(!ExternalLanguageMatches("ChineseTraditional", "ChineseSimp;zh-CN;zh-Hans"), "do not misclassify traditional Chinese");
 
+            string[,] addedLanguages = {
+                { "ja-JP", "Japanese", "戦利品", "ja-JP", "1.25", "15分", "1日 3時" },
+                { "ko-KR", "Korean", "전리품", "ko-KR", "1.25", "15분", "1일 3시" },
+                { "tr-TR", "Turkish", "GANİMET", "tr-TR", "1,25", "15dk", "1g 3sa" } };
+            for (int i = 0; i < addedLanguages.GetLength(0); i++)
+            {
+                SetUiLanguagePreference(addedLanguages[i, 0], "MCM");
+                Verify(GetUiLanguageSignature() == addedLanguages[i, 1] && GetLanguageSignature() == "Russian", "new manual UI keeps game language");
+                Verify(Ui("tab.loot.short") == addedLanguages[i, 2], "new language replaces previous cache");
+                Verify(GetUiNumberCulture().Name == addedLanguages[i, 3] && FormatExpectedNumber(1.25) == addedLanguages[i, 4], "new number cultures");
+                Verify(FormatCompactUiDurationFallback(0.25) == addedLanguages[i, 5] && FormatUiDaysAndHours(27) == addedLanguages[i, 6], "new compact time units");
+                Verify(IsCjkLanguage() == (i < 2), "Turkish is not CJK");
+                Verify(GetLanguageAwareWrapFallback(60, 90) == (i < 2 ? 55 : 60), "new conservative fallback widths");
+            }
+            string[,] addedAliases = {
+                { "日本語", "日本語 / Japanese" }, { "Japanese", "日本語 / Japanese" }, { "ja_JP", "日本語 / Japanese" }, { "ja", "日本語 / Japanese" },
+                { "한국어", "한국어 / Korean" }, { "Korean", "한국어 / Korean" }, { "ko_KR", "한국어 / Korean" }, { "ko", "한국어 / Korean" },
+                { "Türkçe", "Türkçe" }, { "Turkce", "Türkçe" }, { "Turkish", "Türkçe" }, { "tr", "Türkçe" } };
+            for (int i = 0; i < addedAliases.GetLength(0); i++)
+                Verify(NormalizeUiLanguagePreference(addedAliases[i, 0]) == addedAliases[i, 1], "new saved language alias " + addedAliases[i, 0]);
+            foreach (string option in GetUiLanguageOptions())
+                Verify(NormalizeUiLanguagePreference(option) == option, "dropdown label round-trips through saved config: " + option);
+            Verify(!ExternalLanguageMatches("TraditionalChinese", ReadUiLanguageDeclaration(Path.Combine(dir, "tr.lang"))), "tr is not a substring match");
+
             // Community overrides, force rules, English fallback and damaged files.
             string custom = Path.Combine(dir, "custom.lang");
             File.WriteAllText(custom, "@language=German\n@force=true\ntab.loot.short\tCustom\n", new UTF8Encoding(false));
@@ -156,11 +181,23 @@ namespace ItemIntelligence
                 SetUiLanguagePreference("Auto (Game)", "test"); GameLanguage(latinLanguages[i, 1]);
                 Verify(Ui("tab.loot.short") == "Custom", "single force can override new built-in language in Auto");
             }
+            for (int i = 0; i < addedLanguages.GetLength(0); i++)
+            {
+                SetUiLanguagePreference(addedLanguages[i, 0], "test");
+                Verify(Ui("tab.loot.short") == addedLanguages[i, 2], "forced file cannot hijack new manual languages");
+                SetUiLanguagePreference("Auto (Game)", "test"); GameLanguage(addedLanguages[i, 1]);
+                Verify(Ui("tab.loot.short") == "Custom", "new shipped files are built-ins, not community overrides");
+            }
             SetUiLanguagePreference("Auto (Game)", "test");
-            GameLanguage("Turkish");
+            GameLanguage("Italian");
             Verify(Ui("tab.loot.short") == "Custom", "single forced community language in Auto");
             File.Delete(custom); ReloadUi();
             Verify(Ui("tab.loot.short") == "LOOT", "unsupported language safely uses English");
+            File.WriteAllText(custom, "@language=Japanese\ntab.loot.short\t個人訳\n", new UTF8Encoding(false));
+            SetUiLanguagePreference("ja-JP", "test");
+            Verify(Ui("tab.loot.short") == "個人訳", "exact Japanese community override wins over shipped Japanese");
+            File.Delete(custom); ReloadUi();
+            Verify(Ui("tab.loot.short") == "戦利品", "removing override restores shipped Japanese");
             File.WriteAllText(custom, "@language=Custom\na\t leading \na\treplacement\nmalformed\n", new UTF8Encoding(false));
             Dictionary<string, string> map = new Dictionary<string, string>();
             ResetLocalizationHealthForReload(); LoadUiLanguageFile(custom, map);
@@ -181,6 +218,15 @@ namespace ItemIntelligence
             Verify(string.Concat(wrapped) == "汉😀字e\u0301汉字", "surrogate and combining sequence preserved");
             foreach (string line in wrapped)
                 Verify(!char.IsLowSurrogate(line[0]) && !char.IsHighSurrogate(line[line.Length-1]) && line[0] != '\u0301', "text element boundaries");
+            string japanese = "「この契約」は対象です（返還）。オーグメントを確認してください。";
+            for (int width = 5; width <= 12; width++)
+            {
+                wrapped = WrapUnspacedBrowserText(japanese, s => s.Length > width);
+                Verify(string.Concat(wrapped) == japanese, "Japanese punctuation wrapping preserves all characters");
+                foreach (string line in wrapped)
+                    Verify(line.Length <= width && "）。」、ーっゃゅょ".IndexOf(line[0]) < 0 && "（「".IndexOf(line[line.Length - 1]) < 0,
+                        "Japanese punctuation clusters and small kana stay with text");
+            }
 
             // Native game fonts are shared. QII's mixed-script fallback must be private
             // and reused after repeated switches, with no growth of original lists.
@@ -188,7 +234,7 @@ namespace ItemIntelligence
             TMP_FontAsset han = new TMP_FontAsset { name = "Chinese" };
             _inspectorFont = latin;
             MGSC.LocalizationFontKeeper.Instance.FontPresets.Add(new MGSC.FontPreset {
-                FontAsset = latin, AvaialableLangs = new List<string> { "EnglishUS", "Russian", "German", "Polish", "Spanish", "BrazilianPortugal", "French" } });
+                FontAsset = latin, AvaialableLangs = new List<string> { "EnglishUS", "Russian", "German", "Polish", "Spanish", "BrazilianPortugal", "French", "Turkish" } });
             MGSC.LocalizationFontKeeper.Instance.FontPresets.Add(new MGSC.FontPreset {
                 FontAsset = han, AvaialableLangs = new List<string> { "ChineseSimp" } });
             GameLanguage("Russian"); SetUiLanguagePreference("简体中文", "test");
@@ -209,19 +255,41 @@ namespace ItemIntelligence
                 Verify(currentFont == mixedLatin && UiMixedFonts.Count == 2, "Latin languages reuse one private mixed font");
             }
             Verify(han.fallbackFontAssetTable.Count == 0 && latin.fallbackFontAssetTable.Count == 0, "Latin switches preserve shared font lists");
+            TMP_FontAsset kana = new TMP_FontAsset { name = "Japanese" };
+            TMP_FontAsset hangul = new TMP_FontAsset { name = "Korean" };
+            MGSC.LocalizationFontKeeper.Instance.FontPresets.Add(new MGSC.FontPreset {
+                FontAsset = kana, AvaialableLangs = new List<string> { "Japanese" } });
+            MGSC.LocalizationFontKeeper.Instance.FontPresets.Add(new MGSC.FontPreset {
+                FontAsset = hangul, AvaialableLangs = new List<string> { "Korean" } });
+            string[] fontLanguages = { "Turkish", "ChineseSimp", "Japanese", "Korean" };
+            TMP_FontAsset[] nativeFonts = { latin, han, kana, hangul };
+            for (int repeat = 0; repeat < 2; repeat++)
+            for (int gameIndex = 0; gameIndex < nativeFonts.Length; gameIndex++)
+            for (int uiIndex = 0; uiIndex < nativeFonts.Length; uiIndex++)
+            {
+                GameLanguage(fontLanguages[gameIndex]); SetUiLanguagePreference(fontLanguages[uiIndex], "test");
+                TMP_FontAsset actual = ResolveUiFont();
+                Verify(FindGameLanguageFont(GetUiLanguageSignature()) == nativeFonts[uiIndex], "exact new native font preset");
+                Verify(uiIndex == gameIndex ? actual == nativeFonts[uiIndex] :
+                    actual != nativeFonts[uiIndex] && actual.fallbackFontAssetTable.Contains(nativeFonts[gameIndex]), "mixed scripts preserve game names");
+                foreach (TMP_FontAsset shared in nativeFonts) Verify(shared.fallbackFontAssetTable.Count == 0, "shared game font remains untouched");
+            }
+            Verify(UiMixedFonts.Count == 12, "all script pairs reuse a bounded font cache");
 
             string mcmValue;
             Verify(TryReadMcmString(new Dictionary<string, object> { { "UiLanguage", new McmValue { Value = "Polski" } } }, "UiLanguage", out mcmValue)
                 && mcmValue == "Polski", "MCM wrapped string");
             List<object> configs = new List<object>();
             Verify(GetUiLanguageOptions()[5] == "简体中文 / Chinese" && GetUiLanguageOptions()[6] == "Español" &&
-                GetUiLanguageOptions()[7] == "Português (Brasil)" && GetUiLanguageOptions()[8] == "Français", "new options preserve existing language order");
+                GetUiLanguageOptions()[7] == "Português (Brasil)" && GetUiLanguageOptions()[8] == "Français" &&
+                GetUiLanguageOptions()[9] == "日本語 / Japanese" && GetUiLanguageOptions()[10] == "한국어 / Korean" &&
+                GetUiLanguageOptions()[11] == "Türkçe", "new options preserve existing language order");
             AddMcmStringDropdown(typeof(List<object>).GetMethod("Add"), configs, typeof(ModernDropdown), typeof(LegacyDropdown),
                 "UiLanguage", "Auto (Game)", "Language", "Auto (Game)", "Tip", "Label", GetUiLanguageOptions());
-            Verify(((ModernDropdown)configs[0]).Options.Count == 9, "modern dropdown constructor");
+            Verify(((ModernDropdown)configs[0]).Options.Count == 12, "modern dropdown constructor");
             AddMcmStringDropdown(typeof(List<object>).GetMethod("Add"), configs, null, typeof(LegacyDropdown),
                 "UiLanguage", "Auto (Game)", "Language", "Auto (Game)", "Tip", "Label", GetUiLanguageOptions());
-            Verify(((LegacyDropdown)configs[1]).Options.Count == 9, "legacy dropdown constructor");
+            Verify(((LegacyDropdown)configs[1]).Options.Count == 12, "legacy dropdown constructor");
             return localizationChecks;
         }
         private class McmValue { public string Value { get; set; } }

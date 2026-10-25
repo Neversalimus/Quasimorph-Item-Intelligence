@@ -29,10 +29,12 @@ namespace ItemIntelligence
                 }
                 if (end < elements.Count && end - start > 1)
                 {
-                    const string closing = "，。！？；：、）】》」』,.!?;:%";
-                    const string opening = "（【《「『(";
-                    if (closing.IndexOf(elements[end], StringComparison.Ordinal) >= 0 ||
-                        opening.IndexOf(elements[end - 1], StringComparison.Ordinal) >= 0)
+                    const string closing = "，。！？；：、）】》」』,.!?;:%)]}ー々ぁぃぅぇぉっゃゅょゎァィゥェォッャュョヮヵヶ";
+                    const string opening = "（【《「『([{";
+                    // Move an entire punctuation cluster, not just its last character.
+                    while (end - start > 1 &&
+                        (closing.IndexOf(elements[end], StringComparison.Ordinal) >= 0 ||
+                         opening.IndexOf(elements[end - 1], StringComparison.Ordinal) >= 0))
                     {
                         end--;
                         line = line.Substring(0, line.Length - elements[end].Length);

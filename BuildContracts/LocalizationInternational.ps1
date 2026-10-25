@@ -13,6 +13,9 @@ $internationalLanguageSpecs = @(
     @{ Name='ES'; File='es.lang'; Declaration='Spanish;Español;Espanol;es;es-ES' },
     @{ Name='PTBR'; File='pt-BR.lang'; Declaration='BrazilianPortugal;BrazilianPortuguese;PortugueseBrazil;Português (Brasil);Portugues (Brasil);pt-BR' },
     @{ Name='FR'; File='fr.lang'; Declaration='French;Français;Francais;fr;fr-FR' },
+    @{ Name='JA'; File='ja.lang'; Declaration='Japanese;japanese;ja;ja-JP;日本語' },
+    @{ Name='KO'; File='ko.lang'; Declaration='Korean;korean;ko;ko-KR;한국어' },
+    @{ Name='TR'; File='tr.lang'; Declaration='Turkish;turkish;Türkçe;Turkce;tr;tr-TR' },
     @{ Name='TPL'; File='TranslationTemplate.lang'; Declaration='CHANGE_ME' }
 )
 
@@ -54,7 +57,7 @@ $internationalEnglish = $internationalMaps['EN']
 if ($internationalEnglish.Count -ne 695) {
     throw "international localization key count drifted: $($internationalEnglish.Count), expected 695"
 }
-foreach ($name in @('RU','DE','PL','ZH','ES','PTBR','FR','TPL')) {
+foreach ($name in @('RU','DE','PL','ZH','ES','PTBR','FR','JA','KO','TR','TPL')) {
     $map = $internationalMaps[$name]
     if ($map.Count -ne $internationalEnglish.Count) {
         throw "international localization count mismatch: ${name}=$($map.Count), EN=$($internationalEnglish.Count)"
@@ -88,7 +91,7 @@ $zhText = (($internationalMaps['ZH'].Values) -join "`n")
 if ([regex]::Matches($deText,'[ÄÖÜäöüß]').Count -lt 100) { throw 'German translation script-density sanity failed.' }
 if ([regex]::Matches($plText,'[ĄĆĘŁŃÓŚŹŻąćęłńóśźż]').Count -lt 150) { throw 'Polish translation script-density sanity failed.' }
 if ([regex]::Matches($zhText,'[\u3400-\u4DBF\u4E00-\u9FFF]').Count -lt 900) { throw 'Simplified Chinese translation script-density sanity failed.' }
-foreach ($name in @('DE','PL','ZH','ES','PTBR','FR')) {
+foreach ($name in @('DE','PL','ZH','ES','PTBR','FR','JA','KO','TR')) {
     $joined = (($internationalMaps[$name].Values) -join "`n")
     if ($joined -match '[А-Яа-яЁё]') { throw "unexpected Cyrillic residue in shipped $name translation." }
 }
@@ -106,10 +109,22 @@ foreach ($key in $internationalMaps['ZH'].Keys) {
     }
 }
 
+# Brand names, identifiers and compact symbols are intentionally shared. Every
+# other Japanese/Korean value must contain the corresponding writing system.
+foreach ($name in @('JA','KO')) {
+    foreach ($key in $internationalMaps[$name].Keys) {
+        if ($allowedChineseLatinOnly -contains $key -or ($name -eq 'KO' -and $key -eq 'ui.loot_pp')) { continue }
+        $script = if ($name -eq 'JA') { '[\u3040-\u30FF\u3400-\u9FFF]' } else { '[\uAC00-\uD7AF]' }
+        if ([string]$internationalMaps[$name][$key] -notmatch $script) {
+            throw "untranslated $name value: $key"
+        }
+    }
+}
+
 foreach ($key in @(
     'ui.loot_storage_short','ui.loot_corpse_short','ui.loot_implant_short','ui.loot_storage_corpse_short',
     'ui.unit_day_short','ui.unit_hour_short','ui.unit_minute_short')) {
-    foreach ($name in @('EN','RU','DE','PL','ZH','ES','PTBR','FR','TPL')) {
+    foreach ($name in @('EN','RU','DE','PL','ZH','ES','PTBR','FR','JA','KO','TR','TPL')) {
         if (-not $internationalMaps[$name].ContainsKey($key)) {
             throw "international compact UI key missing: $name / $key"
         }
@@ -121,8 +136,8 @@ if (-not (Test-Path -LiteralPath $internationalSourcePath -PathType Leaf)) {
     throw 'international localization presentation owner missing.'
 }
 $internationalSource = Read-Utf8Strict -Path $internationalSourcePath
-if ((Get-Content -LiteralPath $internationalSourcePath).Count -gt 230) {
-    throw 'international localization presentation owner exceeded 230 lines.'
+if ((Get-Content -LiteralPath $internationalSourcePath).Count -gt 250) {
+    throw 'international localization presentation owner exceeded 250 lines.'
 }
 foreach ($token in @(
     'GetUiLanguageOptions()','SetUiLanguagePreference(','GetUiLanguageSignature()','IsUiRussianLanguage()',
@@ -145,7 +160,7 @@ foreach ($forbidden in @('IsRussian() ? "Т" : "B"','IsRussian() ? "К/Т" : "C/
 
 
 foreach ($selectorKey in @('mcm.header.language','mcm.language','mcm.language_tip')) {
-    foreach ($name in @('EN','RU','DE','PL','ZH','ES','PTBR','FR','TPL')) {
+    foreach ($name in @('EN','RU','DE','PL','ZH','ES','PTBR','FR','JA','KO','TR','TPL')) {
         if (-not $internationalMaps[$name].ContainsKey($selectorKey)) {
             throw "language-selector localization key missing: $name / $selectorKey"
         }

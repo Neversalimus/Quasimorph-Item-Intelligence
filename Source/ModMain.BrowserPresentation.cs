@@ -746,7 +746,7 @@ namespace ItemIntelligence
                 int first = _browserSearchLastResultCount <= 0 ? 0 : _browserSearchScrollOffset + 1;
                 int last = Math.Min(_browserSearchLastResultCount, _browserSearchScrollOffset + BrowserSearchVisibleRows);
                 string range = _browserSearchLastResultCount > BrowserSearchVisibleRows
-                    ? "  •  " + first.ToString(CultureInfo.InvariantCulture) + "-" +
+                    ? "  /  " + first.ToString(CultureInfo.InvariantCulture) + "-" +
                       last.ToString(CultureInfo.InvariantCulture)
                     : string.Empty;
                 SetBrowserTextIfChanged(_browserSearchStatusText, NormalizeGameText(
@@ -1442,7 +1442,7 @@ namespace ItemIntelligence
                 }
 
                 List<RecipeUseGroup> ordered = ConsolidateRecipeUseFamilies(new List<RecipeUseGroup>(groups.Values));
-                BrowserLines.Add(BrowserLine.Section((Ui("ui.used_in_2")) + "  •  " + ordered.Count.ToString(CultureInfo.InvariantCulture)));
+                BrowserLines.Add(BrowserLine.Section((Ui("ui.used_in_2")) + "  /  " + ordered.Count.ToString(CultureInfo.InvariantCulture)));
                 ordered.Sort(delegate(RecipeUseGroup a, RecipeUseGroup b)
                 {
                     return string.Compare(LocalizeItem(a.OutputItemId), LocalizeItem(b.OutputItemId), StringComparison.OrdinalIgnoreCase);
@@ -1454,9 +1454,9 @@ namespace ItemIntelligence
                     string quantity = group.MinQuantity == group.MaxQuantity
                         ? "x" + group.MinQuantity.ToString(CultureInfo.InvariantCulture)
                         : "x" + group.MinQuantity.ToString(CultureInfo.InvariantCulture) + "-" + group.MaxQuantity.ToString(CultureInfo.InvariantCulture);
-                    string right = quantity + "  •  " + LocalizeKind(group.Kind, ru);
+                    string right = quantity + "  /  " + LocalizeKind(group.Kind, ru);
                     if (group.Variants > 1)
-                        right += "  •  " + group.Variants.ToString(CultureInfo.InvariantCulture) + (Ui("ui.var"));
+                        right += "  /  " + group.Variants.ToString(CultureInfo.InvariantCulture) + (Ui("ui.var"));
 
                     string chipItemId = GetFamilyPrimaryDatadisk(group.OutputItemIds);
                     int chipStatus = GetFamilyDatadiskStatus(group.OutputItemIds, chipItemId);
@@ -1466,7 +1466,7 @@ namespace ItemIntelligence
 
             if (hasCrafted)
             {
-                BrowserLines.Add(BrowserLine.Section((Ui("ui.crafted_from_2")) + "  •  " + crafted.Count.ToString(CultureInfo.InvariantCulture)));
+                BrowserLines.Add(BrowserLine.Section((Ui("ui.crafted_from_2")) + "  /  " + crafted.Count.ToString(CultureInfo.InvariantCulture)));
                 for (int r = 0; r < crafted.Count; r++)
                 {
                     RecipeDef recipe = crafted[r];
@@ -1488,7 +1488,7 @@ namespace ItemIntelligence
 
                 BrowserLines.Add(BrowserLine.Section(
                     (Ui("ui.disassembly_outputs")) +
-                    "  •  " + disassembly.Count.ToString(CultureInfo.InvariantCulture)));
+                    "  /  " + disassembly.Count.ToString(CultureInfo.InvariantCulture)));
 
                 if (randomDisassemblyPool)
                     BrowserLines.Add(BrowserLine.Note(Ui("ui.possible_outcomes")));
@@ -1517,7 +1517,7 @@ namespace ItemIntelligence
 
                 BrowserLines.Add(BrowserLine.Section(
                     Ui("ui.obtained_by_disassembling") +
-                    "  •  " + orderedSources.Count.ToString(CultureInfo.InvariantCulture)));
+                    "  /  " + orderedSources.Count.ToString(CultureInfo.InvariantCulture)));
 
                 for (int i = 0; i < orderedSources.Count; i++)
                 {
@@ -1534,7 +1534,7 @@ namespace ItemIntelligence
                 if (hasStationProduced)
                 {
                     BrowserLines.Add(BrowserLine.Section(
-                        Ui("ui.station_production_produced_from") + "  •  " +
+                        Ui("ui.station_production_produced_from") + "  /  " +
                         stationProduced.Count.ToString(CultureInfo.InvariantCulture)));
                     AddBrowserStationProductionRelations(stationProduced, true);
                 }
@@ -1542,7 +1542,7 @@ namespace ItemIntelligence
                 if (hasStationUsed)
                 {
                     BrowserLines.Add(BrowserLine.Section(
-                        Ui("ui.station_production_used_to_produce") + "  •  " +
+                        Ui("ui.station_production_used_to_produce") + "  /  " +
                         stationUsed.Count.ToString(CultureInfo.InvariantCulture)));
                     AddBrowserStationProductionRelations(stationUsed, false);
                 }

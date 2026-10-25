@@ -751,8 +751,8 @@ foreach ($locText in @($enLocalizationText,$ruLocalizationText,$templateLocaliza
         if ($locText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "current localization token missing: $token" }
     }
 }
-if ($enLocalizationText.IndexOf("loot.note.container_context_chance`t≈ = chance to get the item at least once.",[StringComparison]::Ordinal) -lt 0 -or
-    $ruLocalizationText.IndexOf("loot.note.container_context_chance`t≈ = шанс получить предмет хотя бы раз.",[StringComparison]::Ordinal) -lt 0) {
+if ($enLocalizationText.IndexOf("loot.note.container_context_chance`t~ = chance to get the item at least once.",[StringComparison]::Ordinal) -lt 0 -or
+    $ruLocalizationText.IndexOf("loot.note.container_context_chance`t~ = шанс получить предмет хотя бы раз.",[StringComparison]::Ordinal) -lt 0) {
     throw 'current regression: save-aware container chance disclosure missing.'
 }
 

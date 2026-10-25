@@ -577,6 +577,9 @@ namespace ItemIntelligence
                         string.Equals(fileName, "es.lang", StringComparison.OrdinalIgnoreCase) ||
                         string.Equals(fileName, "pt-BR.lang", StringComparison.OrdinalIgnoreCase) ||
                         string.Equals(fileName, "fr.lang", StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(fileName, "ja.lang", StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(fileName, "ko.lang", StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(fileName, "tr.lang", StringComparison.OrdinalIgnoreCase) ||
                         string.Equals(fileName, "zh-Hans.lang", StringComparison.OrdinalIgnoreCase);
                     if (builtIn)
                     {

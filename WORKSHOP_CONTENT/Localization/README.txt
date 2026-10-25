@@ -3,8 +3,9 @@
 
 Built in: English (en.lang), Russian (ru.lang), German (de.lang), Polish (pl.lang),
 Simplified Chinese (zh-Hans.lang), Spanish (es.lang), Brazilian Portuguese
-(pt-BR.lang), and French (fr.lang). Each of the eight languages and
-TranslationTemplate.lang has 663 keys. Brazilian Portuguese uses the actual game
+(pt-BR.lang), French (fr.lang), Japanese (ja.lang), Korean (ko.lang), and Turkish
+(tr.lang). All 11 official Quasimorph languages and TranslationTemplate.lang have
+695 keys each. Brazilian Portuguese uses the actual game
 identifier BrazilianPortugal; it does not claim European Portuguese (pt-PT).
 
 MCM language selection
@@ -17,7 +18,8 @@ the QII browser refreshes immediately after saving settings.
 Create a community translation
 -------------------------------
 Copy TranslationTemplate.lang, rename it, and set @language to exact game aliases,
-for example Japanese;ja or Korean;ko. Translate only values after the TAB. Preserve
+for example Italian;it for a community language, or Japanese;ja to override the
+built-in Japanese translation. Translate only values after the TAB. Preserve
 keys, {KEY}, numeric placeholders such as {0}, and leading/trailing spaces used
 in composed phrases. Save as UTF-8 and restart Quasimorph.
 
@@ -34,6 +36,9 @@ Fonts and wrapping
 -------------------
 QII uses Quasimorph font presets for the selected UI language. Mixed UI/game scripts
 use a private font asset with a separate fallback list. Global fonts are untouched.
-CJK notes wrap without requiring spaces. Rendering still needs an in-game check
+Chinese and Japanese notes wrap without requiring spaces. Korean notes prefer
+word boundaries. Japanese closing punctuation stays with the preceding text.
+MCM's language dropdown includes all supported scripts through private fallbacks.
+Rendering still needs an in-game check
 with the installed game and actual resolution; community scripts need suitable
 font glyphs in the game.

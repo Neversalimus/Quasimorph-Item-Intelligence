@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 
@@ -30,7 +30,7 @@ namespace ItemIntelligence
 
             if (ShowSources && sellToPlayerCount > 0)
             {
-                BrowserLines.Add(BrowserLine.FullSection(Ui("ui.buy_at_stations") + "  •  " + sellToPlayerCount.ToString(CultureInfo.InvariantCulture)));
+                BrowserLines.Add(BrowserLine.FullSection(Ui("ui.buy_at_stations") + "  /  " + sellToPlayerCount.ToString(CultureInfo.InvariantCulture)));
                 if (previousLayout)
                 {
                     if (exact103Pricing)
@@ -57,7 +57,7 @@ namespace ItemIntelligence
 
             if (ShowTradeInformation && buyFromPlayerCount > 0)
             {
-                BrowserLines.Add(BrowserLine.FullSection(Ui("ui.sell_to_stations") + "  •  " + buyFromPlayerCount.ToString(CultureInfo.InvariantCulture)));
+                BrowserLines.Add(BrowserLine.FullSection(Ui("ui.sell_to_stations") + "  /  " + buyFromPlayerCount.ToString(CultureInfo.InvariantCulture)));
                 if (previousLayout)
                 {
                     if (exact103Pricing)

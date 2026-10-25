@@ -13,7 +13,7 @@ namespace ItemIntelligence
             new Dictionary<TMP_FontAsset, TMP_FontAsset>();
         private static readonly Dictionary<TMP_FontAsset, TMP_FontAsset> McmOriginalFonts =
             new Dictionary<TMP_FontAsset, TMP_FontAsset>();
-        private static TMP_FontAsset _mcmHanFont, _mcmLatinFont;
+        private static TMP_FontAsset _mcmHanFont, _mcmLatinFont, _mcmJapaneseFont, _mcmKoreanFont;
         private static int _mcmFontRetryFrame;
         private static bool _mcmFontWarningLogged, _mcmFontReadyLogged;
 
@@ -101,15 +101,18 @@ namespace ItemIntelligence
             if (McmOriginalFonts.ContainsKey(original)) return original;
             TMP_FontAsset mixed;
             if (McmMixedFonts.TryGetValue(original, out mixed) && mixed != null) return mixed;
-            if (_mcmHanFont == null || _mcmLatinFont == null)
+            if (_mcmHanFont == null || _mcmLatinFont == null || _mcmJapaneseFont == null || _mcmKoreanFont == null)
             {
                 if (Time.frameCount < _mcmFontRetryFrame) return null;
                 _mcmFontRetryFrame = Time.frameCount + 120;
                 _mcmHanFont = FindGameLanguageFont("ChineseSimplified");
                 _mcmLatinFont = FindGameLanguageFont("EnglishUS");
-                if (_mcmHanFont == null || _mcmLatinFont == null) return null;
+                _mcmJapaneseFont = FindGameLanguageFont("Japanese");
+                _mcmKoreanFont = FindGameLanguageFont("Korean");
+                if (_mcmHanFont == null || _mcmLatinFont == null || _mcmJapaneseFont == null || _mcmKoreanFont == null) return null;
             }
-            // Preserve MCM's primary font and metrics. Add both scripts only on a
+            // All language names share one dropdown, regardless of the current UI
+            // language. Preserve MCM's metrics and add the other scripts only on a
             // private asset; no game font or global TMP fallback list is modified.
             mixed = UnityEngine.Object.Instantiate(original);
             mixed.name = "QII_MCM_" + original.name;
@@ -120,6 +123,10 @@ namespace ItemIntelligence
                 mixed.fallbackFontAssetTable.Add(_mcmHanFont);
             if (_mcmLatinFont != original && !mixed.fallbackFontAssetTable.Contains(_mcmLatinFont))
                 mixed.fallbackFontAssetTable.Add(_mcmLatinFont);
+            if (_mcmJapaneseFont != original && !mixed.fallbackFontAssetTable.Contains(_mcmJapaneseFont))
+                mixed.fallbackFontAssetTable.Add(_mcmJapaneseFont);
+            if (_mcmKoreanFont != original && !mixed.fallbackFontAssetTable.Contains(_mcmKoreanFont))
+                mixed.fallbackFontAssetTable.Add(_mcmKoreanFont);
             McmMixedFonts[original] = mixed;
             McmOriginalFonts[mixed] = original;
             return mixed;

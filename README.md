@@ -4,9 +4,9 @@
 
 [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3780078201) · [Downloads](https://github.com/Neversalimus/Quasimorph-Item-Intelligence/releases) · [Changelog](CHANGELOG.md)
 
-This branch contains **1.7.43.2** for **Quasimorph 1.0.4.590s.969afc6**.
+This branch contains **1.7.43.3-test1** for **Quasimorph 1.0.4.590s.969afc6**.
 
-This build shows recurring upgrade uses in Magnum and links to them from Overview: ranged and melee weapons, every armor slot, clone genomes, classes, pact ritual components, implants and augmentations. Equipment links follow each item's upgrade recipe, including overrides of the standard materials. These uses remain visible after ship research is complete. It also includes the validated grenade, mode, installed-arm and first-open catalog fixes. See [release notes](Release/Notes-v1.7.43.2.md).
+This test build completes all 11 official interface languages with Japanese, Korean and Turkish, and revises the existing translations for clearer wording and current game terminology. It includes language selection, fonts and text wrapping for the new languages. See [release notes](Release/Notes-v1.7.43.3-test1.md).
 
 Compatibility for the new build is enabled through audited feature-owned gates. Unknown future builds continue to fail closed for exact calculations until their contracts are reviewed.
 
@@ -20,7 +20,7 @@ Optional verbose logging keeps `Player.log` concise in normal mode while preserv
 - Live station trade information, stock-sensitive prices and batch totals on supported game builds, with direct navigation to the starmap.
 - Cards and table layouts for Trade, selectable inside the tab.
 - Loot sources grouped by containers, enemies, faction rewards, mission pools and special sources.
-- Container chance estimates and a loot-modifier calculator for Marauder, Organization and Field Medic.
+- Container chance estimates and a loot-modifier calculator for Marauder, Thrift and Field Medic.
 - Enemy implant sources that account for body slots, tissue compatibility, preset implants and socket competition.
 - Faction technology, weapon/ammunition links and detailed fire-mode tooltips, including exact per-mode damage types.
 - Native **ALT / More details** support for item tooltips inside the Item Intelligence browser.
@@ -44,7 +44,7 @@ Modder Mode is optional and creates real items in the current game. Leave it dis
 
 ## Languages
 
-The interface includes **English, Russian, German, Polish, Simplified Chinese, Spanish, Brazilian Portuguese and French**.
+The interface includes all 11 official game languages: **English, Russian, German, Polish, Simplified Chinese, Spanish, Brazilian Portuguese, French, Japanese, Korean and Turkish**.
 
 Choose **Auto (Game)** in MCM to follow Quasimorph's language, or select a language for Item Intelligence separately. Item, enemy, faction and location names—and searches for those names—continue to follow the game language. The browser updates after saving settings; MCM captions refresh after restarting the game.
 
@@ -64,12 +64,12 @@ A Windows build requires **PowerShell 7** and a local Quasimorph installation. F
 pwsh -NoProfile -ExecutionPolicy Bypass -File .\Install.ps1 -GameRoot "C:\Program Files (x86)\Steam\steamapps\common\Quasimorph"
 ```
 
-Use your actual game path. This compiles the stable source against the installed game and stages the files in `C:\QM_Workshop\ItemIntelligence`. The installer prints the command for updating the existing public Workshop item. It does not install over a subscribed copy or upload to Steam. Game assemblies and compiled binaries are not stored in this repository.
+Use your actual game path. This compiles the test source against the installed game and stages the files in `_stage\ItemIntelligence` beside the source. Pass `-WorkshopStage` to choose another package directory. The installer does not replace a subscribed copy or upload to Steam. Game assemblies and compiled binaries are not stored in this repository.
 
 Run the source contracts and behavior tests without game files:
 
 ```powershell
-pwsh -NoProfile -File .\BUILD_AND_STAGE.ps1 -Mode RELEASE -ContractsOnly
+pwsh -NoProfile -File .\BUILD_AND_STAGE.ps1 -Mode TEST -ContractsOnly
 ```
 
 Maintainers can use the [release workflow](Release/README.md) to prepare and publish a new version.

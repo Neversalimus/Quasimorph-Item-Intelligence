@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using MGSC;
@@ -74,8 +74,8 @@ namespace ItemIntelligence
             string percentSuffix = GetUiPercentSuffix();
             string estimate = string.Equals(minText, maxText, StringComparison.Ordinal) ||
                 Math.Abs(maximum - minimum) < 0.0000005
-                ? "≈ " + maxText + percentSuffix
-                : "≈ " + minText + "–" + maxText + percentSuffix;
+                ? "~ " + maxText + percentSuffix
+                : "~ " + minText + "–" + maxText + percentSuffix;
             return modifierKnown ? estimate : estimate + "*";
         }
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
@@ -242,7 +242,7 @@ namespace ItemIntelligence
         {
             int total = preview.ItemIds.Count;
             BrowserLines.Add(BrowserLine.FullSection(
-                preview.Header.ToUpperInvariant() + "  •  " + total.ToString(CultureInfo.InvariantCulture)));
+                preview.Header.ToUpper(GetUiNumberCulture()) + "  /  " + total.ToString(CultureInfo.InvariantCulture)));
 
             HashSet<string> shownNames = new HashSet<string>(StringComparer.CurrentCultureIgnoreCase);
             int shown = 0;
@@ -360,7 +360,7 @@ namespace ItemIntelligence
             }
 
             BrowserLines.Add(BrowserLine.Header(
-                Ui("ui.chip_unlocks") + "  •  " + chipUnlockItems.Count.ToString(CultureInfo.InvariantCulture),
+                Ui("ui.chip_unlocks") + "  /  " + chipUnlockItems.Count.ToString(CultureInfo.InvariantCulture),
                 FormatChipUnlockStatusSummary(learnedCount, lockedCount, unknownCount)));
             if (_chipUnlockChanceContractVerified)
                 BrowserLines.Add(BrowserLine.ChipNote(Ui("ui.chip_unlock_chance_note")));
@@ -389,7 +389,7 @@ namespace ItemIntelligence
         private static void AppendChipUnlockStatusPart(StringBuilder summary, int count, string label)
         {
             if (count <= 0) return;
-            if (summary.Length > 0) summary.Append(" • ");
+            if (summary.Length > 0) summary.Append(" / ");
             summary.Append(count.ToString(CultureInfo.InvariantCulture));
             summary.Append(' ');
             summary.Append(label);
@@ -454,7 +454,7 @@ namespace ItemIntelligence
             if (recipes > 0 && parts.Count < 4)
                 parts.Add(Ui("stats.recipes") + " " + recipes.ToString(CultureInfo.InvariantCulture));
 
-            SetBrowserTextIfChanged(_browserStatsText, NormalizeModUiText(string.Join("   •   ", parts)));
+            SetBrowserTextIfChanged(_browserStatsText, NormalizeModUiText(string.Join("   /   ", parts)));
         }
     }
 }

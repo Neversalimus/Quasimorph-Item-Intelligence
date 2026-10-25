@@ -179,7 +179,7 @@ namespace ItemIntelligence
         {
             _mcmRegisteredName = string.Empty;
             McmMixedFonts.Clear(); McmOriginalFonts.Clear(); FixtureFonts.Clear();
-            _mcmHanFont = _mcmLatinFont = null;
+            _mcmHanFont = _mcmLatinFont = _mcmJapaneseFont = _mcmKoreanFont = null;
             _mcmFontRetryFrame = 0; _mcmFontWarningLogged = _mcmFontReadyLogged = false;
             fixturePatchCount = 1; fontLookups = 0; Time.frameCount = 1000; Debug.Warnings = 0;
         }
@@ -188,12 +188,15 @@ namespace ItemIntelligence
         {
             mcmChecks = 0;
             ResetMcmFixture();
-            var latin = new TMP_FontAsset { name = "NotoLatin", Glyphs = "Item / ChineseРусскийDeutschPolski" };
+            var latin = new TMP_FontAsset { name = "NotoLatin", Glyphs = "Item / ChineseРусскийDeutschPolskiTürkçeİıŞşĞğ" };
             var han = new TMP_FontAsset { name = "NotoSC", Glyphs = "物品语言简体中文" };
+            var japanese = new TMP_FontAsset { name = "NotoJP", Glyphs = "日本語オーグメント" };
+            var korean = new TMP_FontAsset { name = "NotoKR", Glyphs = "한국어전리품" };
             var symbols = new TMP_FontAsset { name = "ExistingSymbols", Glyphs = "*" };
             latin.fallbackFontAssetTable.Add(symbols);
             var originalFallbackList = latin.fallbackFontAssetTable;
             FixtureFonts["ChineseSimplified"] = han; FixtureFonts["EnglishUS"] = latin;
+            FixtureFonts["Japanese"] = japanese; FixtureFonts["Korean"] = korean;
             InstallMcmFontSupport("Item Intelligence - 物品");
             CheckMcm(McmMixedFonts.Count == 0, "registration never changes fonts or opens MCM");
 
@@ -220,6 +223,9 @@ namespace ItemIntelligence
             CheckMcm(!ReferenceEquals(mixed.fallbackFontAssetTable, originalFallbackList) && mixed.Has('*'), "private list preserves existing fallback");
             CheckMcm(han.fallbackFontAssetTable.Count == 0 && foreignText.font == latin, "other mod and Han asset unchanged");
             CheckMcm(optionTemplate.font.Has('简') && dropdown.template.GetComponent<QiiMcmFontScope>() != null, "inactive dropdown template is marked and repaired");
+            foreach (char glyph in "日本語オーグメント한국어전리품TürkçeİıŞşĞğ")
+                CheckMcm(optionTemplate.font.Has(glyph), "dropdown and settings support every new language script: " + glyph);
+            CheckMcm(japanese.fallbackFontAssetTable.Count == 0 && korean.fallbackFontAssetTable.Count == 0, "Japanese and Korean game fonts remain unmodified");
             own.Frame();
             int scans = GameObject.TreeScans, writes = ownText.Writes, lookups = fontLookups;
             for (int i = 0; i < 100; i++) own.Frame();
@@ -272,7 +278,10 @@ namespace ItemIntelligence
             var chinesePrimary = Label(own, "Chinese-game option", han, "Русский / 物品");
             own.GetComponent<QiiMcmFontScope>().RefreshTexts();
             CheckMcm(chinesePrimary.font != han && chinesePrimary.font.Has('Р') && chinesePrimary.font.Has('物'), "Chinese game font receives Latin/Cyrillic options");
-            CheckMcm(chinesePrimary.font.fallbackFontAssetTable.Count == 1, "no self-fallback or duplicate assets");
+            CheckMcm(chinesePrimary.font.fallbackFontAssetTable.Count == 3, "no self-fallback or duplicate assets");
+            var koreanPrimary = Label(own, "Korean-game option", korean, "日本語 / 한국어 / Türkçe");
+            own.GetComponent<QiiMcmFontScope>().RefreshTexts();
+            CheckMcm(koreanPrimary.font.Has('語') && koreanPrimary.font.Has('한') && koreanPrimary.font.Has('ü'), "Korean MCM primary supports other dropdown labels");
             var changedByGame = new TMP_FontAsset { name = "New game font", Glyphs = "N" };
             ownText.font = changedByGame;
             own.GetComponent<QiiMcmFontScope>().RestoreFonts();
@@ -289,8 +298,12 @@ namespace ItemIntelligence
             for (int i = 0; i < 50; i++) { Time.frameCount++; ApplyMcmFonts(new[] { delayed }); }
             CheckMcm(fontLookups == lookups, "missing font lookup is throttled");
             FixtureFonts["ChineseSimplified"] = han; FixtureFonts["EnglishUS"] = latin;
+            FixtureFonts["Japanese"] = japanese;
             Time.frameCount += 120; ApplyMcmFonts(new[] { delayed });
-            CheckMcm(delayed.font.Has('物'), "late font keeper becomes available without restart");
+            CheckMcm(delayed.font == latin, "waits for late Korean preset without caching an incomplete font");
+            FixtureFonts["Korean"] = korean;
+            Time.frameCount += 120; ApplyMcmFonts(new[] { delayed });
+            CheckMcm(delayed.font.Has('物') && delayed.font.Has('한'), "late font keeper becomes available without restart");
             fixturePatchCount = 0;
             InstallMcmFontSupport("Item Intelligence"); InstallMcmFontSupport("Item Intelligence");
             CheckMcm(Debug.Warnings == 1, "unsupported optional MCM hooks warn once without breaking registration");

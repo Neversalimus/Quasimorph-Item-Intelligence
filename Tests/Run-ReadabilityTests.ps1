@@ -63,4 +63,11 @@ Add-Type -TypeDefinition $code -WarningAction Stop
     $type = ($identity + '.ModMain') -as [type]
     $count = $type::RunReadabilityCases($fixture, (Join-Path $SourceRoot 'WORKSHOP_CONTENT/Localization'))
     Write-Host "Production browser readability: PASS ($count assertions; config/cache and synthetic font metrics, not Unity rendering)." -ForegroundColor Green
-} finally { Remove-Item -LiteralPath $fixture -Recurse -Force -ErrorAction SilentlyContinue }
+} finally {
+    $resolvedFixture = [IO.Path]::GetFullPath($fixture)
+    $expectedFixture = [IO.Path]::GetFullPath((Join-Path ([IO.Path]::GetTempPath()) $identity))
+    if ($resolvedFixture -ne $expectedFixture -or (Split-Path -Leaf $resolvedFixture) -notmatch '^QiiReadability_[0-9a-f]{32}$') {
+        throw 'Refusing to remove an unexpected readability fixture path.'
+    }
+    Remove-Item -LiteralPath $fixture -Recurse -Force -ErrorAction SilentlyContinue
+}

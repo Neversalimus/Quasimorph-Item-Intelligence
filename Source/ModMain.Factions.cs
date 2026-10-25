@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -679,8 +679,8 @@ namespace ItemIntelligence
                 AnComDataRewardRecord record = ordered[i];
                 int totalItems = record.Items == null ? 0 : record.Items.Count;
                 string itemCount = totalItems.ToString(CultureInfo.InvariantCulture) + " " + Ui("ui.secret_data_items");
-                string right = itemCount + "  •  " + reputationText + " " + Ui("ui.secret_data_rep") +
-                    "  •  " + Ui("ui.secret_data_view");
+                string right = itemCount + "  /  " + reputationText + " " + Ui("ui.secret_data_rep") +
+                    "  /  " + Ui("ui.secret_data_view");
 
                 BrowserLines.Add(BrowserLine.StationAction(
                     ResolveFactionDisplayName(record.Id),

@@ -63,11 +63,11 @@ ui.scroll_close_keys	[MOLETTE] DÉFILER   [ÉCHAP] FERMER
 ui.lmb_open_item	[CLIC GAUCHE] OUVRIR L’OBJET
 ui.after_all_magnum	Après toutes les améliorations du Magnum
 ui.after_all_research	Après toutes les recherches
-ui.after_open_research	Après les recherches débloquées
+ui.after_open_research	Après les recherches restantes
 ui.all_related_research_is_already_completed	Toutes les recherches associées sont déjà terminées.
 ui.alternative_recipes	Recettes alternatives
 ui.ammo	munitions
-ui.ammo_links	Liens de munitions
+ui.ammo_links	Armes et munitions compatibles
 ui.ammunition	MUNITIONS
 ui.amputate	amputer
 ui.amputation	amputation
@@ -102,7 +102,7 @@ ui.compatibility	COMPATIBILITÉ
 ui.compatible_weapons	ARMES COMPATIBLES
 ui.completed	terminé
 ui.completed_research	Recherches terminées
-ui.connecting_to_market_data	Connexion aux données du marché...
+ui.connecting_to_market_data	Chargement des données commerciales…
 ui.consumers	CONSOMMATEURS
 ui.container	CONTENEUR
 ui.container_2	Conteneur
@@ -112,7 +112,7 @@ ui.context	TYPE DE LIEU
 ui.conveyor	Convoyeur
 ui.corporate_stations	Stations corporatives
 ui.corpse	cadavre
-ui.corpse_bonus	bonus de cadavre
+ui.corpse_bonus	butin supplémentaire du cadavre
 ui.craftable	fabricable
 ui.crafted_by_recipes	Fabriqué via des recettes
 ui.crafted_from	Fabriqué à partir de
@@ -125,11 +125,11 @@ ui.done	TERMINÉ
 ui.enable_item_intelligence	Activer Item Intelligence
 ui.enemy	ENNEMI
 ui.enemy_corpse_loot	BUTIN DES ENNEMIS
-ui.english	Anglais
+ui.english	Français
 ui.extra_item	objet supplémentaire
 ui.extra_weapon_ammo	munitions de l’arme supplémentaire
 ui.f2_close	[{KEY}] FERMER
-ui.f2_item_analysis	[{KEY}]  ANALYSE DE L’OBJET
+ui.f2_item_analysis	[{KEY}]  INFOS SUR L’OBJET
 ui.faction	faction
 ui.faction_2	FACTION
 ui.faction_index	Chargement des données des factions : 
@@ -162,17 +162,17 @@ ui.magnum_research	Recherche du Magnum
 ui.magnum_research_2	RECHERCHE DU MAGNUM
 ui.market_processed	Marché : traité 
 ui.master_switch_for_the_mod	Activer ou désactiver Item Intelligence.
-ui.mission_pools	RÉSERVES DE MISSION
+ui.mission_pools	BUTIN DE MISSION
 ui.mission_workbench	Établi de mission
-ui.more_relationships	Autres liens
+ui.more_relationships	Plus d’informations
 ui.more_rows_format	+ {0} de plus ({1})
-ui.no_disassembly_relationships	Aucun lien de démontage.
-ui.no_explicit_loot_sources_found_check_trade_recip	Aucune source explicite trouvée. Consultez Commerce, Recettes, Factions et les événements spéciaux.
-ui.no_recipe_or_disassembly_relationships	Aucun lien de recette ou de démontage.
-ui.no_recipe_relationships	Aucun lien de recette.
+ui.no_disassembly_relationships	Aucune donnée de démontage.
+ui.no_explicit_loot_sources_found_check_trade_recip	Aucune source directe trouvée. Consultez Commerce, Recettes, Factions et les événements spéciaux.
+ui.no_recipe_or_disassembly_relationships	Aucune recette ni donnée de démontage.
+ui.no_recipe_relationships	Aucune recette trouvée.
 ui.no_related_magnum_research_was_found	Aucune recherche associée du Magnum trouvée.
-ui.no_trade_relationships_found_yet	Aucun lien commercial trouvé pour le moment.
-ui.no_weapon_ammo_relationships	Aucun lien entre armes et munitions.
+ui.no_trade_relationships_found_yet	Aucun lieu de commerce trouvé pour le moment.
+ui.no_weapon_ammo_relationships	Aucune arme ou munition compatible.
 ui.none	aucun
 ui.not_found	introuvable
 ui.not_required	non requis
@@ -185,7 +185,7 @@ ui.page	PAGE
 ui.pirates	Pirates
 ui.possible_outcomes	Résultats possibles
 ui.price	PRIX
-ui.trade_repricing_note	Première → dernière unité du lot. Le prix est recalculé par unité ; le stock peut changer avant l’arrivée.
+ui.trade_repricing_note	Première -> dernière unité du lot. Le prix est recalculé par unité ; le stock peut changer avant l’arrivée.
 ui.next	SUIVANTE
 ui.batch	LOT
 ui.trade_previous_note	SUIVANTE = prochaine unité ; LOT = total des 5 prochaines unités ou du stock restant. Prix recalculé par unité.
@@ -206,9 +206,9 @@ ui.random_augmentation	augmentation aléatoire
 ui.random_implant	implant aléatoire
 ui.recipe	Recette 
 ui.recognized_as_a_trade_item_but_current_game_tabl	Objet commercial ; aucune entrée commerciale trouvée.
-ui.recyclable	recyclable
+ui.recyclable	démontable
 ui.remaining	 restant
-ui.required_for_open_research	Requis pour les recherches débloquées
+ui.required_for_open_research	Requis pour les recherches restantes
 ui.result	RÉSULTAT
 ui.reward	RÉCOMPENSE %
 ui.role	Rôle
@@ -220,19 +220,19 @@ ui.search_item	CHERCHER UN OBJET...
 ui.secondary_ammo	munitions secondaires
 ui.secondary_weapon	arme secondaire
 ui.sell_to_stations	ACCEPTÉ EN STATION
-ui.show_ammo_relations	Afficher les liens de munitions
-ui.show_barter_and_consumer_relationships	Afficher les stations acheteuses et les ingrédients des recettes de l’économie des stations.
+ui.show_ammo_relations	Afficher les munitions compatibles
+ui.show_barter_and_consumer_relationships	Afficher les stations acheteuses et leurs recettes utilisant cet objet.
 ui.show_future_magnum_uses	Afficher les utilisations futures du Magnum
 ui.show_magnum_surplus	Afficher le surplus du Magnum
 ui.show_magnum_uses	Afficher les utilisations du Magnum
-ui.show_production_and_barter_source_relationships	Afficher les sources de butin, les stations vendeuses et les produits des recettes de l’économie des stations.
+ui.show_production_and_barter_source_relationships	Afficher les sources de butin, les stations vendeuses et leurs recettes de production.
 ui.show_recipes	Afficher les recettes
-ui.show_remaining_amount_relative_to_all_unfinished	Afficher la quantité restante pour toutes les améliorations inachevées du Magnum.
+ui.show_remaining_amount_relative_to_all_unfinished	Afficher ce qui reste après avoir réservé les matériaux pour toutes les améliorations restantes du Magnum.
 ui.show_sources	Afficher les sources d’obtention
 ui.show_trade_information	Afficher les utilisations de vente et de troc
 ui.show_unfinished_magnum_upgrade_uses	Afficher les utilisations dans les améliorations inachevées du Magnum.
-ui.show_used_in_and_crafted_from_relationships	Afficher les liens « Utilisé dans » et « Fabriqué à partir de ».
-ui.show_weapon_ammo_relationships	Afficher les liens entre armes et munitions.
+ui.show_used_in_and_crafted_from_relationships	Afficher les ingrédients de fabrication et les recettes utilisant cet objet.
+ui.show_weapon_ammo_relationships	Afficher les armes et munitions compatibles.
 ui.source	SOURCE
 ui.sources	SOURCES
 ui.sources_producers	SOURCES / PRODUCTEURS
@@ -252,7 +252,7 @@ ui.this_item_was_not_found_in_faction_reward_pools	Cet objet ne figure pas dans 
 ui.total_remaining	Total restant
 ui.trade	commerce
 ui.trade_consumers	COMMERCE / CONSOMMATEURS
-ui.trade_links	Liens commerciaux
+ui.trade_links	Lieux de commerce
 ui.travel	TRAJET
 ui.type	TYPE
 ui.unlock	DÉBLOCAGE
@@ -264,15 +264,15 @@ ui.vanilla_exposes_the_remaining_total_but_the_rela	Détails de recherche indisp
 ui.var	 var.
 ui.variants	 variantes
 ui.weapon	arme
-ui.wheel_pgup_pgdn	   •   MOLETTE : DÉFILER   PAGE PRÉC./SUIV. : RAPIDE
+ui.wheel_pgup_pgdn	   /   MOLETTE : DÉFILER   PAGE PRÉC./SUIV. : RAPIDE
 ui.workbench	Établi : 
-ui.wound_slot	EMPLACEMENT DE BLESSURE
-ui.wound_slot_2	emplacement de blessure
+ui.wound_slot	PARTIE DU CORPS
+ui.wound_slot_2	partie du corps
 ammo.index_prefix	Chargement des données des armes : 
 loot.note.amputation	Probabilité de base après une amputation réussie, sans l’amélioration du Magnum garantissant les augmentations. Les implants installés sont affichés séparément.
-loot.note.augmentation_woundslot	Peut apparaître comme module d’une partie du corps de l’ennemi.
+loot.note.augmentation_woundslot	Peut être installée dans une partie du corps de l’ennemi.
 loot.note.augmentations	Probabilité = augmentation installée. Tirages = tentatives de génération ; les probabilités d’augmentations aléatoires sont conditionnelles.
-loot.note.container_chance	La probabilité des conteneurs placés manuellement dépend du contexte de la mission en cours.
+loot.note.container_chance	La probabilité dans les conteneurs ayant leur propre butin dépend des conditions de la mission actuelle.
 loot.note.corpse_transfer	À la mort, l’inventaire et l’équipement sont transférés au cadavre, sauf les mains nues. Un inventaire plein peut entraîner la perte de l’objet.
 loot.note.enemy_chance	PROBA. = génération de l’objet sur cet ennemi, pas probabilité de rencontrer l’ennemi. La plage dépend de la technologie et de la faction.
 loot.note.implants	Probabilité = implant installé à la génération de l’ennemi. « Amputer X% » = probabilité de le récupérer.
@@ -325,9 +325,9 @@ mcm.header.information	Informations
 mcm.show_f2_hint	Afficher le rappel de la touche de l’explorateur
 mcm.show_f2_hint_tip	Afficher le rappel de la touche de l’explorateur au survol des objets. Touche actuelle : {KEY}.
 mcm.enable_browser	Activer l’explorateur d’objets
-mcm.enable_browser_tip	Appuyez sur {KEY} en survolant un objet. Les détails affichés avec Alt restent inchangés.
+mcm.enable_browser_tip	Appuyez sur {KEY} pour ouvrir le catalogue. Si le curseur survole un objet, sa page s’ouvre.
 mcm.inspector_hotkey	Touche d’ouverture de l’explorateur
-mcm.inspector_hotkey_tip	Choisissez la touche de l’explorateur. La recherche accepte la saisie normale ; Échap ferme la fenêtre pendant la saisie.
+mcm.inspector_hotkey_tip	Choisissez la touche de l’explorateur. Échap ferme la fenêtre même pendant la saisie d’une recherche.
 mcm.show_interface_icons	Icônes d’interface minimales
 mcm.show_interface_icons_tip	Afficher des icônes d’interface minimalistes. Les icônes d’objets et les indicateurs d’état fonctionnels sont conservés.
 mcm.enhanced_readability	Lisibilité améliorée
@@ -410,13 +410,13 @@ ui.secret_data_rewards_note	Lot de départ fixe et récompense de réputation.
 ui.secret_data_items	objets
 ui.secret_data_rep	rép.
 ui.secret_data_view	VOIR
-ui.secret_data_back	← RETOUR AUX FACTIONS
+ui.secret_data_back	RETOUR AUX FACTIONS
 ui.secret_data_reputation	RÉPUTATION
 ui.secret_data_package	LOT DE DÉPART
-ui.secret_data_story_effect	Cette remise bénéficie d’un traitement narratif spécifique et peut faire progresser l’histoire de la faction.
+ui.secret_data_story_effect	La remise peut faire progresser l’histoire de la faction.
 ui.secret_data_no_rewards	Les récompenses des Données secrètes sont indisponibles.
 ui.chip_unlocks	DÉBLOQUE
-ui.back_to	← RETOUR À
+ui.back_to	RETOUR À
 compat.module	Module
 compat.reason	Raison :
 ui.chip_unlock_chance_note	La probabilité correspond à une puce. Les objets déjà débloqués restent dans la réserve de sélection.
@@ -429,7 +429,7 @@ ui.baron_depends_on_mission_tech	dépend de la technologie de la mission
 ui.overview_magnum_available_now	disponible maintenant
 ui.overview_magnum_not_available_now	indisponible actuellement
 ui.overview_magnum_all_completed	toutes les recherches terminées
-ui.loot_accordion_hint	▶ / ▼  Cliquez sur une section pour la déplier ou la replier
+ui.loot_accordion_hint	Cliquez sur une section pour la déplier ou la replier
 ui.baron_habitat	Habitat
 ui.baron_guaranteed	Garanti
 ui.baron_one_pact	1 pacte
@@ -451,7 +451,7 @@ ui.mode_damage	Dégâts
 ui.mode_scatter	Dispersion
 ui.mode_shot_delay	Délai
 ui.mode_ammo	Munitions
-ui.mode_full_ammo_required	Munitions complètes requises
+ui.mode_full_ammo_required	Charge de munitions complète requise
 ui.unit_seconds_short	s
 ui.mode_stab	Estoc
 ui.mode_slash	Taille
@@ -474,9 +474,9 @@ ui.damage_type.shock	Électrique
 ui.damage_type.beam	Faisceau
 ui.damage_type.explosion	Explosif
 ui.damage_type.plasma	Plasma
-ui.damage_type.chaos	Chaos
-ui.damage_type.proton	Proton
-ui.damage_type.cryo	Cryogénique
+ui.damage_type.chaos	Entropie
+ui.damage_type.proton	Ion
+ui.damage_type.cryo	Cryo-laser
 ui.mode_ammo_consumption	Consommation de munitions
 mcm.modder_mode	Mode créateur de mods
 mcm.modder_mode_tip	Afficher les données techniques et le panneau de création d’objets. Les objets créés sont enregistrés dans la partie actuelle.
@@ -509,15 +509,15 @@ ui.mission_generation	MÉCANISME
 loot.note.general_spawn	Coche : le conteneur peut recevoir l’objet après la génération du butin de mission. Il s’agit du placement, pas d’une probabilité supplémentaire ; l’objet peut rester au sol.
 ui.loot_modifiers_current	MODIFICATEURS : ACTUELS
 ui.loot_modifiers_manual	MODIFICATEURS : MANUELS
-ui.loot_marauder	Maraudeur
-ui.loot_marika_organization	Marika — Organisation
-ui.loot_laksha_field_medic	Laksha — Médecin de terrain
+ui.loot_marauder	Maraude
+ui.loot_marika_organization	Marika — Économe
+ui.loot_laksha_field_medic	Laksha — Médecin de campagne
 ui.loot_on	ACTIF
 ui.loot_off	INACTIF
 ui.loot_pp	pp
 ui.bonus_corpse_loot	BUTIN SUPPLÉMENTAIRE DES CADAVRES
 ui.bonus_rolls	TIRAGES SUPPLÉMENTAIRES
-loot.note.corpse_bonus_rolls	Maraudeur et Organisation ajoutent des tirages de butin de cadavres. Plage = nombre de tirages ; % entre parenthèses = probabilité du maximum de tirages ; FINALE = probabilité d’obtenir l’objet au moins une fois.
+loot.note.corpse_bonus_rolls	Maraude et Économe ajoutent des tirages de butin de cadavres. Plage = nombre de tirages ; % entre parenthèses = probabilité du maximum de tirages ; FINALE = probabilité d’obtenir l’objet au moins une fois.
 ui.per_roll	PAR TIRAGE
 ui.final_chance	FINALE
 ui.mode_damage_per_ap_default	Dégâts/PA (par défaut)
@@ -529,9 +529,9 @@ ui.station_production_output	PRODUIT
 ui.station_production_input	INGRÉDIENT
 ui.station_production_recipe	RECETTE DE STATION
 ui.no_active_faction_reward_in_current_save	Cet objet figure uniquement dans les réserves de récompenses de factions indisponibles dans cette partie.
-loot.note.enemy_bonus_separate	Maraudeur et Organisation ne modifient pas la probabilité d’équipement ennemi ; ils ajoutent des tirages distincts de butin de cadavres.
+loot.note.enemy_bonus_separate	Maraude et Économe ne modifient pas la probabilité d’équipement ennemi ; ils ajoutent des tirages distincts de butin de cadavres.
 ui.mode_critical_damage_per_ap_default	Dégâts critiques/PA (par défaut)
-ui.faction_technology_navigation_unavailable	L’accès à la technologie de la faction est indisponible dans le contexte actuel.
+ui.faction_technology_navigation_unavailable	Impossible d’ouvrir ici l’écran des technologies de la faction.
 ui.scavenger_mission_rewards	RÉCUPÉRATEURS — PROBA. DE L’OBJET SI LA MISSION RÉUSSIT
 ui.rows_visible	LIGNES
 ui.opponent	ADVERSAIRE
@@ -543,7 +543,7 @@ stats.modes	MODES
 ui.overview_combat	COMBAT
 ui.overview_damage_ap_short	DÉG./PA
 ui.overview_crit_short	CRIT.
-ui.overview_relationships	LIENS DE CET OBJET
+ui.overview_relationships	UTILISATIONS ET SOURCES
 ui.overview_magnum_research	Recherche du Magnum
 ui.overview_used_in_recipes	Utilisé dans des recettes
 ui.overview_crafted_by_recipes	Fabriqué via des recettes
@@ -552,7 +552,7 @@ ui.overview_disassembles_into	Se démonte en
 ui.overview_compatible_ammo	Munitions compatibles
 ui.overview_compatible_weapons	Armes compatibles
 ui.overview_recipe_ingredients	Ingrédients de la recette
-ui.overview_no_core_links	Aucun lien principal ici ; consultez Commerce, Factions ou Butin pour les sources dans le monde.
+ui.overview_no_core_links	Aucune donnée ici. Consultez Commerce, Factions ou Butin pour savoir où obtenir cet objet.
 loot.baron.section	BUTIN DU BARON
 loot.baron.column.baron	BARON
 loot.baron.column.qmorph	QUASIMORPHOSE
@@ -562,7 +562,7 @@ loot.baron.column.death_restore	RESTAURATION
 loot.note.baron_ultimate_death	Un baron laisse 1 pacte. Ce pacte dépend de la technologie de la mission et du butin disponible.
 loot.note.baron_dynamic_tech	Plage = la réserve dépend de la technologie de la mission ou de la faction à la génération du baron.
 loot.note.baron_ksiomara_exception	Histoire : le jeu de base peut remplacer un baron normal par Ksiomara. Cette ligne ne s’applique pas à Ksiomara.
-loot.note.baron_consumption_bound	Si RESTAURATION <100%, la plage du pacte inclut la borne exacte et sûre de consommation avant la mort ; le moment d’action de l’IA n’est pas supposé.
+loot.note.baron_consumption_bound	Si RESTAURATION est inférieure à 100 %, la plage tient compte d’une consommation possible du pacte avant la mort. Le moment de la consommation est inconnu.
 loot.special.section	AUTRES SOURCES
 loot.special.condition	CONDITION
 loot.special.result	RÉSULTAT
@@ -573,7 +573,7 @@ loot.special.starting_loadout	ÉQUIPEMENT INITIAL
 loot.special.ancom_exchange	ÉCHANGE DE DONNÉES SECRÈTES
 loot.special.expire_conversion	CONVERSION D’OBJET
 loot.special.skull_ritual	RITUEL DU CRÂNE
-loot.special.story_script	SCRIPT D’HISTOIRE
+loot.special.story_script	ÉVÉNEMENT NARRATIF
 loot.special.complete_story_mission	Terminer la mission d’histoire
 loot.special.story_mission	Mission d’histoire
 loot.special.selected_start_preset	Ensemble initial fixe sélectionné + équipement initial aléatoire désactivé
@@ -595,8 +595,8 @@ loot.special.death_gift_condition	Don de mort activé + admissibilité à la ré
 loot.special.faction_reward_condition	Réserve de récompenses de faction / technologie requise
 loot.special.random_start_condition	Équipement initial aléatoire activé
 loot.special.station_production_condition	Dans la production actuelle de la station + assez de points de récompense
-loot.note.container_context_chance	≈ = probabilité d’obtenir l’objet au moins une fois. Tirages et Maraudeur ACTUELS/MANUELS ; technologie de mission/faction. Budget, technologie temporaire et événements du lieu exclus.
-loot.note.container_modifier_unavailable	* = tirages de base uniquement : la valeur actuelle de Maraudeur est indisponible. Dans l’espace, choisissez MANUELS.
+loot.note.container_context_chance	~ = probabilité d’obtenir l’objet au moins une fois. Tirages et Maraude ACTUELS/MANUELS ; technologie de mission/faction. Budget, technologie temporaire et événements du lieu exclus.
+loot.note.container_modifier_unavailable	* = tirages de base uniquement : la valeur actuelle de Maraude est indisponible. Dans l’espace, choisissez MANUELS.
 loot.note.container_save_unavailable	— = aucune estimation exacte : technologie de la partie, réserve éligible ou plage de tirages de base indisponible.
 loot.special.other_section	OBTENTION SPÉCIALE
 loot.special.reward_section	RÉCOMPENSES DES FACTIONS
@@ -619,7 +619,7 @@ loot.special.kind_reward	RÉCOMPENSE
 loot.special.kind_start_pool	RÉSERVE INITIALE
 loot.special.kind_station_reward	PRODUCTION
 loot.special.cond_complete	Terminer la mission
-loot.special.cond_fixed_start	Ensemble fixe • départ aléatoire désactivé
+loot.special.cond_fixed_start	Ensemble fixe / départ aléatoire désactivé
 loot.special.cond_exchange	Échanger
 loot.special.cond_expire	Après expiration
 loot.special.cond_ritual_failed	Échec
@@ -628,7 +628,7 @@ loot.special.cond_ritual_sidegrade	Changement équivalent
 loot.special.cond_ritual_downgrade	Dégradation
 loot.special.cond_ritual_outcome	Résultat du rituel
 loot.special.cond_story	Lors de l’événement d’histoire
-loot.special.cond_use	Après utilisation, si la règle de l’objet se déclenche
+loot.special.cond_use	Après utilisation, si les conditions de l’objet sont remplies
 loot.special.cond_death	À la mort : récompense autorisée
 loot.special.cond_mission	Mission
 loot.special.cond_mission_orbit	Mission / orbite
@@ -649,14 +649,14 @@ loot.special.kind_random_pool	RÉSERVE ALÉATOIRE
 loot.special.cond_no_extra_requirement	AUCUNE CONDITION SUPPLÉMENTAIRE
 loot.special.cond_random_start_enabled	Équipement aléatoire activé
 loot.special.cond_fixed_start_enabled	Équipement aléatoire désactivé
-loot.note.faction_reward_sources	✓ = l’objet est dans la réserve, sans être garanti. « Mission/orbite » exige de la technologie. « Production » = la station possède l’objet et assez de points de récompense.
-loot.note.starting_sources	Nouvelle partie uniquement : un ensemble fixe donne l’objet ; une réserve aléatoire peut seulement le sélectionner.
+loot.note.faction_reward_sources	Coche = l’objet est dans la réserve, sans être garanti. « Mission/orbite » exige de la technologie. « Production » = la station possède l’objet et assez de points de récompense.
+loot.note.starting_sources	Au début d’une nouvelle partie seulement : un équipement fixe contient l’objet ; un équipement aléatoire peut le contenir.
 loot.general_spawn.placement	PLACEMENT
 loot.column.container	CONTENEUR
 loot.note.special_sources	Voies rares. Pour les rituels : « Source » = crâne initial ; « Condition » = résultat requis.
 loot.special.fixed_loadout_count	ENSEMBLES D’ÉQUIPEMENT
-loot.special.story_missions_count	Missions d’histoire ×{0}
-loot.note.container_modifier_basic	* = tirages de base uniquement : la valeur actuelle de Maraudeur est indisponible.
+loot.special.story_missions_count	Missions d’histoire x{0}
+loot.note.container_modifier_basic	* = tirages de base uniquement : la valeur actuelle de Maraude est indisponible.
 loot.note.container_save_compatibility	— = les estimations de probabilité pour cette partie sont temporairement indisponibles après une mise à jour du jeu.
 loot.note.manual_unavailable	Le calcul manuel est temporairement indisponible.
 loot.note.manual_compatibility	Le calcul manuel est temporairement indisponible après une mise à jour du jeu.
@@ -681,7 +681,7 @@ ui.mode_effect	Attribut du mode
 ui.mode_status_effect	Effet d'état
 ui.mode_trait_wounding	Blessant
 ui.arm_builtin_weapon	Arme après installation
-ui.arm_source_augmentation	Augmentation associée
+ui.arm_source_augmentation	Augmentation à installer
 ui.upgrade_uses	UTILISÉ POUR LES AMÉLIORATIONS
 ui.upgrade_genomes	Amélioration des génomes
 ui.upgrade_uses_note	Peut rester nécessaire après la fin des recherches du vaisseau. La quantité dépend des améliorations choisies et ne figure pas dans le total requis pour les recherches restantes.
@@ -690,7 +690,7 @@ ui.upgrade_ranged	Amélioration des armes à distance
 ui.upgrade_melee	Amélioration des armes de mêlée
 ui.upgrade_armor	Amélioration des armures (toutes les pièces)
 ui.upgrade_classes	Modification des classes
-ui.upgrade_pacts	Rituels de pactes (Morphanal)
+ui.upgrade_pacts	Rituels de pactes
 ui.upgrade_implants	Installation d’implants sur les clones
 ui.upgrade_augmentations	Installation d’augmentations sur les clones
 ui.upgrade_equipment	ÉQUIPEMENT AMÉLIORÉ AVEC CETTE RESSOURCE

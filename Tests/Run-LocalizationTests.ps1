@@ -75,5 +75,10 @@ Add-Type -TypeDefinition $code -OutputAssembly $dll -WarningAction Stop
     $count = $type::RunLocalizationCases($fixtureRoot)
     Write-Host "Production localization behavior: PASS ($count assertions)." -ForegroundColor Green
 } finally {
+    $resolvedFixture = [IO.Path]::GetFullPath($fixtureRoot)
+    $expectedFixture = [IO.Path]::GetFullPath((Join-Path ([IO.Path]::GetTempPath()) $identity))
+    if ($resolvedFixture -ne $expectedFixture -or (Split-Path -Leaf $resolvedFixture) -notmatch '^QiiLocalization_[0-9a-f]{32}$') {
+        throw 'Refusing to remove an unexpected localization fixture path.'
+    }
     Remove-Item -LiteralPath $fixtureRoot -Recurse -Force -ErrorAction SilentlyContinue
 }

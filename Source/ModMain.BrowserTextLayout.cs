@@ -84,7 +84,9 @@ namespace ItemIntelligence
             try
             {
                 float fullWidthWrapLimit = BrowserColumnCoordinate(BrowserFullNoteWidth, _browserViewport.Width) - 4f;
-                if (ContainsHanScript(value) || ContainsKanaScript(value) || ContainsHangulScript(value))
+                // Korean uses spaces between words; prefer those boundaries, just as
+                // for Latin text. Long unspaced Korean words still use the fallback below.
+                if (ContainsHanScript(value) || ContainsKanaScript(value))
                     return WrapUnspacedBrowserText(value, delegate(string candidate)
                     { return IsBrowserFullWidthTextTooWide(measure, candidate, fullWidthWrapLimit, fallbackMaxChars); });
                 List<string> sentences = SplitBrowserNoteSentences(value);

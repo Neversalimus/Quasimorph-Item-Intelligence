@@ -146,6 +146,13 @@ namespace ItemIntelligence
             string cjk = "成功截肢后的基础概率，不计入Magnum升级。汉😀字e\u0301汉字。";
             CheckReadability(string.Concat(WrapBrowserFullWidthText(cjk + cjk + cjk, 100)) == cjk + cjk + cjk,
                 "CJK text elements preserved");
+            string koreanNote = "함선 연구를 모두 마친 뒤에도 이 재료가 필요할 수 있습니다. 필요한 수량은 선택한 강화에 따라 달라지며 남은 연구의 총 필요량에는 포함되지 않습니다.";
+            List<string> koreanRows = WrapBrowserFullWidthText(koreanNote, 100);
+            CheckReadability(koreanRows.Count > 1 && string.Join(" ", koreanRows) == koreanNote,
+                "Korean wraps at word boundaries and preserves word spacing");
+            string unspacedKorean = new string('한', 120);
+            CheckReadability(string.Concat(WrapBrowserFullWidthText(unspacedKorean, 100)) == unspacedKorean,
+                "long unspaced Korean still wraps without text loss");
             BrowserLines.Clear();
             BrowserLine section = BrowserLine.FullSection("Section");
             BrowserLine action = BrowserLine.ItemAction("powder", "Open");
@@ -163,7 +170,7 @@ namespace ItemIntelligence
 
             // All shipped long notes, both profiles and both viewport modes. These
             // assertions concern the wrapping algorithm under declared metrics.
-            foreach (string language in new string[] { "en", "ru", "de", "pl", "zh-Hans", "es", "pt-BR", "fr" })
+            foreach (string language in new string[] { "en", "ru", "de", "pl", "zh-Hans", "es", "pt-BR", "fr", "ja", "ko", "tr" })
             foreach (string entry in File.ReadAllLines(Path.Combine(localization, language + ".lang")))
             {
                 int separator = entry.IndexOf('\t');

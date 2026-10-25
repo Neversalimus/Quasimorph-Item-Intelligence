@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using TMPro;
 using UnityEngine;
@@ -362,7 +362,7 @@ namespace ItemIntelligence
             {
                 string header = GetBrowserCatalogScopeLabel(_browserCatalogScope, false) + "  /  " +
                     GetBrowserCatalogCategoryLabel(_browserCatalogCategory, false) + "  /  " +
-                    GetBrowserCatalogDataFilterLabel(_browserCatalogDataFilter) + "  •  " +
+                    GetBrowserCatalogDataFilterLabel(_browserCatalogDataFilter) + "  /  " +
                     total.ToString(CultureInfo.InvariantCulture);
                 SetBrowserTextIfChanged(_browserCatalogHeaderText, NormalizeModUiText(header));
             }

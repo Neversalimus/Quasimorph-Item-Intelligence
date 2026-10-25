@@ -1,4 +1,4 @@
-﻿# ============================================================================
+# ============================================================================
 # PERFORMANCE / LAZY UI / RENDERER CONTRACTS
 # Current invariants only. Historical test/build provenance intentionally omitted.
 # ============================================================================
@@ -96,7 +96,7 @@ if ($browserCatalogPresentationText.IndexOf('string[] labels = new string[]',[St
     $browserCatalogPresentationText.IndexOf('string[] fullLabels = new string[]',[StringComparison]::Ordinal) -ge 0) {
     throw 'current regression: catalog category redraw label arrays returned.'
 }
-foreach ($token in @('SetBrowserTextIfChanged(_browserStatsText','string.Join("   •   ", parts)')) {
+foreach ($token in @('SetBrowserTextIfChanged(_browserStatsText','string.Join("   /   ", parts)')) {
     if ($overviewDashboardText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "current Overview stats redraw gate missing: $token" }
 }
 foreach ($token in @('SetBrowserGraphicColorIfChanged','SetBrowserRowRectPosition','SetBrowserImageSpriteIfChanged','SetBrowserFontSizeIfChanged','SetBrowserInteractableIfChanged')) {

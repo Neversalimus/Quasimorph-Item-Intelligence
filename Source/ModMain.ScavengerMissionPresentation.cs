@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 
@@ -55,8 +55,8 @@ namespace ItemIntelligence
             BrowserLines.Add(BrowserLine.FullSection(Ui("ui.scavenger_mission_rewards")));
             BrowserLines.Add(BrowserLine.FullNote(
                 Ui("ui.scavenger_current_missions") + rows.Count.ToString(CultureInfo.InvariantCulture) +
-                "   •   " + Ui("ui.scavenger_best_chance") + FormatScavengerPercent(rows[0].ChancePercent) +
-                "   •   " + Ui("ui.rolls") + ": " + rolls));
+                "   /   " + Ui("ui.scavenger_best_chance") + FormatScavengerPercent(rows[0].ChancePercent) +
+                "   /   " + Ui("ui.rolls") + ": " + rolls));
             BrowserLines.Add(BrowserLine.ScavengerMissionHeader(
                 Ui("ui.station"), Ui("ui.opponent"), Ui("ui.chance"), Ui("ui.travel"), Ui("ui.scavenger_time_left")));
 

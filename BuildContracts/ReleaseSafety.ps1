@@ -1,4 +1,4 @@
-﻿# ============================================================================
+# ============================================================================
 # RELEASE HYGIENE / READ-ONLY / LOCALIZATION / MANIFEST
 # Current invariants only. Historical test/build provenance intentionally omitted.
 # ============================================================================
@@ -116,7 +116,7 @@ if ($overviewDashboardText.IndexOf('FormatChipUnlockStatusSummary',[StringCompar
 if ($browserModelsText.IndexOf('public static BrowserLine Header(string left, string right)',[StringComparison]::Ordinal) -lt 0) {
     throw 'current generic header row factory missing.'
 }
-foreach ($token in @('ui.chip_summary_unlocked','ui.chip_summary_locked','AppendChipUnlockStatusPart(summary, learnedCount','summary.Append(" • ")')) {
+foreach ($token in @('ui.chip_summary_unlocked','ui.chip_summary_locked','AppendChipUnlockStatusPart(summary, learnedCount','summary.Append(" / ")')) {
     if (($overviewDashboardText + $ruLocalizationText + $enLocalizationText + $templateLocalizationText).IndexOf($token,[StringComparison]::Ordinal) -lt 0) {
         throw "current human-readable chip summary contract missing: $token"
     }

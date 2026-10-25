@@ -1,0 +1,696 @@
+@language=Turkish;turkish;Türkçe;Turkce;tr;tr-TR
+catalog.compact.all	TÜMÜ
+catalog.compact.ammo	MÜH.
+catalog.compact.armor	ZIRH
+catalog.compact.chips	ÇİPLER
+catalog.compact.consumables	SARF
+catalog.compact.containers	KAPLAR
+catalog.compact.implants	İMPL.
+catalog.compact.other	DİĞER
+catalog.compact.weapons	SİLAH
+catalog.scope.all.compact	TÜMÜ
+catalog.scope.favorites.compact	FAVORİ
+catalog.scope.recent.compact	SON
+catalog.scope.all	TÜM EŞYALAR
+catalog.scope.favorites	FAVORİLER
+catalog.scope.recent	GEÇMİŞ
+catalog.favorite.short	FAVORİ
+catalog.label.data	BİLGİ
+catalog.data.any	TÜMÜ
+catalog.data.recipes	TARİFLER
+catalog.data.sources	İSTASYON ÜRETİR
+catalog.data.consumers	İSTASYON KULLANIR
+catalog.data.magnum	MAGNUM
+catalog.data.factions	FIRKALAR
+catalog.data.ammo	MÜHİMMAT
+catalog.data.disassembly	SÖKÜM
+catalog.label.sort	SIRALA
+catalog.sort.name	AD
+catalog.sort.tech	TEKNOLOJİ
+catalog.sort.id	ID
+catalog.sort.recent	SON
+catalog.sort.asc	ARTAN
+catalog.sort.desc	AZALAN
+catalog.sort.fixed	SABİT SIRA
+catalog.reset	SIFIRLA
+catalog.clear.history	GEÇMİŞİ SİL
+catalog.full.all	TÜM EŞYALAR
+catalog.full.ammo	MÜHİMMAT
+catalog.full.armor	ZIRH VE EKİPMAN
+catalog.full.chips	ÇİPLER
+catalog.full.consumables	SARF MALZEMELERİ
+catalog.full.containers	KAPLAR
+catalog.full.implants	İMPLANTLAR
+catalog.full.other	DİĞER
+catalog.full.weapons	SİLAHLAR
+chrome.close	[{KEY}] KAPAT
+label.magnum	MAGNUM
+note.improved_variant	Geliştirilmiş model
+stats.ammo	MÜHİMMAT
+stats.weapons	SİLAHLAR
+stats.magnum	MAGNUM
+stats.recipes	TARİFLER
+stats.trade	TİCARET / ÜRETİM
+tab.ammo	5 MÜHİMMAT
+tab.factions	6 FIRKALAR
+tab.loot	7 GANİMET
+tab.magnum	2 MAGNUM
+tab.overview	1 GENEL
+tab.recipes	3 TARİFLER
+tab.trade	4 TİCARET
+ui.navigation_keys	[1-7] BÖLÜM   [Q/E] SEKME
+ui.scroll_close_keys	[TEKERLEK] KAYDIR   [ESC] KAPAT
+ui.lmb_open_item	[SOL TIK] EŞYAYI AÇ
+ui.after_all_magnum	Tüm gemi araştırmalarından sonra
+ui.after_all_research	Tüm araştırmalardan sonra
+ui.after_open_research	Tamamlanmamış araştırmalardan sonra
+ui.all_related_research_is_already_completed	Bu malzemeyi kullanan tüm araştırmalar tamamlandı.
+ui.alternative_recipes	Diğer tarifler
+ui.ammo	mühimmat
+ui.ammo_links	Uyumlu silah ve mühimmat
+ui.ammunition	MÜHİMMAT
+ui.amputate	kesip çıkarma
+ui.amputation	ampütasyon
+ui.amputation_drops	AMPÜTASYONLA ELDE EDİLENLER
+ui.any	herhangi biri
+ui.armor	zırh
+ui.available	mevcut
+ui.available_2	MEVCUT
+ui.available_3	mevcut
+ui.available_now	Şu anda mevcut
+ui.available_now_2	ŞU ANDA MEVCUT
+ui.back	GERİ
+ui.barter_give	VER
+ui.barter_option	SEÇENEK
+ui.barter_receive	AL
+ui.barter_receive_this_item	TAKAS — BU EŞYAYI AL
+ui.barter_recipes	Takas tarifleri
+ui.barter_give_this_item	TAKAS — BU EŞYAYI VER
+ui.bonus	bonus
+ui.boots	bot
+ui.buy_at_stations	SATAN İSTASYONLAR
+ui.item_id	EŞYA ID
+ui.catalog	KATALOG
+ui.chance	OLASILIK
+ui.base_share	TEMEL PAY
+ui.tech	TEKNOLOJİ
+ui.civil_resistance	Sivil Direniş
+ui.click_a_station_to_open_its_location_on_the_star	Yıldız haritasındaki konumunu görmek için istasyona tıklayın.
+ui.cloning	Klonlama
+ui.compact_intelligence_on_normal_hover	Eşyanın üzerine gelince kısa bilgi gösterir.
+ui.compatibility	UYUMLULUK
+ui.compatible_weapons	UYUMLU SİLAHLAR
+ui.completed	Tamamlandı
+ui.completed_research	Tamamlanan araştırmalar
+ui.connecting_to_market_data	Ticaret bilgileri yükleniyor…
+ui.consumers	KULLANANLAR
+ui.container	KAP
+ui.container_2	Kap
+ui.container_3	Kap 
+ui.containers	KENDİ GANİMETİ OLAN KAPLAR
+ui.context	TESİS TÜRÜ
+ui.conveyor	Konveyör
+ui.corporate_stations	Şirket istasyonları
+ui.corpse	ceset
+ui.corpse_bonus	ek ceset ganimeti
+ui.craftable	üretilebilir
+ui.crafted_by_recipes	Üretim tarifleri
+ui.crafted_from	Üretim malzemeleri
+ui.crafted_from_2	ÜRETİM MALZEMELERİ
+ui.current_tech	MEVCUT TEKNOLOJİ
+ui.disassembly_index	Söküm bilgileri yükleniyor: 
+ui.disassembly_outputs	SÖKÜMDEN ELDE EDİLENLER
+ui.obtained_by_disassembling	BUNLARI SÖKEREK ELDE EDİLİR
+ui.done	TAMAMLANDI
+ui.enable_item_intelligence	Item Intelligence'ı etkinleştir
+ui.enemy	DÜŞMAN
+ui.enemy_corpse_loot	DÜŞMAN GANİMETİ
+ui.english	Türkçe
+ui.extra_item	ek eşya
+ui.extra_weapon_ammo	ek silah mühimmatı
+ui.f2_close	[{KEY}] KAPAT
+ui.f2_item_analysis	[{KEY}]  EŞYA BİLGİSİ
+ui.faction	fırka
+ui.faction_2	FIRKA
+ui.faction_index	Fırka bilgileri yükleniyor: 
+ui.faction_rewards	FIRKA ÖDÜLLERİ
+ui.faction_technology	Fırka teknolojisi
+ui.floor	yer
+ui.future	  gelecekte
+ui.future_2	Gelecekte
+ui.future_3	GELECEKTE
+ui.granted_augmentation	sabit artırım
+ui.granted_implant	sabit implant
+ui.granted_item	verilen eşya
+ui.granted_weapon_ammo	verilen silahın mühimmatı
+ui.head_gear	başlık
+ui.here	BURADA
+ui.in_locked_branches	Kilitli araştırma dallarında
+ui.include_locked_future_magnum_upgrades	Kilitli Magnum geliştirmelerini de gösterir.
+ui.ingredient	malzeme
+ui.item_intelligence	ITEM INTELLIGENCE
+ui.key_intel	ÖZET
+ui.leggings	bacak zırhı
+ui.location	konum
+ui.locked	kilitli
+ui.locked_2	kilitli
+ui.loot_index	GANİMET BİLGİSİ  
+ui.low_rep	DÜŞÜK İTİBAR
+ui.magnum	Magnum
+ui.magnum_required	Magnum için gereken: 
+ui.magnum_research	Magnum araştırmaları
+ui.magnum_research_2	MAGNUM ARAŞTIRMALARI
+ui.market_processed	Ticaret: işlenen 
+ui.master_switch_for_the_mod	Item Intelligence'ı açar veya kapatır.
+ui.mission_pools	GÖREV GANİMETİ
+ui.mission_workbench	Görev tezgâhı
+ui.more_relationships	Diğer bilgiler
+ui.more_rows_format	+ {0} tane daha ({1})
+ui.no_disassembly_relationships	Söküm bilgisi yok.
+ui.no_explicit_loot_sources_found_check_trade_recip	Kaynak bulunamadı. Ticaret, Tarifler, Fırkalar ve özel etkinliklere bakın.
+ui.no_recipe_or_disassembly_relationships	Tarif veya söküm bilgisi yok.
+ui.no_recipe_relationships	Tarif bulunamadı.
+ui.no_related_magnum_research_was_found	Bu eşyayı kullanan Magnum araştırması bulunamadı.
+ui.no_trade_relationships_found_yet	Henüz ticaret noktası bulunamadı.
+ui.no_weapon_ammo_relationships	Uyumlu silah veya mühimmat yok.
+ui.none	yok
+ui.not_found	bulunamadı
+ui.not_required	gerekmiyor
+ui.note	Not
+ui.now	  şimdi
+ui.other_compatible_item_intelligence_features_rema	Diğer bölümler etkilenmez.
+ui.other_uses_also_exist	Başka kullanım alanları da var
+ui.owned	Elinizdeki
+ui.page	SAYFA 
+ui.pirates	Korsanlar
+ui.possible_outcomes	Olası sonuçlar
+ui.price	FİYAT
+ui.trade_repricing_note	Partideki ilk -> son birimin fiyatı. Fiyat her birimde değişir; stok varıştan önce değişebilir.
+ui.next	SONRAKİ
+ui.batch	PARTİ
+ui.trade_previous_note	SONRAKİ: bir sonraki birim. PARTİ: sonraki 5 birimin veya kalan stokun toplamı. Fiyat birim başına yeniden hesaplanır.
+ui.trade_payout	ÖDEME
+ui.trade_stock_short	STOKTA
+ui.trade_all	TÜMÜ
+ui.trade_pcs	ADET
+ui.trade_total	TOPLAM
+ui.primary_ammo	ana silah mühimmatı
+ui.primary_weapon	ana silah
+ui.production	ÜRETİM
+ui.profile	PROFİL
+ui.qty	ADET
+ui.qty_rolls	ADET / ÇEKİLİŞ
+ui.quasimorph_sources	Kısmimorfoz kaynakları
+ui.quick_intelligence	Kısa bilgi
+ui.random_augmentation	rastgele artırım
+ui.random_implant	rastgele implant
+ui.recipe	Tarif 
+ui.recognized_as_a_trade_item_but_current_game_tabl	Ticaret eşyası; ticaret kaydı bulunamadı.
+ui.recyclable	sökülebilir
+ui.remaining	 kalan
+ui.required_for_open_research	Tamamlanmamış araştırmalar için gereken
+ui.result	ELDE ETME
+ui.reward	ÖDÜL %
+ui.role	Rol
+ui.roll	/çekiliş
+ui.rolls	ÇEKİLİŞ
+ui.rolls_2	 çekiliş
+ui.rows	 SATIR
+ui.search_item	EŞYA ARA…
+ui.secondary_ammo	ikincil silah mühimmatı
+ui.secondary_weapon	ikincil silah
+ui.sell_to_stations	ALAN İSTASYONLAR
+ui.show_ammo_relations	Uyumlu mühimmatı göster
+ui.show_barter_and_consumer_relationships	Eşyayı satın alan istasyonları ve üretimde kullanan istasyon tariflerini gösterir.
+ui.show_future_magnum_uses	Kilitli Magnum geliştirmelerini göster
+ui.show_magnum_surplus	Magnum sonrası kalanı göster
+ui.show_magnum_uses	Magnum kullanımını göster
+ui.show_production_and_barter_source_relationships	Ganimet kaynaklarını, satan istasyonları ve istasyon üretim tariflerini gösterir.
+ui.show_recipes	Tarifleri göster
+ui.show_remaining_amount_relative_to_all_unfinished	Tamamlanmamış tüm Magnum geliştirmeleri için gereken miktar çıkarıldıktan sonra kalanı gösterir.
+ui.show_sources	Kaynakları göster
+ui.show_trade_information	Satış ve takas kullanımını göster
+ui.show_unfinished_magnum_upgrade_uses	Tamamlanmamış Magnum geliştirmelerindeki kullanımını gösterir.
+ui.show_used_in_and_crafted_from_relationships	Gereken malzemeleri ve bu eşyayı kullanan tarifleri gösterir.
+ui.show_weapon_ammo_relationships	Uyumlu mühimmat ve silahları gösterir.
+ui.source	KAYNAK
+ui.sources	KAYNAKLAR
+ui.sources_producers	KAYNAKLAR / ÜRETİCİLER
+ui.sources_trade	KAYNAKLAR VE TİCARET
+ui.state_unknown	bilinmiyor
+ui.station	İSTASYON
+ui.station_2	istasyon
+ui.station_list_is_unavailable_from_the_current_gam	İstasyon bilgisi mevcut değil.
+ui.stations	İstasyonlar
+ui.status	DURUM
+ui.status_2	DURUM
+ui.stock	STOK
+ui.tech_lock	TEKNOLOJİ YETERSİZ
+ui.this_item	BU EŞYA
+ui.this_is_not_a_safe_to_sell_value_the_item_has_ot	Başka kullanım alanları da var.
+ui.this_item_was_not_found_in_faction_reward_pools	Bu eşya fırka ödül havuzlarında bulunamadı.
+ui.total_remaining	Toplam kalan
+ui.trade	ticaret
+ui.trade_consumers	TİCARET / KULLANIM
+ui.trade_links	Ticaret noktaları
+ui.travel	SEYAHAT
+ui.type	TÜR
+ui.unlock	AÇILAN
+ui.used_by_recipes	Kullanan tarifler
+ui.used_in	Kullanıldığı yerler
+ui.used_in_2	KULLANILDIĞI YERLER
+ui.used_in_barter	Takasta kullanılır
+ui.vanilla_exposes_the_remaining_total_but_the_rela	Araştırma ayrıntıları mevcut değil.
+ui.var	 çeşit
+ui.variants	 çeşit
+ui.weapon	silah
+ui.wheel_pgup_pgdn	   /   TEKERLEK: KAYDIR   PGUP/PGDN: HIZLI
+ui.workbench	Tezgâh: 
+ui.wound_slot	VÜCUT BÖLGESİ
+ui.wound_slot_2	vücut bölgesi
+ammo.index_prefix	Silah bilgileri yükleniyor: 
+loot.note.amputation	Başarılı ampütasyon sonrası temel olasılık. Artırımı garanti eden Magnum geliştirmesi hariçtir. Takılı implantlar ayrı gösterilir.
+loot.note.augmentation_woundslot	Düşmanın bir vücut bölgesine takılı olabilir.
+loot.note.augmentations	Olasılık, artırımın takılı olma olasılığıdır. Çekilişler, oluşturma denemeleridir; rastgele artırım olasılıkları koşulludur.
+loot.note.container_chance	Kendi ganimeti olan kapların olasılığı mevcut görev koşullarına bağlıdır.
+loot.note.corpse_transfer	Ölümde çıplak eller dışında envanter ve ekipman cesede geçer. Dolu envanterde eşya kaybolabilir.
+loot.note.enemy_chance	OLASILIK, bu düşmanın eşyayla oluşma olasılığıdır; düşmanla karşılaşma olasılığı değil. Aralık, teknoloji ve fırkaya bağlıdır.
+loot.note.implants	Olasılık, düşman oluşurken implantın takılı olma olasılığıdır. "Kesip çıkarma X%", geri alma olasılığıdır.
+loot.note.mission_pools	Eşya bu görevlerin normal ganimet havuzundadır; bir kapta veya yerde bulunabilir.
+loot.note.placement_generic	Odalardaki ganimet kaplara konabilir; koridorlardaki ganimet yerde olur.
+loot.note.placement_percent_prefix	Odalarda kaba yerleştirme denemesi: 
+loot.note.placement_percent_suffix	%. Aksi halde yere konur. Koridorlarda her zaman yerde olur.
+loot.note.random_equipment	Oluşma olasılığını gösterir. Düşmanın envanteri doluysa oluşan eşya kaybolabilir.
+loot.note.tech	TEKNOLOJİ: eşya teknolojisi ve düşman ekipman bonusu dâhil, kaynağın asgari teknoloji seviyesi.
+overview.trade.consumers_separator	 / kullananlar 
+overview.trade.sources_prefix	kaynaklar 
+tab.overview.short	GENEL
+tab.magnum.short	MAGNUM
+tab.recipes.short	TARİFLER
+tab.trade.short	TİCARET
+tab.ammo.short	MÜHİMMAT
+tab.factions.short	FIRKALAR
+tab.loot.short	GANİMET
+magnum.module.navigation	Navigasyon
+magnum.module.research	Araştırma
+magnum.module.hangar	Hangar
+magnum.module.supply	İkmal
+magnum.module.cloning	Klonlama
+magnum.module.science	Bilim
+magnum.module.medical	Tıp
+magnum.module.engineering	Mühendislik
+magnum.module.industry	Sanayi
+magnum.module.security	Güvenlik
+magnum.module.logistics	Lojistik
+magnum.module.communications	İletişim
+magnum.module.storage	Depo
+magnum.module.command	Komuta
+magnum.module.crew	Mürettebat
+magnum.module.armory	Arsenal
+magnum.module.workshop	Atölye
+magnum.module.training	Eğitim
+magnum.module.habitation	Yaşam alanı
+magnum.node.scanner	Tarayıcı
+magnum.node.travel	Seyahat
+magnum.node.shuttle	Mekik
+magnum.node.capsule	Kapsül
+magnum.node.trade	Ticaret
+source.station	istasyon
+source.stations	istasyonlar
+source.barter	takas
+mcm.header.general	Genel
+mcm.header.tooltip	İpucu
+mcm.header.inspector	Eşya rehberi
+mcm.header.information	Bilgi
+mcm.show_f2_hint	Rehber tuşu ipucunu göster
+mcm.show_f2_hint_tip	Eşyanın üzerine gelince rehber tuşunu gösterir. Mevcut tuş: {KEY}.
+mcm.enable_browser	Eşya rehberini etkinleştir
+mcm.enable_browser_tip	{KEY} ile kataloğu açın. Bir eşyanın üzerine gelerek basarsanız eşyanın sayfası açılır.
+mcm.inspector_hotkey	Rehberi açma tuşu
+mcm.inspector_hotkey_tip	Rehberi açma tuşunu seçin. Arama yazarken de Esc pencereyi kapatır.
+mcm.show_interface_icons	Sade arayüz simgeleri
+mcm.show_interface_icons_tip	Sade arayüz simgelerini gösterir. Eşya simgeleri ve durum işaretleri de görünür.
+mcm.enhanced_readability	Okunabilirliği artır
+mcm.enhanced_readability_tip	Sekmeleri ve notları büyütür, yardımcı metni aydınlatır. Pencere boyutu ve ölçek korunur.
+ui.trade_layout_view	GÖRÜNÜM
+ui.trade_layout_cards_short	K
+ui.trade_layout_table_short	T
+mcm.header.logging	Günlük
+mcm.verbose_logging	Ayrıntılı günlük
+mcm.verbose_logging_tip	Çalışma ve performans bilgilerini Player.log dosyasına ayrıntılı yazar. Sorun giderirken açın.
+mcm.mod_name	Item Intelligence - Eşya ve ganimet rehberi
+compat.disabled_feature	Bu özellik geçici olarak kullanılamıyor.
+mcm.save_failed	Item Intelligence ayarları kaydedilemedi.
+station_group.corporate	Şirket istasyonları
+station_group.resistance	Sivil Direniş
+station_group.quasimorph	Kısmimorfoz kaynakları
+station_group.pirates	Korsanlar
+station_group.stations	İstasyonlar
+loot.container.common_box	Sıradan kutu
+loot.container.common_container	Sıradan kap
+loot.container.common_rack	Sıradan raf
+loot.container.common_locker	Sıradan dolap
+loot.container.cloth_locker	Giysi dolabı
+loot.container.wooden_box	Ahşap kutu
+loot.container.industry	Sanayi kabı
+loot.container.science	Bilim kabı
+loot.container.medical	Tıbbi kap
+loot.container.medical_case	Tıbbi çanta
+loot.container.medical_holder	Tıbbi raf
+loot.container.weapon_case_big	Büyük silah kasası
+loot.container.weapon_case_small	Küçük silah kasası
+loot.container.elite_weapon_case	Seçkin silah kasası
+loot.container.weapon_stand	Silah rafı
+loot.container.ammo_case	Mühimmat kasası
+loot.container.data	Veri kabı
+loot.container.server	Sunucu kabı
+loot.container.tool_case	Alet çantası
+loot.column.container_profile	TÜR / PROFİL
+loot.column.save_estimate	TAHMİNİ OLASILIK
+loot.column.base_chance	TEMEL OLASILIK
+loot.container.trash_can	Çöp kutusu
+loot.container.armor_locker	Zırh dolabı
+loot.container.food	Yiyecek kabı
+loot.container.plants	Bitki kabı
+loot.container.aztec_chest	Aztek sandığı
+loot.container.matrix_box	Matris kutusu
+loot.container.gas_barrel	Yakıt varili
+loot.container.toxic_barrel	Zehirli madde varili
+loot.container.water_sink	Lavabo
+loot.container.blood_sink	Kanlı lavabo
+loot.container.toilet	Tuvalet
+loot.container.water_tank	Su deposu
+loot.container.corpse_pile	Ceset yığını
+loot.container.station_stash	İstasyon zulası
+loot.container.airdrop_capsule	İndirme kapsülü
+loot.container.autonomous_capsule	Otonom kapsül
+loot.container.aztec_altar	Aztek sunağı
+loot.container.snowman	Kardan adam
+loot.container.aed_case	Defibrilatör kutusu
+loot.container.extinguisher_holder	Yangın söndürücü askısı
+loot.container.watermelon_growbox	Karpuz yetiştirme kutusu
+loot.container.cabbage_growbox	Lahana yetiştirme kutusu
+loot.container.silence_casket	Sessizlik tabutu
+loot.station_type.industrial	Sanayi
+loot.station_type.lab	Laboratuvar
+loot.station_type.mine	Maden
+loot.station_type.military	Askerî
+loot.station_type.prison	Hapishane
+loot.station_type.colony_farm	Koloni çiftliği
+loot.station_type.civilian	Sivil
+loot.station_type.quasimorphic_temple	Kısmimorfoz tapınağı
+loot.station_type.space_station	Uzay istasyonu
+loot.station_type.bramfatura	Bramfatura
+ui.close_current_ship_screen_before_starmap	Yıldız haritasını açmadan önce açık gemi ekranını kapatın.
+ui.starmap_unavailable_in_bramfatura	Bramfatura'da yıldız haritası açılamaz. Önce inişi tamamlayın veya terk edin.
+ui.starmap_unavailable_during_raid_prep	Baskın hazırlığında yıldız haritası açılamaz. Önce hazırlık ekranını kapatın.
+ui.starmap_unavailable_during_travel	Seyahat sırasında yıldız haritası açılamaz. Varışı bekleyin.
+ui.secret_data_rewards	GİZLİ VERİ — FIRKA ÖDÜLLERİ
+ui.secret_data_rewards_note	Sabit başlangıç paketi ve itibar ödülü.
+ui.secret_data_items	eşya
+ui.secret_data_rep	itibar
+ui.secret_data_view	GÖR
+ui.secret_data_back	FIRKALARA DÖN
+ui.secret_data_reputation	İTİBAR
+ui.secret_data_package	BAŞLANGIÇ PAKETİ
+ui.secret_data_story_effect	Teslim etmek fırkanın hikâyesini ilerletebilir.
+ui.secret_data_no_rewards	Gizli Veri ödülleri mevcut değil.
+ui.chip_unlocks	AÇILANLAR
+ui.back_to	GERİ:
+compat.module	Modül
+compat.reason	Neden:
+ui.chip_unlock_chance_note	Olasılık tek çip içindir. Açılmış eşyalar da seçim havuzunda kalır.
+ui.chip_summary_unlocked	açık
+ui.chip_summary_locked	kilitli
+ui.chip_summary_unknown	bilinmiyor
+ui.baron_guaranteed_one_pact	1 pakt garanti
+ui.baron_this_pact	Bu pakt:
+ui.baron_depends_on_mission_tech	görev teknolojisine bağlı
+ui.overview_magnum_available_now	şu anda mevcut
+ui.overview_magnum_not_available_now	şu anda mevcut değil
+ui.overview_magnum_all_completed	tümü araştırıldı
+ui.loot_accordion_hint	Açmak veya kapatmak için bölüme tıklayın
+ui.baron_habitat	Yaşam alanı
+ui.baron_guaranteed	Garanti
+ui.baron_one_pact	1 pakt
+ui.loot_quick_jump	HIZLI GEÇİŞ
+ui.jump	GİT
+ui.weapon_modes	MODLAR
+ui.mode_when_empty	Mühimmatsız
+ui.mode_single	Tekli
+ui.mode_burst	Seri ateş
+ui.mode_auto	Otomatik
+ui.mode_launcher	Fırlatma
+ui.mode_throw	Atma
+ui.mode_melee	Yakın dövüş
+ui.mode_buttstroke	Dipçik darbesi
+ui.mode_single_shot	Tek atış
+ui.mode_shots	Atış sayısı
+ui.mode_accuracy	İsabet
+ui.mode_damage	Hasar
+ui.mode_scatter	Saçılma
+ui.mode_shot_delay	Aralık
+ui.mode_ammo	Mühimmat
+ui.mode_full_ammo_required	Tam mühimmat gerekli
+ui.unit_seconds_short	sn
+ui.mode_stab	Saplama
+ui.mode_slash	Kesme
+ui.mode_chop	Yarma
+ui.mode_smash	Ezme
+ui.mode_punch	Yumruk
+ui.mode_tooltip_fire	Ateş modu
+ui.mode_tooltip_attack	Saldırı modu
+ui.mode_rate_of_fire	Ateş hızı
+ui.mode_damage_modifier	Hasar çarpanı
+ui.mode_damage_type	Hasar türü
+ui.mode_damage_type_default	Hasar türü (varsayılan)
+ui.damage_type.blunt	Darbe
+ui.damage_type.pierce	Delici
+ui.damage_type.lacer	Kesik
+ui.damage_type.fire	Ateş
+ui.damage_type.cold	Soğuk
+ui.damage_type.poison	Zehirli
+ui.damage_type.shock	Şok
+ui.damage_type.beam	Işın
+ui.damage_type.explosion	Patlayıcı
+ui.damage_type.plasma	Plazma
+ui.damage_type.chaos	Entropi
+ui.damage_type.proton	İyon
+ui.damage_type.cryo	Kriolazer
+ui.mode_ammo_consumption	Mühimmat tüketimi
+mcm.modder_mode	Mod yapımcısı modu
+mcm.modder_mode_tip	Teknik verileri ve eşya oluşturma panelini gösterir. Oluşturulan eşyalar mevcut oyuna kaydedilir.
+ui.modder_section	MOD YAPIMI
+ui.modder_record_type	Kayıt türü
+ui.modder_item_class	Eşya sınıfı
+ui.modder_tech_level	Teknoloji seviyesi
+ui.modder_relation_id	İlişki ID
+ui.modder_firemode_ids	Ateş modu ID
+ui.modder_search_syntax	Gelişmiş arama: id:  name:  type:  rel:  tech:  cat:   Örnek: cat:weapon tech:>=5
+ui.search_item_modder	ARA…  id: / tech: / cat:
+ui.open_item_link	EŞYAYI AÇ
+ui.modder_spawn_title	MOD YAPIM ARAÇLARI
+ui.modder_spawn_save_warning	Bu kayıt dosyasında gerçek bir eşya oluşturur.
+ui.modder_spawn_clone	KLONA 1 ADET EKLE
+ui.modder_spawn_cargo	KARGOYA 1 ADET EKLE
+ui.modder_spawn_failed	Eşya eklenemedi.
+ui.modder_spawn_invalid_item	Bu kayıttan eşya oluşturulamaz.
+ui.modder_spawn_wait	Mevcut işlemin bitmesini bekleyin.
+ui.modder_spawn_clone_unavailable	Klon envanterine erişilemiyor.
+ui.modder_spawn_contract_unavailable	Bu oyun sürümünde eşya oluşturulamıyor.
+ui.modder_spawn_clone_success	Klon envanterine eklendi.
+ui.modder_spawn_inventory_full	Klon envanteri dolu.
+ui.modder_spawn_cargo_unavailable	Gemi kargosuna erişilemiyor.
+ui.modder_spawn_cargo_success	Gemi kargosuna eklendi.
+ui.other_containers	GENEL KAP YERLEŞİMİ
+ui.mission	GÖREV
+ui.yes	EVET
+ui.mission_generation	İŞLEYİŞ
+loot.note.general_spawn	İşaret, görev ganimetinin bu kaba yerleşebileceğini gösterir. Ek bir düşme şansı değildir; eşya yerde de kalabilir.
+ui.loot_modifiers_current	BONUSLAR: MEVCUT
+ui.loot_modifiers_manual	BONUSLAR: ELLE
+ui.loot_marauder	Yağmacı
+ui.loot_marika_organization	Marika — Tasarruf
+ui.loot_laksha_field_medic	Laksha — Saha doktoru
+ui.loot_on	AÇIK
+ui.loot_off	KAPALI
+ui.loot_pp	yüzde puan
+ui.bonus_corpse_loot	CESETLERDEN EK GANİMET
+ui.bonus_rolls	EK ÇEKİLİŞLER
+loot.note.corpse_bonus_rolls	Yağmacı ve Tasarruf, ceset ganimeti çekilişlerini artırır. Aralık: çekiliş sayısı; parantezdeki %: en yüksek sayının olasılığı; SONUÇ: en az bir kez elde etme olasılığı.
+ui.per_roll	ÇEKİLİŞ BAŞINA
+ui.final_chance	SONUÇ
+ui.mode_damage_per_ap_default	Hasar/EP (varsayılan)
+loot.note.unknown_container_rolls	? = çekiliş sayısı kesin bilinmediğinden toplam olasılık hesaplanmaz.
+ui.station_production_produced_from	İSTASYON ÜRETİMİ — MALZEMELER
+ui.station_production_used_to_produce	İSTASYON ÜRETİMİ — KULLANIM
+ui.station_production_note	İstasyon üretim tarifidir. Yalnızca mevcut üretim listesine dâhil olan istasyonlarda kullanılır.
+ui.station_production_output	ÜRÜN
+ui.station_production_input	MALZEME
+ui.station_production_recipe	İSTASYON TARİFİ
+ui.no_active_faction_reward_in_current_save	Bu eşya yalnızca bu kayıtta mevcut olmayan fırkaların ödül havuzlarında bulunur.
+loot.note.enemy_bonus_separate	Yağmacı ve Tasarruf düşman ekipmanı olasılığını değiştirmez; ayrı ceset ganimeti çekilişleri ekler.
+ui.mode_critical_damage_per_ap_default	Kritik hasar/EP (varsayılan)
+ui.faction_technology_navigation_unavailable	Şu anda fırka teknolojileri ekranı açılamıyor.
+ui.scavenger_mission_rewards	ÇÖPÇÜLER — GÖREV BAŞARISINDA EŞYA OLASILIĞI
+ui.rows_visible	SATIR
+ui.opponent	RAKİP
+ui.scavenger_current_missions	UYGUN GÖREVLER: 
+ui.scavenger_best_chance	EN YÜKSEK OLASILIK: 
+ui.scavenger_time_left	KALAN SÜRE
+stats.tech	TEKNOLOJİ
+stats.modes	MODLAR
+ui.overview_combat	SAVAŞ
+ui.overview_damage_ap_short	HASAR/EP
+ui.overview_crit_short	KRİTİK
+ui.overview_relationships	KULLANIM VE KAYNAKLAR
+ui.overview_magnum_research	Magnum araştırmaları
+ui.overview_used_in_recipes	Kullanan tarifler
+ui.overview_crafted_by_recipes	Üretim tarifleri
+ui.overview_obtainable_by_disassembly	Sökümle elde edilir
+ui.overview_disassembles_into	Sökümden elde edilenler
+ui.overview_compatible_ammo	Uyumlu mühimmat
+ui.overview_compatible_weapons	Uyumlu silahlar
+ui.overview_recipe_ingredients	Tarif malzemeleri
+ui.overview_no_core_links	Burada gösterilecek bilgi yok. Kaynaklar için Ticaret, Fırkalar veya Ganimet sekmesine bakın.
+loot.baron.section	BARON GANİMETİ
+loot.baron.column.baron	BARON
+loot.baron.column.qmorph	KISMİMORFOZ
+loot.baron.column.item_chance	BU PAKT
+loot.baron.column.any_pact	PAKT
+loot.baron.column.death_restore	İADE
+loot.note.baron_ultimate_death	Baron 1 pakt düşürür. Türü, görev teknolojisine ve mevcut ganimete bağlıdır.
+loot.note.baron_dynamic_tech	Aralık, Baron oluşurken görev ve fırka teknolojisine göre değişen ganimet havuzunu yansıtır.
+loot.note.baron_ksiomara_exception	Hikâye sırasında normal Baron yerine Xiomara çıkabilir. Bu satır Xiomara için geçerli değildir.
+loot.note.baron_consumption_bound	İADE %100'ün altındaysa aralık, ölümden önce paktın tüketilme olasılığını da kapsar. Tüketim zamanı tahmin edilmez.
+loot.special.section	DİĞER KAYNAKLAR
+loot.special.condition	KOŞUL
+loot.special.result	SONUÇ
+loot.special.deterministic	KOŞUL SAĞLANIRSA GARANTİ
+loot.special.outcome_dependent	SONUCA BAĞLI
+loot.special.story_reward	HİKÂYE ÖDÜLÜ
+loot.special.starting_loadout	BAŞLANGIÇ EKİPMANI
+loot.special.ancom_exchange	GİZLİ VERİ TAKASI
+loot.special.expire_conversion	EŞYA DÖNÜŞÜMÜ
+loot.special.skull_ritual	KAFATASI RİTÜELİ
+loot.special.story_script	HİKÂYE OLAYI
+loot.special.complete_story_mission	Hikâye görevini tamamla
+loot.special.story_mission	Hikâye görevi
+loot.special.selected_start_preset	Sabit başlangıç seti seçili ve rastgele başlangıç ekipmanı kapalı
+loot.special.exchange_secret_data	AnCom gizli verisini takas et
+loot.special.item_expires	Kaynak eşyanın süresi dolar
+loot.special.ritual_failed	Ritüelin başarısız sonucu
+loot.special.ritual_outcome	İlgili ritüel sonucu
+loot.special.story_trigger	Hikâye olayı / belirli konuma yerleşim
+loot.special.use_byproduct	KULLANIM YAN ÜRÜNÜ
+loot.special.death_gift	ÖLÜM HEDİYESİ
+loot.special.mission_reward_pool	GÖREV ÖDÜL HAVUZU
+loot.special.mission_orbit_reward_pool	GÖREV / YÖRÜNGE ÖDÜL HAVUZU
+loot.special.random_starting_pool	RASTGELE BAŞLANGIÇ HAVUZU
+loot.special.station_production_reward	İSTASYON ÜRETİM ÖDÜLÜ
+loot.special.death_gift_source	Ölüm hediyesi
+loot.special.random_start_source	Rastgele başlangıç ekipmanı
+loot.special.use_source_item	Kaynak eşyayı kullan / tüket
+loot.special.death_gift_condition	Ölüm Hediyesi açık ve ödül koşulları sağlanmış
+loot.special.faction_reward_condition	Fırka ödül havuzu / teknoloji gereksinimi
+loot.special.random_start_condition	Rastgele başlangıç ekipmanı açık
+loot.special.station_production_condition	İstasyonun mevcut üretiminde ve ödül puanı yeterli
+loot.note.container_context_chance	~ = en az bir kez elde etme olasılığı. Mevcut veya elle girilen çekilişler/Yağmacı ve görev/fırka teknolojisi kullanılır. Ganimet bütçesi, geçici teknoloji ve konum olayları hariçtir.
+loot.note.container_modifier_unavailable	* = mevcut Yağmacı değeri alınamadığı için yalnızca temel çekilişler kullanılır. Uzayda ELLE seçeneğini kullanın.
+loot.note.container_save_unavailable	— = kayıt teknolojisi, uygun havuz veya temel çekiliş aralığı bilinmediği için kesin tahmin yapılamaz.
+loot.special.other_section	ÖZEL ELDE ETME YOLLARI
+loot.special.reward_section	FIRKA ÖDÜLLERİ
+loot.special.start_section	YENİ OYUN BAŞLANGICI
+loot.special.result_pool	HAVUZ
+loot.special.result_outcome	SONUÇ
+loot.special.result_guaranteed	GARANTİ
+loot.special.result_conditional	KOŞULLU
+loot.special.kind_story	HİKÂYE GÖREVİ
+loot.special.kind_start	BAŞLANGIÇ
+loot.special.kind_secret_data	GİZLİ VERİ
+loot.special.kind_expire	SÜRE DOLUMU
+loot.special.kind_ritual	RİTÜEL
+loot.special.kind_story_script	HİKÂYE
+loot.special.story_source	Hikâye dalı
+loot.special.kind_use	KULLANIMDA
+loot.special.kind_death	ÖLÜMDEN SONRA
+loot.special.kind_mission_reward	GÖREV ÖDÜLÜ
+loot.special.kind_reward	ÖDÜL
+loot.special.kind_start_pool	BAŞLANGIÇ HAVUZU
+loot.special.kind_station_reward	ÜRETİM
+loot.special.cond_complete	Görevi tamamla
+loot.special.cond_fixed_start	Sabit set / rastgele başlangıç kapalı
+loot.special.cond_exchange	Takas
+loot.special.cond_expire	Süresi dolunca
+loot.special.cond_ritual_failed	Başarısızlık
+loot.special.cond_ritual_upgrade	Geliştirme
+loot.special.cond_ritual_sidegrade	Eşdeğer dönüşüm
+loot.special.cond_ritual_downgrade	Zayıflatma
+loot.special.cond_ritual_outcome	Ritüel sonucu
+loot.special.cond_story	Hikâye olayında
+loot.special.cond_use	Kullanımdan sonra eşyanın koşulu sağlanınca
+loot.special.cond_death	Ölümde ödül koşulları sağlanmış
+loot.special.cond_mission	Görev
+loot.special.cond_mission_orbit	Görev / yörünge
+loot.special.cond_random_start	Rastgele başlangıç
+loot.special.cond_station_current	Mevcut üretimde; puan yeterli
+loot.special.result_in_pool	HAVUZDA
+loot.special.header_method	YÖNTEM
+loot.special.header_status	DURUM
+loot.special.header_faction	FIRKA
+loot.special.header_where	YER
+loot.special.header_requirement	GEREKSİNİM
+loot.special.header_loadout	EKİPMAN
+loot.special.header_mode	MOD
+loot.special.kind_fixed_start	SABİT EKİPMAN
+loot.special.kind_mission_only	GÖREV
+loot.special.kind_mission_orbit	GÖREV / YÖRÜNGE
+loot.special.kind_random_pool	RASTGELE HAVUZ
+loot.special.cond_no_extra_requirement	EK KOŞUL YOK
+loot.special.cond_random_start_enabled	Rastgele ekipman açık
+loot.special.cond_fixed_start_enabled	Rastgele ekipman kapalı
+loot.note.faction_reward_sources	Onay işareti = eşya havuzdadır, garanti değildir. "Görev / yörünge" teknoloji gerektirir. "Üretim" için istasyonda eşya bulunmalı ve ödül puanı yetmelidir.
+loot.note.starting_sources	Yalnızca yeni oyunda: sabit set eşyayı verir; rastgele havuzda seçilmesi garanti değildir.
+loot.general_spawn.placement	YERLEŞİM
+loot.column.container	KAP
+loot.note.special_sources	Özel yollar. Ritüellerde "Kaynak" başlangıç kafatası, "Koşul" gereken sonuçtur.
+loot.special.fixed_loadout_count	EKİPMAN SETİ
+loot.special.story_missions_count	Hikâye görevleri x{0}
+loot.note.container_modifier_basic	* = mevcut Yağmacı değeri alınamadığı için yalnızca temel çekilişler kullanılır.
+loot.note.container_save_compatibility	— = oyun güncellemesinden sonra bu kayıt için olasılık tahminleri geçici olarak kullanılamıyor.
+loot.note.manual_unavailable	Elle hesaplama geçici olarak kullanılamıyor.
+loot.note.manual_compatibility	Oyun güncellemesinden sonra elle hesaplama geçici olarak kullanılamıyor.
+loot.note.container_calculation_unavailable	— = bu kayıt için olasılık tahminleri geçici olarak kullanılamıyor.
+mcm.header.language	Dil
+mcm.language	Item Intelligence dili
+mcm.language_tip	Auto, oyunun dilini kullanır. Elle seçim yalnızca mod arayüzünü değiştirir; eşya ve fırka adları oyun dilinde kalır.
+ui.loot_storage_short	K
+ui.loot_corpse_short	C
+ui.loot_implant_short	İ
+ui.loot_storage_corpse_short	K/C
+ui.unit_day_short	g
+ui.unit_hour_short	sa
+ui.unit_minute_short	dk
+ui.body_dependent	Koşullu
+loot.note.body_dependent	"Koşullu", olasılığı doğrulanmamış muhtemel bir kaynaktır. Vücut oluşumuna ve takma sınırlarına bağlıdır.
+ui.view_expand	Büyük pencere
+ui.view_window	Normal pencere
+ui.view_zoom	Ölçek
+ui.view_save_failed	Pencere ayarları kaydedilemedi.
+ui.mode_effect	Mod özelliği
+ui.mode_status_effect	Durum etkisi
+ui.mode_trait_wounding	Yaralama
+ui.arm_builtin_weapon	Takıldığında kullanılan silah
+ui.arm_source_augmentation	Takılacak artırım
+ui.upgrade_uses	GELİŞTİRMELERDE KULLANIM
+ui.upgrade_genomes	Genom geliştirmeleri
+ui.upgrade_uses_note	Gemi araştırmaları bittikten sonra da gerekebilir. Miktar seçilen geliştirmelere bağlıdır ve kalan araştırma toplamına dâhil değildir.
+ui.mode_no_effects	Yok
+ui.upgrade_ranged	Menzilli silah geliştirmeleri
+ui.upgrade_melee	Yakın dövüş silahı geliştirmeleri
+ui.upgrade_armor	Zırh geliştirmeleri (tüm bölgeler)
+ui.upgrade_classes	Sınıf değişiklikleri
+ui.upgrade_pacts	Pakt ritüelleri
+ui.upgrade_implants	Klonlara implant takma
+ui.upgrade_augmentations	Klonlara artırım takma
+ui.upgrade_equipment	BU MALZEMEYLE GELİŞTİRİLEN EKİPMAN

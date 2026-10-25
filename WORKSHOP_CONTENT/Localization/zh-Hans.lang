@@ -63,11 +63,11 @@ ui.scroll_close_keys	[滚轮] 滚动   [ESC] 关闭
 ui.lmb_open_item	[左键] 打开物品
 ui.after_all_magnum	完成全部 Magnum 项目后
 ui.after_all_research	完成全部研究后
-ui.after_open_research	完成已开放研究后
-ui.all_related_research_is_already_completed	所有相关研究均已完成。
+ui.after_open_research	完成剩余研究后
+ui.all_related_research_is_already_completed	使用此材料的研究均已完成。
 ui.alternative_recipes	替代配方
 ui.ammo	弹药
-ui.ammo_links	弹药关联
+ui.ammo_links	适用武器与弹药
 ui.ammunition	弹药
 ui.amputate	截肢
 ui.amputation	截肢
@@ -94,7 +94,7 @@ ui.catalog	目录
 ui.chance	概率
 ui.base_share	基础占比
 ui.tech	科技
-ui.civil_resistance	民间抵抗组织
+ui.civil_resistance	人民义军
 ui.click_a_station_to_open_its_location_on_the_star	点击空间站以在星图上打开其位置。
 ui.cloning	克隆
 ui.compact_intelligence_on_normal_hover	悬停物品时显示简要信息。
@@ -102,17 +102,17 @@ ui.compatibility	兼容性
 ui.compatible_weapons	兼容武器
 ui.completed	已完成
 ui.completed_research	已完成研究
-ui.connecting_to_market_data	正在连接市场数据...
+ui.connecting_to_market_data	正在加载交易数据…
 ui.consumers	消耗方
 ui.container	容器
 ui.container_2	容器
 ui.container_3	容器 
 ui.containers	具有独立战利品的容器
 ui.context	地点类型
-ui.conveyor	传送带
+ui.conveyor	生产线
 ui.corporate_stations	公司空间站
 ui.corpse	尸体
-ui.corpse_bonus	尸体额外掉落
+ui.corpse_bonus	尸体额外战利品
 ui.craftable	可制作
 ui.crafted_by_recipes	由配方制作
 ui.crafted_from	制作材料
@@ -129,7 +129,7 @@ ui.english	简体中文
 ui.extra_item	额外物品
 ui.extra_weapon_ammo	额外武器弹药
 ui.f2_close	[{KEY}] 关闭
-ui.f2_item_analysis	[{KEY}]  物品分析
+ui.f2_item_analysis	[{KEY}]  物品信息
 ui.faction	派系
 ui.faction_2	派系
 ui.faction_index	正在加载派系数据： 
@@ -139,7 +139,7 @@ ui.floor	地面
 ui.future	  未来
 ui.future_2	未来
 ui.future_3	未来
-ui.granted_augmentation	预设强化体
+ui.granted_augmentation	预设增强体
 ui.granted_implant	预设植入体
 ui.granted_item	固定物品
 ui.granted_weapon_ammo	固定武器弹药
@@ -162,17 +162,17 @@ ui.magnum_research	Magnum 研究
 ui.magnum_research_2	MAGNUM 研究
 ui.market_processed	市场：已处理 
 ui.master_switch_for_the_mod	启用或禁用 Item Intelligence。
-ui.mission_pools	任务池
+ui.mission_pools	任务战利品
 ui.mission_workbench	任务工作台
-ui.more_relationships	更多关联
+ui.more_relationships	更多信息
 ui.more_rows_format	+ 另外 {0} 项（{1}）
-ui.no_disassembly_relationships	没有拆解关联。
-ui.no_explicit_loot_sources_found_check_trade_recip	未找到明确来源。请检查交易、配方、派系和特殊事件。
-ui.no_recipe_or_disassembly_relationships	没有配方或拆解关联。
-ui.no_recipe_relationships	没有配方关联。
+ui.no_disassembly_relationships	无拆解信息。
+ui.no_explicit_loot_sources_found_check_trade_recip	未找到直接来源。请查看交易、配方、派系和特殊事件。
+ui.no_recipe_or_disassembly_relationships	无配方或拆解信息。
+ui.no_recipe_relationships	未找到配方。
 ui.no_related_magnum_research_was_found	未找到相关 Magnum 研究。
-ui.no_trade_relationships_found_yet	尚未找到交易关联。
-ui.no_weapon_ammo_relationships	没有武器/弹药关联。
+ui.no_trade_relationships_found_yet	暂未找到交易地点。
+ui.no_weapon_ammo_relationships	无适用武器或弹药。
 ui.none	无
 ui.not_found	未找到
 ui.not_required	无需
@@ -185,7 +185,7 @@ ui.page	页
 ui.pirates	海盗
 ui.possible_outcomes	可能结果
 ui.price	价格
-ui.trade_repricing_note	批次内第一件 → 最后一件。价格会按件重新计算；抵达前库存可能变化。
+ui.trade_repricing_note	批次内第一件 -> 最后一件。价格会按件重新计算；抵达前库存可能变化。
 ui.next	下一件
 ui.batch	批次
 ui.trade_previous_note	下一件 = 下一件物品；批次 = 接下来 5 件或剩余库存的总价。每件都会重新定价。
@@ -202,13 +202,13 @@ ui.qty	数量
 ui.qty_rolls	数量/次数
 ui.quasimorph_sources	异变体来源
 ui.quick_intelligence	快速情报
-ui.random_augmentation	随机强化体
+ui.random_augmentation	随机增强体
 ui.random_implant	随机植入体
 ui.recipe	配方 
 ui.recognized_as_a_trade_item_but_current_game_tabl	交易物品；未找到交易记录。
-ui.recyclable	可回收
+ui.recyclable	可拆解
 ui.remaining	 剩余
-ui.required_for_open_research	开放研究所需
+ui.required_for_open_research	剩余研究所需
 ui.result	结果
 ui.reward	奖励 %
 ui.role	作用
@@ -220,19 +220,19 @@ ui.search_item	搜索物品...
 ui.secondary_ammo	副武器弹药
 ui.secondary_weapon	副武器
 ui.sell_to_stations	空间站收购
-ui.show_ammo_relations	显示弹药关联
-ui.show_barter_and_consumer_relationships	显示空间站买家和空间站经济配方输入。
+ui.show_ammo_relations	显示弹药适配信息
+ui.show_barter_and_consumer_relationships	显示收购此物品的空间站，以及用它生产的配方。
 ui.show_future_magnum_uses	显示未来 Magnum 用途
 ui.show_magnum_surplus	显示 Magnum 余量
 ui.show_magnum_uses	显示 Magnum 用途
-ui.show_production_and_barter_source_relationships	显示战利品来源、空间站卖家和空间站经济配方产物。
+ui.show_production_and_barter_source_relationships	显示战利品来源、出售此物品的空间站及其生产配方。
 ui.show_recipes	显示配方
-ui.show_remaining_amount_relative_to_all_unfinished	显示相对于所有未完成 Magnum 升级的剩余数量。
+ui.show_remaining_amount_relative_to_all_unfinished	显示扣除所有未完成 Magnum 升级所需材料后的余量。
 ui.show_sources	显示获取来源
 ui.show_trade_information	显示出售和以物易物用途
 ui.show_unfinished_magnum_upgrade_uses	显示未完成 Magnum 升级中的用途。
-ui.show_used_in_and_crafted_from_relationships	显示“用于”和“制作材料”关联。
-ui.show_weapon_ammo_relationships	显示武器-弹药关联。
+ui.show_used_in_and_crafted_from_relationships	显示制作此物品所需的材料，以及使用它的配方。
+ui.show_weapon_ammo_relationships	显示适用的武器与弹药。
 ui.source	来源
 ui.sources	来源
 ui.sources_producers	来源 / 生产方
@@ -252,11 +252,11 @@ ui.this_item_was_not_found_in_faction_reward_pools	未在派系奖励池中找�
 ui.total_remaining	总剩余
 ui.trade	交易
 ui.trade_consumers	交易 / 消耗方
-ui.trade_links	交易关联
+ui.trade_links	交易地点
 ui.travel	航行
 ui.type	类型
 ui.unlock	解锁
-ui.used_by_recipes	被配方使用
+ui.used_by_recipes	用于配方
 ui.used_in	用于
 ui.used_in_2	用于
 ui.used_in_barter	用于以物易物
@@ -264,23 +264,23 @@ ui.vanilla_exposes_the_remaining_total_but_the_rela	研究详情不可用。
 ui.var	 个变体
 ui.variants	 个变体
 ui.weapon	武器
-ui.wheel_pgup_pgdn	   •   滚轮：滚动   PGUP/PGDN：快速
+ui.wheel_pgup_pgdn	   /   滚轮：滚动   PGUP/PGDN：快速
 ui.workbench	工作台： 
-ui.wound_slot	伤口部位
-ui.wound_slot_2	伤口部位
+ui.wound_slot	身体部位
+ui.wound_slot_2	身体部位
 ammo.index_prefix	正在加载武器数据： 
-loot.note.amputation	成功截肢后的基础概率，不计入 Magnum 必定获得强化体的升级效果。已安装的植入体单独列出。
-loot.note.augmentation_woundslot	可作为敌人的身体部位模块出现。
-loot.note.augmentations	概率表示已安装该强化体的可能性。抽取次数表示生成尝试次数；随机强化体的概率取决于条件。
-loot.note.container_chance	手动容器概率取决于当前任务环境。
-loot.note.corpse_transfer	死亡时，库存和装备会转移到尸体上，空手除外。库存已满时物品可能被丢弃。
+loot.note.amputation	成功截肢后的基础概率，不计入 Magnum 必定获得增强体的升级效果。已安装的植入体单独列出。
+loot.note.augmentation_woundslot	可能安装在敌人的身体部位上。
+loot.note.augmentations	概率表示已安装该增强体的可能性。抽取次数表示生成尝试次数；随机增强体的概率取决于条件。
+loot.note.container_chance	有独立战利品的容器，其掉落概率取决于当前任务条件。
+loot.note.corpse_transfer	死亡时，背包物品和装备会转移到尸体上，空手除外。背包已满时物品可能丢失。
 loot.note.enemy_chance	概率 = 此敌人生成该物品的概率，而不是遇到该敌人的概率。范围取决于科技和派系。
 loot.note.implants	概率表示敌人生成时已安装该植入体的可能性。“截肢 X%”表示取回该植入体的概率。
 loot.note.mission_pools	该物品位于这些任务的常规战利品池中，可能出现在容器内或地面上。
 loot.note.placement_generic	房间战利品可能进入容器；走廊战利品会落在地面。
-loot.note.placement_percent_prefix	放置：房间有 
-loot.note.placement_percent_suffix	% 的容器放置尝试；否则落地。走廊始终落在地面。
-loot.note.random_equipment	显示生成概率。敌人库存已满时可能丢弃生成的物品。
+loot.note.placement_percent_prefix	在房间内，尝试将战利品放入容器的概率为 
+loot.note.placement_percent_suffix	%；否则放在地上。走廊内始终放在地上。
+loot.note.random_equipment	显示生成概率。敌人背包已满时，生成的物品可能丢失。
 loot.note.tech	科技 = 来源的最低科技等级，包括物品科技和敌人装备加成。
 overview.trade.consumers_separator	 / 消耗方 
 overview.trade.sources_prefix	来源 
@@ -320,21 +320,21 @@ source.stations	空间站
 source.barter	以物易物
 mcm.header.general	常规
 mcm.header.tooltip	提示
-mcm.header.inspector	浏览器
+mcm.header.inspector	图鉴
 mcm.header.information	信息
 mcm.header.language	语言
 mcm.language	Item Intelligence 语言
 mcm.language_tip	“自动”跟随《Quasimorph》的语言设置。手动选择只会更改 Item Intelligence 界面；游戏提供的物品和派系名称仍使用游戏语言。
-mcm.show_f2_hint	显示浏览器快捷键提示
-mcm.show_f2_hint_tip	悬停物品时显示浏览器快捷键提示。当前按键：{KEY}。
-mcm.enable_browser	启用物品浏览器
-mcm.enable_browser_tip	悬停物品时按 {KEY}。Alt 物品详情保持不变。
-mcm.inspector_hotkey	打开浏览器快捷键
-mcm.inspector_hotkey_tip	选择浏览器按键。搜索框可正常输入文字；输入时按 Esc 也会关闭窗口。
+mcm.show_f2_hint	显示图鉴快捷键提示
+mcm.show_f2_hint_tip	悬停物品时显示图鉴快捷键提示。当前按键：{KEY}。
+mcm.enable_browser	启用物品图鉴
+mcm.enable_browser_tip	按 {KEY} 打开目录；将鼠标移到物品上再按，可打开该物品页面。
+mcm.inspector_hotkey	打开图鉴快捷键
+mcm.inspector_hotkey_tip	选择打开物品图鉴的按键。输入搜索词时也可按 Esc 关闭窗口。
 mcm.show_interface_icons	简洁界面图标
 mcm.show_interface_icons_tip	显示简洁的界面图标。物品图标和功能状态标记仍会保留。
 mcm.enhanced_readability	增强可读性
-mcm.enhanced_readability_tip	放大物品浏览器中的标签和说明，并提高辅助文字的亮度。保持当前窗口大小和缩放比例。
+mcm.enhanced_readability_tip	放大物品图鉴中的标签和说明，并提高辅助文字的亮度。保持当前窗口大小和缩放比例。
 ui.trade_layout_view	视图
 ui.trade_layout_cards_short	卡
 ui.trade_layout_table_short	表
@@ -345,7 +345,7 @@ mcm.mod_name	Item Intelligence - 物品数据库与战利品来源
 compat.disabled_feature	此功能暂时不可用。
 mcm.save_failed	无法保存 Item Intelligence 设置。
 station_group.corporate	公司空间站
-station_group.resistance	民间抵抗组织
+station_group.resistance	人民义军
 station_group.quasimorph	异变体来源
 station_group.pirates	海盗
 station_group.stations	空间站
@@ -377,7 +377,7 @@ loot.container.plants	植物容器
 loot.container.aztec_chest	阿兹特克宝箱
 loot.container.matrix_box	矩阵箱
 loot.container.gas_barrel	燃料桶
-loot.container.toxic_barrel	毒性桶
+loot.container.toxic_barrel	有毒废料桶
 loot.container.water_sink	水槽
 loot.container.blood_sink	血槽
 loot.container.toilet	马桶
@@ -412,13 +412,13 @@ ui.secret_data_rewards_note	固定初始物资包和声望奖励。
 ui.secret_data_items	物品
 ui.secret_data_rep	声望
 ui.secret_data_view	查看
-ui.secret_data_back	← 返回派系
+ui.secret_data_back	返回派系
 ui.secret_data_reputation	声望
 ui.secret_data_package	初始物资包
-ui.secret_data_story_effect	此次交付具有独立的剧情处理，可能推进派系剧情。
+ui.secret_data_story_effect	交付后可能推进派系剧情。
 ui.secret_data_no_rewards	秘密数据奖励不可用。
 ui.chip_unlocks	解锁
-ui.back_to	← 返回
+ui.back_to	返回
 compat.module	模块
 compat.reason	原因：
 ui.chip_unlock_chance_note	概率按单个芯片计算。已解锁物品仍会保留在选择池中。
@@ -431,7 +431,7 @@ ui.baron_depends_on_mission_tech	取决于任务科技等级
 ui.overview_magnum_available_now	当前可用
 ui.overview_magnum_not_available_now	当前不可用
 ui.overview_magnum_all_completed	全部研究完成
-ui.loot_accordion_hint	▶ / ▼  点击区域以展开或折叠
+ui.loot_accordion_hint	点击区域以展开或折叠
 ui.baron_habitat	栖息地
 ui.baron_guaranteed	必定
 ui.baron_one_pact	1 个契约
@@ -453,7 +453,7 @@ ui.mode_damage	伤害
 ui.mode_scatter	散布
 ui.mode_shot_delay	间隔
 ui.mode_ammo	弹药
-ui.mode_full_ammo_required	需要完整弹药
+ui.mode_full_ammo_required	需要满弹药
 ui.unit_seconds_short	秒
 ui.mode_stab	刺击
 ui.mode_slash	斩击
@@ -473,12 +473,12 @@ ui.damage_type.fire	火焰
 ui.damage_type.cold	冰冷
 ui.damage_type.poison	毒素
 ui.damage_type.shock	电击
-ui.damage_type.beam	光束
+ui.damage_type.beam	辐射
 ui.damage_type.explosion	爆炸
 ui.damage_type.plasma	等离子
 ui.damage_type.chaos	混沌
-ui.damage_type.proton	质子
-ui.damage_type.cryo	低温
+ui.damage_type.proton	离子
+ui.damage_type.cryo	冷激光
 ui.mode_ammo_consumption	弹药消耗
 mcm.modder_mode	模组作者模式
 mcm.modder_mode_tip	显示技术数据和物品生成面板。生成的物品会保存到当前游戏存档。
@@ -498,10 +498,10 @@ ui.modder_spawn_cargo	向货舱添加 1 个
 ui.modder_spawn_failed	未添加物品。
 ui.modder_spawn_invalid_item	无法生成此物品记录。
 ui.modder_spawn_wait	请等待当前操作完成。
-ui.modder_spawn_clone_unavailable	克隆体库存不可用。
+ui.modder_spawn_clone_unavailable	无法访问克隆人的背包。
 ui.modder_spawn_contract_unavailable	此游戏版本无法创建物品。
-ui.modder_spawn_clone_success	已添加到克隆体库存。
-ui.modder_spawn_inventory_full	克隆体库存已满。
+ui.modder_spawn_clone_success	已添加到克隆人的背包。
+ui.modder_spawn_inventory_full	克隆人的背包已满。
 ui.modder_spawn_cargo_unavailable	飞船货舱不可用。
 ui.modder_spawn_cargo_success	已添加到飞船货舱。
 ui.other_containers	常规容器放置
@@ -512,17 +512,17 @@ loot.note.general_spawn	勾号表示容器可在常规任务战利品生成后�
 ui.loot_modifiers_current	修正：当前
 ui.loot_modifiers_manual	修正：手动
 ui.loot_marauder	掠夺者
-ui.loot_marika_organization	Marika — 组织
-ui.loot_laksha_field_medic	Laksha — 战地医护
+ui.loot_marika_organization	玛莉卡 — 节俭
+ui.loot_laksha_field_medic	拉克沙 — 战地医生
 ui.loot_on	开
 ui.loot_off	关
 ui.loot_pp	百分点
 ui.bonus_corpse_loot	尸体额外战利品
 ui.bonus_rolls	额外次数
-loot.note.corpse_bonus_rolls	掠夺者和组织会增加尸体战利品抽取次数。范围 = 次数；括号内 % = 达到最大次数的概率；最终 = 至少获得一次该物品的概率。
+loot.note.corpse_bonus_rolls	掠夺者和节俭会增加尸体战利品抽取次数。范围 = 次数；括号内 % = 达到最大次数的概率；最终 = 至少获得一次该物品的概率。
 ui.per_roll	每次
 ui.final_chance	最终
-ui.mode_damage_per_ap_default	伤害/AP（默认）
+ui.mode_damage_per_ap_default	伤害/行动点（默认）
 loot.note.unknown_container_rolls	? = 抽取次数无法精确确定；不会计算总概率。
 ui.station_production_produced_from	空间站生产 — 原料
 ui.station_production_used_to_produce	空间站生产 — 用于生产
@@ -531,10 +531,10 @@ ui.station_production_output	产物
 ui.station_production_input	材料
 ui.station_production_recipe	空间站配方
 ui.no_active_faction_reward_in_current_save	此物品仅存在于当前存档中不可用派系的奖励池。
-loot.note.enemy_bonus_separate	掠夺者和组织不会改变敌人装备生成概率；它们会另外增加尸体战利品抽取次数。
-ui.mode_critical_damage_per_ap_default	暴击伤害/AP（默认）
-ui.faction_technology_navigation_unavailable	当前环境无法跳转到派系科技。
-ui.scavenger_mission_rewards	拾荒者 — 任务成功时的物品概率
+loot.note.enemy_bonus_separate	掠夺者和节俭不会改变敌人装备生成概率；它们会另外增加尸体战利品抽取次数。
+ui.mode_critical_damage_per_ap_default	暴击伤害/行动点（默认）
+ui.faction_technology_navigation_unavailable	当前无法打开派系科技界面。
+ui.scavenger_mission_rewards	清道夫 — 任务成功时的物品概率
 ui.rows_visible	行
 ui.opponent	对手
 ui.scavenger_current_missions	符合条件的任务： 
@@ -543,9 +543,9 @@ ui.scavenger_time_left	剩余时间
 stats.tech	科技
 stats.modes	模式
 ui.overview_combat	战斗
-ui.overview_damage_ap_short	伤害/AP
+ui.overview_damage_ap_short	伤害/行动点
 ui.overview_crit_short	暴击
-ui.overview_relationships	此物品的相关信息
+ui.overview_relationships	用途与来源
 ui.overview_magnum_research	Magnum 研究
 ui.overview_used_in_recipes	用于配方
 ui.overview_crafted_by_recipes	由配方制作
@@ -554,7 +554,7 @@ ui.overview_disassembles_into	可拆解为
 ui.overview_compatible_ammo	兼容弹药
 ui.overview_compatible_weapons	兼容武器
 ui.overview_recipe_ingredients	配方材料
-ui.overview_no_core_links	此处没有核心物品关联 — 请在交易、派系或战利品中查看世界来源。
+ui.overview_no_core_links	此处暂无信息。请在“交易”“派系”或“战利品”中查看获取来源。
 loot.baron.section	男爵掉落
 loot.baron.column.baron	男爵
 loot.baron.column.qmorph	异变值
@@ -564,7 +564,7 @@ loot.baron.column.death_restore	返还
 loot.note.baron_ultimate_death	男爵会掉落 1 个契约。契约种类取决于任务科技等级和可用战利品。
 loot.note.baron_dynamic_tech	范围 = 男爵生成时，奖池取决于任务/派系科技等级。
 loot.note.baron_ksiomara_exception	剧情：游戏可能用 Ksiomara 替换普通男爵。此行不适用于 Ksiomara。
-loot.note.baron_consumption_bound	若返还 <100%，契约范围包含死亡前可安全吞噬的精确上限；不会猜测 AI 时序。
+loot.note.baron_consumption_bound	返还低于 100% 时，范围包含死亡前契约可能被消耗的情况。消耗时间未知。
 loot.special.section	其他来源
 loot.special.condition	条件
 loot.special.result	结果
@@ -597,7 +597,7 @@ loot.special.death_gift_condition	启用死亡赠礼 + 符合奖励条件
 loot.special.faction_reward_condition	派系奖励池 / 科技要求
 loot.special.random_start_condition	启用随机初始装备
 loot.special.station_production_condition	当前位于空间站生产列表 + 奖励点数足够
-loot.note.container_context_chance	≈ = 至少获得一次该物品的概率。次数/掠夺者：当前/手动；科技：任务/派系。不计入战利品预算、临时科技等级和地点事件。
+loot.note.container_context_chance	~ = 至少获得一次该物品的概率。次数/掠夺者：当前/手动；科技：任务/派系。不计入战利品预算、临时科技等级和地点事件。
 loot.note.container_modifier_unavailable	* = 仅基础次数：当前掠夺者数值不可用。在太空中请选择“手动”。
 loot.note.container_save_unavailable	— = 无法精确估算：存档科技等级、可用奖池或基础次数范围不可用。
 loot.special.other_section	特殊获取方式
@@ -621,7 +621,7 @@ loot.special.kind_reward	奖励
 loot.special.kind_start_pool	初始池
 loot.special.kind_station_reward	生产
 loot.special.cond_complete	完成任务
-loot.special.cond_fixed_start	固定预设 • 随机开始关闭
+loot.special.cond_fixed_start	固定预设 / 随机开始关闭
 loot.special.cond_exchange	交换
 loot.special.cond_expire	到期后
 loot.special.cond_ritual_failed	失败
@@ -630,7 +630,7 @@ loot.special.cond_ritual_sidegrade	同级变化
 loot.special.cond_ritual_downgrade	降级
 loot.special.cond_ritual_outcome	仪式结果
 loot.special.cond_story	剧情事件触发时
-loot.special.cond_use	使用后且物品规则触发时
+loot.special.cond_use	使用后满足该物品条件时
 loot.special.cond_death	死亡时：允许奖励
 loot.special.cond_mission	任务
 loot.special.cond_mission_orbit	任务 / 轨道
@@ -651,13 +651,13 @@ loot.special.kind_random_pool	随机池
 loot.special.cond_no_extra_requirement	无额外要求
 loot.special.cond_random_start_enabled	随机装备开启
 loot.special.cond_fixed_start_enabled	随机装备关闭
-loot.note.faction_reward_sources	✓ = 物品位于奖池中，但并非必定获得。“任务/轨道”需要科技等级。“生产” = 空间站拥有该物品且奖励点数足够。
-loot.note.starting_sources	仅限新游戏：固定装备会直接给予该物品；随机池只可能选中它。
+loot.note.faction_reward_sources	勾选标记 = 物品位于奖池中，但并非必定获得。“任务/轨道”需要科技等级。“生产” = 空间站拥有该物品且奖励点数足够。
+loot.note.starting_sources	仅限开始新游戏时：固定装备会给予该物品；随机装备则可能包含它。
 loot.general_spawn.placement	放置
 loot.column.container	容器
 loot.note.special_sources	稀有获取方式。仪式中：“来源” = 起始头骨；“条件” = 所需结果。
 loot.special.fixed_loadout_count	装备方案
-loot.special.story_missions_count	剧情任务 ×{0}
+loot.special.story_missions_count	剧情任务 x{0}
 ui.loot_storage_short	容
 ui.loot_corpse_short	尸
 ui.loot_implant_short	植
@@ -685,7 +685,7 @@ ui.mode_effect	模式特性
 ui.mode_status_effect	状态效果
 ui.mode_trait_wounding	致伤
 ui.arm_builtin_weapon	安装后武器
-ui.arm_source_augmentation	关联义体
+ui.arm_source_augmentation	可安装的增强体
 ui.upgrade_uses	用于升级
 ui.upgrade_genomes	基因组升级
 ui.upgrade_uses_note	即使已完成飞船研究，仍可能需要此材料。所需数量取决于选择的升级，不计入剩余研究所需材料总量。
@@ -694,7 +694,7 @@ ui.upgrade_ranged	远程武器升级
 ui.upgrade_melee	近战武器升级
 ui.upgrade_armor	护甲升级（所有部位）
 ui.upgrade_classes	职业改造
-ui.upgrade_pacts	契约仪式（Morphanal）
+ui.upgrade_pacts	契约仪式
 ui.upgrade_implants	为克隆人安装植入体
 ui.upgrade_augmentations	为克隆人安装增强体
 ui.upgrade_equipment	使用此资源升级的装备
