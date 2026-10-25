@@ -681,3 +681,8 @@ ui.view_expand	Großes Fenster
 ui.view_window	Normales Fenster
 ui.view_zoom	Skalierung
 ui.view_save_failed	Fenstereinstellungen konnten nicht gespeichert werden.
+ui.mode_effect	Moduseigenschaft
+ui.mode_status_effect	Statuseffekt
+ui.mode_trait_wounding	Verwundend
+ui.arm_builtin_weapon	Waffe nach Einbau
+ui.arm_source_augmentation	Zugehörige Augmentation
