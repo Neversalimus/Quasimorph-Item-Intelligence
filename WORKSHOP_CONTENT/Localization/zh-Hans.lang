@@ -681,3 +681,8 @@ ui.view_expand	大窗口
 ui.view_window	普通窗口
 ui.view_zoom	缩放
 ui.view_save_failed	无法保存窗口设置。
+ui.mode_effect	模式特性
+ui.mode_status_effect	状态效果
+ui.mode_trait_wounding	致伤
+ui.arm_builtin_weapon	安装后武器
+ui.arm_source_augmentation	关联义体
