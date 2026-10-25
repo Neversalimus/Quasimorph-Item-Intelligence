@@ -12,7 +12,8 @@ foreach ($token in @(
     'GetStringMember(ammo, "DmgType")',
     'ui.mode_damage_type_default',
     'ui.mode_damage_type',
-    'WeaponModeDamageTypeMisses')) {
+    'WeaponModeDamageTypeMisses',
+    'CacheIntrinsicWeaponModeDamageType')) {
     if ($damageTypeText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "weapon damage-type contract missing: $token" }
 }
 if ($damageTypeText.IndexOf('Contains("slash"',[StringComparison]::OrdinalIgnoreCase) -ge 0 -or
@@ -20,7 +21,7 @@ if ($damageTypeText.IndexOf('Contains("slash"',[StringComparison]::OrdinalIgnore
     throw 'weapon damage type must never be inferred from mode names.'
 }
 if ($weaponModePresentationText.IndexOf('TryResolveWeaponModeDamageType',[StringComparison]::Ordinal) -lt 0 -or
-    $weaponModePresentationText.IndexOf('WeaponModeTooltipMaxRows = 8',[StringComparison]::Ordinal) -lt 0 -or
+    $weaponModePresentationText.IndexOf('WeaponModeTooltipMaxRows = 12',[StringComparison]::Ordinal) -lt 0 -or
     $weaponModePresentationText.IndexOf('WeaponModeTooltipWidth = 420f',[StringComparison]::Ordinal) -lt 0 -or
     $weaponModePresentationText.IndexOf('new Vector2(132f, 30f)',[StringComparison]::Ordinal) -lt 0) {
     throw 'weapon damage-type tooltip row/value-width contract missing.'
