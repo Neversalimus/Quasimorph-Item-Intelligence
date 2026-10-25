@@ -695,3 +695,8 @@ ui.view_expand	Large window
 ui.view_window	Normal window
 ui.view_zoom	Zoom
 ui.view_save_failed	Could not save window settings.
+ui.mode_effect	Mode trait
+ui.mode_status_effect	Status effect
+ui.mode_trait_wounding	Wounding
+ui.arm_builtin_weapon	Weapon when installed
+ui.arm_source_augmentation	Augmentation item
