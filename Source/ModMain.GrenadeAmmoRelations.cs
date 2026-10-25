@@ -26,7 +26,11 @@ namespace ItemIntelligence
                 HashSet<string> explicitGrenades = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
                 bool hasExplicitLauncherContract = ResolveExplicitLauncherGrenades(
                     record.DefaultGrenadeId, record.AllowedGrenadeIds, KnownItemIds, explicitGrenades);
-                if (!hasExplicitLauncherContract) continue;
+                // A launcher with missing/unresolved grenade data still must not
+                // inherit a rifle-caliber join from the general ammo index.
+                bool isGrenadeLauncher = string.Equals(record.WeaponClass.ToString(),
+                    "GrenadeLauncher", StringComparison.OrdinalIgnoreCase);
+                if (!hasExplicitLauncherContract && !isGrenadeLauncher) continue;
 
                 for (int i = 0; i < weapon.CompatibleAmmo.Count; i++)
                 {
