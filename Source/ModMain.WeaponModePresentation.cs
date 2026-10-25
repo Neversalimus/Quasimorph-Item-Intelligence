@@ -62,7 +62,8 @@ namespace ItemIntelligence
             bool melee = IsWeaponModeMelee(modeKey, stats);
             _browserWeaponModeTooltipSubtitle.text = Ui(melee ? "ui.mode_tooltip_attack" : "ui.mode_tooltip_fire");
 
-            int visibleRows = Math.Min(rows.Count, WeaponModeTooltipMaxRows);
+            int maxViewportRows = Math.Max(1, (int)Math.Floor((_browserViewport.Height - 232f) / 32f));
+            int visibleRows = Math.Min(Math.Min(rows.Count, WeaponModeTooltipMaxRows), maxViewportRows);
             for (int i = 0; i < WeaponModeTooltipMaxRows; i++)
             {
                 bool show = i < visibleRows;
