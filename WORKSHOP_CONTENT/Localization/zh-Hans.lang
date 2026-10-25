@@ -690,3 +690,11 @@ ui.upgrade_uses	用于升级
 ui.upgrade_genomes	基因组升级
 ui.upgrade_uses_note	即使已完成飞船研究，仍可能需要此材料。所需数量取决于选择的升级，不计入剩余研究所需材料总量。
 ui.mode_no_effects	无
+ui.upgrade_ranged	远程武器升级
+ui.upgrade_melee	近战武器升级
+ui.upgrade_armor	护甲升级（所有部位）
+ui.upgrade_classes	职业改造
+ui.upgrade_pacts	契约仪式（Morphanal）
+ui.upgrade_implants	为克隆人安装植入体
+ui.upgrade_augmentations	为克隆人安装增强体
+ui.upgrade_equipment	使用此资源升级的装备

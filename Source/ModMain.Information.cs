@@ -34,7 +34,7 @@ namespace ItemIntelligence
         private static bool HasVisibleMagnumUses(string itemId)
         {
             if (!ShowMagnumUses) return false;
-            if (HasGenomeUpgradeUse(itemId)) return true;
+            if (HasUpgradeUse(itemId)) return true;
             List<MagnumUse> uses;
             if (!MagnumUses.TryGetValue(itemId, out uses) || uses == null || uses.Count == 0)
                 return false;

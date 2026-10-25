@@ -59,7 +59,7 @@ namespace ItemIntelligence
             // as both a summary action and a preview heading.
             OverviewPreview preview = ResolveOverviewPreview(itemId, relationId);
             AppendOverviewRelationships(itemId, relationId, preview);
-
+            AppendOverviewUpgradeUses(itemId);
             if (UsesInheritedStaticRelations(itemId))
                 AddModifiedRelationBrowserNote(itemId);
 

@@ -690,3 +690,11 @@ ui.upgrade_uses	FÜR VERBESSERUNGEN VERWENDET
 ui.upgrade_genomes	Genomverbesserungen
 ui.upgrade_uses_note	Kann auch nach Abschluss der Schiffsforschung benötigt werden. Die Menge hängt von den gewählten Verbesserungen ab und ist nicht im verbleibenden Forschungsbedarf enthalten.
 ui.mode_no_effects	Keine
+ui.upgrade_ranged	Verbesserung von Fernkampfwaffen
+ui.upgrade_melee	Verbesserung von Nahkampfwaffen
+ui.upgrade_armor	Verbesserung von Rüstung (alle Teile)
+ui.upgrade_classes	Modifikation von Klassen
+ui.upgrade_pacts	Paktrituale (Morphanal)
+ui.upgrade_implants	Implantate für Klone einsetzen
+ui.upgrade_augmentations	Augmentierungen für Klone einsetzen
+ui.upgrade_equipment	MIT DIESER RESSOURCE VERBESSERTE AUSRÜSTUNG

@@ -690,3 +690,11 @@ ui.upgrade_uses	WYKORZYSTYWANE W ULEPSZENIACH
 ui.upgrade_genomes	Ulepszanie genomów
 ui.upgrade_uses_note	Może być potrzebne także po zakończeniu badań statku. Ilość zależy od wybranych ulepszeń i nie jest wliczana do pozostałego zapotrzebowania na badania.
 ui.mode_no_effects	Brak
+ui.upgrade_ranged	Ulepszanie broni dystansowej
+ui.upgrade_melee	Ulepszanie broni białej
+ui.upgrade_armor	Ulepszanie pancerza (wszystkie części)
+ui.upgrade_classes	Modyfikacja klas
+ui.upgrade_pacts	Rytuały paktów (Morphanal)
+ui.upgrade_implants	Instalacja implantów u klonów
+ui.upgrade_augmentations	Instalacja augmentacji u klonów
+ui.upgrade_equipment	WYPOSAŻENIE ULEPSZANE TYM ZASOBEM

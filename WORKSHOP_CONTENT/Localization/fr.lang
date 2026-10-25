@@ -686,3 +686,11 @@ ui.upgrade_uses	UTILISÉ POUR LES AMÉLIORATIONS
 ui.upgrade_genomes	Amélioration des génomes
 ui.upgrade_uses_note	Peut rester nécessaire après la fin des recherches du vaisseau. La quantité dépend des améliorations choisies et ne figure pas dans le total requis pour les recherches restantes.
 ui.mode_no_effects	Aucun
+ui.upgrade_ranged	Amélioration des armes à distance
+ui.upgrade_melee	Amélioration des armes de mêlée
+ui.upgrade_armor	Amélioration des armures (toutes les pièces)
+ui.upgrade_classes	Modification des classes
+ui.upgrade_pacts	Rituels de pactes (Morphanal)
+ui.upgrade_implants	Installation d’implants sur les clones
+ui.upgrade_augmentations	Installation d’augmentations sur les clones
+ui.upgrade_equipment	ÉQUIPEMENT AMÉLIORÉ AVEC CETTE RESSOURCE

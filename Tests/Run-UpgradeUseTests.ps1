@@ -26,7 +26,7 @@ foreach ($baseline in $researchBaselines) {
     finally { $hasher.Dispose() }
     if ($hash -cne $baseline[2]) { throw "Numeric research body changed: $($baseline[1])" }
 }
-$pieces = foreach ($name in @('ModMain.GenomeUpgradeUseReader.cs','ModMain.GenomeUpgradeUses.cs','ModMain.UpgradeUsesPresentation.cs')) {
+$pieces = foreach ($name in @('ModMain.UpgradeUseReader.cs','ModMain.UpgradeUses.cs','ModMain.UpgradeUsesGameData.cs','ModMain.UpgradeUsesPresentation.cs')) {
     $tree = [Microsoft.CodeAnalysis.CSharp.CSharpSyntaxTree]::ParseText(
         [IO.File]::ReadAllText((Join-Path $SourceRoot ('Source/' + $name))))
     $errors = @($tree.GetDiagnostics() | Where-Object Severity -eq 'Error')
@@ -44,4 +44,4 @@ $code += "`n" + $verboseLoggingFixture.Replace('namespace ItemIntelligence', ('n
 Add-Type -TypeDefinition $code -WarningAction Stop
 $type = ($identity + '.ModMain') -as [type]
 $count = $type::RunUpgradeUseCases()
-Write-Host "Production genome upgrade-use reader/decorator: PASS ($count assertions; game schema fixtures, not Unity runtime)." -ForegroundColor Green
+Write-Host "Production upgrade-use reader/decorator: PASS ($count assertions; game schema fixtures, not Unity runtime)." -ForegroundColor Green

@@ -80,7 +80,7 @@ namespace ItemIntelligence
             if (_compatDisassembly && _disassemblyWarmupComplete)
                 s.DisassemblyRelations = GetDisassemblyOutputCount(itemId) + GetDisassemblySourceCount(itemId);
             if (ShowMagnumUses)
-                s.MagnumRelations = GetVisibleMagnumRequired(itemId);
+                s.MagnumRelations = GetVisibleMagnumRequired(itemId) + (HasUpgradeUse(itemId) ? 1 : 0);
             return s;
         }
     }

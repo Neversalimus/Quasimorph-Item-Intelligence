@@ -686,3 +686,11 @@ ui.upgrade_uses	SE USA EN MEJORAS
 ui.upgrade_genomes	Mejoras de genomas
 ui.upgrade_uses_note	Puede seguir siendo necesario después de completar la investigación de la nave. La cantidad depende de las mejoras elegidas y no se incluye en el total de investigación pendiente.
 ui.mode_no_effects	Ninguno
+ui.upgrade_ranged	Mejora de armas a distancia
+ui.upgrade_melee	Mejora de armas cuerpo a cuerpo
+ui.upgrade_armor	Mejora de armaduras (todas las piezas)
+ui.upgrade_classes	Modificación de clases
+ui.upgrade_pacts	Rituales de pactos (Morphanal)
+ui.upgrade_implants	Instalación de implantes en clones
+ui.upgrade_augmentations	Instalación de aumentos en clones
+ui.upgrade_equipment	EQUIPO QUE SE MEJORA CON ESTE RECURSO

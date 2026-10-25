@@ -698,3 +698,11 @@ ui.upgrade_uses	USED IN UPGRADES
 ui.upgrade_genomes	Genome upgrades
 ui.upgrade_uses_note	May still be needed after ship research is complete. The amount depends on the chosen upgrades and is not included in the remaining research total.
 ui.mode_no_effects	None
+ui.upgrade_ranged	Ranged weapon upgrades
+ui.upgrade_melee	Melee weapon upgrades
+ui.upgrade_armor	Armor upgrades (all slots)
+ui.upgrade_classes	Class modifications
+ui.upgrade_pacts	Pact rituals (Morphanal)
+ui.upgrade_implants	Implant installation on clones
+ui.upgrade_augmentations	Augmentation installation on clones
+ui.upgrade_equipment	EQUIPMENT UPGRADED WITH THIS RESOURCE

@@ -698,3 +698,11 @@ ui.upgrade_uses	ИСПОЛЬЗУЕТСЯ В УЛУЧШЕНИЯХ
 ui.upgrade_genomes	Улучшение геномов
 ui.upgrade_uses_note	Может понадобиться после завершения исследований корабля. Количество зависит от выбранных улучшений и не входит в остаток для исследований.
 ui.mode_no_effects	Нет
+ui.upgrade_ranged	Улучшение стрелкового оружия
+ui.upgrade_melee	Улучшение оружия ближнего боя
+ui.upgrade_armor	Улучшение брони (все части)
+ui.upgrade_classes	Модификация классов
+ui.upgrade_pacts	Ритуалы пактов (Морфанал)
+ui.upgrade_implants	Установка имплантов клонам
+ui.upgrade_augmentations	Установка аугментаций клонам
+ui.upgrade_equipment	СНАРЯЖЕНИЕ, УЛУЧШАЕМОЕ ЭТИМ РЕСУРСОМ

@@ -4,9 +4,9 @@
 
 [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3780078201) · [Downloads](https://github.com/Neversalimus/Quasimorph-Item-Intelligence/releases) · [Changelog](CHANGELOG.md)
 
-This branch contains **1.7.43.2-test4** for **Quasimorph 1.0.4.590s.969afc6**, for DEV validation before a stable release.
+This branch contains **1.7.43.2-test5** for **Quasimorph 1.0.4.590s.969afc6**, for DEV validation before a stable release.
 
-This build combines the weapon-report fixes and the previously separate genome-upgrade material metadata. Grenade launchers follow the game's reload restrictions; weapon modes show their own damage types, ammo traits and status effects; augmentations link to installed weapons in both directions through body-slot records. The first hotkey press opens the catalog when no item has been inspected yet, including a direct mission resume. See [test build notes](Release/Notes-v1.7.43.2-test4.md).
+This build shows recurring upgrade uses in Magnum and links to them from Overview: ranged and melee weapons, every armor slot, clone genomes, classes, pact ritual components, implants and augmentations. Equipment links follow each item's upgrade recipe, including overrides of the standard materials. These uses remain visible after ship research is complete. It also includes the validated grenade, mode, installed-arm and first-open catalog fixes. See [test build notes](Release/Notes-v1.7.43.2-test5.md).
 
 Compatibility for the new build is enabled through audited feature-owned gates. Unknown future builds continue to fail closed for exact calculations until their contracts are reviewed.
 
@@ -16,6 +16,7 @@ Optional verbose logging keeps `Player.log` concise in normal mode while preserv
 
 - Item search, catalog, favorites, browsing history and advanced filters.
 - Item overview, recipes, disassembly, station production and Magnum requirements.
+- Upgrade material uses and clickable equipment targets, separate from finite ship-research totals.
 - Live station trade information, stock-sensitive prices and batch totals on supported game builds, with direct navigation to the starmap.
 - Cards and table layouts for Trade, selectable inside the tab.
 - Loot sources grouped by containers, enemies, faction rewards, mission pools and special sources.
