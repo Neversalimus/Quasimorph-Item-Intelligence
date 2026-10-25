@@ -165,6 +165,19 @@ namespace ItemIntelligence
             }
         }
 
+        private static bool CacheIntrinsicWeaponModeDamageType(
+            string modeKey, WeaponRecord weapon, string type,
+            out string label, out string value)
+        {
+            label = Ui(weapon.IsMelee ? "ui.mode_damage_type" : "ui.mode_damage_type_default");
+            value = ResolveWeaponModeDamageTypeDisplay(type);
+            if (string.IsNullOrEmpty(value)) return false;
+            WeaponModeDamageTypeByKey[modeKey] = type;
+            VerboseLog("[ItemIntelligence][WeaponModeDamageType] intrinsic=" + type +
+                ", modeKey=" + modeKey + ".");
+            return true;
+        }
+
         private static bool TryResolveWeaponModeDamageType(
             string modeKey, out string label, out string value)
         {
@@ -192,9 +205,17 @@ namespace ItemIntelligence
                 return false;
             }
 
+            // A few vanilla melee defaults store the damage element on the
+            // weapon's own DmgInfo instead of an AmmoRecord. This path only accepts
+            // explicitly recognized DmgInfo.damage ids, never mode-name guesses.
+            string intrinsicType = GetStringMember(GetMember(weapon, "Damage"), "damage").Trim();
+            bool validIntrinsicType = weapon.IsMelee && VanillaDamageTypeIds.Contains(intrinsicType);
             string ammoId = ResolveWeaponModeAmmoId(modeKey, weapon);
             if (string.IsNullOrEmpty(ammoId) || Data.Items == null)
             {
+                if (validIntrinsicType)
+                    return CacheIntrinsicWeaponModeDamageType(modeKey, weapon, intrinsicType,
+                        out label, out value);
                 WeaponModeDamageTypeMisses.Add(modeKey);
                 return false;
             }
@@ -204,6 +225,9 @@ namespace ItemIntelligence
             catch { }
             if (ammo == null)
             {
+                if (validIntrinsicType)
+                    return CacheIntrinsicWeaponModeDamageType(modeKey, weapon, intrinsicType,
+                        out label, out value);
                 WeaponModeDamageTypeMisses.Add(modeKey);
                 return false;
             }
