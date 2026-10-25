@@ -15,6 +15,22 @@ namespace ItemIntelligence
             try { augmentation = Data.Items.GetSimpleRecord<AugmentationRecord>(augmentationId, true); }
             catch { }
             if (augmentation == null) return string.Empty;
+            // Exact per-record references take precedence when the game exposes one.
+            string[] explicitMembers = new string[]
+            {
+                "InstalledWeaponId", "BuiltInWeaponId", "NaturalWeaponId", "WeaponId"
+            };
+            for (int i = 0; i < explicitMembers.Length; i++)
+            {
+                string linked = GetStringMember(augmentation, explicitMembers[i]);
+                if (string.IsNullOrEmpty(linked) || !KnownItemIds.Contains(linked)) continue;
+                try
+                {
+                    if (Data.Items.GetSimpleRecord<WeaponRecord>(linked, true) != null)
+                        return linked;
+                }
+                catch { }
+            }
             string candidate = "nature_" + augmentationId;
             if (!KnownItemIds.Contains(candidate)) return string.Empty;
             try
