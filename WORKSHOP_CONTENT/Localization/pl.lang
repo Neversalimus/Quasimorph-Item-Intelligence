@@ -681,3 +681,8 @@ ui.view_expand	Duże okno
 ui.view_window	Zwykłe okno
 ui.view_zoom	Skala
 ui.view_save_failed	Nie udało się zapisać ustawień okna.
+ui.mode_effect	Cecha trybu
+ui.mode_status_effect	Efekt statusu
+ui.mode_trait_wounding	Raniący
+ui.arm_builtin_weapon	Broń po instalacji
+ui.arm_source_augmentation	Powiązana augmentacja
