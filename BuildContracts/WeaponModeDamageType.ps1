@@ -31,3 +31,42 @@ foreach ($locText in @($enLocalizationText,$ruLocalizationText,$templateLocaliza
         if ($locText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "weapon damage-type localization missing: $token" }
     }
 }
+
+# Player-reported launcher, mode effect, and installed-arm regressions.
+$grenadeText = Read-Utf8Strict -Path (Join-Path $sourceDir 'ModMain.GrenadeAmmoRelations.cs')
+foreach ($token in @('record.DefaultGrenadeId','record.AllowedGrenadeIds',
+    'ResolveExplicitLauncherGrenades','CompatibleWeaponsByAmmo.Remove(oldId)',
+    'weapon.CompatibleAmmo.Clear()')) {
+    if ($grenadeText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) {
+        throw "explicit grenade allowlist contract missing: $token"
+    }
+}
+$ammoAuditText = Read-Utf8Strict -Path (Join-Path $sourceDir 'ModMain.AmmoSanityAudit.cs')
+if ($ammoAuditText.IndexOf('CorrectExplicitGrenadeLauncherRelations();',[StringComparison]::Ordinal) -lt 0) {
+    throw 'grenade correction must run after ammo warmup.'
+}
+
+$effectsText = Read-Utf8Strict -Path (Join-Path $sourceDir 'ModMain.WeaponModePayloadEffects.cs')
+foreach ($token in @('ResolveWeaponModeAmmoId','ammo.Traits','ammo.StatusEffectId',
+    'ui.mode_trait_wounding','ui.mode_effect','ui.mode_status_effect')) {
+    if ($effectsText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) {
+        throw "per-mode effects contract missing: $token"
+    }
+}
+if ($weaponModePresentationText.IndexOf('AppendWeaponModePayloadEffectRows(modeKey, rows);',
+    [StringComparison]::Ordinal) -lt 0) {
+    throw 'per-mode effects are not shown in weapon tooltip.'
+}
+
+$armLinkText = Read-Utf8Strict -Path (Join-Path $sourceDir 'ModMain.ArmWeaponLinks.cs')
+foreach ($token in @('GetSimpleRecord<AugmentationRecord>',
+    'GetSimpleRecord<WeaponRecord>','KnownItemIds.Contains','ui.arm_builtin_weapon',
+    'ui.arm_source_augmentation')) {
+    if ($armLinkText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) {
+        throw "validated limb link contract missing: $token"
+    }
+}
+$overviewText = Read-Utf8Strict -Path (Join-Path $sourceDir 'ModMain.OverviewDashboard.cs')
+if ($overviewText.IndexOf('AppendOverviewArmWeaponLinks(itemId);',[StringComparison]::Ordinal) -lt 0) {
+    throw 'validated limb link not displayed in Overview.'
+}
