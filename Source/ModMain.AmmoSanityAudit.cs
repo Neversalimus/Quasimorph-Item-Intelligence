@@ -11,9 +11,9 @@ namespace ItemIntelligence
 
         private static void AuditAmmoRelationsAfterWarmup()
         {
+            CorrectExplicitGrenadeLauncherRelations();
             if (_ammoSanityAuditLogged) return;
             _ammoSanityAuditLogged = true;
-            CorrectExplicitGrenadeLauncherRelations();
 
             int staticMelee = 0;
             int staticMeleeFalseLinks = 0;
