@@ -1,43 +1,30 @@
 #requires -Version 7.0
-param(
-    [string]$GameRoot = ''
-)
-
+param([string]$GameRoot = '')
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version 2.0
 
-$PublicWorkshopId = '3780078201'
-$stage = 'C:\QM_Workshop\ItemIntelligence'
+$DevWorkshopId = '3781927679'
+$stage = 'C:\QM_Workshop\ItemIntelligence_DEV'
 $root = Split-Path -Parent $MyInvocation.MyCommand.Path
 $buildScript = Join-Path $root 'BUILD_AND_STAGE.ps1'
-if (-not (Test-Path -LiteralPath $buildScript -PathType Leaf)) { throw 'BUILD_AND_STAGE.ps1 not found.' }
+if (-not (Test-Path -LiteralPath $buildScript -PathType Leaf)) { throw 'BUILD_AND_STAGE.ps1 missing.' }
 
-Write-Host 'Item Intelligence v1.7.43.1 - Stable Release' -ForegroundColor Cyan
-Write-Host 'Builds the stable source and prepares the existing public Workshop payload.' -ForegroundColor DarkGray
-Write-Host 'No Steam upload is performed automatically.' -ForegroundColor DarkGray
-Write-Host 'This installer does not overwrite the live subscribed Workshop copy.' -ForegroundColor DarkGray
-Write-Host ''
+Write-Host 'Item Intelligence 1.7.43.2-test2 - DEV validation only' -ForegroundColor Cyan
+Write-Host 'No Steam upload is performed automatically.'
+Write-Host 'PUBLIC Workshop item 3780078201 is protected and not targeted.' -ForegroundColor Yellow
 
-$buildArguments = @{ Mode = 'RELEASE'; WorkshopStage = $stage }
+$buildArguments = @{ Mode = 'TEST'; WorkshopStage = $stage }
 if ($GameRoot) { $buildArguments.GameRoot = $GameRoot }
 & $buildScript @buildArguments
-if ($LASTEXITCODE -ne 0) { throw "RELEASE build/stage failed with exit code $LASTEXITCODE" }
-
+if ($LASTEXITCODE -ne 0) { throw "TEST build/stage failed: $LASTEXITCODE" }
 $stageDll = Join-Path $stage 'ItemIntelligence.dll'
 $stageManifest = Join-Path $stage 'modmanifest.json'
-if (-not (Test-Path -LiteralPath $stageDll -PathType Leaf)) { throw 'RELEASE stage validation failed: ItemIntelligence.dll missing.' }
-if (-not (Test-Path -LiteralPath $stageManifest -PathType Leaf)) { throw 'RELEASE stage validation failed: modmanifest.json missing.' }
+if (-not (Test-Path -LiteralPath $stageDll -PathType Leaf)) { throw 'TEST DLL missing.' }
+if (-not (Test-Path -LiteralPath $stageManifest -PathType Leaf)) { throw 'TEST manifest missing.' }
+
 $stageHash = (Get-FileHash -Algorithm SHA256 -LiteralPath $stageDll).Hash
-
-Write-Host ''
-Write-Host 'RELEASE BUILD + STAGING OK.' -ForegroundColor Green
-Write-Host ('Stage: ' + $stage) -ForegroundColor Green
-Write-Host ('Stage DLL SHA256: ' + $stageHash) -ForegroundColor Green
-Write-Host 'Expected runtime marker:' -ForegroundColor Yellow
-Write-Host '[ItemIntelligence] ACTIVE VERSION 1.7.43.1 (StableRelease17431).' -ForegroundColor Cyan
-Write-Host ''
-Write-Host 'Upload to the existing public item, then enable the public copy in the game:' -ForegroundColor Yellow
-Write-Host ('mod_updateworkshopitem ' + $PublicWorkshopId + ' ' + $stage + ' FALSE') -ForegroundColor Cyan
-
-# Native ALT details and weapon-mode damage types were verified live on
-# Quasimorph 1.0.4.590 before this stable promotion.
+Write-Host 'TEST BUILD + STAGING OK.' -ForegroundColor Green
+Write-Host ('Stage: ' + $stage)
+Write-Host ('Stage DLL SHA256: ' + $stageHash)
+Write-Host '[ItemIntelligence] ACTIVE VERSION 1.7.43.2-test2 (WeaponReportTest2).'
+Write-Host ('mod_updateworkshopitem ' + $DevWorkshopId + ' ' + $stage + ' FALSE') -ForegroundColor Cyan
