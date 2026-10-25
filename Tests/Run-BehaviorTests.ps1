@@ -36,7 +36,7 @@ $members = @(
     (Get-ProductionMember 'ModMain.NumericProjectionSafety.cs' 'MethodDeclarationSyntax' 'TryRoundAndScaleDamage'),
     (Get-ProductionMember 'ModMain.BrowserNativeTooltipMore.cs' 'MethodDeclarationSyntax' 'ShouldAllowBrowserTooltipMoreAction'),
     (Get-ProductionMember 'ModMain.WeaponModeDamageType.cs' 'MethodDeclarationSyntax' 'ResolveWeaponModeAmmoIdFromSlots'),
-    (Get-ProductionMember 'ModMain.GrenadeAmmoRelations.cs' 'MethodDeclarationSyntax' 'ResolveExplicitLauncherGrenades'),
+    (Get-ProductionMember 'ModMain.GrenadeAmmoRelations.cs' 'MethodDeclarationSyntax' 'ResolveLauncherGrenades'),
     (Get-ProductionMember 'ModMain.Loot.cs' 'ClassDeclarationSyntax' 'LootWeightedItem'),
     (Get-ProductionMember 'ModMain.LootContainerSaveEstimate.cs' 'ClassDeclarationSyntax' 'LootContainerWeightedPool'),
     (Get-ProductionMember 'ModMain.LootContainerSaveEstimate.cs' 'MethodDeclarationSyntax' 'TryGetExactContainerItemTechLevel'),

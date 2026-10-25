@@ -141,7 +141,7 @@ namespace ItemIntelligence
             if (_inspectorHotkeyCaptureFrame != frame)
             {
                 _inspectorHotkeyCaptureFrame = frame;
-                _inspectorHotkeyCaptureHasTarget = !string.IsNullOrEmpty(ResolveInspectorTargetOnDemand());
+                _inspectorHotkeyCaptureHasTarget = CanOpenInspectorFromRequest(ResolveInspectorTargetOnDemand());
             }
 
             return _inspectorHotkeyCaptureHasTarget;
@@ -411,7 +411,7 @@ namespace ItemIntelligence
             // runtime readiness check. Lazy-bootstrap the data here, only on an explicit
             // browser hotkey target resolution. This keeps main-menu/bootstrap loading
             // unchanged and makes direct mission resume self-healing.
-            bool hasObservedItemUi = HasObservedInspectorItemUi();
+            bool hasObservedItemUi = _browserGameplayActive || HasObservedInspectorItemUi();
 
             if (hasObservedItemUi && (KnownItemIds.Count == 0 || ItemRecordsById.Count == 0))
             {
@@ -469,20 +469,9 @@ namespace ItemIntelligence
             // so there is no feature warmup, resolver, diagnostics hotkey or tooltip
             // maintenance to tick until a gameplay session exists again. This keeps
             // the persistent driver effectively dormant on older main-thread-bound CPUs.
-            // v1.7.38.3-test1 BuildFix1: direct mission resume can enter Dungeon
-            // without ever receiving SpaceStarted, leaving _indexesBuilt=false. The
-            // 1.7.38.1 main-menu idle fast path therefore used to swallow the first F2
-            // unless a vanilla InputController query happened to run on that same frame.
-            // Probe only while a real item UI is observed and only for the configured
-            // opening hotkey. Main Menu remains fully dormant because its item UI state
-            // is cleared at the session boundary. The normal resolver below performs the
-            // existing lazy bootstrap and opens the browser on this very same key press.
-            bool directMissionHotkeyBootstrap =
-                !_indexesBuilt && !_inspectorOpen &&
-                EnableItemIntelligence && InspectorEnabled &&
-                _compatCore && _compatInputGuard &&
-                HasObservedInspectorItemUi() &&
-                Input.GetKeyDown(InspectorKeyCode);
+            // A direct mission resume may skip SpaceStarted. The gameplay hooks
+            // permit the first hotkey to open the catalog even before any item hover.
+            bool directMissionHotkeyBootstrap = ShouldBootstrapInspectorFromHotkey();
 
             if (!_indexesBuilt && !_inspectorOpen &&
                 string.IsNullOrEmpty(_pendingStarmapTargetId) &&
@@ -528,19 +517,7 @@ namespace ItemIntelligence
                     }
                     else
                     {
-                        float openRequestStarted = Time.realtimeSinceStartup;
-                        string targetItemId = ResolveInspectorTargetOnDemand();
-                        float targetResolveMs = (Time.realtimeSinceStartup - openRequestStarted) * 1000f;
-
-                        if (!string.IsNullOrEmpty(targetItemId))
-                        {
-                            VerboseLog("[ItemIntelligence] " + GetInspectorKeyDisplayName() + " target resolved: " + targetItemId + ".");
-                            OpenInspector(targetItemId, openRequestStarted, targetResolveMs);
-                        }
-                        else
-                        {
-                            Debug.LogWarning("[ItemIntelligence] " + GetInspectorKeyDisplayName() + " pressed but no item target was resolved.");
-                        }
+                        OpenInspectorFromHotkey();
                     }
 
                     return;
@@ -553,7 +530,7 @@ namespace ItemIntelligence
 
                 if (Input.GetKeyDown(KeyCode.Escape))
                 {
-                    if (_browserCatalogOpen)
+                    if (_browserCatalogOpen && !string.IsNullOrEmpty(_inspectorItemId))
                     {
                         CloseBrowserCatalog();
                         return;
@@ -681,7 +658,7 @@ namespace ItemIntelligence
         {
             if (!EnableItemIntelligence ||
                 !InspectorEnabled ||
-                string.IsNullOrEmpty(itemId))
+                !CanOpenInspectorFromRequest(itemId))
                 return;
 
             if (!_compatCore)
@@ -702,6 +679,8 @@ namespace ItemIntelligence
 
             try
             {
+                itemId = itemId ?? string.Empty;
+                bool catalogEntry = string.IsNullOrEmpty(itemId);
                 bool firstPanelBuild = _inspectorRoot == null;
                 float perfTotalStart = openRequestStarted;
                 float perfStageStart = Time.realtimeSinceStartup;
@@ -721,7 +700,7 @@ namespace ItemIntelligence
                 _inspectorOpen = true;
                 HideHoverHint();
                 _inspectorItemId = itemId;
-                BrowserTabId adaptiveEntryTab = ResolveAdaptiveEntryTab(itemId);
+                BrowserTabId adaptiveEntryTab = catalogEntry ? BrowserTabId.Overview : ResolveAdaptiveEntryTab(itemId);
                 BrowserNavigation.Tab = (int)adaptiveEntryTab;
                 VerboseLog("[ItemIntelligence][AdaptiveEntry] item=" + itemId + ", tab=" + adaptiveEntryTab.ToString() + ".");
                 BrowserNavigation.ScrollOffset = 0;
@@ -749,6 +728,7 @@ namespace ItemIntelligence
                 RefreshInspectorAnchorFromTooltip();
                 perfStageStart = Time.realtimeSinceStartup;
                 RenderBrowser(itemId);
+                if (catalogEntry) OpenBrowserCatalog();
                 float perfRenderMs = (Time.realtimeSinceStartup - perfStageStart) * 1000f;
                 float perfTotalMs = (Time.realtimeSinceStartup - perfTotalStart) * 1000f;
                 ReportBrowserPerformanceBudget(itemId, firstPanelBuild, perfTotalMs, perfRenderMs);
@@ -859,7 +839,7 @@ namespace ItemIntelligence
 
         private static void SetBrowserTab(int tab)
         {
-            if (!_inspectorOpen) return;
+            if (!_inspectorOpen || string.IsNullOrEmpty(_inspectorItemId)) return;
             if (tab < 0) tab = 0;
             if (tab >= BrowserTabCount) tab = BrowserTabCount - 1;
             if (BrowserNavigation.Tab == tab)

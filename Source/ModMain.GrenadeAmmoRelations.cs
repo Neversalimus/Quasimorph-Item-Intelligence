@@ -12,6 +12,10 @@ namespace ItemIntelligence
         private static void CorrectExplicitGrenadeLauncherRelations()
         {
             if (Data.Items == null) return;
+            HashSet<string> grenadeIds = new HashSet<string>(StringComparer.Ordinal);
+            foreach (string itemId in KnownItemIds)
+                if (Data.Items.GetSimpleRecord<GrenadeRecord>(itemId, true) != null)
+                    grenadeIds.Add(itemId);
             int corrected = 0;
             int unresolved = 0;
             foreach (KeyValuePair<string, WeaponInfo> pair in WeaponsByItem)
@@ -19,15 +23,10 @@ namespace ItemIntelligence
                 WeaponInfo weapon = pair.Value;
                 if (weapon == null || weapon.CompatibleAmmo == null) continue;
                 WeaponRecord record = Data.Items.GetSimpleRecord<WeaponRecord>(pair.Key, true);
-                if (record == null) continue;
+                if (!IsGrenadeLauncherRecord(record)) continue;
 
                 HashSet<string> explicitGrenades = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-                bool hasExplicitLauncherContract = ResolveExplicitLauncherGrenades(
-                    record.DefaultGrenadeId, record.AllowedGrenadeIds, KnownItemIds, explicitGrenades);
-                // A launcher with missing/unresolved grenade data still must not
-                // inherit a rifle-caliber join from the general ammo index.
-                bool isGrenadeLauncher = IsGrenadeLauncherRecord(record);
-                if (!hasExplicitLauncherContract && !isGrenadeLauncher) continue;
+                ResolveLauncherGrenades(record.AllowedGrenadeIds, grenadeIds, explicitGrenades);
 
                 for (int i = 0; i < weapon.CompatibleAmmo.Count; i++)
                 {
@@ -43,7 +42,6 @@ namespace ItemIntelligence
 
                 foreach (string grenadeId in explicitGrenades)
                 {
-                    if (Data.Items.GetSimpleRecord<GrenadeRecord>(grenadeId, true) == null) continue;
                     weapon.CompatibleAmmo.Add(grenadeId);
                     AddToList(CompatibleWeaponsByAmmo, grenadeId, weapon.ItemId);
                 }
@@ -74,28 +72,18 @@ namespace ItemIntelligence
             return explosion.Parameters.DamageType ?? string.Empty;
         }
 
-        // The values are verified game item ids, never a caliber or a name guess.
-        private static bool ResolveExplicitLauncherGrenades(
-            string defaultGrenadeId, IEnumerable<string> allowedGrenadeIds,
-            HashSet<string> knownItemIds, HashSet<string> output)
+        // ReloadLauncherSystem.CanReload / CanReloadWeaponFromStorage:
+        // null allows every GrenadeRecord; an empty list allows none. DefaultGrenadeId
+        // only fills a newly created weapon and does not override a reload restriction.
+        private static void ResolveLauncherGrenades(
+            IEnumerable<string> allowedGrenadeIds, HashSet<string> grenadeIds,
+            HashSet<string> output)
         {
-            bool hasContract = !string.IsNullOrWhiteSpace(defaultGrenadeId);
-            if (!string.IsNullOrWhiteSpace(defaultGrenadeId) && knownItemIds != null &&
-                knownItemIds.Contains(defaultGrenadeId.Trim()) && output != null)
-                output.Add(defaultGrenadeId.Trim());
-
-            if (allowedGrenadeIds != null)
+            if (grenadeIds == null || output == null) return;
+            foreach (string id in allowedGrenadeIds ?? grenadeIds)
             {
-                foreach (string raw in allowedGrenadeIds)
-                {
-                    if (string.IsNullOrWhiteSpace(raw)) continue;
-                    hasContract = true;
-                    string id = raw.Trim();
-                    if (knownItemIds != null && knownItemIds.Contains(id) && output != null)
-                        output.Add(id);
-                }
+                if (!string.IsNullOrEmpty(id) && grenadeIds.Contains(id)) output.Add(id);
             }
-            return hasContract;
         }
     }
 }

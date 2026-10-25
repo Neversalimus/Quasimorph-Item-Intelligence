@@ -1025,27 +1025,30 @@ namespace ItemIntelligence
 
         private static void RenderBrowser(string itemId)
         {
-            if (_inspectorRoot == null || string.IsNullOrEmpty(itemId)) return;
-            bool measureTrade = BrowserNavigation.Tab == (int)BrowserTabId.Trade;
+            if (_inspectorRoot == null) return;
+            bool hasItem = !string.IsNullOrEmpty(itemId);
+            bool measureTrade = hasItem && BrowserNavigation.Tab == (int)BrowserTabId.Trade;
             long renderStarted = measureTrade ? TradePerfTimestamp() : 0;
 
             ApplyBrowserViewport();
             EnsureLocalizationCacheLanguage();
             RefreshBrowserLanguageFonts();
             if (_inspectorTitle != null)
-                SetBrowserTextIfChanged(_inspectorTitle, NormalizeGameText(LocalizeItem(itemId)));
+                SetBrowserTextIfChanged(_inspectorTitle, hasItem ? NormalizeGameText(LocalizeItem(itemId)) : NormalizeModUiText(Ui("ui.catalog")));
             if (_inspectorItemIdText != null)
-                SetBrowserTextIfChanged(_inspectorItemIdText, NormalizeModUiText(Ui("ui.item_id")) + ": " + itemId);
+                SetBrowserTextIfChanged(_inspectorItemIdText, hasItem ? NormalizeModUiText(Ui("ui.item_id")) + ": " + itemId : string.Empty);
 
             UpdateBrowserPreview(itemId);
             RefreshModderSpawnPanel();
             UpdateBrowserChromeLocalization();
             UpdateBrowserTabs();
-            UpdateBrowserStats(itemId);
+            if (hasItem) UpdateBrowserStats(itemId);
+            else SetBrowserTextIfChanged(_browserStatsText, string.Empty);
             UpdateBrowserTradeLayoutControls();
 
             BrowserLines.Clear();
-            switch ((BrowserTabId)BrowserNavigation.Tab)
+            if (!hasItem) BrowserLines.Add(BrowserLine.FullNote(Ui("ui.search_item")));
+            else switch ((BrowserTabId)BrowserNavigation.Tab)
             {
                 case BrowserTabId.Overview:
                     BuildBrowserOverview(itemId);
@@ -1139,8 +1142,8 @@ namespace ItemIntelligence
 
             for (int i = 0; i < BrowserTabCount; i++)
             {
-                bool available = IsBrowserTabCompatibilityAvailable(i);
-                bool selected = i == BrowserNavigation.Tab;
+                bool available = !string.IsNullOrEmpty(_inspectorItemId) && IsBrowserTabCompatibilityAvailable(i);
+                bool selected = available && i == BrowserNavigation.Tab;
                 TMP_Text tabText = BrowserTabTexts[i];
                 if (tabText != null)
                 {

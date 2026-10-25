@@ -34,8 +34,8 @@ foreach ($locText in @($enLocalizationText,$ruLocalizationText,$templateLocaliza
 
 # Player-reported launcher, mode effect, and installed-arm regressions.
 $grenadeText = Read-Utf8Strict -Path (Join-Path $sourceDir 'ModMain.GrenadeAmmoRelations.cs')
-foreach ($token in @('record.DefaultGrenadeId','record.AllowedGrenadeIds',
-    'ResolveExplicitLauncherGrenades','CompatibleWeaponsByAmmo.Remove(oldId)',
+foreach ($token in @('record.AllowedGrenadeIds','allowedGrenadeIds ?? grenadeIds',
+    'ResolveLauncherGrenades','CompatibleWeaponsByAmmo.Remove(oldId)',
     'weapon.CompatibleAmmo.Clear()')) {
     if ($grenadeText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) {
         throw "explicit grenade allowlist contract missing: $token"

@@ -4,9 +4,9 @@
 
 [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3780078201) · [Downloads](https://github.com/Neversalimus/Quasimorph-Item-Intelligence/releases) · [Changelog](CHANGELOG.md)
 
-This branch contains **1.7.43.2-test3** for **Quasimorph 1.0.4.590s.969afc6**, for DEV validation before a stable release.
+This branch contains **1.7.43.2-test4** for **Quasimorph 1.0.4.590s.969afc6**, for DEV validation before a stable release.
 
-This build combines the weapon-report fixes and the previously separate genome-upgrade material metadata. Grenade launchers use their actual grenade allowlists; weapon modes show their own damage types, ammo traits and status effects; augmentations link to installed weapons in both directions through body-slot records. See [test build notes](Release/Notes-v1.7.43.2-test3.md).
+This build combines the weapon-report fixes and the previously separate genome-upgrade material metadata. Grenade launchers follow the game's reload restrictions; weapon modes show their own damage types, ammo traits and status effects; augmentations link to installed weapons in both directions through body-slot records. The first hotkey press opens the catalog when no item has been inspected yet, including a direct mission resume. See [test build notes](Release/Notes-v1.7.43.2-test4.md).
 
 Compatibility for the new build is enabled through audited feature-owned gates. Unknown future builds continue to fail closed for exact calculations until their contracts are reviewed.
 

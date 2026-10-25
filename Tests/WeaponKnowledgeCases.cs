@@ -86,7 +86,7 @@ namespace ItemIntelligence
         }
         public static void AddWeapon(string id, bool melee, string modes, string overrides, string ammo, string grenade, string allowed, bool launcher)
         {
-            var weapon = new WeaponRecord { Id = id, IsMelee = melee, Firemodes = Split(modes), OverrideAmmo = Split(overrides), DefaultAmmoId = ammo, DefaultGrenadeId = grenade, AllowedGrenadeIds = Split(allowed), WeaponClass = launcher ? WeaponClass.GrenadeLauncher : WeaponClass.Default };
+            var weapon = new WeaponRecord { Id = id, IsMelee = melee, Firemodes = Split(modes), OverrideAmmo = Split(overrides), DefaultAmmoId = ammo, DefaultGrenadeId = grenade, AllowedGrenadeIds = allowed == null ? null : Split(allowed), WeaponClass = launcher ? WeaponClass.GrenadeLauncher : WeaponClass.Default };
             KnownItemIds.Add(id); Data.Items.Add(id, weapon); WeaponsByItem[id] = new WeaponInfo(id, null, null, null);
             foreach (string mode in weapon.Firemodes) { string key = id + ":" + mode; WeaponModeRawIdByKey[key] = mode; WeaponModeItemIdByKey[key] = id; }
         }
@@ -120,7 +120,7 @@ namespace ItemIntelligence
             var effects = new List<KeyValuePair<string, string>>(); AppendWeaponModePayloadEffectRows("poison_blade:claw_1", effects);
             Check(effects.Any(r => r.Key == "中毒"), "status uses the game's tooltip localization key");
             AddWeapon("grenade_launcher_1", false, "launcher_1", "", "rifle_basic_ammo", "frag_grenade", "frag_grenade thermal_grenade", true);
-            AddWeapon("nature_mars_grenade_launcher", false, "launcher_1", "", "rifle_basic_ammo", "urparp_grenade", "", true);
+            AddWeapon("nature_mars_grenade_launcher", false, "launcher_1", "", "rifle_basic_ammo", "urparp_grenade", null, true);
             AddWeapon("rifle", false, "rifle_1", "", "rifle_basic_ammo", "", "", false);
             AddAmmo("rifle_basic_ammo", "pierce", "wounding", ""); AddGrenade("frag_grenade", "frag_explosion"); AddGrenade("thermal_grenade", "fire_explosion"); AddGrenade("urparp_grenade", "urparp_explosion");
             AddExplosion("frag_explosion", "explosion", true); AddExplosion("urparp_explosion", "plasma", true);
@@ -128,7 +128,13 @@ namespace ItemIntelligence
             CorrectExplicitGrenadeLauncherRelations(); CorrectExplicitGrenadeLauncherRelations();
             Check(WeaponsByItem["grenade_launcher_1"].CompatibleAmmo.Count == 2, "Shaker's exact grenade allowlist");
             Check(!CompatibleWeaponsByAmmo["rifle_basic_ammo"].Contains("grenade_launcher_1") && CompatibleWeaponsByAmmo["rifle_basic_ammo"].Contains("rifle"), "both relation directions repaired, rifle preserved");
-            Check(CompatibleWeaponsByAmmo["frag_grenade"].Count == 1, "rebuild does not duplicate reverse links");
+            Check(CompatibleWeaponsByAmmo["frag_grenade"].Count == 2, "rebuild does not duplicate reverse links");
+            Check(WeaponsByItem["nature_mars_grenade_launcher"].CompatibleAmmo.Count == 3, "unrestricted launcher accepts every grenade, not only default");
+            var shaker = Data.Items.GetSimpleRecord<WeaponRecord>("grenade_launcher_1", true);
+            shaker.AllowedGrenadeIds = new List<string> { "thermal_grenade", "rifle_basic_ammo" };
+            CorrectExplicitGrenadeLauncherRelations();
+            Check(WeaponsByItem["grenade_launcher_1"].CompatibleAmmo.SequenceEqual(new[] { "thermal_grenade" }), "default grenade cannot bypass explicit reload restrictions");
+            Check(!CompatibleWeaponsByAmmo["frag_grenade"].Contains("grenade_launcher_1"), "changed restriction also repairs reverse links");
             string label, value;
             Check(TryResolveWeaponModeDamageType("grenade_launcher_1:launcher_1", out label, out value) && value == "ui.damage_type.explosion", "Shaker type comes from grenade explosion");
             Check(TryResolveWeaponModeDamageType("nature_mars_grenade_launcher:launcher_1", out label, out value) && value == "ui.damage_type.plasma", "second launcher uses its own grenade");
@@ -192,6 +198,13 @@ namespace ItemIntelligence
                 Check(!info.CompatibleAmmo.Contains(record.DefaultAmmoId), info.ItemId + " no rifle placeholder");
                 foreach (string grenade in info.CompatibleAmmo) Check(Data.Items.GetSimpleRecord<GrenadeRecord>(grenade, true) != null, info.ItemId + " actual grenade item");
             }
+            Check(new HashSet<string>(WeaponsByItem["grenade_launcher_1"].CompatibleAmmo).SetEquals(new[] {
+                "frag_grenade", "quasi_grenade", "thermal_grenade", "stun_grenade", "smoke_grenade",
+                "toxic_grenade", "toxic_gas_grenade", "frost_grenade", "frost_gas_grenade", "urparp_grenade", "hellfire_grenade"
+            }), "installed game's Shaker has all 11 allowed grenades including compound items");
+            Check(!WeaponsByItem["grenade_launcher_1"].CompatibleAmmo.Contains("handmade_frag_grenade"), "makeshift grenade is not allowed in Shaker");
+            Check(WeaponsByItem["nature_mars_grenade_launcher"].CompatibleAmmo.Count == 0,
+                "native parser makes blank list empty: built-in launcher default payload is not reload compatibility");
             return WeaponsByItem.Count + " weapons, " + modeCount + " ammo-backed modes, " + ArmWeaponsByAugmentation.Count + " linked augmentations, " + checks + " assertions";
         }
     }
