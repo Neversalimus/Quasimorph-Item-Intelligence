@@ -53,6 +53,7 @@ namespace ItemIntelligence
             // QuasiPacts get their exact scripted Baron source immediately on the
             // landing page without starting the heavy Loot warmup.
             AppendOverviewBaronSpecial(itemId);
+            AppendOverviewArmWeaponLinks(itemId);
 
             // Resolve the visual relationship first so the same fact is not printed twice
             // as both a summary action and a preview heading.
