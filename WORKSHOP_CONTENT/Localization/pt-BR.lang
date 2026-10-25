@@ -677,3 +677,8 @@ ui.view_expand	Janela grande
 ui.view_window	Janela normal
 ui.view_zoom	Zoom
 ui.view_save_failed	Não foi possível salvar as configurações da janela.
+ui.mode_effect	Traço do modo
+ui.mode_status_effect	Efeito de status
+ui.mode_trait_wounding	Causa feridas
+ui.arm_builtin_weapon	Arma ao instalar
+ui.arm_source_augmentation	Aprimoramento associado
