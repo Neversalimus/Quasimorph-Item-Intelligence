@@ -677,3 +677,8 @@ ui.view_expand	Ventana grande
 ui.view_window	Ventana normal
 ui.view_zoom	Zoom
 ui.view_save_failed	No se pudo guardar la configuración de la ventana.
+ui.mode_effect	Rasgo del modo
+ui.mode_status_effect	Efecto de estado
+ui.mode_trait_wounding	Causa heridas
+ui.arm_builtin_weapon	Arma al instalar
+ui.arm_source_augmentation	Aumento asociado
