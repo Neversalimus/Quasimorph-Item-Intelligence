@@ -7,6 +7,11 @@ namespace ItemIntelligence
             string[] modes = new string[] { "slash_2", "stab_2" };
 
             Check(ResolveWeaponModeAmmoIdFromSlots(
+                modes, new string[] { "none", "implicted_combat_knife" },
+                "implicted_sword_brutal", "slash_2") == "implicted_sword_brutal",
+                "none override means default melee ammo, not an ammo id");
+
+            Check(ResolveWeaponModeAmmoIdFromSlots(
                 modes,
                 new string[] { "implicted_sword", "implicted_knife" },
                 "fallback_ammo",
