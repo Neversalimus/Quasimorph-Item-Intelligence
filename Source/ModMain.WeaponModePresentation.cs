@@ -13,7 +13,7 @@ namespace ItemIntelligence
         // v1.7.37-test2: weapon-mode rows stay compact. The exact modeKey carried by
         // each row owns its hover payload, so two identically named modes can expose
         // different FireModeRecord stats without any label-based lookup.
-        private const int WeaponModeTooltipMaxRows = 8;
+        private const int WeaponModeTooltipMaxRows = 12;
         private const float WeaponModeTooltipWidth = 420f;
         private static GameObject _browserWeaponModeTooltipRoot;
         private static RectTransform _browserWeaponModeTooltipRect;
@@ -109,7 +109,7 @@ namespace ItemIntelligence
 
         private static List<KeyValuePair<string, string>> BuildWeaponModeTooltipRows(string modeKey, WeaponModeStaticStats stats)
         {
-            List<KeyValuePair<string, string>> rows = new List<KeyValuePair<string, string>>(8);
+            List<KeyValuePair<string, string>> rows = new List<KeyValuePair<string, string>>(WeaponModeTooltipMaxRows);
             if (stats == null) return rows;
 
             // Match MGSC.TooltipFactory.BuildFiremodeTooltip exactly for the fields it
@@ -143,6 +143,7 @@ namespace ItemIntelligence
             float scatter;
             if (TryCalculateVanillaFiremodeScatter(modeKey, stats, out scatter))
                 rows.Add(new KeyValuePair<string, string>(Ui("ui.mode_scatter"), FormatWeaponModeScatter(scatter)));
+            AppendWeaponModePayloadEffectRows(modeKey, rows);
             return rows;
         }
 
