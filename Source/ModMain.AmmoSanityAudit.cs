@@ -13,6 +13,7 @@ namespace ItemIntelligence
         {
             if (_ammoSanityAuditLogged) return;
             _ammoSanityAuditLogged = true;
+            CorrectExplicitGrenadeLauncherRelations();
 
             int staticMelee = 0;
             int staticMeleeFalseLinks = 0;
