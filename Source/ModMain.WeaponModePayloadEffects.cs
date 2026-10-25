@@ -18,9 +18,7 @@ namespace ItemIntelligence
             string ammoId = ResolveWeaponModeAmmoId(modeKey, weapon);
             if (string.IsNullOrEmpty(ammoId)) return;
 
-            AmmoRecord ammo = null;
-            try { ammo = Data.Items.GetSimpleRecord<AmmoRecord>(ammoId, true); }
-            catch { }
+            AmmoRecord ammo = Data.Items.GetSimpleRecord<AmmoRecord>(ammoId, true);
             if (ammo == null) return;
 
             HashSet<string> seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -32,18 +30,23 @@ namespace ItemIntelligence
                     if (string.IsNullOrWhiteSpace(traitId) || !seen.Add(traitId.Trim())) continue;
                     string value = LocalizeWeaponModePayloadTrait(traitId.Trim());
                     if (string.IsNullOrEmpty(value)) continue;
-                    rows.Add(new KeyValuePair<string, string>(Ui("ui.mode_effect"), value));
-                    if (++added >= 3) break; // bound the presentation, never invent traits
+                    // Names fit the wider property column; the right column identifies
+                    // them as traits. Long localized names may use two lines.
+                    rows.Add(new KeyValuePair<string, string>(value, Ui("ui.mode_effect")));
+                    added++;
                 }
             }
 
             string statusId = (ammo.StatusEffectId ?? string.Empty).Trim();
+            if (string.Equals(statusId, "none", StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(statusId, "null", StringComparison.OrdinalIgnoreCase)) statusId = string.Empty;
             if (!string.IsNullOrEmpty(statusId) &&
                 !string.Equals(statusId, "none", StringComparison.OrdinalIgnoreCase) &&
                 !string.Equals(statusId, "null", StringComparison.OrdinalIgnoreCase))
             {
                 string name = LocalizeCandidates(new string[]
                 {
+                    "tooltip.statuseffect_" + statusId,
                     "effect." + statusId + ".name",
                     "status." + statusId + ".name",
                     "statuseffect." + statusId + ".name",
@@ -51,9 +54,11 @@ namespace ItemIntelligence
                     statusId
                 }, statusId);
                 if (!string.IsNullOrEmpty(name))
-                    rows.Add(new KeyValuePair<string, string>(Ui("ui.mode_status_effect"),
-                        NormalizeGameText(name)));
+                    rows.Add(new KeyValuePair<string, string>(NormalizeGameText(name),
+                        Ui("ui.mode_status_effect")));
             }
+            if (added == 0 && string.IsNullOrEmpty(statusId))
+                rows.Add(new KeyValuePair<string, string>(Ui("ui.mode_effect"), Ui("ui.mode_no_effects")));
         }
 
         private static string LocalizeWeaponModePayloadTrait(string rawId)

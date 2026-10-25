@@ -18,9 +18,7 @@ namespace ItemIntelligence
             {
                 WeaponInfo weapon = pair.Value;
                 if (weapon == null || weapon.CompatibleAmmo == null) continue;
-                WeaponRecord record = null;
-                try { record = Data.Items.GetSimpleRecord<WeaponRecord>(pair.Key, true); }
-                catch { }
+                WeaponRecord record = Data.Items.GetSimpleRecord<WeaponRecord>(pair.Key, true);
                 if (record == null) continue;
 
                 HashSet<string> explicitGrenades = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -28,8 +26,7 @@ namespace ItemIntelligence
                     record.DefaultGrenadeId, record.AllowedGrenadeIds, KnownItemIds, explicitGrenades);
                 // A launcher with missing/unresolved grenade data still must not
                 // inherit a rifle-caliber join from the general ammo index.
-                bool isGrenadeLauncher = string.Equals(record.WeaponClass.ToString(),
-                    "GrenadeLauncher", StringComparison.OrdinalIgnoreCase);
+                bool isGrenadeLauncher = IsGrenadeLauncherRecord(record);
                 if (!hasExplicitLauncherContract && !isGrenadeLauncher) continue;
 
                 for (int i = 0; i < weapon.CompatibleAmmo.Count; i++)
@@ -46,6 +43,7 @@ namespace ItemIntelligence
 
                 foreach (string grenadeId in explicitGrenades)
                 {
+                    if (Data.Items.GetSimpleRecord<GrenadeRecord>(grenadeId, true) == null) continue;
                     weapon.CompatibleAmmo.Add(grenadeId);
                     AddToList(CompatibleWeaponsByAmmo, grenadeId, weapon.ItemId);
                 }
@@ -58,6 +56,22 @@ namespace ItemIntelligence
             if (corrected > 0)
                 VerboseLog("[ItemIntelligence][GrenadeAmmo] corrected=" + corrected +
                     ", unresolved=" + unresolved + ".");
+        }
+
+        private static bool IsGrenadeLauncherRecord(WeaponRecord record)
+        {
+            return record != null && record.WeaponClass == WeaponClass.GrenadeLauncher;
+        }
+
+        private static string ResolveDefaultGrenadeDamageType(WeaponRecord weapon)
+        {
+            if (!IsGrenadeLauncherRecord(weapon) || Data.Items == null || Data.Explosions == null ||
+                string.IsNullOrEmpty(weapon.DefaultGrenadeId)) return string.Empty;
+            GrenadeRecord grenade = Data.Items.GetSimpleRecord<GrenadeRecord>(weapon.DefaultGrenadeId, true);
+            if (grenade == null || string.IsNullOrEmpty(grenade.Explosion)) return string.Empty;
+            ExplosionRecord explosion = Data.Explosions.GetRecord(grenade.Explosion, true);
+            if (explosion == null || !explosion.Parameters.GainDmgToCreature) return string.Empty;
+            return explosion.Parameters.DamageType ?? string.Empty;
         }
 
         // The values are verified game item ids, never a caliber or a name guess.

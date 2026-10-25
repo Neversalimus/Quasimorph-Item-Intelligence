@@ -62,8 +62,8 @@ namespace ItemIntelligence
             bool melee = IsWeaponModeMelee(modeKey, stats);
             _browserWeaponModeTooltipSubtitle.text = Ui(melee ? "ui.mode_tooltip_attack" : "ui.mode_tooltip_fire");
 
-            int maxViewportRows = Math.Max(1, (int)Math.Floor((_browserViewport.Height - 232f) / 32f));
-            int visibleRows = Math.Min(Math.Min(rows.Count, WeaponModeTooltipMaxRows), maxViewportRows);
+            int visibleRows = Math.Min(rows.Count, WeaponModeTooltipMaxRows);
+            float rowPitch = CalculateWeaponModeTooltipRowPitch(_browserViewport, visibleRows);
             for (int i = 0; i < WeaponModeTooltipMaxRows; i++)
             {
                 bool show = i < visibleRows;
@@ -71,15 +71,19 @@ namespace ItemIntelligence
                 {
                     BrowserWeaponModeTooltipNames[i].gameObject.SetActive(show);
                     BrowserWeaponModeTooltipNames[i].text = show ? NormalizeModUiText(rows[i].Key) : string.Empty;
+                    BrowserWeaponModeTooltipNames[i].rectTransform.anchoredPosition = new Vector2(18f, -70f - i * rowPitch);
+                    BrowserWeaponModeTooltipNames[i].rectTransform.sizeDelta = new Vector2(250f, rowPitch - 2f);
                 }
                 if (BrowserWeaponModeTooltipValues[i] != null)
                 {
                     BrowserWeaponModeTooltipValues[i].gameObject.SetActive(show);
                     BrowserWeaponModeTooltipValues[i].text = show ? NormalizeModUiText(rows[i].Value) : string.Empty;
+                    BrowserWeaponModeTooltipValues[i].rectTransform.anchoredPosition = new Vector2(270f, -70f - i * rowPitch);
+                    BrowserWeaponModeTooltipValues[i].rectTransform.sizeDelta = new Vector2(132f, rowPitch - 2f);
                 }
             }
 
-            float height = 76f + visibleRows * 32f + 12f;
+            float height = 88f + visibleRows * rowPitch;
             _browserWeaponModeTooltipRect.sizeDelta = new Vector2(WeaponModeTooltipWidth, height);
             float desiredY = sourceRow == null ? -180f : sourceRow.anchoredPosition.y + 18f;
             float x, y;
@@ -125,6 +129,7 @@ namespace ItemIntelligence
             string damageTypeValue;
             if (TryResolveWeaponModeDamageType(modeKey, out damageTypeLabel, out damageTypeValue))
                 rows.Add(new KeyValuePair<string, string>(damageTypeLabel, damageTypeValue));
+            AppendWeaponModePayloadEffectRows(modeKey, rows);
 
             int damagePerApMin;
             int damagePerApMax;
@@ -144,7 +149,6 @@ namespace ItemIntelligence
             float scatter;
             if (TryCalculateVanillaFiremodeScatter(modeKey, stats, out scatter))
                 rows.Add(new KeyValuePair<string, string>(Ui("ui.mode_scatter"), FormatWeaponModeScatter(scatter)));
-            AppendWeaponModePayloadEffectRows(modeKey, rows);
             return rows;
         }
 
@@ -229,7 +233,10 @@ namespace ItemIntelligence
             text.fontSize = fontSize;
             text.color = color;
             text.alignment = alignment;
-            text.enableWordWrapping = false;
+            text.enableAutoSizing = true;
+            text.fontSizeMin = 11f;
+            text.fontSizeMax = fontSize;
+            text.enableWordWrapping = true;
             text.overflowMode = TextOverflowModes.Truncate;
             text.raycastTarget = false;
             return text;

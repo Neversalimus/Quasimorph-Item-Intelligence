@@ -1,4 +1,4 @@
-﻿@language=BrazilianPortugal;BrazilianPortuguese;PortugueseBrazil;Português (Brasil);Portugues (Brasil);pt-BR
+@language=BrazilianPortugal;BrazilianPortuguese;PortugueseBrazil;Português (Brasil);Portugues (Brasil);pt-BR
 catalog.compact.all	TODOS
 catalog.compact.ammo	MUNIÇÃO
 catalog.compact.armor	ARMAD.
@@ -682,3 +682,7 @@ ui.mode_status_effect	Efeito de status
 ui.mode_trait_wounding	Causa feridas
 ui.arm_builtin_weapon	Arma ao instalar
 ui.arm_source_augmentation	Aprimoramento associado
+ui.upgrade_uses	USADO EM MELHORIAS
+ui.upgrade_genomes	Melhorias de genomas
+ui.upgrade_uses_note	Pode continuar sendo necessário após concluir as pesquisas da nave. A quantidade depende das melhorias escolhidas e não está incluída no total de pesquisas restantes.
+ui.mode_no_effects	Nenhum

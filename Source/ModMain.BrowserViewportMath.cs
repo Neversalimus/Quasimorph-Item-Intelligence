@@ -56,6 +56,11 @@ namespace ItemIntelligence
             return value * Math.Max(1f, (width - 28f) / 708f);
         }
 
+        private static float CalculateWeaponModeTooltipRowPitch(BrowserViewportGeometry view, int rows)
+        {
+            return Math.Min(32f, (view.Height - 232f) / Math.Max(1, rows));
+        }
+
         private static void CalculateBrowserWeaponTooltipPosition(BrowserViewportGeometry view,
             bool expanded, bool pinnedRight, bool drawer, float desiredY, float tooltipWidth, float tooltipHeight,
             out float x, out float y)

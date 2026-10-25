@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace ItemIntelligence
@@ -22,6 +22,7 @@ namespace ItemIntelligence
 
         private static void ResetMagnumIndexState()
         {
+            ResetGenomeUpgradeUseCache();
             MagnumUses.Clear();
             // ClearIndexes can run again when strategy data appears after bootstrap.
             // The runtime progression pass must be allowed to repopulate the new index.

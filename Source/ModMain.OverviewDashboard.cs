@@ -91,7 +91,7 @@ namespace ItemIntelligence
                 int normalMin, normalMax, critMin, critMax;
                 bool haveNormal = TryCalculateWeaponModeDamagePerAp(mode.Key, mode.Stats, out normalMin, out normalMax);
                 bool haveCrit = TryCalculateWeaponModeCriticalDamagePerAp(mode.Key, mode.Stats, out critMin, out critMax);
-                if (!haveNormal && !haveCrit) continue;
+                // Keep modes inspectable when static Damage/AP is unavailable (e.g. grenade explosions).
                 BrowserLines.Add(BrowserLine.OverviewCombatRow(
                     label, mode.Key,
                     haveNormal ? FormatWeaponModeDamagePerAp(normalMin, normalMax) : "—",

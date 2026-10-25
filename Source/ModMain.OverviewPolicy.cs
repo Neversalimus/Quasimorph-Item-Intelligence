@@ -15,6 +15,7 @@ namespace ItemIntelligence
             public int ChipUnlocks;
             public bool BaronPact;
             public int AmmoRelations;
+            public int InstalledWeaponRelations;
             public bool AmmoItem;
             public int RecipeRelations;
             public int DisassemblyRelations;
@@ -29,6 +30,7 @@ namespace ItemIntelligence
                     if (ChipUnlocks > 0) n++;
                     if (BaronPact) n++;
                     if (AmmoRelations > 0) n++;
+                    if (InstalledWeaponRelations > 0) n++;
                     if (RecipeRelations > 0) n++;
                     if (DisassemblyRelations > 0) n++;
                     if (MagnumRelations > 0) n++;
@@ -38,7 +40,7 @@ namespace ItemIntelligence
 
             public bool StrongOverview
             {
-                get { return CombatModes > 0 || ChipUnlocks > 0 || BaronPact || AmmoItem || AmmoRelations >= 2; }
+                get { return CombatModes > 0 || ChipUnlocks > 0 || BaronPact || AmmoItem || AmmoRelations >= 2 || InstalledWeaponRelations > 0; }
             }
         }
 
@@ -52,6 +54,8 @@ namespace ItemIntelligence
 
             if (ShowAmmoRelations)
             {
+                s.InstalledWeaponRelations = GetListCount(ArmWeaponsByAugmentation, relationId) +
+                    GetListCount(AugmentationsByArmWeapon, relationId);
                 List<WeaponModeDescriptor> modes = GetWeaponModesForItem(itemId);
                 s.CombatModes = modes == null ? 0 : modes.Count;
 

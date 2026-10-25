@@ -1,4 +1,4 @@
-﻿@language=EnglishUS;English;english;en;Английский
+@language=EnglishUS;English;english;en;Английский
 catalog.compact.all	ALL
 catalog.compact.ammo	AMMO
 catalog.compact.armor	ARMOR
@@ -694,3 +694,7 @@ ui.mode_status_effect	Status effect
 ui.mode_trait_wounding	Wounding
 ui.arm_builtin_weapon	Weapon when installed
 ui.arm_source_augmentation	Augmentation item
+ui.upgrade_uses	USED IN UPGRADES
+ui.upgrade_genomes	Genome upgrades
+ui.upgrade_uses_note	May still be needed after ship research is complete. The amount depends on the chosen upgrades and is not included in the remaining research total.
+ui.mode_no_effects	None

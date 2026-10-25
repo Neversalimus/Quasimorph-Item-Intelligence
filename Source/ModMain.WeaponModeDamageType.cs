@@ -95,6 +95,9 @@ namespace ItemIntelligence
         private static string ResolveWeaponModeAmmoId(string modeKey, WeaponRecord weapon)
         {
             if (weapon == null || string.IsNullOrEmpty(modeKey)) return string.Empty;
+            // Launcher DefaultAmmoId may be an unused rifle placeholder. Grenades
+            // use their own explosion record, never AmmoRecord traits or damage.
+            if (IsGrenadeLauncherRecord(weapon)) return string.Empty;
 
             string rawModeId;
             if (!WeaponModeRawIdByKey.TryGetValue(modeKey, out rawModeId) ||
@@ -201,6 +204,16 @@ namespace ItemIntelligence
             WeaponRecord weapon = ResolveWeaponModeWeaponRecord(modeKey);
             if (weapon == null)
             {
+                WeaponModeDamageTypeMisses.Add(modeKey);
+                return false;
+            }
+
+            if (IsGrenadeLauncherRecord(weapon))
+            {
+                string grenadeDamageType = ResolveDefaultGrenadeDamageType(weapon);
+                if (!string.IsNullOrEmpty(grenadeDamageType))
+                    return CacheIntrinsicWeaponModeDamageType(modeKey, weapon, grenadeDamageType,
+                        out label, out value);
                 WeaponModeDamageTypeMisses.Add(modeKey);
                 return false;
             }

@@ -1,4 +1,4 @@
-﻿@language=Russian;russian;ru;Русский;рус
+@language=Russian;russian;ru;Русский;рус
 catalog.compact.all	ВСЕ
 catalog.compact.ammo	ПАТР
 catalog.compact.armor	БРОН
@@ -694,3 +694,7 @@ ui.mode_status_effect	Эффект состояния
 ui.mode_trait_wounding	Ранящий
 ui.arm_builtin_weapon	Оружие после установки
 ui.arm_source_augmentation	Устанавливаемая конечность
+ui.upgrade_uses	ИСПОЛЬЗУЕТСЯ В УЛУЧШЕНИЯХ
+ui.upgrade_genomes	Улучшение геномов
+ui.upgrade_uses_note	Может понадобиться после завершения исследований корабля. Количество зависит от выбранных улучшений и не входит в остаток для исследований.
+ui.mode_no_effects	Нет

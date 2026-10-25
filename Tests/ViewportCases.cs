@@ -49,6 +49,17 @@ namespace ItemIntelligence
                 }
                 VerifyViewportChrome(g, false);
                 VerifyViewportChrome(g, true);
+                for (int rows = 1; rows <= 12; rows++)
+                {
+                    float pitch = CalculateWeaponModeTooltipRowPitch(g, rows);
+                    float height = 88f + rows * pitch;
+                    float x, y;
+                    CalculateBrowserWeaponTooltipPosition(g, expanded != 0, false, drawer != 0,
+                        -650f, 420f, height, out x, out y);
+                    CheckViewport(pitch >= 20f && pitch <= 32f, "all mode effects retain readable row height");
+                    CheckViewport(-y >= 92f && -y + height <= g.Height - 52f + 0.001f,
+                        "all twelve mode rows fit without dropping effects");
+                }
                 for (int pinned = 0; pinned < 2; pinned++)
                 foreach (float rowY in new float[] { -221f, -650f, -1300f })
                 {

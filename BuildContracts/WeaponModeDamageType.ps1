@@ -60,7 +60,8 @@ if ($weaponModePresentationText.IndexOf('AppendWeaponModePayloadEffectRows(modeK
 
 $armLinkText = Read-Utf8Strict -Path (Join-Path $sourceDir 'ModMain.ArmWeaponLinks.cs')
 foreach ($token in @('GetSimpleRecord<AugmentationRecord>',
-    'GetSimpleRecord<WeaponRecord>','KnownItemIds.Contains','ui.arm_builtin_weapon',
+    'GetSimpleRecord<WeaponRecord>','KnownItemIds.Contains','augmentation.WoundSlotIds',
+    'Data.WoundSlots.GetRecord','slot.BareHandWeapon','ui.arm_builtin_weapon',
     'ui.arm_source_augmentation')) {
     if ($armLinkText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) {
         throw "validated limb link contract missing: $token"
@@ -70,3 +71,10 @@ $overviewText = Read-Utf8Strict -Path (Join-Path $sourceDir 'ModMain.OverviewDas
 if ($overviewText.IndexOf('AppendOverviewArmWeaponLinks(itemId);',[StringComparison]::Ordinal) -lt 0) {
     throw 'validated limb link not displayed in Overview.'
 }
+foreach ($token in @('IndexArmWeaponLinks(itemId);','ResetArmWeaponLinks();')) {
+    if ($ammoText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "limb link lifecycle missing: $token" }
+}
+if ($armLinkText.Contains('"nature_" +') -or $armLinkText.Contains('StartsWith("nature_"')) {
+    throw 'installed limb weapons must follow body-slot records, not naming guesses.'
+}
+& (Join-Path $root 'Tests/Run-WeaponKnowledgeTests.ps1') -SourceRoot $root

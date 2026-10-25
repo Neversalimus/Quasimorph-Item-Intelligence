@@ -6,39 +6,39 @@ namespace ItemIntelligence
 {
     public static partial class ModMain
     {
-        private static string ValidatedLimbWeapon(string augmentationId)
+        private static readonly Dictionary<string, List<string>> ArmWeaponsByAugmentation =
+            new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
+        private static readonly Dictionary<string, List<string>> AugmentationsByArmWeapon =
+            new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
+
+        private static void ResetArmWeaponLinks()
         {
-            if (Data.Items == null || string.IsNullOrEmpty(augmentationId) ||
-                augmentationId.StartsWith("nature_", StringComparison.OrdinalIgnoreCase))
-                return string.Empty;
-            AugmentationRecord augmentation = null;
-            try { augmentation = Data.Items.GetSimpleRecord<AugmentationRecord>(augmentationId, true); }
-            catch { }
-            if (augmentation == null) return string.Empty;
-            // Exact per-record references take precedence when the game exposes one.
-            string[] explicitMembers = new string[]
+            ArmWeaponsByAugmentation.Clear();
+            AugmentationsByArmWeapon.Clear();
+        }
+
+        // AugmentationSystem installs WoundSlotIds; the resulting body slot owns
+        // BareHandWeapon. Item names do not describe this many-to-many relation.
+        // Called inside the existing item warmup, never from a hover or frame loop.
+        private static void IndexArmWeaponLinks(string augmentationId)
+        {
+            if (Data.Items == null || Data.WoundSlots == null ||
+                string.IsNullOrEmpty(augmentationId)) return;
+            AugmentationRecord augmentation = Data.Items.GetSimpleRecord<AugmentationRecord>(augmentationId, true);
+            if (augmentation == null || augmentation.WoundSlotIds == null) return;
+            foreach (string slotId in augmentation.WoundSlotIds)
             {
-                "InstalledWeaponId", "BuiltInWeaponId", "NaturalWeaponId", "WeaponId"
-            };
-            for (int i = 0; i < explicitMembers.Length; i++)
-            {
-                string linked = GetStringMember(augmentation, explicitMembers[i]);
-                if (string.IsNullOrEmpty(linked) || !KnownItemIds.Contains(linked)) continue;
-                try
-                {
-                    if (Data.Items.GetSimpleRecord<WeaponRecord>(linked, true) != null)
-                        return linked;
-                }
-                catch { }
+                if (string.IsNullOrEmpty(slotId)) continue;
+                WoundSlotRecord slot = Data.WoundSlots.GetRecord(slotId, true);
+                string weaponId = slot == null ? string.Empty : slot.BareHandWeapon;
+                if (string.IsNullOrEmpty(weaponId) || !KnownItemIds.Contains(weaponId) ||
+                    Data.Items.GetSimpleRecord<WeaponRecord>(weaponId, true) == null) continue;
+                List<string> existing;
+                if (ArmWeaponsByAugmentation.TryGetValue(augmentationId, out existing) &&
+                    existing.Contains(weaponId)) continue;
+                AddToList(ArmWeaponsByAugmentation, augmentationId, weaponId);
+                AddToList(AugmentationsByArmWeapon, weaponId, augmentationId);
             }
-            string candidate = "nature_" + augmentationId;
-            if (!KnownItemIds.Contains(candidate)) return string.Empty;
-            try
-            {
-                return Data.Items.GetSimpleRecord<WeaponRecord>(candidate, true) == null
-                    ? string.Empty : candidate;
-            }
-            catch { return string.Empty; }
         }
 
         private static void AppendOverviewArmWeaponLinks(string itemId)
@@ -47,20 +47,19 @@ namespace ItemIntelligence
                 Data.Items == null || string.IsNullOrEmpty(itemId)) return;
             string id = ResolveStaticRelationItemId(itemId);
             if (string.IsNullOrEmpty(id)) id = itemId;
-            string weapon = ValidatedLimbWeapon(id);
-            if (!string.IsNullOrEmpty(weapon))
+            List<string> linked;
+            if (ArmWeaponsByAugmentation.TryGetValue(id, out linked) && linked.Count > 0)
             {
                 BrowserLines.Add(BrowserLine.Section(Ui("ui.arm_builtin_weapon")));
-                BrowserLines.Add(ItemWithProductionChip(weapon, string.Empty));
-                return;
+                foreach (string weaponId in linked)
+                    BrowserLines.Add(ItemWithProductionChip(weaponId, string.Empty));
             }
-            if (!id.StartsWith("nature_", StringComparison.OrdinalIgnoreCase)) return;
-            string parent = id.Substring("nature_".Length);
-            if (!KnownItemIds.Contains(parent) ||
-                !string.Equals(ValidatedLimbWeapon(parent), id,
-                    StringComparison.OrdinalIgnoreCase)) return;
-            BrowserLines.Add(BrowserLine.Section(Ui("ui.arm_source_augmentation")));
-            BrowserLines.Add(ItemWithProductionChip(parent, string.Empty));
+            if (AugmentationsByArmWeapon.TryGetValue(id, out linked) && linked.Count > 0)
+            {
+                BrowserLines.Add(BrowserLine.Section(Ui("ui.arm_source_augmentation")));
+                foreach (string augmentationId in linked)
+                    BrowserLines.Add(ItemWithProductionChip(augmentationId, string.Empty));
+            }
         }
     }
 }

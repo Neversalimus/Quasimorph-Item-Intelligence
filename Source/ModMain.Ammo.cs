@@ -90,6 +90,7 @@ namespace ItemIntelligence
         {
             WeaponsByItem.Clear();
             CompatibleWeaponsByAmmo.Clear();
+            ResetArmWeaponLinks();
             WeaponModeIconsByRawId.Clear();
             WeaponModeRecordsById.Clear();
             WeaponModeStatsByRawId.Clear();
@@ -161,6 +162,7 @@ namespace ItemIntelligence
         {
             WeaponsByItem.Clear();
             CompatibleWeaponsByAmmo.Clear();
+            ResetArmWeaponLinks();
             WeaponModeIconsByRawId.Clear();
             WeaponModeRecordsById.Clear();
             WeaponModeStatsByRawId.Clear();
@@ -276,6 +278,7 @@ namespace ItemIntelligence
 
             List<object> graph = BuildRelevantItemGraph(record, 4, 72);
             AnalyzeDatadiskGraph(itemId, graph);
+            IndexArmWeaponLinks(itemId);
 
             object weaponPayload = null;
             object ammoPayload = null;

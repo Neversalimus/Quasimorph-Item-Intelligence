@@ -1,4 +1,4 @@
-﻿@language=German;german;Deutsch;de;de-DE
+@language=German;german;Deutsch;de;de-DE
 catalog.compact.all	ALLE
 catalog.compact.ammo	MUN.
 catalog.compact.armor	RÜST.
@@ -686,3 +686,7 @@ ui.mode_status_effect	Statuseffekt
 ui.mode_trait_wounding	Verwundend
 ui.arm_builtin_weapon	Waffe nach Einbau
 ui.arm_source_augmentation	Zugehörige Augmentation
+ui.upgrade_uses	FÜR VERBESSERUNGEN VERWENDET
+ui.upgrade_genomes	Genomverbesserungen
+ui.upgrade_uses_note	Kann auch nach Abschluss der Schiffsforschung benötigt werden. Die Menge hängt von den gewählten Verbesserungen ab und ist nicht im verbleibenden Forschungsbedarf enthalten.
+ui.mode_no_effects	Keine

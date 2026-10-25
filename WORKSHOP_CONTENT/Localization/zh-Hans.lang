@@ -1,4 +1,4 @@
-﻿@language=ChineseSimp;ChineseSimplified;SimplifiedChinese;schinese;zhcn;zh-CN;zh-Hans;简体中文;Chinese (Simplified);Simplified Chinese
+@language=ChineseSimp;ChineseSimplified;SimplifiedChinese;schinese;zhcn;zh-CN;zh-Hans;简体中文;Chinese (Simplified);Simplified Chinese
 catalog.compact.all	全部
 catalog.compact.ammo	弹药
 catalog.compact.armor	护甲
@@ -686,3 +686,7 @@ ui.mode_status_effect	状态效果
 ui.mode_trait_wounding	致伤
 ui.arm_builtin_weapon	安装后武器
 ui.arm_source_augmentation	关联义体
+ui.upgrade_uses	用于升级
+ui.upgrade_genomes	基因组升级
+ui.upgrade_uses_note	即使已完成飞船研究，仍可能需要此材料。所需数量取决于选择的升级，不计入剩余研究所需材料总量。
+ui.mode_no_effects	无

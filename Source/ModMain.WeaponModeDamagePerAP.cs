@@ -82,7 +82,7 @@ namespace ItemIntelligence
             if (WeaponModeDamagePerApMisses.Contains(modeKey)) return false;
 
             WeaponRecord weapon = ResolveWeaponModeWeaponRecord(modeKey);
-            if (weapon == null)
+            if (weapon == null || IsGrenadeLauncherRecord(weapon))
             {
                 WeaponModeDamagePerApMisses.Add(modeKey);
                 return false;

@@ -4,11 +4,13 @@
 
 [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3780078201) · [Downloads](https://github.com/Neversalimus/Quasimorph-Item-Intelligence/releases) · [Changelog](CHANGELOG.md)
 
-This branch contains **1.7.43.1** for **Quasimorph 1.0.4.590s.969afc6**.
+This branch contains **1.7.43.2-test3** for **Quasimorph 1.0.4.590s.969afc6**, for DEV validation before a stable release.
+
+This build combines the weapon-report fixes and the previously separate genome-upgrade material metadata. Grenade launchers use their actual grenade allowlists; weapon modes show their own damage types, ammo traits and status effects; augmentations link to installed weapons in both directions through body-slot records. See [test build notes](Release/Notes-v1.7.43.2-test3.md).
 
 Compatibility for the new build is enabled through audited feature-owned gates. Unknown future builds continue to fail closed for exact calculations until their contracts are reviewed.
 
-This release adds optional verbose logging. Normal mode keeps `Player.log` concise while preserving warnings, errors and a small set of lifecycle/status messages; detailed runtime, UI, index, navigation and performance diagnostics can be enabled through **MCM → Logging → Verbose logging**.
+Optional verbose logging keeps `Player.log` concise in normal mode while preserving warnings, errors and a small set of lifecycle/status messages; detailed runtime, UI, index, navigation and performance diagnostics can be enabled through **MCM → Logging → Verbose logging**.
 
 ## Features
 
@@ -61,12 +63,12 @@ A Windows build requires **PowerShell 7** and a local Quasimorph installation. F
 pwsh -NoProfile -ExecutionPolicy Bypass -File .\Install.ps1 -GameRoot "C:\Program Files (x86)\Steam\steamapps\common\Quasimorph"
 ```
 
-Use your actual game path. This compiles the stable source against the installed game and stages the files in `C:\QM_Workshop\ItemIntelligence`. The installer prints the command for updating the existing public Workshop item. It does not install over a subscribed copy or upload to Steam. Game assemblies and compiled binaries are not stored in this repository.
+Use your actual game path. This compiles the test source against the installed game and stages the files in `C:\QM_Workshop\ItemIntelligence_DEV`. The installer prints the command for updating the existing DEV Workshop item. It does not install over a subscribed copy or upload to Steam. Game assemblies and compiled binaries are not stored in this repository.
 
 Run the source contracts and behavior tests without game files:
 
 ```powershell
-pwsh -NoProfile -File .\BUILD_AND_STAGE.ps1 -Mode RELEASE -ContractsOnly
+pwsh -NoProfile -File .\BUILD_AND_STAGE.ps1 -Mode TEST -ContractsOnly
 ```
 
 Maintainers can use the [release workflow](Release/README.md) to prepare and publish a new version.

@@ -1,4 +1,4 @@
-﻿@language=Spanish;Español;Espanol;es;es-ES
+@language=Spanish;Español;Espanol;es;es-ES
 catalog.compact.all	TODO
 catalog.compact.ammo	MUNIC.
 catalog.compact.armor	ARMAD.
@@ -682,3 +682,7 @@ ui.mode_status_effect	Efecto de estado
 ui.mode_trait_wounding	Causa heridas
 ui.arm_builtin_weapon	Arma al instalar
 ui.arm_source_augmentation	Aumento asociado
+ui.upgrade_uses	SE USA EN MEJORAS
+ui.upgrade_genomes	Mejoras de genomas
+ui.upgrade_uses_note	Puede seguir siendo necesario después de completar la investigación de la nave. La cantidad depende de las mejoras elegidas y no se incluye en el total de investigación pendiente.
+ui.mode_no_effects	Ninguno

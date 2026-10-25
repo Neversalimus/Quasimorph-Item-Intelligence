@@ -442,7 +442,7 @@ foreach ($methodName in $weaponModeScatterOwnershipContracts) {
 $browserPresentationOwnershipContracts = @(
     'EnsureInspectorPanel','CreateBrowserSearchUi','CreateBrowserSearchDropdown',
     'CreateBrowserText','CreateBrowserPageScrollbar','RenderBrowser',
-    'UpdateBrowserChromeLocalization','UpdateBrowserTabs','BuildBrowserMagnum',
+    'UpdateBrowserChromeLocalization','UpdateBrowserTabs','BuildBrowserMagnumResearch',
     'BuildBrowserRecipes','ConfigureInspectorText'
 )
 foreach ($methodName in $browserPresentationOwnershipContracts) {
