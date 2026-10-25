@@ -235,6 +235,9 @@ namespace ItemIntelligence
             string rawDamageType = GetStringMember(ammo, "DmgType").Trim();
             if (string.IsNullOrEmpty(rawDamageType))
             {
+                if (validIntrinsicType)
+                    return CacheIntrinsicWeaponModeDamageType(modeKey, weapon, intrinsicType,
+                        out label, out value);
                 WeaponModeDamageTypeMisses.Add(modeKey);
                 return false;
             }
