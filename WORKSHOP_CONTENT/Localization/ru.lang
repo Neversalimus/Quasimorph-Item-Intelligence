@@ -689,3 +689,8 @@ ui.view_expand	Большое окно
 ui.view_window	Обычное окно
 ui.view_zoom	Масштаб
 ui.view_save_failed	Не удалось сохранить настройки окна.
+ui.mode_effect	Свойство режима
+ui.mode_status_effect	Эффект состояния
+ui.mode_trait_wounding	Ранящий
+ui.arm_builtin_weapon	Оружие после установки
+ui.arm_source_augmentation	Устанавливаемая конечность
