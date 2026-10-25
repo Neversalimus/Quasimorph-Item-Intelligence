@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.7.43.2 — 2026-10-25
+
+- Added recurring upgrade uses to Magnum and direct links from Overview: ranged and melee weapons, all armor slots, clone genomes, class modifications, pact rituals, implants and augmentations.
+- Added links from upgrade materials to the equipment that uses them. Individual upgrade recipes override standard material lists, and upgrade uses remain visible after ship research is complete.
+- Corrected grenade-launcher ammunition links using the game's reload restrictions, including Shaker. Initial payloads do not override reload compatibility.
+- Fixed default weapon-mode damage types and positional ammo overrides; mode tooltips now show their own traits and status effects.
+- Linked augmentation items to their installed weapons in both directions through body-slot records.
+- Fixed the first browser hotkey before hovering an item: it opens the catalog in space and after a direct mission resume, including custom key bindings.
+- Added all eight interface translations for the new upgrade information. Research totals remain separate from variable upgrade costs.
+
 ## v1.7.43.1 — 2026-10-06
 
 - Added exact damage-type labels to existing weapon-mode hover tooltips.
