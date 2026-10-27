@@ -25,7 +25,7 @@ namespace ItemIntelligence
         {
             int previousTab = BrowserNavigation.Tab;
             bool previousReadability = EnhancedReadability;
-            BrowserNavigation.Tab = (int)BrowserTabId.Overview;
+            BrowserNavigation.SwitchTab((int)BrowserTabId.Overview);
             EnhancedReadability = false;
             BrowserRowRoots[0] = new GameObject();
             BrowserRowLeft[0] = new TMP_Text();
@@ -53,12 +53,12 @@ namespace ItemIntelligence
                 "unrecognized row kind fails closed");
             foreach (BrowserTabId tab in Enum.GetValues(typeof(BrowserTabId)))
             {
-                BrowserNavigation.Tab = (int)tab;
+                BrowserNavigation.SwitchTab((int)tab);
                 CaptureBrowserRowRenderStamp(0, baseline, "en");
                 CheckReadability(CanReuseBrowserRowRender(0, baseline, "en") == (tab == BrowserTabId.Overview),
                     "reuse policy for tab " + tab);
             }
-            BrowserNavigation.Tab = (int)BrowserTabId.Overview;
+            BrowserNavigation.SwitchTab((int)BrowserTabId.Overview);
             foreach (BrowserLeftContentKind content in Enum.GetValues(typeof(BrowserLeftContentKind)))
                 CheckReadability(IsBrowserRowRenderReuseSafe(ReuseRow(content: content)) ==
                     (content == BrowserLeftContentKind.Text), "asynchronous content is not reusable: " + content);
@@ -97,9 +97,9 @@ namespace ItemIntelligence
                 ReuseRow(current: "current"), ReuseRow(state: "state"), ReuseRow(icon: "icon"),
                 ReuseRow(arrival: BrowserTradeArrivalState.ComparisonUnavailable) })
                 CheckReadability(!BrowserRowRenderStamps[0].Matches(changed, "en"), "changed stamp input requires rendering");
-            BrowserNavigation.Tab = (int)BrowserTabId.Magnum;
+            BrowserNavigation.SwitchTab((int)BrowserTabId.Magnum);
             CheckReadability(!BrowserRowRenderStamps[0].Matches(baseline, "en"), "stamp includes current tab");
-            BrowserNavigation.Tab = (int)BrowserTabId.Overview;
+            BrowserNavigation.SwitchTab((int)BrowserTabId.Overview);
             CheckReadability(!BrowserRowRenderStamps[0].Matches(null, "en"), "stamp rejects missing row");
             CaptureBrowserRowRenderStamp(0, baseline, null);
             CheckReadability(CanReuseBrowserRowRender(0, baseline, ""), "missing language normalizes consistently");
@@ -135,7 +135,7 @@ namespace ItemIntelligence
             CheckReadability(!CanReuseBrowserRowRender(0, baseline, "en"), "invalidation clears captured rendering");
             BeginBrowserRowRenderReusePass();
             CheckReadability(_browserRowReuseHitsThisPass == 0, "new pass resets hit counter");
-            BrowserNavigation.Tab = previousTab; EnhancedReadability = previousReadability;
+            BrowserNavigation.SwitchTab(previousTab); EnhancedReadability = previousReadability;
         }
     }
 }

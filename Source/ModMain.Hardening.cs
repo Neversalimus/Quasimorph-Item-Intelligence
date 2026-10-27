@@ -255,7 +255,7 @@ namespace ItemIntelligence
                     (_browserCatalogSortDescending ? ":Descending" : ":Ascending"));
                 lines.Add("CatalogFavorites=" + BrowserFavoriteItemIds.Count.ToString(CultureInfo.InvariantCulture));
                 lines.Add("CatalogRecent=" + BrowserRecentItemIds.Count.ToString(CultureInfo.InvariantCulture));
-                lines.Add("BrowserBackDepth=" + BrowserNavigation.History.Count.ToString(CultureInfo.InvariantCulture));
+                lines.Add("BrowserBackDepth=" + BrowserNavigation.HistoryCount.ToString(CultureInfo.InvariantCulture));
                 lines.Add("GameLanguage=" + (UiText.Language ?? string.Empty));
                 lines.Add("LocalizationFile=" + (UiText.FileName ?? string.Empty));
                 lines.Add("LocalizationEnglishKeys=" + UiText.EnglishCount.ToString(CultureInfo.InvariantCulture));

@@ -30,6 +30,9 @@ $whole = foreach ($file in @('BrowserReadability','BrowserRowRenderCache','Brows
         [IO.File]::ReadAllText((Join-Path $SourceRoot ('Source/ModMain.' + $file + '.cs'))))
     $tree.GetRoot().Members | ForEach-Object ToFullString
 }
+$whole += ([Microsoft.CodeAnalysis.CSharp.CSharpSyntaxTree]::ParseText(
+    [IO.File]::ReadAllText((Join-Path $SourceRoot 'Source/BrowserNavigationSessionState.cs'))).GetRoot().Members |
+    ForEach-Object ToFullString) -join "`n"
 $members = @(
     Read-Members 'Configuration' 'VariableDeclaratorSyntax' @('_configLoaded','EnableItemIntelligence',
         'QuickIntelligence','InspectorEnabled','ShowInspectorHint','ShowInterfaceIcons','EnhancedReadability',
@@ -39,7 +42,7 @@ $members = @(
     Read-Members 'Configuration' 'MethodDeclarationSyntax' @('EnsureConfigLoaded','ApplyConfigValue',
         'ApplyConfigTextValue','SaveConfig','OnMcmConfigSaved','ApplyMcmBool','TryReadMcmBool','TryReadMcmString')
     Read-Members 'BrowserState' 'VariableDeclaratorSyntax' @('BrowserRowCapacity','BrowserCatalogRowCapacity',
-        'BrowserTabCount','BrowserVisibleRows','BrowserRowLeft','BrowserRowRight','BrowserRowRoots','BrowserRowButtons',
+        'BrowserTabCount','BrowserNavigationHistoryLimit','BrowserVisibleRows','BrowserRowLeft','BrowserRowRight','BrowserRowRoots','BrowserRowButtons',
         'BrowserLines','BrowserNavigation','_browserHelpText','_inspectorOpen','_inspectorItemId')
     Read-Members 'BrowserUiDirtySuppression' 'MethodDeclarationSyntax' @('SetBrowserFontSizeIfChanged',
         'SetBrowserGraphicColorIfChanged','SetBrowserFontStyleIfChanged','SetBrowserActiveIfChanged',

@@ -4,9 +4,9 @@
 
 [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3780078201) · [Downloads](https://github.com/Neversalimus/Quasimorph-Item-Intelligence/releases) · [Changelog](CHANGELOG.md)
 
-This branch contains development build **1.7.43.4-test1** for **Quasimorph 1.0.4.590s.969afc6**.
+This branch contains development build **1.7.43.4-test2** for **Quasimorph 1.0.4.590s.969afc6**.
 
-This build isolates ship-stock polling from the shared UI state and adds a common local/CI check runner. The published stable release is [1.7.43.3](https://github.com/Neversalimus/Quasimorph-Item-Intelligence/releases/tag/v1.7.43.3).
+This build isolates ship-stock polling and browser navigation from the shared UI state and adds a common local/CI check runner. The published stable release is [1.7.43.3](https://github.com/Neversalimus/Quasimorph-Item-Intelligence/releases/tag/v1.7.43.3).
 
 Compatibility for the new build is enabled through audited feature-owned gates. Unknown future builds continue to fail closed for exact calculations until their contracts are reviewed.
 
@@ -81,6 +81,8 @@ Language metadata lives in `Source/LanguageCatalog.cs`. The UI selector, loader,
 `ReflectionDataReader` owns cached reflection metadata and exposes read-only member snapshots. Game values are read on every request. Metadata remains valid for the lifetime of the loaded game assemblies, so returning to the menu does not rescan it.
 
 `ShipCargoMonitor` owns the selected item, last known count and polling deadline for one inspection. Its reader and clock input are supplied by the UI adapter; it retains no game or UI objects. Its tests compile it independently with System only, then exercise the actual Overview adapter against game fixtures.
+
+`BrowserNavigationSessionState` owns bounded back history, the selected tab and per-tab scroll. Its collections remain private; the UI uses explicit navigation operations. Back selects an immutable snapshot, closes the old item's overlays and then restores the snapshot. Tests compile the state owner without game/UI fixtures and execute the production item, back, tab, wheel and loot-section adapters separately.
 
 Run the complete check set, including deliberately broken temporary source copies:
 

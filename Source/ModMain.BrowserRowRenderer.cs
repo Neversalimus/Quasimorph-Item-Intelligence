@@ -18,10 +18,7 @@ namespace ItemIntelligence
             BeginBrowserRowRenderReusePass();
             string renderLanguage = GetLanguageSignature() + "|" + GetUiLanguageSignature();
             int total = BrowserLines.Count;
-            int maxOffset = Math.Max(0, total - BrowserVisibleRows);
-            BrowserNavigation.ScrollOffset = Mathf.Clamp(BrowserNavigation.ScrollOffset, 0, maxOffset);
-            if (BrowserNavigation.Tab >= 0 && BrowserNavigation.Tab < BrowserNavigation.ScrollOffsets.Length)
-                BrowserNavigation.ScrollOffsets[BrowserNavigation.Tab] = BrowserNavigation.ScrollOffset;
+            BrowserNavigation.ClampScrollOffset(total, BrowserVisibleRows);
 
             int startIndex = BrowserNavigation.ScrollOffset;
             for (int i = 0; i < BrowserRowCapacity; i++)

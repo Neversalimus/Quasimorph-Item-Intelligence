@@ -934,9 +934,7 @@ namespace ItemIntelligence
             if (!_inspectorOpen || _browserCatalogOpen) return;
             int next = BrowserOffsetFromScrollbarValue(value, BrowserLines.Count, BrowserVisibleRows);
             if (next == BrowserNavigation.ScrollOffset) return;
-            BrowserNavigation.ScrollOffset = next;
-            if (BrowserNavigation.Tab >= 0 && BrowserNavigation.Tab < BrowserNavigation.ScrollOffsets.Length)
-                BrowserNavigation.ScrollOffsets[BrowserNavigation.Tab] = next;
+            BrowserNavigation.SetScrollOffset(next);
             RenderBrowserRowsOnly();
         }
 
@@ -1084,7 +1082,7 @@ namespace ItemIntelligence
                     if (ShowSources) BuildBrowserLootSources(itemId);
                     break;
                 default:
-                    BrowserNavigation.Tab = (int)BrowserTabId.Overview;
+                    BrowserNavigation.StartItem((int)BrowserTabId.Overview);
                     BuildBrowserOverview(itemId);
                     break;
             }
@@ -1092,10 +1090,7 @@ namespace ItemIntelligence
             WrapBrowserNoteRows();
             if (BrowserLinesNeedRecipeContextUi()) EnsureBrowserRecipeContextUi();
 
-            int maxOffset = Math.Max(0, BrowserLines.Count - BrowserVisibleRows);
-            BrowserNavigation.ScrollOffset = Mathf.Clamp(BrowserNavigation.ScrollOffset, 0, maxOffset);
-            if (BrowserNavigation.Tab >= 0 && BrowserNavigation.Tab < BrowserNavigation.ScrollOffsets.Length)
-                BrowserNavigation.ScrollOffsets[BrowserNavigation.Tab] = BrowserNavigation.ScrollOffset;
+            BrowserNavigation.ClampScrollOffset(BrowserLines.Count, BrowserVisibleRows);
             RenderBrowserRowsOnly();
             UpdateLootProgressUi();
             PositionInspectorPanel();

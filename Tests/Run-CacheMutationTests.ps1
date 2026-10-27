@@ -33,7 +33,23 @@ $cases = @(
        Error='another item cannot poll or delay the selected item' },
     @{ File='ShipCargoMonitor.cs'; Test='Run-ShipCargoTests.ps1';
        Before='if (next == Count) return false;'; After='/* intentionally redraw unchanged stock */';
-       Error='unchanged stock does not request rendering' }
+       Error='unchanged stock does not request rendering' },
+    @{ File='BrowserNavigationSessionState.cs'; Test='Run-BrowserNavigationTests.ps1';
+       Before='ScrollOffset = scrollOffsets[Tab];'; After='ScrollOffset = 0;';
+       Error='switching tabs restores each saved offset' },
+    @{ File='BrowserNavigationSessionState.cs'; Test='Run-BrowserNavigationTests.ps1';
+       Before='history.RemoveAt(0);'; After='history.RemoveAt(history.Count - 1);';
+       Error='history restores bounded newest-first snapshots' },
+    @{ File='BrowserNavigationSessionState.cs'; Test='Run-BrowserNavigationTests.ps1';
+       Before='Array.Clear(scrollOffsets, 0, scrollOffsets.Length);'; After='/* intentionally retain tab offsets */';
+       Error='new inspection clears per-tab offsets' },
+    @{ File='BrowserNavigationSessionState.cs'; Test='Run-BrowserNavigationTests.ps1';
+       Before='if (!isKnownItem(entry.ItemId)) continue;';
+       After='if (isKnownItem(entry.ItemId) && entry.ItemId == null) continue;';
+       Error='back skips items missing from the current game data' },
+    @{ File='BrowserNavigationSessionState.cs'; Test='Run-BrowserNavigationTests.ps1';
+       Before='SetScrollOffset(0);'; After='history.Clear(); SetScrollOffset(0);';
+       Error='new item resets its current tab without discarding back history' }
 )
 New-Item -ItemType Directory -Path $temp | Out-Null
 try {

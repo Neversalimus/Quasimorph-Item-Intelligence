@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.7.43.4-test2 — 2026-10-28
+
+- Moved browser back history, tab selection and per-tab scroll into an independent component with private collections and explicit lifecycle operations.
+- Kept native overlay closure ahead of Back restoration, Trade's same-tab price refresh and the clicked loot-header anchor. Added direct state tests and production adapter cases for these paths.
+- Replaced the loot-anchor source-spelling check with a behavior test and added regression-sensitivity cases for navigation state.
+
 ## v1.7.43.4-test1 — 2026-10-28
 
 - Moved the inspected ship-stock snapshot and polling schedule into an independent component. The Overview adapter keeps UI access; the monitor retains no game or Unity objects.
