@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.7.43.4-test3 — 2026-10-28
+
+- Reuse the catalog's sorted item IDs when its candidates, localized-name revision, culture and sort settings are unchanged. Filters still read current data; Tech sorting always uses current record values.
+- Construct the browser and catalog while inactive and keep unused pooled item rows inactive, avoiding early Unity/TMP enable callbacks.
+- Add direct cache and production catalog-refresh tests, regression-sensitivity cases and per-stage opening diagnostics.
+
 ## v1.7.43.4-test2 — 2026-10-28
 
 - Moved browser back history, tab selection and per-tab scroll into an independent component with private collections and explicit lifecycle operations.

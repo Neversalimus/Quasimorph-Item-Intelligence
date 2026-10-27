@@ -228,6 +228,7 @@ namespace ItemIntelligence
         // Live GameObject/pool teardown remains in BrowserUI lifecycle methods.
         private static void ResetBrowserIndexState()
         {
+            BrowserCatalogSort.Reset();
             BrowserSearchIndexItemIds.Clear();
             BrowserSearchDisplayNames.Clear();
             BrowserSearchNormalizedNames.Clear();

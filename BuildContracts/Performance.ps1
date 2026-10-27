@@ -50,6 +50,7 @@ $hardeningText = [IO.File]::ReadAllText((Join-Path $sourceDir 'ModMain.Hardening
 # Compile all production guards and count setter calls over repeated redraws,
 # changed values, pooled-object reuse, and missing/destroyed targets.
 & (Join-Path $root 'Tests/Run-UiWriteTests.ps1') -SourceRoot $root
+& (Join-Path $root 'Tests/Run-CatalogSortTests.ps1') -SourceRoot $root
 # Production localization tests count backend calls over repeated lookups, change
 # the game language, and reset the session; cache field spelling is not a contract.
 foreach ($token in @('ItemDisplayCache','MagnumDisplayCache')) {

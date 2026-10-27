@@ -730,12 +730,12 @@ namespace ItemIntelligence
                 float perfRenderMs = (Time.realtimeSinceStartup - perfStageStart) * 1000f;
                 float perfTotalMs = (Time.realtimeSinceStartup - perfTotalStart) * 1000f;
                 ReportBrowserPerformanceBudget(itemId, firstPanelBuild, perfTotalMs, perfRenderMs);
-                if (firstPanelBuild)
+                if (VerboseLogging)
                 {
                     float knownStagesMs = targetResolveMs + perfIndexesMs + perfPanelMs + perfRenderMs;
                     float perfMiscMs = Mathf.Max(0f, perfTotalMs - knownStagesMs);
                     float coreBuildMs = _lastCoreIndexBuildFrame == Time.frameCount ? _lastCoreIndexBuildMs : 0f;
-                    VerboseLog("[ItemIntelligence][FirstOpenPerf] targetResolve=" +
+                    VerboseLog("[ItemIntelligence][FirstOpenPerf] cold=" + firstPanelBuild + ", targetResolve=" +
                         targetResolveMs.ToString("0.0", CultureInfo.InvariantCulture) +
                         "ms, coreBuild=" + coreBuildMs.ToString("0.0", CultureInfo.InvariantCulture) +
                         "ms, runtimeReady=" + perfIndexesMs.ToString("0.0", CultureInfo.InvariantCulture) +

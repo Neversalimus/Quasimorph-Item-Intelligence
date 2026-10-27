@@ -111,6 +111,8 @@ namespace ItemIntelligence
             ResetBrowserInterfaceIconPresentation();
             InvalidateBrowserRowRenderCache();
             _inspectorRoot = new GameObject("QII_ItemBrowser");
+            // Configure children before enabling their Unity/TMP lifecycle callbacks.
+            _inspectorRoot.SetActive(false);
             _inspectorRoot.transform.SetParent(_inspectorCanvas.transform, false);
             _inspectorRoot.transform.localScale = Vector3.one;
             _inspectorRoot.transform.SetAsLastSibling();
@@ -264,6 +266,7 @@ namespace ItemIntelligence
             for (int i = 0; i < BrowserRowCapacity; i++)
             {
                 GameObject row = new GameObject("BrowserRow_" + i.ToString(CultureInfo.InvariantCulture));
+                row.SetActive(false);
                 row.transform.SetParent(_inspectorRoot.transform, false);
                 RectTransform rowRt = row.AddComponent<RectTransform>();
                 rowRt.anchorMin = new Vector2(0f, 1f);

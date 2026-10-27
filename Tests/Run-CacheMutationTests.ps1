@@ -49,7 +49,17 @@ $cases = @(
        Error='back skips items missing from the current game data' },
     @{ File='BrowserNavigationSessionState.cs'; Test='Run-BrowserNavigationTests.ps1';
        Before='SetScrollOffset(0);'; After='history.Clear(); SetScrollOffset(0);';
-       Error='new item resets its current tab without discarding back history' }
+       Error='new item resets its current tab without discarding back history' },
+    @{ File='CatalogSortCache.cs'; Test='Run-CatalogSortTests.ps1';
+       Before='revision == nextRevision &&'; After='true &&';
+       Error='name revision invalidates ordering' },
+    @{ File='CatalogSortCache.cs'; Test='Run-CatalogSortTests.ps1';
+       Before='!string.Equals(sourceOrder[i], items[i], StringComparison.Ordinal)';
+       After='!string.Equals(items[i], items[i], StringComparison.Ordinal)';
+       Error='same-size membership change invalidates ordering' },
+    @{ File='ModMain.BrowserCatalog.cs'; Test='Run-CatalogSortTests.ps1';
+       Before='_browserCatalogSortMode != BrowserCatalogSortMode.Tech'; After='true';
+       Error='Tech changes bypass sort cache without index revision' }
 )
 New-Item -ItemType Directory -Path $temp | Out-Null
 try {

@@ -181,6 +181,7 @@ namespace ItemIntelligence
         private static void CreateBrowserCatalogUi()
         {
             _browserCatalogPanel = new GameObject("ItemCatalogPanel");
+            _browserCatalogPanel.SetActive(false);
             _browserCatalogPanel.transform.SetParent(_inspectorRoot.transform, false);
             RectTransform panelRt = _browserCatalogPanel.AddComponent<RectTransform>();
             panelRt.anchorMin = new Vector2(0f, 1f);

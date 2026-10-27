@@ -67,6 +67,7 @@ namespace ItemIntelligence
             if (!rebuild) return;
 
             _browserSearchIndexLanguage = language;
+            BrowserCatalogSort.Reset();
             BrowserSearchIndexItemIds.Clear();
             BrowserSearchDisplayNames.Clear();
             BrowserSearchNormalizedNames.Clear();

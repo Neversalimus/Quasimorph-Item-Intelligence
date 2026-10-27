@@ -4,9 +4,9 @@
 
 [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3780078201) · [Downloads](https://github.com/Neversalimus/Quasimorph-Item-Intelligence/releases) · [Changelog](CHANGELOG.md)
 
-This branch contains development build **1.7.43.4-test2** for **Quasimorph 1.0.4.590s.969afc6**.
+This branch contains development build **1.7.43.4-test3** for **Quasimorph 1.0.4.590s.969afc6**.
 
-This build isolates ship-stock polling and browser navigation from the shared UI state and adds a common local/CI check runner. The published stable release is [1.7.43.3](https://github.com/Neversalimus/Quasimorph-Item-Intelligence/releases/tag/v1.7.43.3).
+This build isolates ship-stock polling and browser navigation from the shared UI state and adds a common local/CI check runner. It also reuses unchanged catalog ordering and reduces work when creating the browser. The published stable release is [1.7.43.3](https://github.com/Neversalimus/Quasimorph-Item-Intelligence/releases/tag/v1.7.43.3).
 
 Compatibility for the new build is enabled through audited feature-owned gates. Unknown future builds continue to fail closed for exact calculations until their contracts are reviewed.
 

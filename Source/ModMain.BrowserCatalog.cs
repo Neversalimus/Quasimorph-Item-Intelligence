@@ -393,8 +393,11 @@ namespace ItemIntelligence
             return _browserCatalogSortDescending ? -result : result;
         }
 
+        private static readonly CatalogSortCache BrowserCatalogSort = new CatalogSortCache();
+
         private static void RefreshBrowserCatalog()
         {
+            long refreshStarted = System.Diagnostics.Stopwatch.GetTimestamp();
             if (!IsBrowserCatalogDataFilterAvailable(_browserCatalogDataFilter))
                 _browserCatalogDataFilter = BrowserCatalogDataFilter.Any;
 
@@ -421,10 +424,26 @@ namespace ItemIntelligence
                 BrowserCatalogFilteredItemIds.Add(itemId);
             }
 
+            long sortStarted = System.Diagnostics.Stopwatch.GetTimestamp();
+            bool sortReused = false;
             if (_browserCatalogScope != BrowserCatalogScope.Recent)
-                BrowserCatalogFilteredItemIds.Sort(CompareBrowserCatalogItems);
+                sortReused = BrowserCatalogSort.Sort(BrowserCatalogFilteredItemIds, CompareBrowserCatalogItems,
+                    _browserSearchIndexRevision, (int)_browserCatalogSortMode, _browserCatalogSortDescending,
+                    CultureInfo.CurrentCulture.CompareInfo.Name,
+                    _browserCatalogSortMode != BrowserCatalogSortMode.Tech);
 
+            long rowsStarted = System.Diagnostics.Stopwatch.GetTimestamp();
             RenderBrowserCatalogRows();
+            if (VerboseLogging)
+            {
+                long finished = System.Diagnostics.Stopwatch.GetTimestamp();
+                double msPerTick = 1000d / System.Diagnostics.Stopwatch.Frequency;
+                VerboseLog("[ItemIntelligence][CatalogPerf] items=" + BrowserCatalogFilteredItemIds.Count +
+                    ", filter=" + ((sortStarted - refreshStarted) * msPerTick).ToString("0.00", CultureInfo.InvariantCulture) +
+                    "ms, sort=" + ((rowsStarted - sortStarted) * msPerTick).ToString("0.00", CultureInfo.InvariantCulture) +
+                    "ms, rows=" + ((finished - rowsStarted) * msPerTick).ToString("0.00", CultureInfo.InvariantCulture) +
+                    "ms, reused=" + sortReused + ".");
+            }
         }
 
         private static void SelectBrowserCatalogItem(string itemId)
