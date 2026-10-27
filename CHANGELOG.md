@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.7.43.4-test1 — 2026-10-28
+
+- Moved the inspected ship-stock snapshot and polling schedule into an independent component. The Overview adapter keeps UI access; the monitor retains no game or Unity objects.
+- Added direct lifecycle tests and save-switch integration cases, plus regression-sensitivity checks for stale selection and unnecessary refreshes.
+- Added one local check runner and GitHub Actions configuration for source, behavior and mutation checks without game files or publication credentials.
+
 ## v1.7.43.3 — 2026-10-28
 
 - Added **On ship** at the top of every item’s Overview, so you can check your stock when choosing mission loot. Counts update while the page is open.

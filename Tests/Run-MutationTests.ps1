@@ -4,7 +4,8 @@ param()
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 $root = Split-Path -Parent $PSScriptRoot
-$temp = Join-Path ([IO.Path]::GetTempPath()) ('qii-mutation-tests-' + [guid]::NewGuid().ToString('N'))
+$identity = 'qii-mutation-tests-' + [guid]::NewGuid().ToString('N')
+$temp = [IO.Path]::GetFullPath((Join-Path ([IO.Path]::GetTempPath()) $identity))
 $cases = @(
     @{ File = 'ModMain.LootProbabilityMath.cs'; Before = 'return (1.0 - fraction) * pFloor + fraction * pCeil;'; After = 'return (1.0 - fraction) * pFloor + fraction * pCeil + 0.25;'; Error = 'fractional bonus probability' },
     @{ File = 'ModMain.ProductionUnlockRuntime.cs'; Before = ' + "|" + relationId;'; After = ';'; Error = 'same-name unrelated items must stay separate' },
@@ -31,4 +32,8 @@ try {
         Write-Host ('Mutation rejected by production behavior tests: ' + $case.File)
     }
     Write-Host ("Mutation sensitivity: PASS ($($cases.Count)/$($cases.Count); original source untouched).") -ForegroundColor Green
-} finally { Remove-Item -LiteralPath $temp -Recurse -Force }
+} finally {
+    if ($temp -ne [IO.Path]::GetFullPath((Join-Path ([IO.Path]::GetTempPath()) $identity)) -or
+        (Split-Path -Leaf $temp) -notmatch '^qii-mutation-tests-[0-9a-f]{32}$') { throw 'Unexpected cleanup path.' }
+    Remove-Item -LiteralPath $temp -Recurse -Force
+}

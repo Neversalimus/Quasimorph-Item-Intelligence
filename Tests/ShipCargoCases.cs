@@ -181,6 +181,15 @@ namespace ItemIntelligence
             Time.realtimeSinceStartup = 12f;
             TickOverviewShipCargo();
             CheckCargo(BrowserLines[0].Right == "3", "recover displayed count");
+            _modContext.Current = new State { Cargo = new MagnumCargo() };
+            _modContext.Current.Cargo.ShipCargo.Add(Storage("food", 88));
+            Time.realtimeSinceStartup = 12.5f;
+            TickOverviewShipCargo();
+            CheckCargo(BrowserLines[0].Right == "88", "open row follows replacement save state");
+            _modContext.Current = new State { Cargo = cargo };
+            Time.realtimeSinceStartup = 13f;
+            TickOverviewShipCargo();
+            CheckCargo(BrowserLines[0].Right == "3", "returning to previous save re-reads its stock");
             reads = _modContext.Current.Reads;
             Time.realtimeSinceStartup = 20f;
             _inspectorOpen = false;
@@ -202,6 +211,8 @@ namespace ItemIntelligence
             ResetOverviewShipCargo();
             TickOverviewShipCargo();
             CheckCargo(_modContext.Current.Reads == reads && _overviewShipCargoLine == null, "reset releases row state");
+            CheckCargo(OverviewShipCargo.ItemId == null && !OverviewShipCargo.Count.HasValue,
+                "closing the view resets the independently owned snapshot");
             _modContext = null;
             CheckCargo(!ReadOverviewShipCargoCount("food").HasValue, "missing context");
             _numberCulture = CultureInfo.GetCultureInfo("de-DE");

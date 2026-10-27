@@ -4,9 +4,9 @@
 
 [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3780078201) · [Downloads](https://github.com/Neversalimus/Quasimorph-Item-Intelligence/releases) · [Changelog](CHANGELOG.md)
 
-This branch contains **1.7.43.3** for **Quasimorph 1.0.4.590s.969afc6**.
+This branch contains development build **1.7.43.4-test1** for **Quasimorph 1.0.4.590s.969afc6**.
 
-This version adds live ship stock to every item’s Overview, completes all 11 official interface languages with Japanese, Korean and Turkish, and improves the existing translations. It also includes font recovery, text layout and internal maintenance fixes. See [release notes](Release/Notes-v1.7.43.3.md).
+This build isolates ship-stock polling from the shared UI state and adds a common local/CI check runner. The published stable release is [1.7.43.3](https://github.com/Neversalimus/Quasimorph-Item-Intelligence/releases/tag/v1.7.43.3).
 
 Compatibility for the new build is enabled through audited feature-owned gates. Unknown future builds continue to fail closed for exact calculations until their contracts are reviewed.
 
@@ -66,28 +66,29 @@ A Windows build requires **PowerShell 7** and a local Quasimorph installation. F
 pwsh -NoProfile -ExecutionPolicy Bypass -File .\Install.ps1 -GameRoot "C:\Program Files (x86)\Steam\steamapps\common\Quasimorph"
 ```
 
-Use your actual game path. This compiles the stable source against the installed game and stages the files in `C:\QM_Workshop\ItemIntelligence`. Pass `-WorkshopStage` to choose another package directory. The installer does not replace a subscribed copy or upload to Steam. Game assemblies and compiled binaries are not stored in this repository.
+Use your actual game path. This compiles the development source against the installed game and stages a local test package in `_stage\ItemIntelligence` beside the source. Pass `-WorkshopStage` to choose another package directory. The installer does not replace a subscribed copy or upload to Steam. Game assemblies and compiled binaries are not stored in this repository.
 
 A stage must be empty or contain an Item Intelligence package. Source directories, game installations, live Steam content, linked paths and folders with unrelated files are rejected. Existing packages are backed up before replacement. If an interrupted build leaves an incomplete `.tmp` folder, inspect it and choose a fresh stage path.
 
 Run the source contracts and behavior tests without game files:
 
 ```powershell
-pwsh -NoProfile -File .\BUILD_AND_STAGE.ps1 -Mode RELEASE -ContractsOnly
+pwsh -NoProfile -File .\Tests\Run-Checks.ps1
 ```
 
 Language metadata lives in `Source/LanguageCatalog.cs`. The UI selector, loader, number formatting and build tools use this registry. `UiLocalization`, `GameLocalization` and `UiFontResolver` own their caches; the game hooks explicitly reset them on returning to the menu and on exit. Optional reflection probes remain quiet; required reads report missing members or getter failures once per schema member, with a 32-entry session limit.
 
 `ReflectionDataReader` owns cached reflection metadata and exposes read-only member snapshots. Game values are read on every request. Metadata remains valid for the lifetime of the loaded game assemblies, so returning to the menu does not rescan it.
 
-Run regression sensitivity checks against deliberately broken temporary source copies:
+`ShipCargoMonitor` owns the selected item, last known count and polling deadline for one inspection. Its reader and clock input are supplied by the UI adapter; it retains no game or UI objects. Its tests compile it independently with System only, then exercise the actual Overview adapter against game fixtures.
+
+Run the complete check set, including deliberately broken temporary source copies:
 
 ```powershell
-pwsh -NoProfile -File .\Tests\Run-LocalizationMutationTests.ps1
-pwsh -NoProfile -File .\Tests\Run-CacheMutationTests.ps1
+pwsh -NoProfile -File .\Tests\Run-Checks.ps1 -IncludeMutationTests
 ```
 
-Each command introduces six deliberate bugs in disposable copies and requires the behavior tests to reject them. Ordinary builds also check translations, placeholders and language switching. They do not require Python or game assets.
+The runner selects TEST or RELEASE checks from the source version and propagates failed child-process exits. GitHub Actions runs the same command on main-branch pushes and pull requests using Windows and PowerShell 7, with read-only repository permissions. The mutation suites require the behavior tests to reject each deliberate bug; the source checkout is untouched. No game files, Python, staging or publication credentials are required. Actual game-font coverage and visual checks remain separate.
 
 To check glyph coverage against your installed game's actual language enum and TMP font presets, use Python 3.12 and the pinned audit dependencies (validated with Quasimorph **1.0.4.590s.969afc6**):
 

@@ -24,7 +24,16 @@ $cases = @(
        Error='dynamic row fails closed even with a matching stamp' },
     @{ File='ModMain.BrowserRowRenderCache.cs'; Test='Run-ReadabilityTests.ps1';
        Before='string.Equals(Language, language ?? string.Empty, StringComparison.OrdinalIgnoreCase) &&';
-       After='true &&'; Error='language switch rejects stale row text' }
+       After='true &&'; Error='language switch rejects stale row text' },
+    @{ File='ShipCargoMonitor.cs'; Test='Run-ShipCargoTests.ps1';
+       Before='ItemId = null;'; After='/* intentionally retain previous selection */';
+       Error='reset releases selected item and count' },
+    @{ File='ShipCargoMonitor.cs'; Test='Run-ShipCargoTests.ps1';
+       Before='string.Equals(ItemId, itemId, StringComparison.Ordinal)'; After='true';
+       Error='another item cannot poll or delay the selected item' },
+    @{ File='ShipCargoMonitor.cs'; Test='Run-ShipCargoTests.ps1';
+       Before='if (next == Count) return false;'; After='/* intentionally redraw unchanged stock */';
+       Error='unchanged stock does not request rendering' }
 )
 New-Item -ItemType Directory -Path $temp | Out-Null
 try {
