@@ -4,9 +4,9 @@
 
 [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3780078201) · [Downloads](https://github.com/Neversalimus/Quasimorph-Item-Intelligence/releases) · [Changelog](CHANGELOG.md)
 
-This branch contains **1.7.43.3-test4** for **Quasimorph 1.0.4.590s.969afc6**.
+This branch contains **1.7.43.3-test5** for **Quasimorph 1.0.4.590s.969afc6**.
 
-This test series completes all 11 official interface languages with Japanese, Korean and Turkish, and revises the existing translations for clearer wording and current game terminology. Test4 isolates reflection metadata, removes repeated localization-key allocations and strengthens cache and UI regression tests. See [release notes](Release/Notes-v1.7.43.3-test4.md).
+This test series completes all 11 official interface languages with Japanese, Korean and Turkish, and revises the existing translations for clearer wording and current game terminology. Test5 adds live ship stock to every item’s Overview. It also includes the reflection-cache, localization-allocation and UI regression fixes from Test4. See [release notes](Release/Notes-v1.7.43.3-test5.md).
 
 Compatibility for the new build is enabled through audited feature-owned gates. Unknown future builds continue to fail closed for exact calculations until their contracts are reviewed.
 
@@ -15,7 +15,7 @@ Optional verbose logging keeps `Player.log` concise in normal mode while preserv
 ## Features
 
 - Item search, catalog, favorites, browsing history and advanced filters.
-- Item overview, recipes, disassembly, station production and Magnum requirements.
+- Item overview with live ship stock, recipes, disassembly, station production and Magnum requirements.
 - Upgrade material uses and clickable equipment targets, separate from finite ship-research totals.
 - Live station trade information, stock-sensitive prices and batch totals on supported game builds, with direct navigation to the starmap.
 - Cards and table layouts for Trade, selectable inside the tab.
@@ -41,6 +41,8 @@ Enable **Enhanced readability** in MCM for brighter secondary text and larger ta
 **Verbose logging** is also optional and disabled by default. Enable it only when collecting detailed diagnostics for troubleshooting; the setting is saved across restarts.
 
 Modder Mode is optional and creates real items in the current game. Leave it disabled when using the mod solely as a reference browser.
+
+The **On ship** row in Overview counts the inspected item across cargo tabs, the fridge and the idle recycling storage. Items being recycled and items carried by clones are excluded. Stack quantities are summed, and upgraded variants retain their own counts. The row reads the current save during missions as well as in space and refreshes while Overview is open. **0** means none are stored; **?** means the cargo data is unavailable.
 
 ## Languages
 

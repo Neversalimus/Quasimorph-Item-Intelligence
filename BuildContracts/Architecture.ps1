@@ -111,6 +111,7 @@ foreach ($token in @('HasObservedInspectorItemUi','directMissionHotkeyBootstrap'
 }
 & (Join-Path $root 'Tests/Run-BrowserEntryTests.ps1') -SourceRoot $root
 & (Join-Path $root 'Tests/Run-ReflectionTests.ps1') -SourceRoot $root
+& (Join-Path $root 'Tests/Run-ShipCargoTests.ps1') -SourceRoot $root
 if ($browserPresentationLines -gt 1700) { throw "Browser presentation ownership regressed: ModMain.BrowserPresentation.cs has $browserPresentationLines lines; current requires <= 1700." }
 if ($overviewDashboardLines -gt 460) { throw "Overview dashboard ownership regressed: ModMain.OverviewDashboard.cs has $overviewDashboardLines lines; current requires <= 460." }
 if ($adaptiveEntryLines -gt 90) { throw "Adaptive entry ownership regressed: ModMain.AdaptiveEntry.cs has $adaptiveEntryLines lines; current requires <= 90." }

@@ -694,3 +694,4 @@ ui.upgrade_pacts	契約の儀式
 ui.upgrade_implants	クローンへのインプラント装着
 ui.upgrade_augmentations	クローンへのオーグメント装着
 ui.upgrade_equipment	この素材で強化する装備
+ui.ship_cargo	船内の在庫

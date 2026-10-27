@@ -38,6 +38,7 @@ namespace ItemIntelligence
         private static void BuildBrowserOverview(string itemId)
         {
             if (string.IsNullOrEmpty(itemId)) return;
+            AppendOverviewShipCargo(itemId);
             int playerContentStart = BrowserLines.Count;
 
             string relationId = ResolveStaticRelationItemId(itemId);
@@ -105,7 +106,6 @@ namespace ItemIntelligence
         private static void AppendOverviewRelationships(string itemId, string relationId, OverviewPreview preview)
         {
             OverviewMagnumState magnumState = GetOverviewMagnumState(itemId);
-            int magnum = magnumState != null ? magnumState.CurrentRequired : 0;
             bool hasMagnumRelations = magnumState != null && magnumState.HasRelations;
             int used = ShowRecipes ? GetUniqueRecipeOutputCount(itemId) : 0;
             int crafted = ShowRecipes ? GetStaticRelationListCount(CraftedFromRecipes, itemId) : 0;

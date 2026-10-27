@@ -525,6 +525,7 @@ namespace ItemIntelligence
 
                 if (!_inspectorOpen) return;
 
+                TickOverviewShipCargo();
                 TickBrowserViewport();
                 TickBrowserSearchIndexWarmup();
 
@@ -774,6 +775,7 @@ namespace ItemIntelligence
 
         private static void CloseInspector()
         {
+            ResetOverviewShipCargo();
             ClearBrowserNativeTooltipMoreTarget(null);
             _inspectorOpen = false;
             _inspectorItemId = string.Empty;

@@ -694,3 +694,4 @@ ui.upgrade_pacts	팩트 의식
 ui.upgrade_implants	클론에 임플란트 장착
 ui.upgrade_augmentations	클론에 증강체 장착
 ui.upgrade_equipment	이 재료로 강화하는 장비
+ui.ship_cargo	함선 보관량
