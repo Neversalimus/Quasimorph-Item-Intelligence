@@ -695,3 +695,9 @@ ui.upgrade_implants	Klonlara implant takma
 ui.upgrade_augmentations	Klonlara artırım takma
 ui.upgrade_equipment	BU MALZEMEYLE GELİŞTİRİLEN EKİPMAN
 ui.ship_cargo	Gemide
+
+# Item spoilage
+ui.decay_result	Bozulunca dönüşür
+ui.decay_sources	Bozulmayla elde edilir
+ui.decay_disappears	Bozulunca kaybolur.
+ui.decay_shelf_life_note	Süreler taze eşyalar içindir. Buzdolabı bozulmayı duraklatır.

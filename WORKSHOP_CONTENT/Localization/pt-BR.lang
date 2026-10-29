@@ -695,3 +695,9 @@ ui.upgrade_implants	Instalação de implantes em clones
 ui.upgrade_augmentations	Instalação de augmentações em clones
 ui.upgrade_equipment	EQUIPAMENTO MELHORADO COM ESTE RECURSO
 ui.ship_cargo	Na nave
+
+# Item spoilage
+ui.decay_result	Ao estragar, vira
+ui.decay_sources	Obtido por deterioração
+ui.decay_disappears	Desaparece ao estragar.
+ui.decay_shelf_life_note	Os tempos se referem a itens frescos. A geladeira pausa a deterioração.

@@ -19,6 +19,7 @@ namespace ItemIntelligence
             public bool AmmoItem;
             public int RecipeRelations;
             public int DisassemblyRelations;
+            public int DecayRelations;
             public int MagnumRelations;
 
             public int MeaningfulGroups
@@ -33,6 +34,7 @@ namespace ItemIntelligence
                     if (InstalledWeaponRelations > 0) n++;
                     if (RecipeRelations > 0) n++;
                     if (DisassemblyRelations > 0) n++;
+                    if (DecayRelations > 0) n++;
                     if (MagnumRelations > 0) n++;
                     return n;
                 }
@@ -75,6 +77,7 @@ namespace ItemIntelligence
                 s.ChipUnlocks = unlockedByChip.Count;
 
             s.BaronPact = IsBaronPactItem(itemId);
+            s.DecayRelations = GetItemDecayRelationCount(itemId);
             if (ShowRecipes)
                 s.RecipeRelations = GetOverviewRecipeRelationCount(itemId);
             if (_compatDisassembly && _disassemblyWarmupComplete)

@@ -695,3 +695,9 @@ ui.upgrade_implants	Instalación de implantes en clones
 ui.upgrade_augmentations	Instalación de augmentaciones en clones
 ui.upgrade_equipment	EQUIPO QUE SE MEJORA CON ESTE RECURSO
 ui.ship_cargo	En la nave
+
+# Item spoilage
+ui.decay_result	Al estropearse se convierte en
+ui.decay_sources	Se obtiene al estropearse
+ui.decay_disappears	Desaparece al estropearse.
+ui.decay_shelf_life_note	Los tiempos corresponden a objetos frescos. El frigorífico detiene el deterioro.

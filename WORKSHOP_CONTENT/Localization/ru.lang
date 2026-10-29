@@ -707,3 +707,9 @@ ui.upgrade_implants	Установка имплантов клонам
 ui.upgrade_augmentations	Установка аугментаций клонам
 ui.upgrade_equipment	СНАРЯЖЕНИЕ, УЛУЧШАЕМОЕ ЭТИМ РЕСУРСОМ
 ui.ship_cargo	На корабле
+
+# Item spoilage
+ui.decay_result	Превращается при порче
+ui.decay_sources	Можно получить при порче
+ui.decay_disappears	Исчезает при порче.
+ui.decay_shelf_life_note	Указан срок хранения свежего предмета. В холодильнике порча приостановлена.

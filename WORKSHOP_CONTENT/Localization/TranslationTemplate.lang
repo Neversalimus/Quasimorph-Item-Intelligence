@@ -713,3 +713,9 @@ ui.upgrade_implants	Implant installation on clones
 ui.upgrade_augmentations	Augmentation installation on clones
 ui.upgrade_equipment	EQUIPMENT UPGRADED WITH THIS RESOURCE
 ui.ship_cargo	On ship
+
+# Item spoilage
+ui.decay_result	Spoils into
+ui.decay_sources	Obtained by spoilage
+ui.decay_disappears	Disappears when it spoils.
+ui.decay_shelf_life_note	Times are for fresh items. Refrigeration pauses spoilage.

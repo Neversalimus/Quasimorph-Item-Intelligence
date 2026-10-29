@@ -21,6 +21,7 @@ namespace ItemIntelligence
                  GetListCount(StationProductionByOutputItem, relationId) > 0 ||
                  GetListCount(StationProductionByInputItem, relationId) > 0)) return true;
             if (GetDisassemblyOutputCount(itemId) > 0) return true;
+            if (GetItemDecayRelationCount(itemId) > 0) return true;
             if (ShowAmmoRelations)
             {
                 if (WeaponsByItem.ContainsKey(relationId)) return true;

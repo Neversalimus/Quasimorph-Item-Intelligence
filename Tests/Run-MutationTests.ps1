@@ -13,7 +13,10 @@ $cases = @(
     @{ File = 'ModMain.SourceFamilyPolicy.cs'; Before = '"RandomStart_rewardEquipment"'; After = '"General_rewardEquipment"'; Error = 'random-start equipment pool matches game version' },
     @{ File = 'ModMain.CompatibilityFeatureGates.cs'; Before = 'return IsAuditedFeatureAssembly() ||'; After = 'return IsAuditedFeatureAssembly() || _compatStaticChecked ||'; Error = 'Loot modifier fingerprint scope' },
     @{ File = 'ModMain.LootAmputationWeights.cs'; Before = 'result[id] = previous + row.Item1;'; After = 'result[id] = row.Item1;'; Error = 'repeated amputation outcomes retain total weight' },
-    @{ File = 'ModMain.LootIndexes.cs'; Before = 'GetMember(entry.Value, "AmputatedDrop")'; After = 'GetMember(entry.Value, "MissingAmputatedDrop")'; Error = 'tuple amputation index contains known outcomes' }
+    @{ File = 'ModMain.LootIndexes.cs'; Before = 'GetMember(entry.Value, "AmputatedDrop")'; After = 'GetMember(entry.Value, "MissingAmputatedDrop")'; Error = 'tuple amputation index contains known outcomes' },
+    @{ File = 'ItemDecayIndex.cs'; Test = 'Run-ItemDecayTests.ps1'; Before = 'linked.Add(relation);'; After = '/* omit reverse link */'; Error = 'both reverse sources retained' },
+    @{ File = 'ModMain.ItemDecay.cs'; Test = 'Run-ItemDecayTests.ps1'; Before = '!IsExpirableItemRecord(itemRecord)'; After = 'false'; Error = 'only known expirable records with valid output and time indexed' },
+    @{ File = 'ModMain.ItemDecay.cs'; Test = 'Run-ItemDecayTests.ps1'; Before = 'ItemDecay.Clear();'; After = '/* retain stale graph */'; Error = 'failed build clears partial graph' }
 )
 New-Item -ItemType Directory -Path $temp | Out-Null
 try {
@@ -24,7 +27,8 @@ try {
         if (-not $original.Contains($case.Before)) { throw "Mutation target missing: $($case.File)" }
         [IO.File]::WriteAllText($path, $original.Replace($case.Before, $case.After))
         $caught = $false
-        try { & (Join-Path $PSScriptRoot 'Run-BehaviorTests.ps1') -SourceRoot $temp }
+        $testName = if ($case.ContainsKey('Test')) { $case.Test } else { 'Run-BehaviorTests.ps1' }
+        try { & (Join-Path $PSScriptRoot $testName) -SourceRoot $temp }
         catch {
             if ($_.Exception.ToString().Contains($case.Error)) { $caught = $true } else { throw }
         } finally { [IO.File]::WriteAllText($path, $original) }

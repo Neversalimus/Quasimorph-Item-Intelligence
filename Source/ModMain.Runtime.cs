@@ -21,7 +21,7 @@ namespace ItemIntelligence
     /// </summary>
     public static partial class ModMain
     {
-        public const string Version = "1.7.43.4-test3";
+        public const string Version = "1.7.43.4-test4";
         // Ordinary Item Intelligence remains a read-only knowledge browser. The only
         // save-affecting exception is one explicit item-spawn click inside MCM Modder Mode;
         // economy, story variables and faction progression are never mutated.
@@ -55,7 +55,7 @@ namespace ItemIntelligence
         {
             if (context != null) _modContext = context;
             EnsureConfigLoaded();
-            Debug.Log("[ItemIntelligence] ACTIVE VERSION " + Version + " (Engineering17434Test3).");
+            Debug.Log("[ItemIntelligence] ACTIVE VERSION " + Version + " (Engineering17434Test4).");
             Debug.Log("[ItemIntelligence] Logging mode: " + (VerboseLogging ? "VERBOSE" : "NORMAL") +
                 (VerboseLogging ? "." : " (enable Verbose logging in MCM for detailed diagnostics)."));
             RunCompatibilityShieldStatic();

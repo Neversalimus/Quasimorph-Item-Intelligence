@@ -17,6 +17,7 @@ $buildContractBudgets = [ordered]@{
     'TooltipInteraction.ps1' = 120
     'WeaponModeDamageType.ps1' = 120
     'UpgradeUses.ps1' = 120
+    'ItemDecay.ps1' = 80
     'GameplayExactness.ps1' = 550
     'SourceFamilyHotfix.ps1' = 80
     'SourceFamilyRuntime.ps1' = 80

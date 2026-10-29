@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.7.43.4-test4 — 2026-10-29
+
+- Show what perishable items turn into in Overview and Recipes, with clickable links to the resulting items.
+- Show the reverse relation on each result: which items can spoil into it, including perishable quasimorph equipment as well as food.
+- Show shelf lives for fresh items and explain that refrigeration pauses spoilage. Multi-step chains remain separate direct transformations.
+- Read the game's spoilage table and expirable item components once per index generation, with isolated failure handling and session cleanup. Add behavior tests and translations in all 11 supported languages.
+
 ## v1.7.43.4-test3 — 2026-10-28
 
 - Reuse the catalog's sorted item IDs when its candidates, localized-name revision, culture and sort settings are unchanged. Filters still read current data; Tech sorting always uses current record values.

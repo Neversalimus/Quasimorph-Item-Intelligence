@@ -248,6 +248,7 @@ namespace ItemIntelligence
         private static void AppendOverviewCombat(List<WeaponModeDescriptor> modes) { }
         private static void AppendOverviewBaronSpecial(string id) { }
         private static void AppendOverviewArmWeaponLinks(string id) { }
+        private static bool AppendItemDecayRelations(string id) { return false; }
         private static OverviewPreview ResolveOverviewPreview(string id, string relationId) { return null; }
         private static void AppendOverviewRelationships(string id, string relationId, OverviewPreview preview) { }
         private static void AppendOverviewUpgradeUses(string id) { }

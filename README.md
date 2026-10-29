@@ -4,9 +4,11 @@
 
 [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3780078201) · [Downloads](https://github.com/Neversalimus/Quasimorph-Item-Intelligence/releases) · [Changelog](CHANGELOG.md)
 
-This branch contains development build **1.7.43.4-test3** for **Quasimorph 1.0.4.590s.969afc6**.
+This branch contains development build **1.7.43.4-test4** for **Quasimorph 1.0.4.590s.969afc6**.
 
 This build isolates ship-stock polling and browser navigation from the shared UI state and adds a common local/CI check runner. It also reuses unchanged catalog ordering and reduces work when creating the browser. The published stable release is [1.7.43.3](https://github.com/Neversalimus/Quasimorph-Item-Intelligence/releases/tag/v1.7.43.3).
+
+It also shows what perishable items turn into and which items can spoil into a resource, directly in **Overview** and **Recipes**. These are clickable, immediate transformations from the game's spoilage table. Times refer to fresh items; refrigeration pauses spoilage.
 
 Compatibility for the new build is enabled through audited feature-owned gates. Unknown future builds continue to fail closed for exact calculations until their contracts are reviewed.
 
@@ -17,6 +19,7 @@ Optional verbose logging keeps `Player.log` concise in normal mode while preserv
 - Item search, catalog, favorites, browsing history and advanced filters.
 - Item overview with live ship stock, recipes, disassembly, station production and Magnum requirements.
 - Upgrade material uses and clickable equipment targets, separate from finite ship-research totals.
+- Spoilage results and sources, including food and perishable quasimorph equipment, with shelf lives for fresh items.
 - Live station trade information, stock-sensitive prices and batch totals on supported game builds, with direct navigation to the starmap.
 - Cards and table layouts for Trade, selectable inside the tab.
 - Loot sources grouped by containers, enemies, faction rewards, mission pools and special sources.

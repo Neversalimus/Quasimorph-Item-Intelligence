@@ -1310,6 +1310,7 @@ namespace ItemIntelligence
         private static void BuildBrowserRecipes(string itemId)
         {
             bool ru = IsRussian();
+            bool hasDecay = AppendItemDecayRelations(itemId);
 
             bool recipesAvailable = ShowRecipes && _compatRecipes;
             bool disassemblyAvailable = _compatDisassembly;
@@ -1383,6 +1384,7 @@ namespace ItemIntelligence
 
             if (!hasUsed && !hasCrafted && !hasStationProduced && !hasStationUsed && !hasDisassembly && !hasDisassemblySources)
             {
+                if (hasDecay) return;
                 if (_disassemblyWarmupActive)
                 {
                     int pct = DisassemblyWarmupItems.Count <= 0 ? 0 :

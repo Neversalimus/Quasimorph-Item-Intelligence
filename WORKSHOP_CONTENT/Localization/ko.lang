@@ -695,3 +695,9 @@ ui.upgrade_implants	클론에 임플란트 장착
 ui.upgrade_augmentations	클론에 증강체 장착
 ui.upgrade_equipment	이 재료로 강화하는 장비
 ui.ship_cargo	함선 보관량
+
+# Item spoilage
+ui.decay_result	부패 후 변하는 아이템
+ui.decay_sources	부패로 획득
+ui.decay_disappears	부패하면 사라집니다.
+ui.decay_shelf_life_note	시간은 신선한 아이템의 보관 기한입니다. 냉장고에서는 부패가 멈춥니다.
