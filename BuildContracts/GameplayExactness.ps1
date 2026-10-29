@@ -235,8 +235,8 @@ if ($ruLocalizationText.IndexOf('ШАНС ≥1',[StringComparison]::Ordinal) -ge
     $enLocalizationText.IndexOf('≥1 CHANCE',[StringComparison]::Ordinal) -ge 0) {
     throw 'current font-safety regression: unsupported Scavengers heading glyph returned.'
 }
-if ($runtimeText.IndexOf('public const string Version = "1.7.43.3";',[StringComparison]::Ordinal) -lt 0 -or
-    $runtimeText.IndexOf('StableRelease17433',[StringComparison]::Ordinal) -lt 0) {
+if ($runtimeText.IndexOf('public const string Version = "1.7.43.4-test4";',[StringComparison]::Ordinal) -lt 0 -or
+    $runtimeText.IndexOf('Engineering17434Test4',[StringComparison]::Ordinal) -lt 0) {
     throw 'current runtime version/marker contract missing.'
 }
 
@@ -415,9 +415,8 @@ foreach ($token in @(
 # External IL audit artifacts are evidence, not runtime/build dependencies.
 # Current exactness is enforced by the source contracts in this module.
 
-if ($lootNavigationText.IndexOf('BrowserNavigation.ScrollOffset = Math.Max(0, clickedRowIndex - 1);',[StringComparison]::Ordinal) -lt 0) {
-    throw 'current Loot accordion toggle must keep the clicked header in view.'
-}
+# The production loot-section callback is executed by Run-BrowserNavigationTests;
+# it must retain the clicked header without requiring one assignment spelling.
 
 # Adaptive Entry / Smart Overview regression gates.
 foreach ($token in @(

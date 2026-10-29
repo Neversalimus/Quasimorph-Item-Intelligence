@@ -695,3 +695,9 @@ ui.upgrade_implants	クローンへのインプラント装着
 ui.upgrade_augmentations	クローンへのオーグメント装着
 ui.upgrade_equipment	この素材で強化する装備
 ui.ship_cargo	船内の在庫
+
+# Item spoilage
+ui.decay_result	腐敗後のアイテム
+ui.decay_sources	腐敗させて入手
+ui.decay_disappears	腐敗すると消滅します。
+ui.decay_shelf_life_note	時間は新品の保存期間です。冷蔵庫に入れると腐敗が止まります。

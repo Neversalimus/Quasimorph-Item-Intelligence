@@ -1,5 +1,30 @@
 # Changelog
 
+## v1.7.43.4-test4 — 2026-10-29
+
+- Show what perishable items turn into in Overview and Recipes, with clickable links to the resulting items.
+- Show the reverse relation on each result: which items can spoil into it, including perishable quasimorph equipment as well as food.
+- Show shelf lives for fresh items and explain that refrigeration pauses spoilage. Multi-step chains remain separate direct transformations.
+- Read the game's spoilage table and expirable item components once per index generation, with isolated failure handling and session cleanup. Add behavior tests and translations in all 11 supported languages.
+
+## v1.7.43.4-test3 — 2026-10-28
+
+- Reuse the catalog's sorted item IDs when its candidates, localized-name revision, culture and sort settings are unchanged. Filters still read current data; Tech sorting always uses current record values.
+- Construct the browser and catalog while inactive and keep unused pooled item rows inactive, avoiding early Unity/TMP enable callbacks.
+- Add direct cache and production catalog-refresh tests, regression-sensitivity cases and per-stage opening diagnostics.
+
+## v1.7.43.4-test2 — 2026-10-28
+
+- Moved browser back history, tab selection and per-tab scroll into an independent component with private collections and explicit lifecycle operations.
+- Kept native overlay closure ahead of Back restoration, Trade's same-tab price refresh and the clicked loot-header anchor. Added direct state tests and production adapter cases for these paths.
+- Replaced the loot-anchor source-spelling check with a behavior test and added regression-sensitivity cases for navigation state.
+
+## v1.7.43.4-test1 — 2026-10-28
+
+- Moved the inspected ship-stock snapshot and polling schedule into an independent component. The Overview adapter keeps UI access; the monitor retains no game or Unity objects.
+- Added direct lifecycle tests and save-switch integration cases, plus regression-sensitivity checks for stale selection and unnecessary refreshes.
+- Added one local check runner and GitHub Actions configuration for source, behavior and mutation checks without game files or publication credentials.
+
 ## v1.7.43.3 — 2026-10-28
 
 - Added **On ship** at the top of every item’s Overview, so you can check your stock when choosing mission loot. Counts update while the page is open.

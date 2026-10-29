@@ -137,9 +137,7 @@ namespace ItemIntelligence
             LootSectionExpanded[key] = !expanded;
 
             // Keep the clicked section header in view after the page shrinks/grows.
-            BrowserNavigation.ScrollOffset = Math.Max(0, clickedRowIndex - 1);
-            if (BrowserNavigation.Tab >= 0 && BrowserNavigation.Tab < BrowserNavigation.ScrollOffsets.Length)
-                BrowserNavigation.ScrollOffsets[BrowserNavigation.Tab] = BrowserNavigation.ScrollOffset;
+            BrowserNavigation.SetScrollOffset(Math.Max(0, clickedRowIndex - 1));
 
             VerboseLog("[ItemIntelligence][LootAccordion] section=" + key +
                 ", expanded=" + (!expanded ? "true" : "false") + ".");

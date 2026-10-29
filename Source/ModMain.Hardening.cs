@@ -94,7 +94,7 @@ namespace ItemIntelligence
             {
                 case BrowserTabId.Overview: return _compatCore;
                 case BrowserTabId.Magnum: return ShowMagnumUses && _compatMagnum;
-                case BrowserTabId.Recipes: return (ShowRecipes && _compatRecipes) || _compatDisassembly;
+                case BrowserTabId.Recipes: return (ShowRecipes && _compatRecipes) || _compatDisassembly || ItemDecay.Count > 0;
                 case BrowserTabId.Trade: return (ShowSources || ShowTradeInformation) && _compatTrade;
                 case BrowserTabId.Ammo: return ShowAmmoRelations && _compatAmmo;
                 case BrowserTabId.Factions: return _compatFactions;
@@ -255,7 +255,7 @@ namespace ItemIntelligence
                     (_browserCatalogSortDescending ? ":Descending" : ":Ascending"));
                 lines.Add("CatalogFavorites=" + BrowserFavoriteItemIds.Count.ToString(CultureInfo.InvariantCulture));
                 lines.Add("CatalogRecent=" + BrowserRecentItemIds.Count.ToString(CultureInfo.InvariantCulture));
-                lines.Add("BrowserBackDepth=" + BrowserNavigation.History.Count.ToString(CultureInfo.InvariantCulture));
+                lines.Add("BrowserBackDepth=" + BrowserNavigation.HistoryCount.ToString(CultureInfo.InvariantCulture));
                 lines.Add("GameLanguage=" + (UiText.Language ?? string.Empty));
                 lines.Add("LocalizationFile=" + (UiText.FileName ?? string.Empty));
                 lines.Add("LocalizationEnglishKeys=" + UiText.EnglishCount.ToString(CultureInfo.InvariantCulture));

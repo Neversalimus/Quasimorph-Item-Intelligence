@@ -702,11 +702,8 @@ namespace ItemIntelligence
                 HideHoverHint();
                 _inspectorItemId = itemId;
                 BrowserTabId adaptiveEntryTab = catalogEntry ? BrowserTabId.Overview : ResolveAdaptiveEntryTab(itemId);
-                BrowserNavigation.Tab = (int)adaptiveEntryTab;
+                BrowserNavigation.Begin((int)adaptiveEntryTab);
                 VerboseLog("[ItemIntelligence][AdaptiveEntry] item=" + itemId + ", tab=" + adaptiveEntryTab.ToString() + ".");
-                BrowserNavigation.ScrollOffset = 0;
-                BrowserNavigation.History.Clear();
-                Array.Clear(BrowserNavigation.ScrollOffsets, 0, BrowserNavigation.ScrollOffsets.Length);
                 _secretDataSelectedFactionId = string.Empty;
                 _browserCatalogOpen = false;
                 _browserCatalogScrollOffset = 0;
@@ -733,12 +730,12 @@ namespace ItemIntelligence
                 float perfRenderMs = (Time.realtimeSinceStartup - perfStageStart) * 1000f;
                 float perfTotalMs = (Time.realtimeSinceStartup - perfTotalStart) * 1000f;
                 ReportBrowserPerformanceBudget(itemId, firstPanelBuild, perfTotalMs, perfRenderMs);
-                if (firstPanelBuild)
+                if (VerboseLogging)
                 {
                     float knownStagesMs = targetResolveMs + perfIndexesMs + perfPanelMs + perfRenderMs;
                     float perfMiscMs = Mathf.Max(0f, perfTotalMs - knownStagesMs);
                     float coreBuildMs = _lastCoreIndexBuildFrame == Time.frameCount ? _lastCoreIndexBuildMs : 0f;
-                    VerboseLog("[ItemIntelligence][FirstOpenPerf] targetResolve=" +
+                    VerboseLog("[ItemIntelligence][FirstOpenPerf] cold=" + firstPanelBuild + ", targetResolve=" +
                         targetResolveMs.ToString("0.0", CultureInfo.InvariantCulture) +
                         "ms, coreBuild=" + coreBuildMs.ToString("0.0", CultureInfo.InvariantCulture) +
                         "ms, runtimeReady=" + perfIndexesMs.ToString("0.0", CultureInfo.InvariantCulture) +
@@ -780,8 +777,7 @@ namespace ItemIntelligence
             _inspectorOpen = false;
             _inspectorItemId = string.Empty;
             _browserPreviewLiveItem = null;
-            BrowserNavigation.ScrollOffset = 0;
-            BrowserNavigation.History.Clear();
+            BrowserNavigation.Close();
             ResetLootAccordionState();
             _secretDataSelectedFactionId = string.Empty;
             _marketScanActive = false;
@@ -842,11 +838,9 @@ namespace ItemIntelligence
         private static void SetBrowserTab(int tab)
         {
             if (!_inspectorOpen || string.IsNullOrEmpty(_inspectorItemId)) return;
-            if (tab < 0) tab = 0;
-            if (tab >= BrowserTabCount) tab = BrowserTabCount - 1;
-            if (BrowserNavigation.Tab == tab)
+            if (!BrowserNavigation.SwitchTab(tab))
             {
-                if (tab == (int)BrowserTabId.Trade && (ShowSources || ShowTradeInformation))
+                if (BrowserNavigation.Tab == (int)BrowserTabId.Trade && (ShowSources || ShowTradeInformation))
                 {
                     StartMarketScan(_inspectorItemId, true);
                     RenderBrowser(_inspectorItemId);
@@ -854,11 +848,6 @@ namespace ItemIntelligence
                 return;
             }
 
-            if (BrowserNavigation.Tab >= 0 && BrowserNavigation.Tab < BrowserNavigation.ScrollOffsets.Length)
-                BrowserNavigation.ScrollOffsets[BrowserNavigation.Tab] = Math.Max(0, BrowserNavigation.ScrollOffset);
-
-            BrowserNavigation.Tab = tab;
-            BrowserNavigation.ScrollOffset = BrowserNavigation.ScrollOffsets[BrowserNavigation.Tab];
             if (BrowserNavigation.Tab != (int)BrowserTabId.Factions) _secretDataSelectedFactionId = string.Empty;
             CloseBrowserCatalog();
             if (BrowserNavigation.Tab == (int)BrowserTabId.Trade && (ShowSources || ShowTradeInformation))
@@ -880,9 +869,7 @@ namespace ItemIntelligence
             int maxOffset = Math.Max(0, BrowserLines.Count - BrowserVisibleRows);
             int next = Mathf.Clamp(BrowserNavigation.ScrollOffset + delta, 0, maxOffset);
             if (next == BrowserNavigation.ScrollOffset) return;
-            BrowserNavigation.ScrollOffset = next;
-            if (BrowserNavigation.Tab >= 0 && BrowserNavigation.Tab < BrowserNavigation.ScrollOffsets.Length)
-                BrowserNavigation.ScrollOffsets[BrowserNavigation.Tab] = BrowserNavigation.ScrollOffset;
+            BrowserNavigation.SetScrollOffset(next);
             RenderBrowserRowsOnly();
         }
 
@@ -1269,7 +1256,7 @@ namespace ItemIntelligence
             {
                 case BrowserActionKind.SecretDataBack:
                     _secretDataSelectedFactionId = string.Empty;
-                    BrowserNavigation.ScrollOffset = 0;
+                    BrowserNavigation.SetScrollOffset(0);
                     RenderBrowser(_inspectorItemId);
                     return;
 
@@ -1277,7 +1264,7 @@ namespace ItemIntelligence
                     if (!string.IsNullOrEmpty(action.Payload))
                     {
                         _secretDataSelectedFactionId = action.Payload;
-                        BrowserNavigation.ScrollOffset = 0;
+                        BrowserNavigation.SetScrollOffset(0);
                         VerboseLog("[ItemIntelligence] Secret Data faction package selected: " + action.Payload + ".");
                         RenderBrowser(_inspectorItemId);
                     }

@@ -699,3 +699,9 @@ ui.upgrade_implants	Implantate für Klone einsetzen
 ui.upgrade_augmentations	Augmentationen in Klone einbauen
 ui.upgrade_equipment	MIT DIESER RESSOURCE VERBESSERTE AUSRÜSTUNG
 ui.ship_cargo	Auf dem Schiff
+
+# Item spoilage
+ui.decay_result	Verdirbt zu
+ui.decay_sources	Durch Verderben erhältlich
+ui.decay_disappears	Verschwindet beim Verderben.
+ui.decay_shelf_life_note	Die Zeiten gelten für frische Gegenstände. Im Kühlschrank wird der Verderb pausiert.

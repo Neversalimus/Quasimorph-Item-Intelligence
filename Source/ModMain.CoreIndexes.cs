@@ -53,6 +53,9 @@ namespace ItemIntelligence
                     delegate { BuildItemCoverageIndex(); },
                     ref failures);
 
+            if (_compatCore)
+                RunIndexStage("ItemDecay", delegate { BuildItemDecayIndex(); }, ref failures);
+
             if (_compatMagnum)
             {
                 RunCompatibilityIndexStage(
@@ -216,6 +219,7 @@ namespace ItemIntelligence
             RecipesById.Clear();
 
             ResetDisassemblyIndexState();
+            ResetItemDecayIndex();
             ResetStationProductionIndexState();
             ResetTradeIndexState();
             ResetAmmoWeaponIndexState();

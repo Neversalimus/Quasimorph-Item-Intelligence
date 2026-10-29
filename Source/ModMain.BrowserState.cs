@@ -42,9 +42,8 @@ namespace ItemIntelligence
         private static string _inspectorItemId = string.Empty;
         private static TMP_FontAsset _inspectorFont;
 
-        // v1.7.36-test3: browser-owned mutable/UI state lives beside the browser
-        // implementation instead of the shared runtime/bootstrap file. This is a
-        // declaration-only move; pooled UI, navigation and search behavior are unchanged.
+        // The browser owns these UI references. Navigation history and per-tab
+        // scroll values belong to the independent BrowserNavigationSessionState.
         // v1.2 browser UI: fixed-size object pool. F2 never creates/destroys a list
         // proportional to the number of recipes, sources or weapons.
         private const int BrowserRowCapacity = 32;
@@ -58,7 +57,8 @@ namespace ItemIntelligence
         private const int BrowserCatalogScopeCount = (int)BrowserCatalogScope.Count;
         private const int BrowserRecentItemLimit = 32;
         private const int BrowserNavigationHistoryLimit = 64;
-        private static readonly BrowserNavigationSessionState BrowserNavigation = new BrowserNavigationSessionState();
+        private static readonly BrowserNavigationSessionState BrowserNavigation =
+            new BrowserNavigationSessionState(BrowserTabCount, BrowserNavigationHistoryLimit);
 
 
         // v1.5.13 global item directory. Names are localized incrementally while the
@@ -228,6 +228,7 @@ namespace ItemIntelligence
         // Live GameObject/pool teardown remains in BrowserUI lifecycle methods.
         private static void ResetBrowserIndexState()
         {
+            BrowserCatalogSort.Reset();
             BrowserSearchIndexItemIds.Clear();
             BrowserSearchDisplayNames.Clear();
             BrowserSearchNormalizedNames.Clear();

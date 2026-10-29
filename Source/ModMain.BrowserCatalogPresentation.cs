@@ -95,7 +95,7 @@ namespace ItemIntelligence
                     ? new Color(0.105f, 0.205f, 0.120f, 0.98f)
                     : new Color(0.017f, 0.047f, 0.040f, 0.55f));
 
-            bool canBack = _inspectorOpen && BrowserNavigation.History.Count > 0;
+            bool canBack = _inspectorOpen && BrowserNavigation.HistoryCount > 0;
             SetBrowserInteractableIfChanged(_browserBackButton, canBack);
             if (_browserBackButtonText != null)
             {
@@ -181,6 +181,7 @@ namespace ItemIntelligence
         private static void CreateBrowserCatalogUi()
         {
             _browserCatalogPanel = new GameObject("ItemCatalogPanel");
+            _browserCatalogPanel.SetActive(false);
             _browserCatalogPanel.transform.SetParent(_inspectorRoot.transform, false);
             RectTransform panelRt = _browserCatalogPanel.AddComponent<RectTransform>();
             panelRt.anchorMin = new Vector2(0f, 1f);

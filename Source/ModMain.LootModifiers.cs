@@ -202,7 +202,7 @@ namespace ItemIntelligence
                 ", organization=" + _lootManualOrganization.ToString() +
                 ", fieldMedic=" + _lootManualFieldMedic.ToString() + ".");
 
-            BrowserNavigation.ScrollOffset = 0;
+            BrowserNavigation.SetScrollOffset(0);
             if (_inspectorOpen && !string.IsNullOrEmpty(_inspectorItemId))
             {
                 if (ModderMode)

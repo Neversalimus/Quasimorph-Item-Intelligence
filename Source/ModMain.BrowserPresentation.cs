@@ -111,6 +111,8 @@ namespace ItemIntelligence
             ResetBrowserInterfaceIconPresentation();
             InvalidateBrowserRowRenderCache();
             _inspectorRoot = new GameObject("QII_ItemBrowser");
+            // Configure children before enabling their Unity/TMP lifecycle callbacks.
+            _inspectorRoot.SetActive(false);
             _inspectorRoot.transform.SetParent(_inspectorCanvas.transform, false);
             _inspectorRoot.transform.localScale = Vector3.one;
             _inspectorRoot.transform.SetAsLastSibling();
@@ -264,6 +266,7 @@ namespace ItemIntelligence
             for (int i = 0; i < BrowserRowCapacity; i++)
             {
                 GameObject row = new GameObject("BrowserRow_" + i.ToString(CultureInfo.InvariantCulture));
+                row.SetActive(false);
                 row.transform.SetParent(_inspectorRoot.transform, false);
                 RectTransform rowRt = row.AddComponent<RectTransform>();
                 rowRt.anchorMin = new Vector2(0f, 1f);
@@ -934,9 +937,7 @@ namespace ItemIntelligence
             if (!_inspectorOpen || _browserCatalogOpen) return;
             int next = BrowserOffsetFromScrollbarValue(value, BrowserLines.Count, BrowserVisibleRows);
             if (next == BrowserNavigation.ScrollOffset) return;
-            BrowserNavigation.ScrollOffset = next;
-            if (BrowserNavigation.Tab >= 0 && BrowserNavigation.Tab < BrowserNavigation.ScrollOffsets.Length)
-                BrowserNavigation.ScrollOffsets[BrowserNavigation.Tab] = next;
+            BrowserNavigation.SetScrollOffset(next);
             RenderBrowserRowsOnly();
         }
 
@@ -1084,7 +1085,7 @@ namespace ItemIntelligence
                     if (ShowSources) BuildBrowserLootSources(itemId);
                     break;
                 default:
-                    BrowserNavigation.Tab = (int)BrowserTabId.Overview;
+                    BrowserNavigation.StartItem((int)BrowserTabId.Overview);
                     BuildBrowserOverview(itemId);
                     break;
             }
@@ -1092,10 +1093,7 @@ namespace ItemIntelligence
             WrapBrowserNoteRows();
             if (BrowserLinesNeedRecipeContextUi()) EnsureBrowserRecipeContextUi();
 
-            int maxOffset = Math.Max(0, BrowserLines.Count - BrowserVisibleRows);
-            BrowserNavigation.ScrollOffset = Mathf.Clamp(BrowserNavigation.ScrollOffset, 0, maxOffset);
-            if (BrowserNavigation.Tab >= 0 && BrowserNavigation.Tab < BrowserNavigation.ScrollOffsets.Length)
-                BrowserNavigation.ScrollOffsets[BrowserNavigation.Tab] = BrowserNavigation.ScrollOffset;
+            BrowserNavigation.ClampScrollOffset(BrowserLines.Count, BrowserVisibleRows);
             RenderBrowserRowsOnly();
             UpdateLootProgressUi();
             PositionInspectorPanel();
@@ -1312,6 +1310,7 @@ namespace ItemIntelligence
         private static void BuildBrowserRecipes(string itemId)
         {
             bool ru = IsRussian();
+            bool hasDecay = AppendItemDecayRelations(itemId);
 
             bool recipesAvailable = ShowRecipes && _compatRecipes;
             bool disassemblyAvailable = _compatDisassembly;
@@ -1385,6 +1384,7 @@ namespace ItemIntelligence
 
             if (!hasUsed && !hasCrafted && !hasStationProduced && !hasStationUsed && !hasDisassembly && !hasDisassemblySources)
             {
+                if (hasDecay) return;
                 if (_disassemblyWarmupActive)
                 {
                     int pct = DisassemblyWarmupItems.Count <= 0 ? 0 :

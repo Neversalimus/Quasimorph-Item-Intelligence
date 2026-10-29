@@ -600,7 +600,7 @@ namespace ItemIntelligence
                 if (selected == null)
                 {
                     _secretDataSelectedFactionId = string.Empty;
-                    BrowserNavigation.ScrollOffset = 0;
+                    BrowserNavigation.SetScrollOffset(0);
                     BuildBrowserSecretDataRewards();
                     return;
                 }

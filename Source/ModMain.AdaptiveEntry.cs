@@ -17,7 +17,7 @@ namespace ItemIntelligence
             if (s.StrongOverview || s.MeaningfulGroups >= 2)
                 return BrowserTabId.Overview;
 
-            if (s.RecipeRelations > 0 || s.DisassemblyRelations > 0)
+            if (s.RecipeRelations > 0 || s.DisassemblyRelations > 0 || s.DecayRelations > 0)
                 return BrowserTabId.Recipes;
             if (s.MagnumRelations > 0)
                 return BrowserTabId.Magnum;

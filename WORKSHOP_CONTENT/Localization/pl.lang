@@ -699,3 +699,9 @@ ui.upgrade_implants	Instalacja implantów u klonów
 ui.upgrade_augmentations	Instalacja augmentacji u klonów
 ui.upgrade_equipment	WYPOSAŻENIE ULEPSZANE TYM ZASOBEM
 ui.ship_cargo	Na statku
+
+# Item spoilage
+ui.decay_result	Po zepsuciu zmienia się w
+ui.decay_sources	Można uzyskać przez zepsucie
+ui.decay_disappears	Znika po zepsuciu.
+ui.decay_shelf_life_note	Podany czas dotyczy świeżych przedmiotów. Lodówka wstrzymuje psucie.

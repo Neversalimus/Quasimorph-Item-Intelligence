@@ -55,6 +55,7 @@ namespace ItemIntelligence
             // landing page without starting the heavy Loot warmup.
             AppendOverviewBaronSpecial(itemId);
             AppendOverviewArmWeaponLinks(itemId);
+            AppendItemDecayRelations(itemId);
 
             // Resolve the visual relationship first so the same fact is not printed twice
             // as both a summary action and a preview heading.
@@ -182,7 +183,6 @@ namespace ItemIntelligence
                     BrowserAction.SwitchTab(BrowserTabId.Ammo)));
             }
         }
-
 
         private static OverviewPreview ResolveOverviewPreview(string itemId, string relationId)
         {

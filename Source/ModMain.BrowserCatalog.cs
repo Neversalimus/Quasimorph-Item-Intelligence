@@ -148,12 +148,7 @@ namespace ItemIntelligence
 
         private static void PushBrowserNavigationState()
         {
-            if (string.IsNullOrEmpty(_inspectorItemId)) return;
-
-            BrowserNavigation.History.Add(new BrowserItemNavigationState(
-                _inspectorItemId, BrowserNavigation.Tab, BrowserNavigation.ScrollOffset));
-            if (BrowserNavigation.History.Count > BrowserNavigationHistoryLimit)
-                BrowserNavigation.History.RemoveAt(0);
+            BrowserNavigation.Push(_inspectorItemId);
         }
 
         private static bool NavigateBrowserToItem(string itemId, bool resetToOverview, string source)
@@ -169,11 +164,8 @@ namespace ItemIntelligence
             CloseBrowserCatalog();
             HideBrowserPreviewTooltip();
             _inspectorItemId = itemId;
-            if (resetToOverview || (changed && wasLandingContext))
-                BrowserNavigation.Tab = (int)ResolveAdaptiveEntryTab(itemId);
-            BrowserNavigation.ScrollOffset = 0;
-            if (BrowserNavigation.Tab >= 0 && BrowserNavigation.Tab < BrowserNavigation.ScrollOffsets.Length)
-                BrowserNavigation.ScrollOffsets[BrowserNavigation.Tab] = 0;
+            BrowserNavigation.StartItem(resetToOverview || (changed && wasLandingContext)
+                ? (int)ResolveAdaptiveEntryTab(itemId) : BrowserNavigation.Tab);
             _secretDataSelectedFactionId = string.Empty;
             _marketScanActive = false;
             _marketScanComplete = false;
@@ -194,20 +186,13 @@ namespace ItemIntelligence
 
         private static bool NavigateBrowserBack()
         {
-            while (BrowserNavigation.History.Count > 0)
+            BrowserNavigationSnapshot snapshot;
+            if (BrowserNavigation.TryBack(IsKnownItemId, out snapshot))
             {
-                int last = BrowserNavigation.History.Count - 1;
-                BrowserItemNavigationState state = BrowserNavigation.History[last];
-                BrowserNavigation.History.RemoveAt(last);
-                if (state == null || string.IsNullOrEmpty(state.ItemId) || !IsKnownItemId(state.ItemId))
-                    continue;
-
                 CloseBrowserCatalog();
                 HideBrowserPreviewTooltip();
-                _inspectorItemId = state.ItemId;
-                BrowserNavigation.Tab = Math.Max(0, Math.Min(BrowserTabCount - 1, state.Tab));
-                BrowserNavigation.ScrollOffset = Math.Max(0, state.ScrollOffset);
-                BrowserNavigation.ScrollOffsets[BrowserNavigation.Tab] = BrowserNavigation.ScrollOffset;
+                _inspectorItemId = snapshot.ItemId;
+                BrowserNavigation.Restore(snapshot);
                 _secretDataSelectedFactionId = string.Empty;
                 _marketScanActive = false;
                 _marketScanComplete = false;
@@ -408,8 +393,11 @@ namespace ItemIntelligence
             return _browserCatalogSortDescending ? -result : result;
         }
 
+        private static readonly CatalogSortCache BrowserCatalogSort = new CatalogSortCache();
+
         private static void RefreshBrowserCatalog()
         {
+            long refreshStarted = System.Diagnostics.Stopwatch.GetTimestamp();
             if (!IsBrowserCatalogDataFilterAvailable(_browserCatalogDataFilter))
                 _browserCatalogDataFilter = BrowserCatalogDataFilter.Any;
 
@@ -436,10 +424,26 @@ namespace ItemIntelligence
                 BrowserCatalogFilteredItemIds.Add(itemId);
             }
 
+            long sortStarted = System.Diagnostics.Stopwatch.GetTimestamp();
+            bool sortReused = false;
             if (_browserCatalogScope != BrowserCatalogScope.Recent)
-                BrowserCatalogFilteredItemIds.Sort(CompareBrowserCatalogItems);
+                sortReused = BrowserCatalogSort.Sort(BrowserCatalogFilteredItemIds, CompareBrowserCatalogItems,
+                    _browserSearchIndexRevision, (int)_browserCatalogSortMode, _browserCatalogSortDescending,
+                    CultureInfo.CurrentCulture.CompareInfo.Name,
+                    _browserCatalogSortMode != BrowserCatalogSortMode.Tech);
 
+            long rowsStarted = System.Diagnostics.Stopwatch.GetTimestamp();
             RenderBrowserCatalogRows();
+            if (VerboseLogging)
+            {
+                long finished = System.Diagnostics.Stopwatch.GetTimestamp();
+                double msPerTick = 1000d / System.Diagnostics.Stopwatch.Frequency;
+                VerboseLog("[ItemIntelligence][CatalogPerf] items=" + BrowserCatalogFilteredItemIds.Count +
+                    ", filter=" + ((sortStarted - refreshStarted) * msPerTick).ToString("0.00", CultureInfo.InvariantCulture) +
+                    "ms, sort=" + ((rowsStarted - sortStarted) * msPerTick).ToString("0.00", CultureInfo.InvariantCulture) +
+                    "ms, rows=" + ((finished - rowsStarted) * msPerTick).ToString("0.00", CultureInfo.InvariantCulture) +
+                    "ms, reused=" + sortReused + ".");
+            }
         }
 
         private static void SelectBrowserCatalogItem(string itemId)

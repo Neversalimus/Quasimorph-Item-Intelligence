@@ -7,9 +7,8 @@ namespace ItemIntelligence
     public static partial class ModMain
     {
         private static BrowserLine _overviewShipCargoLine;
-        private static string _overviewShipCargoItemId;
-        private static int? _overviewShipCargoCount;
-        private static float _overviewShipCargoNextCheck;
+        private static readonly ShipCargoMonitor OverviewShipCargo =
+            new ShipCargoMonitor(ReadOverviewShipCargoCount);
 
         private static int? ReadOverviewShipCargoCount(string itemId)
         {
@@ -37,10 +36,8 @@ namespace ItemIntelligence
 
         private static void AppendOverviewShipCargo(string itemId)
         {
-            _overviewShipCargoItemId = itemId;
-            _overviewShipCargoCount = ReadOverviewShipCargoCount(itemId);
-            _overviewShipCargoLine = CreateOverviewShipCargoLine(_overviewShipCargoCount);
-            _overviewShipCargoNextCheck = Time.realtimeSinceStartup + 0.5f;
+            _overviewShipCargoLine = CreateOverviewShipCargoLine(
+                OverviewShipCargo.Begin(itemId, Time.realtimeSinceStartup));
             BrowserLines.Add(_overviewShipCargoLine);
         }
 
@@ -48,16 +45,12 @@ namespace ItemIntelligence
         {
             if (!_inspectorOpen || _browserCatalogOpen || _inspectorRoot == null ||
                 BrowserNavigation.Tab != (int)BrowserTabId.Overview || _overviewShipCargoLine == null ||
-                !string.Equals(_overviewShipCargoItemId, _inspectorItemId, StringComparison.Ordinal) ||
-                Time.realtimeSinceStartup < _overviewShipCargoNextCheck) return;
-
-            _overviewShipCargoNextCheck = Time.realtimeSinceStartup + 0.5f;
-            int? count = ReadOverviewShipCargoCount(_inspectorItemId);
-            if (count == _overviewShipCargoCount) return;
+                !OverviewShipCargo.IsDue(_inspectorItemId, Time.realtimeSinceStartup)) return;
 
             int index = BrowserLines.IndexOf(_overviewShipCargoLine);
             if (index < 0) return;
-            _overviewShipCargoCount = count;
+            int? count;
+            if (!OverviewShipCargo.TryRefresh(_inspectorItemId, Time.realtimeSinceStartup, out count)) return;
             _overviewShipCargoLine = CreateOverviewShipCargoLine(count);
             BrowserLines[index] = _overviewShipCargoLine;
             // Update only the value row; keep scroll position, search and other data.
@@ -67,9 +60,7 @@ namespace ItemIntelligence
         private static void ResetOverviewShipCargo()
         {
             _overviewShipCargoLine = null;
-            _overviewShipCargoItemId = null;
-            _overviewShipCargoCount = null;
-            _overviewShipCargoNextCheck = 0f;
+            OverviewShipCargo.Reset();
         }
     }
 }

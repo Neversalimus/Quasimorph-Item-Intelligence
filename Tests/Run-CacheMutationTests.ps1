@@ -24,7 +24,42 @@ $cases = @(
        Error='dynamic row fails closed even with a matching stamp' },
     @{ File='ModMain.BrowserRowRenderCache.cs'; Test='Run-ReadabilityTests.ps1';
        Before='string.Equals(Language, language ?? string.Empty, StringComparison.OrdinalIgnoreCase) &&';
-       After='true &&'; Error='language switch rejects stale row text' }
+       After='true &&'; Error='language switch rejects stale row text' },
+    @{ File='ShipCargoMonitor.cs'; Test='Run-ShipCargoTests.ps1';
+       Before='ItemId = null;'; After='/* intentionally retain previous selection */';
+       Error='reset releases selected item and count' },
+    @{ File='ShipCargoMonitor.cs'; Test='Run-ShipCargoTests.ps1';
+       Before='string.Equals(ItemId, itemId, StringComparison.Ordinal)'; After='true';
+       Error='another item cannot poll or delay the selected item' },
+    @{ File='ShipCargoMonitor.cs'; Test='Run-ShipCargoTests.ps1';
+       Before='if (next == Count) return false;'; After='/* intentionally redraw unchanged stock */';
+       Error='unchanged stock does not request rendering' },
+    @{ File='BrowserNavigationSessionState.cs'; Test='Run-BrowserNavigationTests.ps1';
+       Before='ScrollOffset = scrollOffsets[Tab];'; After='ScrollOffset = 0;';
+       Error='switching tabs restores each saved offset' },
+    @{ File='BrowserNavigationSessionState.cs'; Test='Run-BrowserNavigationTests.ps1';
+       Before='history.RemoveAt(0);'; After='history.RemoveAt(history.Count - 1);';
+       Error='history restores bounded newest-first snapshots' },
+    @{ File='BrowserNavigationSessionState.cs'; Test='Run-BrowserNavigationTests.ps1';
+       Before='Array.Clear(scrollOffsets, 0, scrollOffsets.Length);'; After='/* intentionally retain tab offsets */';
+       Error='new inspection clears per-tab offsets' },
+    @{ File='BrowserNavigationSessionState.cs'; Test='Run-BrowserNavigationTests.ps1';
+       Before='if (!isKnownItem(entry.ItemId)) continue;';
+       After='if (isKnownItem(entry.ItemId) && entry.ItemId == null) continue;';
+       Error='back skips items missing from the current game data' },
+    @{ File='BrowserNavigationSessionState.cs'; Test='Run-BrowserNavigationTests.ps1';
+       Before='SetScrollOffset(0);'; After='history.Clear(); SetScrollOffset(0);';
+       Error='new item resets its current tab without discarding back history' },
+    @{ File='CatalogSortCache.cs'; Test='Run-CatalogSortTests.ps1';
+       Before='revision == nextRevision &&'; After='true &&';
+       Error='name revision invalidates ordering' },
+    @{ File='CatalogSortCache.cs'; Test='Run-CatalogSortTests.ps1';
+       Before='!string.Equals(sourceOrder[i], items[i], StringComparison.Ordinal)';
+       After='!string.Equals(items[i], items[i], StringComparison.Ordinal)';
+       Error='same-size membership change invalidates ordering' },
+    @{ File='ModMain.BrowserCatalog.cs'; Test='Run-CatalogSortTests.ps1';
+       Before='_browserCatalogSortMode != BrowserCatalogSortMode.Tech'; After='true';
+       Error='Tech changes bypass sort cache without index revision' }
 )
 New-Item -ItemType Directory -Path $temp | Out-Null
 try {

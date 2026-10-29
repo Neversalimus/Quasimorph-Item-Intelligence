@@ -695,3 +695,9 @@ ui.upgrade_implants	Installation d’implants sur les clones
 ui.upgrade_augmentations	Installation d’augmentations sur les clones
 ui.upgrade_equipment	ÉQUIPEMENT AMÉLIORÉ AVEC CETTE RESSOURCE
 ui.ship_cargo	À bord du vaisseau
+
+# Item spoilage
+ui.decay_result	Se transforme en se dégradant
+ui.decay_sources	Obtenu par dégradation
+ui.decay_disappears	Disparaît en se dégradant.
+ui.decay_shelf_life_note	Les durées concernent les objets frais. Le réfrigérateur suspend leur dégradation.

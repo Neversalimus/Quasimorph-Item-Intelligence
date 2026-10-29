@@ -46,20 +46,6 @@ namespace ItemIntelligence
             Count = 7
         }
 
-        private sealed class BrowserItemNavigationState
-        {
-            public readonly string ItemId;
-            public readonly int Tab;
-            public readonly int ScrollOffset;
-
-            public BrowserItemNavigationState(string itemId, int tab, int scrollOffset)
-            {
-                ItemId = itemId ?? string.Empty;
-                Tab = tab;
-                ScrollOffset = scrollOffset;
-            }
-        }
-
         private sealed class BrowserSearchMatch
         {
             public readonly string ItemId;
@@ -253,14 +239,6 @@ namespace ItemIntelligence
                 if (string.IsNullOrEmpty(factionId)) return None();
                 return new BrowserAction(BrowserActionKind.SecretDataFaction, factionId, BrowserTabId.Overview, BrowserLootModifierCommand.None);
             }
-        }
-
-        private sealed class BrowserNavigationSessionState
-        {
-            public int Tab;
-            public int ScrollOffset;
-            public readonly List<BrowserItemNavigationState> History = new List<BrowserItemNavigationState>();
-            public readonly int[] ScrollOffsets = new int[BrowserTabCount];
         }
 
         private static BrowserChipStatus ToBrowserChipStatus(int value)
