@@ -10,31 +10,18 @@ if (-not (Test-Path -LiteralPath $installPath -PathType Leaf)) { throw 'Install.
 $installText = Read-Utf8Strict -Path $installPath
 & (Join-Path $root 'Tests/Run-StagePathTests.ps1') -SourceRoot $root
 
-if ($Mode -eq 'TEST') {
-    # The test installer defaults to a package beside the source tree. Installation
-    # into a live game and any Workshop publication are separate, explicit actions.
-    foreach ($token in @(
-        'Join-Path $root ''_stage\ItemIntelligence''',
-        '$buildArguments = @{ Mode = ''TEST''; WorkshopStage = $stage }',
-        'No Steam upload is performed automatically.',
-        'does not overwrite the live subscribed Workshop copy')) {
-        if ($installText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "TEST staging safety token missing: $token" }
-    }
-    foreach ($forbidden in @('$PublicWorkshopId','$DevWorkshopId','Find-LiveDevWorkshopFolder','workshop\content','.qii_install_tmp','mod_updateworkshopitem')) {
-        if ($installText.IndexOf($forbidden,[StringComparison]::OrdinalIgnoreCase) -ge 0) {
-            throw "TEST Install.ps1 must remain stage-only and never touch live Workshop content: $forbidden"
-        }
-    }
-} else {
-    foreach ($token in @(
-        '$PublicWorkshopId = ''3780078201''',
-        '$stage = ''C:\QM_Workshop\ItemIntelligence''',
-        '$buildArguments = @{ Mode = ''RELEASE''; WorkshopStage = $stage }',
-        'No Steam upload is performed automatically.',
-        'does not overwrite the live subscribed Workshop copy')) {
-        if ($installText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "RELEASE staging safety token missing: $token" }
-    }
-    foreach ($forbidden in @('$DevWorkshopId','Find-LiveDevWorkshopFolder','workshop\content')) {
-        if ($installText.IndexOf($forbidden,[StringComparison]::OrdinalIgnoreCase) -ge 0) { throw "RELEASE Install.ps1 must remain stage-only: $forbidden" }
+# Both installers prepare a package beside the source tree. The build script owns
+# Workshop IDs and validates any explicit stage path; Install never deploys/uploads.
+$installerModeToken = '$buildArguments = @{ Mode = ''' + $Mode + '''; WorkshopStage = $stage }'
+foreach ($token in @(
+    'Join-Path $root ''_stage\ItemIntelligence''',
+    $installerModeToken,
+    'No Steam upload is performed automatically.',
+    'does not overwrite the live subscribed Workshop copy')) {
+    if ($installText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "$Mode staging safety token missing: $token" }
+}
+foreach ($forbidden in @('$PublicWorkshopId','$DevWorkshopId','Find-LiveDevWorkshopFolder','workshop\content','.qii_install_tmp','mod_updateworkshopitem')) {
+    if ($installText.IndexOf($forbidden,[StringComparison]::OrdinalIgnoreCase) -ge 0) {
+        throw "Install.ps1 must remain stage-only and never touch live Workshop content: $forbidden"
     }
 }

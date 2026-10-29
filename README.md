@@ -4,11 +4,9 @@
 
 [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3780078201) · [Downloads](https://github.com/Neversalimus/Quasimorph-Item-Intelligence/releases) · [Changelog](CHANGELOG.md)
 
-This branch contains development build **1.7.43.4-test4** for **Quasimorph 1.0.4.590s.969afc6**.
+This is **Item Intelligence 1.7.43.4** for **Quasimorph 1.0.4.590s.969afc6**.
 
-This build isolates ship-stock polling and browser navigation from the shared UI state and adds a common local/CI check runner. It also reuses unchanged catalog ordering and reduces work when creating the browser. The published stable release is [1.7.43.3](https://github.com/Neversalimus/Quasimorph-Item-Intelligence/releases/tag/v1.7.43.3).
-
-It also shows what perishable items turn into and which items can spoil into a resource, directly in **Overview** and **Recipes**. These are clickable, immediate transformations from the game's spoilage table. Times refer to fresh items; refrigeration pauses spoilage.
+Overview and Recipes show what perishable items turn into and which items can spoil into a resource, with clickable links and shelf lives for fresh items. Refrigeration pauses spoilage. This version also reduces repeated catalog work and improves internal browser-state ownership. See the [release notes](Release/Notes-v1.7.43.4.md).
 
 Compatibility for the new build is enabled through audited feature-owned gates. Unknown future builds continue to fail closed for exact calculations until their contracts are reviewed.
 
@@ -69,7 +67,7 @@ A Windows build requires **PowerShell 7** and a local Quasimorph installation. F
 pwsh -NoProfile -ExecutionPolicy Bypass -File .\Install.ps1 -GameRoot "C:\Program Files (x86)\Steam\steamapps\common\Quasimorph"
 ```
 
-Use your actual game path. This compiles the development source against the installed game and stages a local test package in `_stage\ItemIntelligence` beside the source. Pass `-WorkshopStage` to choose another package directory. The installer does not replace a subscribed copy or upload to Steam. Game assemblies and compiled binaries are not stored in this repository.
+Use your actual game path. This compiles the stable source against the installed game and stages a local package in `_stage\ItemIntelligence` beside the source. Pass `-WorkshopStage` to choose another package directory. The installer does not replace a subscribed copy or upload to Steam. Game assemblies and compiled binaries are not stored in this repository.
 
 A stage must be empty or contain an Item Intelligence package. Source directories, game installations, live Steam content, linked paths and folders with unrelated files are rejected. Existing packages are backed up before replacement. If an interrupted build leaves an incomplete `.tmp` folder, inspect it and choose a fresh stage path.
 
