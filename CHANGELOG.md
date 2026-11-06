@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.7.43.5 — 2026-11-06
+
+- Fixed chip recipe links for every piece of an armor set, including helmets, leggings and boots.
+- Included default ammunition unlocked together with weapons. Chip chances retain the original pool weights and account for shared unlocks.
+- Added **Weapon type** to the Weapons catalog, using the game's classifications instead of item ID keywords.
+- Added search by localized weapon classes and built-in perks, with `weapon:` / `class:` and `perk:` / `trait:` filters.
+- Updated search hints and chip explanations in all 11 supported languages.
+
 ## v1.7.43.5-test1 — 2026-11-06
 
 - Fixed chip recipe links for all pieces of an armor set.

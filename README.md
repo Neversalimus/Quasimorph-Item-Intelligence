@@ -4,11 +4,11 @@
 
 [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3780078201) · [Downloads](https://github.com/Neversalimus/Quasimorph-Item-Intelligence/releases) · [Changelog](CHANGELOG.md)
 
-This branch contains **Item Intelligence 1.7.43.5-test1** for **Quasimorph 1.0.4.590s.969afc6**.
+This branch contains **Item Intelligence 1.7.43.5** for **Quasimorph 1.0.4.590s.969afc6**.
 
-This test build fixes chip links for complete armor sets and default weapon ammunition. In the catalog, select Weapons and use Weapon type. Search also accepts translated weapon classes and perks, or combined filters such as `weapon:AssaultRifle perk:suppressor`.
+This version fixes chip links for complete armor sets and default weapon ammunition. In the catalog, select **Weapons → Weapon type** to filter by the game's classifications. Search also accepts translated weapon classes and built-in perks, or combined filters such as `weapon:AssaultRifle perk:suppressor`. See the [release notes](Release/Notes-v1.7.43.5.md).
 
-Overview and Recipes show what perishable items turn into and which items can spoil into a resource, with clickable links and shelf lives for fresh items. Refrigeration pauses spoilage. This version also reduces repeated catalog work and improves internal browser-state ownership. See the [release notes](Release/Notes-v1.7.43.4.md).
+Overview and Recipes show what perishable items turn into and which items can spoil into a resource, with clickable links and shelf lives for fresh items. Refrigeration pauses spoilage.
 
 Compatibility for the new build is enabled through audited feature-owned gates. Unknown future builds continue to fail closed for exact calculations until their contracts are reviewed.
 
@@ -17,6 +17,8 @@ Optional verbose logging keeps `Player.log` concise in normal mode while preserv
 ## Features
 
 - Item search, catalog, favorites, browsing history and advanced filters.
+- Weapon-type filters and search by the game's localized weapon classes and built-in perks.
+- Chip recipe links for complete armor sets and ammunition unlocked together with weapons.
 - Item overview with live ship stock, recipes, disassembly, station production and Magnum requirements.
 - Upgrade material uses and clickable equipment targets, separate from finite ship-research totals.
 - Spoilage results and sources, including food and perishable quasimorph equipment, with shelf lives for fresh items.
