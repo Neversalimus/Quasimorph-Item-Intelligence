@@ -16,7 +16,12 @@ $cases = @(
     @{ File = 'ModMain.LootIndexes.cs'; Before = 'GetMember(entry.Value, "AmputatedDrop")'; After = 'GetMember(entry.Value, "MissingAmputatedDrop")'; Error = 'tuple amputation index contains known outcomes' },
     @{ File = 'ItemDecayIndex.cs'; Test = 'Run-ItemDecayTests.ps1'; Before = 'linked.Add(relation);'; After = '/* omit reverse link */'; Error = 'both reverse sources retained' },
     @{ File = 'ModMain.ItemDecay.cs'; Test = 'Run-ItemDecayTests.ps1'; Before = '!IsExpirableItemRecord(itemRecord)'; After = 'false'; Error = 'only known expirable records with valid output and time indexed' },
-    @{ File = 'ModMain.ItemDecay.cs'; Test = 'Run-ItemDecayTests.ps1'; Before = 'ItemDecay.Clear();'; After = '/* retain stale graph */'; Error = 'failed build clears partial graph' }
+    @{ File = 'ModMain.ItemDecay.cs'; Test = 'Run-ItemDecayTests.ps1'; Before = 'ItemDecay.Clear();'; After = '/* retain stale graph */'; Error = 'failed build clears partial graph' },
+    @{ File = 'ModMain.DatadiskUnlockExpansion.cs'; Test = 'Run-ItemKnowledgeTests.ps1'; Before = 'foreach (string itemId in setItems) AddKnownDatadiskOutput(result, itemId);'; After = 'AddKnownDatadiskOutput(result, unlockId);'; Error = 'all set pieces link to the chip' },
+    @{ File = 'ModMain.DatadiskRuntime.cs'; Test = 'Run-ItemKnowledgeTests.ps1'; Before = 'UnlockPoolSizeByDatadisk[datadiskItemId] = rawPool.Count;'; After = 'UnlockPoolSizeByDatadisk[datadiskItemId] = counts.Count;'; Error = 'original chip pool probability' },
+    @{ File = 'ModMain.WeaponSearch.cs'; Test = 'Run-ItemKnowledgeTests.ps1'; Before = 'classId = weapon.WeaponClass.ToString();'; After = 'classId = "Pistol";'; Error = 'plain class search does not need an item-ID keyword' },
+    @{ File = 'ModMain.WeaponSearch.cs'; Test = 'Run-ItemKnowledgeTests.ps1'; Before = 'perks.Add(LocalizeWeaponModePayloadTrait(traitId));'; After = '/* omit translated perk */'; Error = 'Chinese class and perk names are searchable' },
+    @{ File = 'ModMain.WeaponSearch.cs'; Test = 'Run-ItemKnowledgeTests.ps1'; Before = 'BrowserWeaponPerkTerms.Clear();'; After = '/* retain old language */'; Error = 'language reset clears weapon search metadata' }
 )
 New-Item -ItemType Directory -Path $temp | Out-Null
 try {

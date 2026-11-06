@@ -235,8 +235,8 @@ if ($ruLocalizationText.IndexOf('ШАНС ≥1',[StringComparison]::Ordinal) -ge
     $enLocalizationText.IndexOf('≥1 CHANCE',[StringComparison]::Ordinal) -ge 0) {
     throw 'current font-safety regression: unsupported Scavengers heading glyph returned.'
 }
-if ($runtimeText.IndexOf('public const string Version = "1.7.43.4";',[StringComparison]::Ordinal) -lt 0 -or
-    $runtimeText.IndexOf('StableRelease17434',[StringComparison]::Ordinal) -lt 0) {
+if ($runtimeText.IndexOf('public const string Version = "1.7.43.5-test1";',[StringComparison]::Ordinal) -lt 0 -or
+    $runtimeText.IndexOf('Feature17435Test1',[StringComparison]::Ordinal) -lt 0) {
     throw 'current runtime version/marker contract missing.'
 }
 
@@ -261,7 +261,7 @@ $datadiskText = [IO.File]::ReadAllText((Join-Path $sourceDir 'ModMain.DatadiskRu
 foreach ($token in @('MGSC.DatadiskRecord','SetCanonicalDatadiskUnlockPool','UnlockPoolSizeByDatadisk')) {
     if ($datadiskText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "current canonical datadisk contract missing: $token" }
 }
-foreach ($token in @('if (rawUnlockType == null) continue;','Convert.ToInt32(rawUnlockType, CultureInfo.InvariantCulture)','if (unlockType != 0) continue;','string outputItemId = rawPool[n];')) {
+foreach ($token in @('if (rawUnlockType == null) continue;','Convert.ToInt32(rawUnlockType, CultureInfo.InvariantCulture)','if (unlockType != 0) continue;','GetDatadiskUnlockOutputs(rawPool[n])','UnlockPoolSizeByDatadisk[datadiskItemId] = rawPool.Count;')) {
     if ($datadiskText.IndexOf($token,[StringComparison]::Ordinal) -lt 0) { throw "current production-datadisk exact contract missing: $token" }
 }
 if ($datadiskText.IndexOf('RecipesById.TryGetValue(unlockId',[StringComparison]::Ordinal) -ge 0) { throw 'current datadisk regression: vanilla production UnlockId must not be remapped through recipes.' }

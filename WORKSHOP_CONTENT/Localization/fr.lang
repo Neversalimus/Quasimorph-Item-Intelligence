@@ -216,7 +216,7 @@ ui.roll	/tirage
 ui.rolls	TIRAGES
 ui.rolls_2	 tirages
 ui.rows	 LIGNES
-ui.search_item	CHERCHER UN OBJET...
+ui.search_item	OBJET, TYPE D’ARME OU ATOUT...
 ui.secondary_ammo	munitions secondaires
 ui.secondary_weapon	arme secondaire
 ui.sell_to_stations	ACCEPTÉ EN STATION
@@ -419,7 +419,7 @@ ui.chip_unlocks	DÉBLOQUE
 ui.back_to	RETOUR À
 compat.module	Module
 compat.reason	Raison :
-ui.chip_unlock_chance_note	La probabilité correspond à une puce. Les objets déjà débloqués restent dans la réserve de sélection.
+ui.chip_unlock_chance_note	Probabilité par puce ; les objets déjà débloqués restent dans le tirage. Certains plans se débloquent ensemble : leurs probabilités se recoupent.
 ui.chip_summary_unlocked	débloqué
 ui.chip_summary_locked	verrouillé
 ui.chip_summary_unknown	inconnu
@@ -486,7 +486,7 @@ ui.modder_item_class	Classe d’objet
 ui.modder_tech_level	Niveau technologique
 ui.modder_relation_id	ID du lien
 ui.modder_firemode_ids	ID des modes de tir
-ui.modder_search_syntax	Recherche avancée : id:  name:  type:  rel:  tech:  cat:   Exemple : cat:weapon tech:>=5
+ui.modder_search_syntax	Recherche avancée : id:  name:  type:  weapon:  perk:  rel:  tech:  cat:   Exemple : cat:weapon tech:>=5
 ui.search_item_modder	CHERCHER...  id: / tech: / cat:
 ui.open_item_link	OUVRIR L’OBJET
 ui.modder_spawn_title	ACTIONS DE CRÉATION
@@ -701,3 +701,5 @@ ui.decay_result	Se transforme en se dégradant
 ui.decay_sources	Obtenu par dégradation
 ui.decay_disappears	Disparaît en se dégradant.
 ui.decay_shelf_life_note	Les durées concernent les objets frais. Le réfrigérateur suspend leur dégradation.
+catalog.weapon_type	Type d’arme
+catalog.weapon_throwing	Armes de jet

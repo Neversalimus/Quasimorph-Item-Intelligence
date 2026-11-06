@@ -247,6 +247,8 @@ namespace ItemIntelligence
             BrowserCatalogCategoryByItem.Clear();
             ResetBrowserAdvancedSearchIndexState();
             BrowserCatalogFilteredItemIds.Clear();
+            _browserCatalogWeaponClass = string.Empty;
+            CloseBrowserWeaponTypeChoices();
             _browserCatalogOpen = false;
             _browserCatalogCategory = 0;
             _browserCatalogScrollOffset = 0;

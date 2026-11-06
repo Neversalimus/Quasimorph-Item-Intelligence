@@ -359,11 +359,11 @@ namespace ItemIntelligence
                 else unknownCount++;
             }
 
-            BrowserLines.Add(BrowserLine.Header(
-                Ui("ui.chip_unlocks") + "  /  " + chipUnlockItems.Count.ToString(CultureInfo.InvariantCulture),
+            BrowserLines.Add(BrowserLine.Header(Ui("ui.chip_unlocks") + "  /  " + chipUnlockItems.Count.ToString(CultureInfo.InvariantCulture),
                 FormatChipUnlockStatusSummary(learnedCount, lockedCount, unknownCount)));
             if (_chipUnlockChanceContractVerified)
-                BrowserLines.Add(BrowserLine.ChipNote(Ui("ui.chip_unlock_chance_note")));
+                foreach (string note in WrapBrowserFullWidthText(Ui("ui.chip_unlock_chance_note"), GetLanguageAwareWrapFallback(100, 115)))
+                    BrowserLines.Add(BrowserLine.ChipNote(note));
 
             for (int i = 0; i < chipUnlockItems.Count; i++)
             {

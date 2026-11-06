@@ -19,6 +19,8 @@ namespace ItemIntelligence
             public readonly List<string> IdTerms = new List<string>();
             public readonly List<string> NameTerms = new List<string>();
             public readonly List<string> TypeTerms = new List<string>();
+            public readonly List<string> WeaponTerms = new List<string>();
+            public readonly List<string> PerkTerms = new List<string>();
             public readonly List<string> RelationTerms = new List<string>();
             public readonly List<int> Categories = new List<int>();
             public readonly List<BrowserTechConstraint> Tech = new List<BrowserTechConstraint>();
@@ -53,6 +55,7 @@ namespace ItemIntelligence
             BrowserSearchRecordTypes.Clear();
             BrowserSearchRelationIds.Clear();
             BrowserSearchTechLevels.Clear();
+            ResetBrowserWeaponSearchIndex();
         }
 
         private static void EnsureBrowserSearchIndexWarmup()
@@ -147,6 +150,7 @@ namespace ItemIntelligence
         {
             object record;
             if (!ItemRecordsById.TryGetValue(itemId, out record) || record == null) return;
+            IndexBrowserWeaponSearchMetadata(itemId);
 
             Type type = record.GetType();
             string typeName = type.FullName ?? type.Name ?? string.Empty;
@@ -247,6 +251,8 @@ namespace ItemIntelligence
                 if (field == "id") { result.IdTerms.Add(value); result.HasTechnicalFilter = true; }
                 else if (field == "name") result.NameTerms.Add(value);
                 else if (field == "type") { result.TypeTerms.Add(value); result.HasTechnicalFilter = true; }
+                else if (field == "weapon" || field == "class") { result.WeaponTerms.Add(value); result.HasTechnicalFilter = true; }
+                else if (field == "perk" || field == "trait") { result.PerkTerms.Add(value); result.HasTechnicalFilter = true; }
                 else if (field == "rel" || field == "relation") { result.RelationTerms.Add(value); result.HasTechnicalFilter = true; }
                 else if (field == "cat" || field == "category")
                 {
@@ -379,8 +385,12 @@ namespace ItemIntelligence
 
             string typeName;
             if (!BrowserSearchRecordTypes.TryGetValue(itemId, out typeName)) typeName = string.Empty;
+            string weaponType;
+            if (BrowserWeaponClassTerms.TryGetValue(itemId, out weaponType)) typeName += " " + weaponType;
             for (int i = 0; i < query.TypeTerms.Count; i++)
                 if (typeName.IndexOf(query.TypeTerms[i], StringComparison.Ordinal) < 0) return false;
+            if (!BrowserWeaponTermsMatch(itemId, query.WeaponTerms, false) ||
+                !BrowserWeaponTermsMatch(itemId, query.PerkTerms, true)) return false;
 
             string relationId;
             if (!BrowserSearchRelationIds.TryGetValue(itemId, out relationId)) relationId = string.Empty;
@@ -411,6 +421,8 @@ namespace ItemIntelligence
             {
                 int plainScore = ScoreBrowserSearchMatch(
                     normalizedName, normalizedId, query.PlainJoined, query.PlainTokens);
+                if (plainScore < 0)
+                    plainScore = ScoreBrowserWeaponSearch(itemId, normalizedName, normalizedId, query.PlainJoined, query.PlainTokens);
                 if (plainScore < 0) return false;
                 score += plainScore;
             }
@@ -421,7 +433,8 @@ namespace ItemIntelligence
         {
             BrowserAdvancedSearchQuery parsed = ParseBrowserAdvancedSearchQuery(rawQuery);
             if (parsed.PlainTerms.Count == 0 && parsed.IdTerms.Count == 0 && parsed.NameTerms.Count == 0 &&
-                parsed.TypeTerms.Count == 0 && parsed.RelationTerms.Count == 0 && parsed.Categories.Count == 0 && parsed.Tech.Count == 0)
+                parsed.TypeTerms.Count == 0 && parsed.WeaponTerms.Count == 0 && parsed.PerkTerms.Count == 0 &&
+                parsed.RelationTerms.Count == 0 && parsed.Categories.Count == 0 && parsed.Tech.Count == 0)
             {
                 _browserSearchLastResultCount = 0;
                 BrowserSearchCurrentMatches.Clear();

@@ -216,7 +216,7 @@ ui.roll	/çekiliş
 ui.rolls	ÇEKİLİŞ
 ui.rolls_2	 çekiliş
 ui.rows	 SATIR
-ui.search_item	EŞYA ARA…
+ui.search_item	EŞYA, SİLAH TÜRÜ VEYA ÖZELLİK...
 ui.secondary_ammo	ikincil silah mühimmatı
 ui.secondary_weapon	ikincil silah
 ui.sell_to_stations	ALAN İSTASYONLAR
@@ -419,7 +419,7 @@ ui.chip_unlocks	AÇILANLAR
 ui.back_to	GERİ:
 compat.module	Modül
 compat.reason	Neden:
-ui.chip_unlock_chance_note	Olasılık tek çip içindir. Açılmış eşyalar da seçim havuzunda kalır.
+ui.chip_unlock_chance_note	Olasılık tek çip içindir; açılmış eşyalar da havuzda kalır. Bazı tarifler birlikte açıldığı için olasılıkları örtüşür.
 ui.chip_summary_unlocked	açık
 ui.chip_summary_locked	kilitli
 ui.chip_summary_unknown	bilinmiyor
@@ -486,7 +486,7 @@ ui.modder_item_class	Eşya sınıfı
 ui.modder_tech_level	Teknoloji seviyesi
 ui.modder_relation_id	İlişki ID
 ui.modder_firemode_ids	Ateş modu ID
-ui.modder_search_syntax	Gelişmiş arama: id:  name:  type:  rel:  tech:  cat:   Örnek: cat:weapon tech:>=5
+ui.modder_search_syntax	Gelişmiş arama: id:  name:  type:  weapon:  perk:  rel:  tech:  cat:   Örnek: cat:weapon tech:>=5
 ui.search_item_modder	ARA…  id: / tech: / cat:
 ui.open_item_link	EŞYAYI AÇ
 ui.modder_spawn_title	MOD YAPIM ARAÇLARI
@@ -701,3 +701,5 @@ ui.decay_result	Bozulunca dönüşür
 ui.decay_sources	Bozulmayla elde edilir
 ui.decay_disappears	Bozulunca kaybolur.
 ui.decay_shelf_life_note	Süreler taze eşyalar içindir. Buzdolabı bozulmayı duraklatır.
+catalog.weapon_type	Silah türü
+catalog.weapon_throwing	Fırlatma silahları

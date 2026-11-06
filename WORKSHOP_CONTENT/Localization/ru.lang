@@ -216,7 +216,7 @@ ui.roll	/бросок
 ui.rolls	БРОСКИ
 ui.rolls_2	 броск.
 ui.rows	 СТРОК
-ui.search_item	ПОИСК ПРЕДМЕТА...
+ui.search_item	ПОИСК: ПРЕДМЕТ, ТИП, ПЕРК...
 ui.secondary_ammo	патроны доп. оружия
 ui.secondary_weapon	доп. оружие
 ui.sell_to_stations	СТАНЦИИ ПРИНИМАЮТ
@@ -420,7 +420,7 @@ ui.back_to	НАЗАД К
 compat.module	Модуль
 compat.reason	Причина:
 
-ui.chip_unlock_chance_note	Шанс указан для одного чипа. Уже открытые предметы остаются в пуле.
+ui.chip_unlock_chance_note	Шанс на один чип; открытые предметы остаются в пуле. Один результат может открыть несколько рецептов сразу; их шансы не складываются.
 ui.chip_summary_unlocked	открыто
 ui.chip_summary_locked	не открыто
 ui.chip_summary_unknown	неизвестно
@@ -490,7 +490,7 @@ ui.modder_item_class	Класс предмета
 ui.modder_tech_level	Тех. уровень
 ui.modder_relation_id	ID связи
 ui.modder_firemode_ids	ID режимов
-ui.modder_search_syntax	Расширенный поиск: id:  name:  type:  rel:  tech:  cat:   Пример: cat:оружие tech:>=5
+ui.modder_search_syntax	Расширенный поиск: id:  name:  type:  weapon:  perk:  rel:  tech:  cat:   Пример: cat:оружие tech:>=5
 ui.search_item_modder	ПОИСК...  id: / tech: / cat:
 ui.open_item_link	ОТКРЫТЬ
 ui.modder_spawn_title	ИНСТРУМЕНТЫ МОДДЕРА
@@ -713,3 +713,5 @@ ui.decay_result	Превращается при порче
 ui.decay_sources	Можно получить при порче
 ui.decay_disappears	Исчезает при порче.
 ui.decay_shelf_life_note	Указан срок хранения свежего предмета. В холодильнике порча приостановлена.
+catalog.weapon_type	Тип оружия
+catalog.weapon_throwing	Метательное оружие

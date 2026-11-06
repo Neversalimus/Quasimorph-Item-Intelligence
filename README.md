@@ -4,7 +4,9 @@
 
 [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3780078201) · [Downloads](https://github.com/Neversalimus/Quasimorph-Item-Intelligence/releases) · [Changelog](CHANGELOG.md)
 
-This is **Item Intelligence 1.7.43.4** for **Quasimorph 1.0.4.590s.969afc6**.
+This branch contains **Item Intelligence 1.7.43.5-test1** for **Quasimorph 1.0.4.590s.969afc6**.
+
+This test build fixes chip links for complete armor sets and default weapon ammunition. In the catalog, select Weapons and use Weapon type. Search also accepts translated weapon classes and perks, or combined filters such as `weapon:AssaultRifle perk:suppressor`.
 
 Overview and Recipes show what perishable items turn into and which items can spoil into a resource, with clickable links and shelf lives for fresh items. Refrigeration pauses spoilage. This version also reduces repeated catalog work and improves internal browser-state ownership. See the [release notes](Release/Notes-v1.7.43.4.md).
 

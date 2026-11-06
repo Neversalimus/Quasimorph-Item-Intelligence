@@ -256,6 +256,7 @@ namespace ItemIntelligence
             _browserCatalogHeaderText = headerGo.GetComponent<TMP_Text>();
             _browserCatalogHeaderText.enableWordWrapping = false;
             _browserCatalogHeaderText.overflowMode = TextOverflowModes.Truncate;
+            CreateBrowserWeaponTypeUi();
 
             for (int i = 0; i < BrowserCatalogRowCapacity; i++)
             {
@@ -365,6 +366,9 @@ namespace ItemIntelligence
                     GetBrowserCatalogCategoryLabel(_browserCatalogCategory, false) + "  /  " +
                     GetBrowserCatalogDataFilterLabel(_browserCatalogDataFilter) + "  /  " +
                     total.ToString(CultureInfo.InvariantCulture);
+                if (_browserCatalogCategory == 1)
+                    header = total.ToString(CultureInfo.InvariantCulture) + "  /  " + GetBrowserCatalogScopeLabel(_browserCatalogScope, false) +
+                        "  /  " + GetBrowserCatalogDataFilterLabel(_browserCatalogDataFilter);
                 SetBrowserTextIfChanged(_browserCatalogHeaderText, NormalizeModUiText(header));
             }
 
@@ -436,6 +440,7 @@ namespace ItemIntelligence
 
         private static void UpdateBrowserCatalogControls()
         {
+            UpdateBrowserWeaponTypeControl();
             for (int i = 0; i < BrowserCatalogScopeCount; i++)
             {
                 BrowserCatalogScope scope = (BrowserCatalogScope)i;

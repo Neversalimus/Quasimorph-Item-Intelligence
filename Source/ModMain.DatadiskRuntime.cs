@@ -38,10 +38,12 @@ namespace ItemIntelligence
 
                 for (int n = 0; n < rawPool.Count; n++)
                 {
-                    string outputItemId = rawPool[n];
-                    if (string.IsNullOrEmpty(outputItemId) || !KnownItemIds.Contains(outputItemId)) continue;
-                    AddUniqueString(DatadisksByUnlockedItem, outputItemId, datadiskItemId);
-                    AddUniqueString(ItemsUnlockedByDatadisk, datadiskItemId, outputItemId);
+                    if (string.IsNullOrEmpty(rawPool[n])) continue;
+                    foreach (string outputItemId in GetDatadiskUnlockOutputs(rawPool[n]))
+                    {
+                        AddUniqueString(DatadisksByUnlockedItem, outputItemId, datadiskItemId);
+                        AddUniqueString(ItemsUnlockedByDatadisk, datadiskItemId, outputItemId);
+                    }
                 }
             }
         }
@@ -55,9 +57,14 @@ namespace ItemIntelligence
             {
                 string unlockId = rawPool[i];
                 if (string.IsNullOrEmpty(unlockId)) continue;
-                int current;
-                counts.TryGetValue(unlockId, out current);
-                counts[unlockId] = current + 1;
+                // One raw entry can unlock several recipes together. Each affected item
+                // receives this entry's weight once; the original roll denominator stays intact.
+                foreach (string outputItemId in GetDatadiskUnlockOutputs(unlockId))
+                {
+                    int current;
+                    counts.TryGetValue(outputItemId, out current);
+                    counts[outputItemId] = current + 1;
+                }
             }
             UnlockHitCountsByDatadisk[datadiskItemId] = counts;
             UnlockPoolSizeByDatadisk[datadiskItemId] = rawPool.Count;

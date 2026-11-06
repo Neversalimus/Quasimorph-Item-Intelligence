@@ -216,7 +216,7 @@ ui.roll	/tirada
 ui.rolls	TIRADAS
 ui.rolls_2	 tiradas
 ui.rows	 FILAS
-ui.search_item	BUSCAR OBJETO...
+ui.search_item	OBJETO, TIPO DE ARMA O RASGO...
 ui.secondary_ammo	munición secundaria
 ui.secondary_weapon	arma secundaria
 ui.sell_to_stations	ACEPTADO POR ESTACIONES
@@ -419,7 +419,7 @@ ui.chip_unlocks	DESBLOQUEA
 ui.back_to	VOLVER A
 compat.module	Módulo
 compat.reason	Motivo:
-ui.chip_unlock_chance_note	La probabilidad corresponde a un chip. Los objetos ya desbloqueados permanecen en la reserva de selección.
+ui.chip_unlock_chance_note	Probabilidad por chip; los objetos ya desbloqueados siguen en el sorteo. Algunas recetas se desbloquean juntas y sus probabilidades se solapan.
 ui.chip_summary_unlocked	desbloqueado
 ui.chip_summary_locked	bloqueado
 ui.chip_summary_unknown	desconocido
@@ -486,7 +486,7 @@ ui.modder_item_class	Clase de objeto
 ui.modder_tech_level	Nivel tecnológico
 ui.modder_relation_id	ID de relación
 ui.modder_firemode_ids	ID de modos de disparo
-ui.modder_search_syntax	Búsqueda avanzada: id:  name:  type:  rel:  tech:  cat:   Ejemplo: cat:weapon tech:>=5
+ui.modder_search_syntax	Búsqueda avanzada: id:  name:  type:  weapon:  perk:  rel:  tech:  cat:   Ejemplo: cat:weapon tech:>=5
 ui.search_item_modder	BUSCAR...  id: / tech: / cat:
 ui.open_item_link	ABRIR OBJETO
 ui.modder_spawn_title	ACCIONES DE MODIFICACIÓN
@@ -701,3 +701,5 @@ ui.decay_result	Al estropearse se convierte en
 ui.decay_sources	Se obtiene al estropearse
 ui.decay_disappears	Desaparece al estropearse.
 ui.decay_shelf_life_note	Los tiempos corresponden a objetos frescos. El frigorífico detiene el deterioro.
+catalog.weapon_type	Tipo de arma
+catalog.weapon_throwing	Armas arrojadizas

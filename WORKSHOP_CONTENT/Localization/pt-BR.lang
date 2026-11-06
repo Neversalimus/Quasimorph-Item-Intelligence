@@ -216,7 +216,7 @@ ui.roll	/sorteio
 ui.rolls	SORTEIOS
 ui.rolls_2	 sorteios
 ui.rows	 LINHAS
-ui.search_item	BUSCAR ITEM...
+ui.search_item	ITEM, TIPO DE ARMA OU CARACTERÍSTICA...
 ui.secondary_ammo	munição secundária
 ui.secondary_weapon	arma secundária
 ui.sell_to_stations	ACEITO PELAS ESTAÇÕES
@@ -419,7 +419,7 @@ ui.chip_unlocks	DESBLOQUEIA
 ui.back_to	VOLTAR A
 compat.module	Módulo
 compat.reason	Motivo:
-ui.chip_unlock_chance_note	A chance se refere a um chip. Itens já desbloqueados permanecem no conjunto de seleção.
+ui.chip_unlock_chance_note	Chance por chip; itens já desbloqueados continuam no sorteio. Algumas receitas são desbloqueadas juntas, então suas chances se sobrepõem.
 ui.chip_summary_unlocked	desbloqueado
 ui.chip_summary_locked	bloqueado
 ui.chip_summary_unknown	desconhecido
@@ -486,7 +486,7 @@ ui.modder_item_class	Classe do item
 ui.modder_tech_level	Nível tecnológico
 ui.modder_relation_id	ID da relação
 ui.modder_firemode_ids	IDs dos modos de disparo
-ui.modder_search_syntax	Busca avançada: id:  name:  type:  rel:  tech:  cat:   Exemplo: cat:weapon tech:>=5
+ui.modder_search_syntax	Busca avançada: id:  name:  type:  weapon:  perk:  rel:  tech:  cat:   Exemplo: cat:weapon tech:>=5
 ui.search_item_modder	BUSCAR...  id: / tech: / cat:
 ui.open_item_link	ABRIR ITEM
 ui.modder_spawn_title	AÇÕES DE MODIFICAÇÃO
@@ -701,3 +701,5 @@ ui.decay_result	Ao estragar, vira
 ui.decay_sources	Obtido por deterioração
 ui.decay_disappears	Desaparece ao estragar.
 ui.decay_shelf_life_note	Os tempos se referem a itens frescos. A geladeira pausa a deterioração.
+catalog.weapon_type	Tipo de arma
+catalog.weapon_throwing	Armas de arremesso

@@ -216,7 +216,7 @@ ui.roll	/los.
 ui.rolls	LOSOWANIA
 ui.rolls_2	 los.
 ui.rows	 WIERSZE
-ui.search_item	SZUKAJ PRZEDMIOTU...
+ui.search_item	PRZEDMIOT, TYP BRONI LUB CECHA...
 ui.secondary_ammo	amunicja dodatkowa
 ui.secondary_weapon	broń dodatkowa
 ui.sell_to_stations	PRZYJMOWANE PRZEZ STACJE
@@ -421,7 +421,7 @@ ui.chip_unlocks	ODBLOKOWUJE
 ui.back_to	WRÓĆ DO
 compat.module	Moduł
 compat.reason	Powód:
-ui.chip_unlock_chance_note	Szansa dotyczy jednego chipa. Już odblokowane przedmioty pozostają w puli wyboru.
+ui.chip_unlock_chance_note	Szansa na jeden chip; odblokowane przedmioty nadal biorą udział w losowaniu. Część przepisów odblokowuje się razem, więc ich szanse się pokrywają.
 ui.chip_summary_unlocked	odblokowane
 ui.chip_summary_locked	zablokowane
 ui.chip_summary_unknown	nieznane
@@ -488,7 +488,7 @@ ui.modder_item_class	Klasa przedmiotu
 ui.modder_tech_level	Poziom Tech
 ui.modder_relation_id	ID relacji
 ui.modder_firemode_ids	ID trybów ognia
-ui.modder_search_syntax	Wyszukiwanie zaawansowane: id:  name:  type:  rel:  tech:  cat:   Przykład: cat:weapon tech:>=5
+ui.modder_search_syntax	Wyszukiwanie zaawansowane: id:  name:  type:  weapon:  perk:  rel:  tech:  cat:   Przykład: cat:weapon tech:>=5
 ui.search_item_modder	SZUKAJ...  id: / tech: / cat:
 ui.open_item_link	OTWÓRZ PRZEDMIOT
 ui.modder_spawn_title	AKCJE MODDERSKIE
@@ -705,3 +705,5 @@ ui.decay_result	Po zepsuciu zmienia się w
 ui.decay_sources	Można uzyskać przez zepsucie
 ui.decay_disappears	Znika po zepsuciu.
 ui.decay_shelf_life_note	Podany czas dotyczy świeżych przedmiotów. Lodówka wstrzymuje psucie.
+catalog.weapon_type	Typ broni
+catalog.weapon_throwing	Broń miotana

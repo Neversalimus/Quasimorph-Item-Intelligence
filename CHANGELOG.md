@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.7.43.5-test1 — 2026-11-06
+
+- Fixed chip recipe links for all pieces of an armor set.
+- Included default ammunition unlocked together with a weapon. Probabilities still use the original chip pool and count shared unlocks once per entry.
+- Added a weapon-type selector to the Weapons catalog using the game’s classifications.
+- Search now finds weapons by their localized class and built-in perks. Added `weapon:` / `class:` and `perk:` / `trait:` filters; `type:` also recognizes weapon classes.
+- Updated search hints and chip explanations in all 11 languages.
+
 ## v1.7.43.4 — 2026-10-29
 
 - Added spoilage results to **Overview** and **Recipes**, with clickable links to the resulting items.

@@ -222,7 +222,7 @@ ui.roll	/roll
 ui.rolls	ROLLS
 ui.rolls_2	 rolls
 ui.rows	 ROWS
-ui.search_item	SEARCH ITEM...
+ui.search_item	SEARCH ITEMS, TYPES OR PERKS...
 ui.secondary_ammo	secondary ammo
 ui.secondary_weapon	secondary weapon
 ui.sell_to_stations	ACCEPTED BY STATIONS
@@ -426,7 +426,7 @@ ui.back_to	BACK TO
 compat.module	Module
 compat.reason	Reason:
 
-ui.chip_unlock_chance_note	Chance is for one chip. Already unlocked items remain in the selection pool.
+ui.chip_unlock_chance_note	Chance per chip; learned items stay in the pool. Some recipes unlock together, so their chances overlap.
 ui.chip_summary_unlocked	unlocked
 ui.chip_summary_locked	locked
 ui.chip_summary_unknown	unknown
@@ -496,7 +496,7 @@ ui.modder_item_class	Item class
 ui.modder_tech_level	Tech level
 ui.modder_relation_id	Relation ID
 ui.modder_firemode_ids	Fire mode IDs
-ui.modder_search_syntax	Advanced search: id:  name:  type:  rel:  tech:  cat:   Example: cat:weapon tech:>=5
+ui.modder_search_syntax	Advanced search: id:  name:  type:  weapon:  perk:  rel:  tech:  cat:   Example: cat:weapon tech:>=5
 ui.search_item_modder	SEARCH...  id: / tech: / cat:
 ui.open_item_link	OPEN ITEM
 ui.modder_spawn_title	MODDER ACTIONS
@@ -719,3 +719,5 @@ ui.decay_result	Spoils into
 ui.decay_sources	Obtained by spoilage
 ui.decay_disappears	Disappears when it spoils.
 ui.decay_shelf_life_note	Times are for fresh items. Refrigeration pauses spoilage.
+catalog.weapon_type	Weapon type
+catalog.weapon_throwing	Throwing weapons

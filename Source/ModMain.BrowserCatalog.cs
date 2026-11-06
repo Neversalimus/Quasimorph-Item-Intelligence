@@ -240,6 +240,7 @@ namespace ItemIntelligence
 
         private static void CloseBrowserCatalog()
         {
+            CloseBrowserWeaponTypeChoices();
             _browserCatalogOpen = false;
             if (_browserCatalogPanel != null) _browserCatalogPanel.SetActive(false);
             UpdateBrowserCatalogButtonStyle();
@@ -255,6 +256,7 @@ namespace ItemIntelligence
 
         private static void SetBrowserCatalogCategory(int category)
         {
+            CloseBrowserWeaponTypeChoices();
             category = Math.Max(0, Math.Min(BrowserCatalogCategoryCount - 1, category));
             _browserCatalogCategory = category;
             _browserCatalogScrollOffset = 0;
@@ -302,6 +304,8 @@ namespace ItemIntelligence
             }
 
             _browserCatalogCategory = 0;
+            _browserCatalogWeaponClass = string.Empty;
+            CloseBrowserWeaponTypeChoices();
             _browserCatalogDataFilter = BrowserCatalogDataFilter.Any;
             _browserCatalogSortMode = BrowserCatalogSortMode.Name;
             _browserCatalogSortDescending = false;
@@ -416,6 +420,7 @@ namespace ItemIntelligence
                 int category;
                 if (!BrowserCatalogCategoryByItem.TryGetValue(itemId, out category)) category = 8;
                 if (_browserCatalogCategory != 0 && category != _browserCatalogCategory) continue;
+                if (!BrowserCatalogItemMatchesWeaponClass(itemId)) continue;
                 if (!BrowserCatalogItemPassesDataFilter(itemId)) continue;
 
                 string name;

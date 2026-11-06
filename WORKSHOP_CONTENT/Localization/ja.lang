@@ -216,7 +216,7 @@ ui.roll	/回
 ui.rolls	抽選回数
 ui.rolls_2	 回
 ui.rows	 行
-ui.search_item	アイテムを検索…
+ui.search_item	アイテム名・武器種・特性で検索...
 ui.secondary_ammo	副武器の弾薬
 ui.secondary_weapon	副武器
 ui.sell_to_stations	買い取るステーション
@@ -419,7 +419,7 @@ ui.chip_unlocks	解放されるもの
 ui.back_to	戻る：
 compat.module	モジュール
 compat.reason	理由：
-ui.chip_unlock_chance_note	チップ1個あたりの確率です。解放済みのアイテムも抽選対象に残ります。
+ui.chip_unlock_chance_note	チップ1個あたりの確率です。解放済みのアイテムも抽選対象に残ります。一度に複数のレシピが解放されることがあるため、確率には重複があります。
 ui.chip_summary_unlocked	解放済み
 ui.chip_summary_locked	未解放
 ui.chip_summary_unknown	不明
@@ -486,7 +486,7 @@ ui.modder_item_class	アイテムクラス
 ui.modder_tech_level	技術レベル
 ui.modder_relation_id	関連ID
 ui.modder_firemode_ids	射撃モードID
-ui.modder_search_syntax	詳細検索：id:  name:  type:  rel:  tech:  cat:   例：cat:weapon tech:>=5
+ui.modder_search_syntax	詳細検索：id:  name:  type:  weapon:  perk:  rel:  tech:  cat:   例：cat:weapon tech:>=5
 ui.search_item_modder	検索…  id: / tech: / cat:
 ui.open_item_link	アイテムを開く
 ui.modder_spawn_title	MOD制作ツール
@@ -701,3 +701,5 @@ ui.decay_result	腐敗後のアイテム
 ui.decay_sources	腐敗させて入手
 ui.decay_disappears	腐敗すると消滅します。
 ui.decay_shelf_life_note	時間は新品の保存期間です。冷蔵庫に入れると腐敗が止まります。
+catalog.weapon_type	武器種
+catalog.weapon_throwing	投擲武器

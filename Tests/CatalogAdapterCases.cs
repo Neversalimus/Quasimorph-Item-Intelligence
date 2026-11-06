@@ -29,6 +29,7 @@ namespace ItemIntelligence
         private static bool IsKnownItemId(string id) { return !missing.Contains(id); }
         private static bool IsBrowserCatalogDataFilterAvailable(BrowserCatalogDataFilter filter) { return true; }
         private static bool BrowserCatalogItemPassesDataFilter(string id) { filterReads++; return !excluded.Contains(id); }
+        private static bool BrowserCatalogItemMatchesWeaponClass(string id) { return true; } // Covered by Run-ItemKnowledgeTests.
         private static bool TryGetExactItemTechLevel(string id, out int value) { return tech.TryGetValue(id, out value); }
         private static void RenderBrowserCatalogRows() { renders++; rendered = string.Join(",", BrowserCatalogFilteredItemIds); }
         private static void VerboseLog(string text) { }

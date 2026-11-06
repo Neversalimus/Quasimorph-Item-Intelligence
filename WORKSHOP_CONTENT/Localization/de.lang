@@ -216,7 +216,7 @@ ui.roll	/Wurf
 ui.rolls	WÜRFE
 ui.rolls_2	 Würfe
 ui.rows	 ZEILEN
-ui.search_item	GEGENSTAND SUCHEN...
+ui.search_item	GEGENSTAND, WAFFENTYP ODER EIGENSCHAFT...
 ui.secondary_ammo	Sekundärmunition
 ui.secondary_weapon	Sekundärwaffe
 ui.sell_to_stations	VON STATIONEN ANGENOMMEN
@@ -421,7 +421,7 @@ ui.chip_unlocks	SCHALTET FREI
 ui.back_to	ZURÜCK ZU
 compat.module	Modul
 compat.reason	Grund:
-ui.chip_unlock_chance_note	Die Chance gilt für einen Chip. Bereits freigeschaltete Gegenstände bleiben im Auswahlpool.
+ui.chip_unlock_chance_note	Chance pro Chip; bereits freigeschaltete Gegenstände bleiben im Pool. Manche Rezepte werden gemeinsam freigeschaltet, ihre Chancen überschneiden sich.
 ui.chip_summary_unlocked	freigeschaltet
 ui.chip_summary_locked	gesperrt
 ui.chip_summary_unknown	unbekannt
@@ -488,7 +488,7 @@ ui.modder_item_class	Gegenstandsklasse
 ui.modder_tech_level	Tech-Level
 ui.modder_relation_id	Beziehungs-ID
 ui.modder_firemode_ids	Feuermodus-IDs
-ui.modder_search_syntax	Erweiterte Suche: id:  name:  type:  rel:  tech:  cat:   Beispiel: cat:weapon tech:>=5
+ui.modder_search_syntax	Erweiterte Suche: id:  name:  type:  weapon:  perk:  rel:  tech:  cat:   Beispiel: cat:weapon tech:>=5
 ui.search_item_modder	SUCHEN...  id: / tech: / cat:
 ui.open_item_link	GEGENSTAND ÖFFNEN
 ui.modder_spawn_title	MODDER-AKTIONEN
@@ -705,3 +705,5 @@ ui.decay_result	Verdirbt zu
 ui.decay_sources	Durch Verderben erhältlich
 ui.decay_disappears	Verschwindet beim Verderben.
 ui.decay_shelf_life_note	Die Zeiten gelten für frische Gegenstände. Im Kühlschrank wird der Verderb pausiert.
+catalog.weapon_type	Waffentyp
+catalog.weapon_throwing	Wurfwaffen

@@ -216,7 +216,7 @@ ui.roll	/次
 ui.rolls	次数
 ui.rolls_2	 次
 ui.rows	 行
-ui.search_item	搜索物品...
+ui.search_item	搜索物品、武器类型或特性...
 ui.secondary_ammo	副武器弹药
 ui.secondary_weapon	副武器
 ui.sell_to_stations	空间站收购
@@ -421,7 +421,7 @@ ui.chip_unlocks	解锁
 ui.back_to	返回
 compat.module	模块
 compat.reason	原因：
-ui.chip_unlock_chance_note	概率按单个芯片计算。已解锁物品仍会保留在选择池中。
+ui.chip_unlock_chance_note	概率按单个芯片计算，已解锁物品仍在抽取池中。一次抽取可能同时解锁多个配方，因此各配方的概率会重叠。
 ui.chip_summary_unlocked	已解锁
 ui.chip_summary_locked	未解锁
 ui.chip_summary_unknown	未知
@@ -488,7 +488,7 @@ ui.modder_item_class	物品类别
 ui.modder_tech_level	科技等级
 ui.modder_relation_id	关联 ID
 ui.modder_firemode_ids	射击模式 ID
-ui.modder_search_syntax	高级搜索：id:  name:  type:  rel:  tech:  cat:   示例：cat:weapon tech:>=5
+ui.modder_search_syntax	高级搜索：id:  name:  type:  weapon:  perk:  rel:  tech:  cat:   示例：cat:weapon tech:>=5
 ui.search_item_modder	搜索...  id: / tech: / cat:
 ui.open_item_link	打开物品
 ui.modder_spawn_title	模组操作
@@ -705,3 +705,5 @@ ui.decay_result	腐败后变为
 ui.decay_sources	由物品腐败获得
 ui.decay_disappears	腐败后消失。
 ui.decay_shelf_life_note	时间为新鲜物品的保质期。冷藏会暂停腐败。
+catalog.weapon_type	武器类型
+catalog.weapon_throwing	投掷武器

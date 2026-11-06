@@ -83,6 +83,7 @@ namespace ItemIntelligence
             ItemsUnlockedByDatadisk.Clear();
             UnlockHitCountsByDatadisk.Clear();
             UnlockPoolSizeByDatadisk.Clear();
+            ResetDatadiskUnlockExpansion();
             ProductionDatadiskItemIds.Clear();
         }
 
